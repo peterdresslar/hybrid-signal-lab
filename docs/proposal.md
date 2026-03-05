@@ -41,27 +41,41 @@ A survey of the recent MAS literature (2025--2026) reveals a set of recurring ch
 
 ## 3. Core Idea: From Direct to Distributed Orchestration
 
-In a standard MAS orchestrator, a central module directly selects agents and routes tasks. We propose replacing or augmenting this with a *distributed signaling layer* inspired by honey bee colony coordination:
+In a standard MAS orchestrator, a central module directly selects agents and routes tasks. We propose replacing or augmenting this with a *distributed signaling layer* inspired by honey bee colony coordination, optionally using a "queenful" orchestrator. To describe this, we must first borrow from current work in LLM observability and interpretability. 
 
-- **Pheromone-like signals**: Instead of a router making hard selection decisions, agents broadcast low-dimensional state signals (analogous to pheromonal fields) that influence---but do not dictate---the routing distribution. The orchestrator integrates these signals rather than computing selections from scratch.
+- **Non-Semiotic Pheromone Signals**: Instead of a router making hard selection decisions based on human-readable text, agents broadcast low-dimensional state signals (analogous to pheromonal fields) that influence---but do not dictate---the routing distribution. These signals need not possess semantic meaning; they can be derived directly from the models' internal state, such as normalized hidden state activations, attention head gradients, or token entropy signatures. The queenful orchestrator operates on these signals rather than computing selections from scratch.
 
 - **Amplification control**: Drawing on Daniels et al. (2016), we tune the degree to which individual agent signals are amplified or dampened by the collective. This provides a control parameter analogous to the queen's QMP influence on hive behavior.
 
 - **Criticality tuning**: Following Romanczuk and Daniels (2023) and Shpurov et al. (2024), we hypothesize that orchestration performance is optimized when the system operates near a critical point---poised between rigid single-mode operation and disordered switching. The distributed signaling layer provides a natural parameter space in which to search for and maintain criticality.
 
+We note here that ant and bee signals degrade or decay by virtue of distance or time. Whether or not this is a problem or an opportunitity is not currently clear, though we hypothesize that introducing artificial signal decay (e.g., an exponential time-decay factoring) may naturally counteract the hallucination loops and coordination collapse observed in flat MAS topologies.
+
+### 3.1 Proposed Signal Types
+
+To implement the non-semiotic pheromone signaling, we will explore several observability metrics derived from the LLMs' internal states:
+
+1. **Confidence and Entropy Signatures**: The average log-probability or entropy of recently generated tokens. Like the intensity of a bee's waggle dance, high-confidence (low-entropy) outputs could structurally amplify an agent's routing priority, naturally driving the system toward certainty.
+2. **Hidden State Activations**: Mean-pooled high-dimensional vectors from a model's final layer, projected down to lower dimensions. This acts as a semantic "chemical signature," representing the specific region of latent space the agent is currently exploring. It enables clustering of agents addressing similar sub-problems or the prioritization of agents exploring novel conceptual spaces.
+3. **Attention Gradients**: Leveraging intrinsic importance measurements derived from the gradients of the output with respect to the input context. Analogous to localized scent marks, this maps which sections of the shared context an agent considers most critical.
+
 ## 4. Approach
 
 ### 4.1 Testbed Construction (Weeks 1--3)
 
-Build a lightweight multi-agent testbed in Python with the following components:
+Build a lightweight multi-agent testbed in Python. Week 1 focuses on the core turn-taking loop and persistent signal buffer with K=5 agents on a single task; Week 2 extends to the full orchestration layer (both modes) and signal decay mechanics; Week 3 scales to N=50 via asynchronous batching and validates on the full task suite. Components:
 
-1. **Agent pool**: A consortium of N agents (target: 5--10), using open-weight LLMs (e.g., LLaMA-3.1 8B, Qwen-3 8B, DeepSeek-R1 8B) following Ghosh et al.'s homogeneous consortium design with controlled temperature variation. Compute is provisioned through ASU research computing facilities. For rapid prototyping during development, API-based models or smaller quantized variants may be used.
+1. **Agent pool and asynchronous scaling**: The testbed uses open-weight LLMs (e.g., LLaMA-3.1 8B, Qwen-3 8B, DeepSeek-R1 8B) following Ghosh et al.'s homogeneous consortium design with controlled temperature variation. Compute is provisioned through ASU research computing facilities.
+
+   Rather than requiring all N agents to run concurrently, the testbed uses **asynchronous turn-taking**: a batch of K agents (target: K=5) is loaded at a time, each reading the current state of a persistent signal buffer, performing inference, and writing updated signals back. Agents not currently loaded still have presence in the system through their persisted signals, which decay over time according to the exponential decay schedule described in Section 3. This architecture allows scaling to large consortia (target: N=50) with modest hardware---N=50 requires only K=5 concurrent models across 10 rounds per cycle.
+
+   This design is not merely a compute optimization; it is more biologically faithful than synchronous execution. Bee pheromone signals persist in the physical environment and are read asynchronously by individuals who encounter them. The persistent signal buffer with time-decay replicates this dynamic: signals from recently-active agents are strong, while signals from agents that haven't contributed recently fade naturally. The turn-taking structure also introduces a temporal dimension to the collective dynamics that is absent from synchronous architectures, enabling the study of how signal persistence and decay affect collective behavior.
 
 2. **Task suite**: A subset of benchmark tasks from GSM8K and/or HumanEval, chosen for tractability within compute and time constraints. These overlap with the Ghosh et al. evaluation, enabling direct comparison.
 
 3. **Orchestration layer**: Implement two orchestration modes:
-   - **Baseline (direct)**: A standard learned router following the Ghosh et al. INFORM architecture---collaboration matrix C(x), selection distribution via Gumbel-Softmax.
-   - **Experimental (distributed)**: A pheromone-inspired signaling layer where agents emit state vectors that collectively shape routing, with tunable amplification parameters.
+   - **Baseline (direct)**: A standard learned router following the Ghosh et al. INFORM architecture---collaboration matrix C(x), selection distribution via Gumbel-Softmax. In the asynchronous setting, the router updates its collaboration matrix after each batch.
+   - **Experimental (distributed)**: A pheromone-inspired signaling layer where agents emit state vectors into the persistent signal buffer, collectively shaping routing through decayed accumulation rather than direct selection. Tunable parameters include amplification gain, decay rate, and batch size K.
 
 ### 4.2 Measurement Framework (Weeks 2--4)
 
@@ -103,13 +117,17 @@ The stretch goal is a complete comparison paper demonstrating that criticality t
 | Risk | Mitigation |
 |------|------------|
 | Compute constraints for running multiple LLMs | ASU research computing facilities provide GPU access for parallel inference; use quantized models or API-based agents for rapid prototyping during development |
-| Collective effects may not emerge at small N | Start with the simplest case (N=5) where signals are still interpretable; Shpurov et al. (2024) show scale-free dynamics even in moderately-sized bee colonies |
+| Collective effects may not emerge at small N | Asynchronous turn-taking allows scaling to N=50 with K=5 concurrent models; start with small N for debugging, then scale up; Shpurov et al. (2024) show scale-free dynamics even in moderately-sized bee colonies |
 | Criticality tuning may be sensitive to hyperparameters | Frame the criticality sweep itself as a result---mapping the parameter landscape is valuable even if the optimum is hard to find |
 | 8 weeks is tight | Prioritize the testbed and measurement framework; the comparison experiments can be scoped down to a single task if needed |
 
 ## 7. Relevance
 
 This project sits at the intersection of complexity science and applied AI engineering. It tests whether formal theories of collectivity---developed in the context of biological systems---transfer productively to the design of artificial multi-agent systems. The superorganism framing (Dresslar, 2026) suggests that AI collectives may satisfy the conditions for Krakauer individuality and Hoel causal emergence without requiring constraint closure, making them a novel class of collective entity. This capstone would provide an early empirical data point on that broader theoretical question.
+
+## 8. Future Work
+
+- **Distillation Potential**: Because these coordination mechanisms rely on low-dimensional vector representations rather than complex meta-prompting, they present a novel opportunity for model distillation. If robust collective intelligence emerges from these compact signals, a smaller model could theoretically be trained to predict and internalize these non-semiotic signaling dynamics, effectively distilling the emergent "superorganism" into a highly efficient monolithic architecture.
 
 ## References
 
