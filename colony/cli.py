@@ -45,6 +45,9 @@ def run(
     signal_dim: int = typer.Option(
         16, "--signal-dim", help="Dimensionality of signal vectors."
     ),
+    think: bool = typer.Option(
+        True, "--think/--no-think", help="Enable model thinking traces."
+    ),
     output: Path | None = typer.Option(
         None, "--output", "-o", help="Path to write results JSON."
     ),
@@ -74,6 +77,7 @@ def run(
             model=model,
             temperature=t,
             signal_dim=signal_dim,
+            think=think,
         )
         agent_list.append(agent)
 
@@ -82,7 +86,7 @@ def run(
 
     typer.echo(
         f"Colony initialized: N={colony.n_agents}, K={colony.batch_size}, "
-        f"decay={decay_rate}, model={model}"
+        f"decay={decay_rate}, model={model}, think={think}"
     )
 
     if rounds == 0:
@@ -95,8 +99,12 @@ def run(
         typer.echo(f"\nRound {r.round_number} [{', '.join(r.batch)}]:")
         for agent_id, resp in r.responses.items():
             preview = resp.text[:80].replace("\n", " ")
+            think_info = ""
+            if resp.thinking:
+                think_info = f" think={resp.signal.thinking_length}ch"
             typer.echo(
-                f"  {agent_id}: entropy={resp.signal.entropy:.3f} "
+                f"  {agent_id}: entropy={resp.signal.entropy:.3f}"
+                f"{think_info} "
                 f'"{preview}..."'
             )
 
@@ -110,7 +118,9 @@ def run(
                 "responses": {
                     aid: {
                         "text": resp.text,
+                        "thinking": resp.thinking,
                         "entropy": resp.signal.entropy,
+                        "thinking_length": resp.signal.thinking_length,
                         "signal_vector": resp.signal.vector.tolist(),
                         "timestamp": resp.signal.timestamp,
                     }

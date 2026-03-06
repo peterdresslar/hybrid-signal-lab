@@ -129,6 +129,69 @@ This project sits at the intersection of complexity science and applied AI engin
 
 - **Distillation Potential**: Because these coordination mechanisms rely on low-dimensional vector representations rather than complex meta-prompting, they present a novel opportunity for model distillation. If robust collective intelligence emerges from these compact signals, a smaller model could theoretically be trained to predict and internalize these non-semiotic signaling dynamics, effectively distilling the emergent "superorganism" into a highly efficient monolithic architecture.
 
+## 9. Notes (March 2026)
+
+### 9.1 Colony v0.0.1 observations
+
+The Colony testbed is running locally (Qwen 3.5 1.7b via Ollama, M2 MBA). Initial observations from a 10-agent, 2-batch run:
+- Temperature spread across agents (following Ghosh et al.) produces measurable entropy gradients: cooler agents cluster around 0.663–0.682, hotter agents at 0.723–0.730.
+- Thinking traces enabled via Ollama's `think=True` parameter. Trace length varies by agent and correlates with temperature.
+- Signal extraction currently uses metadata proxies (generation speed, token count, thinking length). Real entropy from logprobs is available via Ollama but untested.
+
+The testbed validated the architecture but also exposed the core problem: **agents are not yet collective members**. They generate independently and write to the signal buffer, but do not read from it in any way that alters their behavior. Without a feedback loop from collective state to individual behavior, there is nothing for Daniels et al. to measure. This must be solved before any experiment can proceed.
+
+### 9.2 Feedback loop design (priority for Weeks 2–3)
+
+Three mechanisms identified, in order of implementation difficulty:
+
+1. **Temperature modulation from collective entropy.** Collective entropy high (agents disagree) → lower individual temperatures → force convergence. Collective entropy low (agents agree) → raise temperatures → push exploration. This maps directly to bee biology (individual response thresholds shift with pheromone concentration) and is literally criticality tuning: adjusting the control parameter based on the order parameter. Implementable immediately with current infrastructure.
+
+2. **Prompt context injection.** The aggregate buffer state — mean entropy, agreement level, dominant signal direction — is injected into each agent's prompt as contextual framing. The agent's output distribution changes because its input changes. Low-hanging fruit but may not produce strong enough coupling for measurable collective dynamics.
+
+3. **Activation steering from collective state.** Forward hooks in the transformer modify agent activations mid-generation based on aggregated hidden states from peer agents. This is the real pheromone: the signal doesn't enter as text, it nudges the model's internal computations directly. Requires moving from Ollama to transformers/vllm with full hidden state access. Not feasible on local hardware; requires ASU compute. This is representation engineering (cf. Zou et al., 2023) but with the steering vector derived from the collective rather than predetermined by researchers. Nobody has done this. It is the novel technical contribution if it can be demonstrated.
+
+### 9.3 Experiment design direction
+
+The experiment should demonstrate that a multi-agent LLM system can satisfy two of the three Kantian Individual criteria (information preservation per Krakauer, causal emergence per Hoel) while failing the third (constraint closure per Kauffman) — making it a superorganism by the companion paper's definition.
+
+**Task loop**: A stream of classification or reasoning tasks (e.g., MMLU subsets) where the colony processes repeated rounds. Three conditions: (a) agents alone (no coupling), (b) agents with temperature feedback, (c) agents with temperature feedback + prompt context or activation steering. Midstream perturbation: domain shift, ambiguous injection, or agent removal.
+
+**Measurements**: Accuracy over time, agreement/entropy dynamics, amplification (Daniels et al.), recovery speed post-perturbation. The prediction: coupled colony shows amplification, self-organizes toward criticality, and recovers from perturbation faster than uncoupled agents.
+
+**Constraint closure test**: Remove agents mid-run. Colony does not regenerate them. Structurally distinguishes superorganism from organism.
+
+Standard MAS benchmarks (MultiAgentBench/MARBLE, ACL 2025) evaluate task completion but not collective dynamics. The multi-agent debate format (Du et al., 2023) provides a useful loop structure (propose → see peers → revise) but nobody instruments the dynamics of the consensus process. Our contribution is measuring the process, not the outcome.
+
+### 9.4 Companion paper status
+
+A theoretical companion paper is in development: "Kantian Individuals, Superorganisms, and Artificial Intelligence." The argument:
+
+1. Kantian Individuals = synthesis of Krakauer (information preservation) + Kauffman (constraint closure) + Hoel (causal emergence). A testable framework.
+2. Superorganisms = Kantian Individuals without constraint closure. Sharpens a historically vague term.
+3. AI systems are more likely to build superorganisms than organisms. Engineering implications: the lack of constraint closure is a feature (replaceable, upgradeable, heterogeneous components).
+
+The capstone experiment provides empirical grounding for the companion paper's claims. The companion paper may become the capstone itself, pending discussion with Bryan Daniels.
+
+### 9.5 Beyond MAS: applicability to single composite models
+
+The measurement framework (amplification, decomposition, causal emergence) is not specific to multi-agent systems. It applies to any composite system: layers in a hybrid architecture, experts in a mixture-of-experts, attention heads in a transformer. The MAS testbed is the proof-of-concept where all components are visible and manipulable. The longer-term application is instrumenting the internal collective dynamics of single models — particularly hybrid architectures (e.g., OLMo Hybrid, Qwen 3.5) where attention and RNN/GDN layers interact in ways the developers themselves cannot yet explain (Lambert, 2026; Merrill et al., 2026).
+
+This connects to distillation: the teacher-student relationship is a two-agent system with asymmetric information flow. The finding that the best model is not necessarily the best teacher (Lambert, 2026) is consistent with Ghosh et al.'s finding that relational importance diverges from intrinsic importance.
+
+### 9.6 Open questions for Bryan
+
+- Is the companion paper viable as the capstone deliverable, with the Colony experiment as supporting empirical work?
+- Access to ASU compute for transformers/vllm-based hidden state extraction?
+- Activation steering from collective state: is this within scope, or is it a separate project?
+- What venue for the companion paper? ALIFE 2026? Complexity? Entropy?
+- The connection to hybrid architectures and distillation: worth mentioning to potential collaborators (e.g., Ai2/OLMo team) now, or wait until we have results?
+
+### 9.7 Knowledge gaps to address
+
+- Model internals: hidden state extraction, forward hooks, activation steering. Need hands-on experience with transformers library and Qwen model architecture before attempting the real signal extraction.
+- Daniels et al. (2016) formalism: need to implement amplification and decomposition as actual computations, not just conceptual references. This requires understanding the eigenvalue decomposition of the collective influence matrix.
+- Representation engineering literature (Zou et al., 2023; Li et al., 2024): need to understand how steering vectors are constructed, applied, and evaluated before proposing collective activation steering.
+
 ## References
 
 - Cemri, M., Pan, M. Z., Yang, S., et al. (2025). Why do multi-agent LLM systems fail? Preprint, arXiv:2503.13657.
