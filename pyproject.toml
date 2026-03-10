@@ -8,6 +8,10 @@ dependencies = [
     "numpy",
     "typer",
     "ollama",
+    "marimo>=0.20.4",
+    "transformers>=5.3.0",
+    "torch>=2.10.0",
+    "accelerate>=1.13.0",
 ]
 
 [build-system]

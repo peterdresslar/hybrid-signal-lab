@@ -1,4 +1,4 @@
-# Capstone Project Proposal: Collective Control in Multi-Agent Systems
+# Attention Is In The Air
 
 **Peter Dresslar**
 **CAS Capstone, Arizona State University**
@@ -7,201 +7,126 @@
 
 ## 1. Problem Statement
 
-Multi-agent systems (MAS) composed of networked large language models (LLMs) are a rapidly growing area of AI engineering. Current orchestration approaches use direct control: a central router selects which agent to invoke, in what order, and with what context (Dang et al., 2025). Recent interpretability work by Ghosh et al. (2026) reveals a striking finding within this paradigm: relational importance (routing frequency, interaction topology) diverges from intrinsic importance (gradient-based causal attribution). Agents that are frequently routed to often have limited causal influence, while sparsely routed agents can be structurally critical.
+Multi-agent systems (MAS) composed of networked large language models (LLMs) are a rapidly growing area of AI engineering, yet the MAS literature lacks formal tools for measuring collective behavior. Daniels et al. (2016) provide exactly such tools---amplification and decomposition---developed for biological collectives including eusocial insect colonies. Honey bee hives achieve robust collective behavior not through direct command but through distributed chemical signaling, information amplification across networks, and phase transitions tuned near critical points (Romanczuk and Daniels, 2023; Lynch and Daniels, 2026). These measures have not been applied to artificial multi-agent systems.
 
-This divergence is familiar from complexity science. Daniels et al. (2016) formalize precisely these properties---amplification and decomposition---as measures of collectivity in biological systems, including eusocial insect colonies. Honey bee hives, for instance, achieve robust collective behavior not through direct command but through distributed chemical signaling (e.g., queen mandibular pheromone), information amplification across networks, and phase transitions tuned near critical points (Romanczuk and Daniels, 2023; Lynch and Daniels, 2026).
+Meanwhile, a parallel development in LLM architecture has introduced hybrid models that interleave fundamentally different computational layer types within a single transformer. Qwen3.5 (Qwen Team, 2026) alternates Gated DeltaNet (GDN) layers---fast, recurrent, locally-focused---with gated attention layers---slower, global, relationally-rich---in a fixed 3:1 ratio. The OLMo Hybrid (Merrill et al., 2026) demonstrates that such hybrids outperform both pure attention and pure recurrent architectures, but the ratio between layer types is static, set at training time. Finding the optimal ratio is expensive: it requires ablation studies across architectures and domains, and there is no guarantee that a ratio optimized for one task generalizes to others.
 
-Yet the MAS literature does not draw on this framework. None of the 31 papers citing Dang et al. (2025) emphasize eigenvectors or collective dynamics per Google Scholar as of this writing. The Ghosh et al. (2026) paper itself reinvents concepts analogous to amplification and decomposition without citing the complexity science origins.
+A separate line of work has begun exploring latent (non-textual) communication between LLM agents. Ramesh and Li (2025) inject one agent's intermediate activations into another's forward pass, achieving 27% improvement over natural language communication. Du et al. (2026) transmit compressed last-hidden-state representations between agents. Shi et al. (2026) selectively share KV pairs between agents based on attention importance scores. These approaches demonstrate that activation-level inter-agent communication is effective, but none of them use the collective signal to modulate architectural parameters, and none measure the resulting collective with formal tools.
 
-**This project asks: can bee-inspired distributed control, informed by the formal theory of collectivity, produce measurably better orchestration dynamics in a multi-agent LLM system?**
+**This project asks: can a colony of LLM agents collectively modulate the balance between hybrid layer types at inference time, producing measurably better performance than any fixed configuration---and does the resulting collective exhibit the amplification and decomposition predicted by the formal theory of collectivity?**
 
-## 2. Current Problems in Multi-Agent LLM Systems
+## 2. Core Idea: The Colony as Meta-Transformer
 
-A survey of the recent MAS literature (2025--2026) reveals a set of recurring challenges that motivate alternative orchestration approaches:
+The key insight is structural. A colony of hybrid LLM agents, each processing different windows of a shared context, is itself a transformer---one level up. The agents are the heads. The pheromone buffer (shared signal space) is the residual stream. The signal compression is the projection. The collective modulation of each agent's GDN/attention balance is the layer norm---regulating information flow.
 
-1. **Centralized routing bottleneck.** The dominant paradigm uses a central meta-controller for task decomposition and routing, creating a single point of failure whose decision space grows combinatorially with agent count (Lyu, 2025; Li et al., 2026).
+Unlike a standard transformer, this meta-transformer has heterogeneous heads. Different agents can occupy different positions in the input sequence (geopositioning) and operate at different temperatures. A single transformer cannot do this; its heads are identical by construction.
 
-2. **Relational vs. intrinsic importance divergence.** Agents that are routed to most frequently are not necessarily the most causally important---an observability finding from Ghosh et al. (2026) that diagnoses the problem but does not propose an orchestration solution.
+This design draws directly on honey bee colony coordination:
 
-3. **Coordination collapse ("bag of agents").** Flat topologies with no structure lead to circular logic and hallucination loops, with error rates amplified up to 17x over single-agent baselines in unstructured multi-agent configurations (Towards Data Science, 2025).
+- **Geopositioning as attention windows.** Each agent receives a different (overlapping) window of the input context, analogous to scouts stationed at different locations. The GDN layers process the local window (strong on nearby context, lossy on distant context); the attention layers integrate across the window. The inter-agent signal aggregation performs the global integration that would require a single model to have attention over the entire sequence.
 
-4. **Inter-agent misalignment.** The MAST failure taxonomy identifies 14 failure modes across 1600+ annotated traces, with breakdowns in inter-agent information flow---role confusion, contradictory outputs, coordination overload---forming a major failure category distinct from individual agent errors (Cemri et al., 2025).
+- **Swarm density and centroid.** The overlap between agent windows controls redundancy vs. coverage. The centroid of the swarm---where most agents' windows cluster---can shift dynamically based on agent signals. Agents near high-entropy regions (uncertain, finding something unexpected) recruit the swarm's attention toward their region, analogous to scout recruitment in bee colonies.
 
-5. **Fragile degradation under ablation.** When agents are removed or fail, centralized systems tend to collapse rather than degrade gracefully. There is little work on how MAS can maintain function when components drop out.
+- **Non-semiotic pheromone signals.** Agents broadcast low-dimensional state signals derived from their internal activations via dimensionality reduction (PCA or lightweight autoencoder on layer-boundary hidden states). These signals need not possess semantic meaning---they are the "chemical signature" of each agent's computational state.
 
-6. **Token and cost explosion.** Multi-agent systems consume 4--220x more input tokens than single-agent systems due to inter-agent communication overhead (Cemri et al., 2025).
+- **Noise as substrate.** Temperature diversity across agents is not incidental---it is a design requirement. High-temperature agents establish the entropy floor against which low-temperature agents' convergence becomes a detectable signal. Without noise, the collective cannot distinguish "easy task, everyone agrees" from "hard task, everyone is confidently wrong." Noise keeps the system exploring the parameter space and prevents lock-in, maintaining the colony near the critical regime where collective dynamics are richest (Shpurov et al., 2024). This mirrors biological colonies, where stochastic individual behavior is the substrate that makes collective signal detection possible.
 
-7. **Emergent collective bias.** Decentralized LLM populations spontaneously develop shared conventions and collective biases even when individual agents exhibit none---a coordination phenomenon that is also a safety concern (Hu et al., 2025).
+## 3. Architecture
 
-8. **Long-horizon planning fragility.** Individual agents reason well locally, but MAS struggle with tasks where early decisions constrain future options and constraints evolve dynamically (Gundawar et al., 2025).
+### 3.1 Hybrid Layer Modulation
 
-9. **False emergence (data leakage).** LLMs may reproduce conventions encountered during pretraining rather than genuinely self-organizing, making it methodologically difficult to distinguish real emergent coordination from memorized patterns.
+In Qwen3.5's hybrid architecture, the residual stream is additive: each layer adds its output to a running sum. Forward hooks can scale the contribution of GDN layers vs. attention layers by a collective-determined factor *g*:
 
-10. **Static vs. dynamic topology.** Most frameworks use fixed agent roles and communication graphs. Newer work argues agents should specialize dynamically and adjust connectivity, but how to achieve this robustly remains open (AgentNet, 2025).
+- g → 0: GDN layers dominate (fast, local, compressed processing)
+- g → 1: Attention layers dominate (slow, global, relational processing)
 
-## 3. Core Idea: From Direct to Distributed Orchestration
+The collective sets *g* each turn based on aggregated agent signals. This is a resource allocation decision---the same kind bee colonies make when adjusting the ratio of foragers to scouts.
 
-In a standard MAS orchestrator, a central module directly selects agents and routes tasks. We propose replacing or augmenting this with a *distributed signaling layer* inspired by honey bee colony coordination, optionally using a "queenful" orchestrator. To describe this, we must first borrow from current work in LLM observability and interpretability. 
+This approach sidesteps the training encumbrance of hybrid architectures. Rather than training multiple models with different fixed ratios and hoping one generalizes, we train (or use) a single hybrid model and let the collective discover the appropriate balance per task at inference time.
 
-- **Non-Semiotic Pheromone Signals**: Instead of a router making hard selection decisions based on human-readable text, agents broadcast low-dimensional state signals (analogous to pheromonal fields) that influence---but do not dictate---the routing distribution. These signals need not possess semantic meaning; they can be derived directly from the models' internal state, such as normalized hidden state activations, attention head gradients, or token entropy signatures. The queenful orchestrator operates on these signals rather than computing selections from scratch.
+### 3.2 Signal Extraction and Compression
 
-- **Amplification control**: Drawing on Daniels et al. (2016), we tune the degree to which individual agent signals are amplified or dampened by the collective. This provides a control parameter analogous to the queen's QMP influence on hive behavior.
+Each agent's forward pass yields hidden states at every layer boundary. In a 32-layer Qwen3.5 model, there are ~8 GDN-to-attention transition points. The signal extraction pipeline:
 
-- **Criticality tuning**: Following Romanczuk and Daniels (2023) and Shpurov et al. (2024), we hypothesize that orchestration performance is optimized when the system operates near a critical point---poised between rigid single-mode operation and disordered switching. The distributed signaling layer provides a natural parameter space in which to search for and maintain criticality.
+1. **Extract**: Read hidden state tensors at layer boundaries (7-8 transition points × hidden_dim floats per agent). Computationally free relative to the forward pass.
+2. **Compress**: Reduce to a low-dimensional pheromone vector (target: 8–16 dimensions) via PCA or a lightweight autoencoder trained on the first N runs. The bottleneck representation is the pheromone. The compressor discovers the "natural pheromone channels" of the architecture.
+3. **Buffer**: Write the compressed signal to a shared buffer with exponential time-decay, so recent signals are strong and old signals fade (matching biological pheromone dynamics).
+4. **Aggregate**: The buffer state---mean, variance, trajectory of the signal distribution across agents---drives the collective modulation of *g* and the swarm centroid.
 
-We note here that ant and bee signals degrade or decay by virtue of distance or time. Whether or not this is a problem or an opportunitity is not currently clear, though we hypothesize that introducing artificial signal decay (e.g., an exponential time-decay factoring) may naturally counteract the hallucination loops and coordination collapse observed in flat MAS topologies.
+This pipeline is structurally analogous to inter-agent attention heads: the compression learns which dimensions of one agent's internal state are most relevant to the collective, and the injection determines which aspects of the collective state matter for each agent's computation. The key difference from Ramesh and Li (2025) is that the communication is collective (many-to-one-to-many via the buffer) rather than pairwise, and it drives architectural modulation rather than just information transfer.
 
-### 3.1 Proposed Signal Types
+## 4. Experiment Design
 
-To implement the non-semiotic pheromone signaling, we will explore several observability metrics derived from the LLMs' internal states:
+### 4.1 Abstract Probe Battery
 
-1. **Confidence and Entropy Signatures**: The average log-probability or entropy of recently generated tokens. Like the intensity of a bee's waggle dance, high-confidence (low-entropy) outputs could structurally amplify an agent's routing priority, naturally driving the system toward certainty.
-2. **Hidden State Activations**: Mean-pooled high-dimensional vectors from a model's final layer, projected down to lower dimensions. This acts as a semantic "chemical signature," representing the specific region of latent space the agent is currently exploring. It enables clustering of agents addressing similar sub-problems or the prioritization of agents exploring novel conceptual spaces.
-3. **Attention Gradients**: Leveraging intrinsic importance measurements derived from the gradients of the output with respect to the input context. Analogous to localized scent marks, this maps which sections of the shared context an agent considers most critical.
+Three probe types, each designed to favor a different GDN/attention balance, plus a control, with automatic scoring:
 
-## 4. Approach
+1. **Sequence echo** (GDN-favoring): Present a structured token pattern (e.g., A-B-C-A-B-C...) and ask the model to continue. Pure local pattern completion; a recurrent state machine should excel. Score: exact match of continued pattern.
 
-### 4.1 Testbed Construction (Weeks 1--3)
+2. **Needle retrieval** (attention-favoring): Embed a specific token or phrase early in a long context, fill with distractor text, ask "what was the item at position X?" Requires reaching back across full context; GDN's compressed state will have degraded early information. Score: exact retrieval of the target.
 
-Build a lightweight multi-agent testbed in Python. Week 1 focuses on the core turn-taking loop and persistent signal buffer with K=5 agents on a single task; Week 2 extends to the full orchestration layer (both modes) and signal decay mechanics; Week 3 scales to N=50 via asynchronous batching and validates on the full task suite. Components:
+3. **Compositional reasoning** (balanced): Present 2–3 facts and ask a question requiring their combination ("A > B, C > A, what's smallest?"). Needs both retention and cross-token interaction. Score: correct logical answer (graded for partial credit on multi-step problems).
 
-1. **Agent pool and asynchronous scaling**: The testbed uses open-weight LLMs (e.g., LLaMA-3.1 8B, Qwen-3 8B, DeepSeek-R1 8B) following Ghosh et al.'s homogeneous consortium design with controlled temperature variation. Compute is provisioned through ASU research computing facilities.
+4. **Null probe** (control): A task where GDN and attention perform equally (e.g., single-token factual recall). Verifies that collective modulation doesn't degrade baseline performance.
 
-   Rather than requiring all N agents to run concurrently, the testbed uses **asynchronous turn-taking**: a batch of K agents (target: K=5) is loaded at a time, each reading the current state of a persistent signal buffer, performing inference, and writing updated signals back. Agents not currently loaded still have presence in the system through their persisted signals, which decay over time according to the exponential decay schedule described in Section 3. This architecture allows scaling to large consortia (target: N=50) with modest hardware---N=50 requires only K=5 concurrent models across 10 rounds per cycle.
+### 4.2 Experimental Conditions
 
-   This design is not merely a compute optimization; it is more biologically faithful than synchronous execution. Bee pheromone signals persist in the physical environment and are read asynchronously by individuals who encounter them. The persistent signal buffer with time-decay replicates this dynamic: signals from recently-active agents are strong, while signals from agents that haven't contributed recently fade naturally. The turn-taking structure also introduces a temporal dimension to the collective dynamics that is absent from synchronous architectures, enabling the study of how signal persistence and decay affect collective behavior.
+1. **Fixed-g baseline**: Run each probe type with the knob fixed at positions across the full range (g = 0, 0.25, 0.5, 0.75, 1.0). This maps the response surface: which g values favor which probes.
+2. **Individual agent adaptive**: A single agent adjusts its own g based on its own hidden states (self-reflection). This controls for whether any benefit comes from the collective vs. just from adaptive inference.
+3. **Collective adaptive**: The colony of 50 agents, with signals aggregated and g set collectively. The hypothesis: the collective finds better g values than any fixed setting or individual self-adaptation, especially on mixed task streams.
+4. **Perturbation and recovery**: Run a stream of one probe type, then inject a different type. Measure how many turns until the collective re-adapts g. Recovery speed relates directly to amplification---a system with high amplification recovers faster because the collective signal dominates individual noise.
 
-2. **Task suite**: A subset of benchmark tasks from GSM8K and/or HumanEval, chosen for tractability within compute and time constraints. These overlap with the Ghosh et al. evaluation, enabling direct comparison.
+### 4.3 Measurements
 
-3. **Orchestration layer**: Implement two orchestration modes:
-   - **Baseline (direct)**: A standard learned router following the Ghosh et al. INFORM architecture---collaboration matrix C(x), selection distribution via Gumbel-Softmax. In the asynchronous setting, the router updates its collaboration matrix after each batch.
-   - **Experimental (distributed)**: A pheromone-inspired signaling layer where agents emit state vectors into the persistent signal buffer, collectively shaping routing through decayed accumulation rather than direct selection. Tunable parameters include amplification gain, decay rate, and batch size K.
+Drawing on Daniels et al. (2016):
 
-### 4.2 Measurement Framework (Weeks 2--4)
+- **Amplification**: Does the collective g setting carry more information about the task type than any individual agent's signal? Measured as mutual information between collective state and task identity, normalized by individual agent mutual information.
+- **Decomposition**: Can the colony's behavior be decomposed into independent agent contributions, or are there irreducible collective effects? Measured via the eigenvalue spectrum of the agent-agent influence matrix.
+- **Task performance**: Accuracy on the probe battery, compared across conditions. The prediction: collectively-tuned colony outperforms any fixed configuration on mixed task streams.
 
-Implement collective-theoretic measurements from Daniels et al. (2016):
+Additionally, following Riedl et al. (2024), we can apply partial information decomposition to distinguish redundant, unique, and synergistic components of the inter-agent signal---testing whether the colony exhibits genuine higher-order synergy or merely averages individual estimates.
 
-- **Amplification**: Quantify how much individual agent signals are magnified by the collective routing process. High amplification of a single agent indicates queen-like causal centrality.
-- **Decomposition**: Measure the degree to which the system's behavior can be decomposed into independent agent contributions vs. irreducible collective effects.
-- **Relational vs. intrinsic importance**: Replicate the Ghosh et al. divergence measurement, then assess whether the distributed control condition reduces or restructures this divergence.
+## 5. Implementation Status
 
-Additionally, monitor for signatures of criticality:
-- Power-law distributions in routing weight fluctuations (cf. Shpurov et al., 2024).
-- Sensitivity to perturbation (ablation of agents) as a function of the amplification control parameter.
-- Bistability or hysteresis in task-switching behavior.
+### Colony v0.0.1
 
-### 4.3 Experiments (Weeks 4--7)
+The Colony testbed is running locally (Qwen 3.5 2B via Ollama, M2 MBA). Validated: asynchronous turn-taking, signal buffer with exponential decay, thinking traces via Ollama's think parameter, entropy measurement from logprobs.
 
-1. **Divergence comparison**: Run both orchestration modes on the same task suite. Measure whether the distributed control condition produces a different relationship between relational and intrinsic importance.
+### Signal Lab
 
-2. **Criticality sweep**: Vary the amplification control parameter across a range and measure task performance alongside collective metrics. Test the hypothesis that performance peaks near a critical point in the collective dynamics.
+A diagnostic tool (signal_lab.py) for exploring model internals via HuggingFace transformers. Produces per-layer hidden state statistics, attention entropy, logit distributions, and KV cache inspection. Output saved to JSON. Built for Qwen3-1.7B (homogeneous attention); needs updating for Qwen3.5-2B (hybrid GDN + attention).
 
-3. **Robustness under ablation**: Mask agents (following Ghosh et al.'s protocol) and compare routing collapse between the two orchestration modes. The distributed mode should exhibit more graceful degradation if the collective signal provides redundancy.
+### Next steps
 
-### 4.4 Analysis and Writing (Weeks 6--8)
-
-Compile results into a methods-focused capstone paper. Even negative results (e.g., distributed control does not outperform direct routing on these benchmarks) would be informative, as they would help characterize the boundary conditions under which collective dynamics matter for engineered systems.
-
-## 5. Minimum Viable Deliverable
-
-Given the 8-week timeline, the minimum viable project is:
-
-1. A working testbed with at least one direct and one distributed orchestration mode.
-2. Implemented collective measurements (amplification, decomposition) applied to both modes.
-3. A methods section and preliminary results suitable for a capstone paper, with clear identification of what further work would be needed to make the results publication-ready.
-
-The stretch goal is a complete comparison paper demonstrating that criticality tuning produces measurable advantages in multi-agent orchestration.
+1. Switch to Qwen3.5-2B via transformers. Map which layers are GDN vs. attention using the model config (full_attention_interval=4).
+2. Implement forward hooks for reading layer-boundary hidden states and for scaling layer contributions (the g knob).
+3. Build the probe battery with automatic scoring.
+4. Implement signal compression (PCA on layer-boundary snapshots from initial runs).
+5. Wire the collective feedback loop: agent signals → buffer → aggregate → g modulation.
+6. Run the experimental conditions and compute Daniels et al. measurements.
 
 ## 6. Risks and Mitigations
 
 | Risk | Mitigation |
 |------|------------|
-| Compute constraints for running multiple LLMs | ASU research computing facilities provide GPU access for parallel inference; use quantized models or API-based agents for rapid prototyping during development |
-| Collective effects may not emerge at small N | Asynchronous turn-taking allows scaling to N=50 with K=5 concurrent models; start with small N for debugging, then scale up; Shpurov et al. (2024) show scale-free dynamics even in moderately-sized bee colonies |
-| Criticality tuning may be sensitive to hyperparameters | Frame the criticality sweep itself as a result---mapping the parameter landscape is valuable even if the optimum is hard to find |
-| 8 weeks is tight | Prioritize the testbed and measurement framework; the comparison experiments can be scoped down to a single task if needed |
+| Hybrid layer scaling may not produce measurable performance differences across probes | Map the full response surface first (fixed-g sweep). If GDN/attention balance doesn't affect probe performance, the experimental premise fails early and cheaply. |
+| Signal compression may lose the relevant information | Ablation study: run with 1, 4, 8, 16 signal dimensions and plot collective performance vs. dimensionality. |
+| 50 agents on a laptop may be too slow for meaningful experimental runs | Qwen3.5-0.8B as fallback; reduce to 20 agents; MBP upgrade imminent; ASU compute for final runs. |
+| Collective effects may not emerge---the colony may behave like 50 independent agents | This is a publishable negative result: it tells us where the threshold for collectivity lies. Compare against the individual-adaptive condition to distinguish "no collective effect" from "no adaptive effect." |
 
 ## 7. Relevance
 
-This project sits at the intersection of complexity science and applied AI engineering. It tests whether formal theories of collectivity---developed in the context of biological systems---transfer productively to the design of artificial multi-agent systems. The superorganism framing (Dresslar, 2026) suggests that AI collectives may satisfy the conditions for Krakauer individuality and Hoel causal emergence without requiring constraint closure, making them a novel class of collective entity. This capstone would provide an early empirical data point on that broader theoretical question.
-
-## 8. Future Work
-
-- **Distillation Potential**: Because these coordination mechanisms rely on low-dimensional vector representations rather than complex meta-prompting, they present a novel opportunity for model distillation. If robust collective intelligence emerges from these compact signals, a smaller model could theoretically be trained to predict and internalize these non-semiotic signaling dynamics, effectively distilling the emergent "superorganism" into a highly efficient monolithic architecture.
-
-## 9. Notes (March 2026)
-
-### 9.1 Colony v0.0.1 observations
-
-The Colony testbed is running locally (Qwen 3.5 1.7b via Ollama, M2 MBA). Initial observations from a 10-agent, 2-batch run:
-- Temperature spread across agents (following Ghosh et al.) produces measurable entropy gradients: cooler agents cluster around 0.663–0.682, hotter agents at 0.723–0.730.
-- Thinking traces enabled via Ollama's `think=True` parameter. Trace length varies by agent and correlates with temperature.
-- Signal extraction currently uses metadata proxies (generation speed, token count, thinking length). Real entropy from logprobs is available via Ollama but untested.
-
-The testbed validated the architecture but also exposed the core problem: **agents are not yet collective members**. They generate independently and write to the signal buffer, but do not read from it in any way that alters their behavior. Without a feedback loop from collective state to individual behavior, there is nothing for Daniels et al. to measure. This must be solved before any experiment can proceed.
-
-### 9.2 Feedback loop design (priority for Weeks 2–3)
-
-Three mechanisms identified, in order of implementation difficulty:
-
-1. **Temperature modulation from collective entropy.** Collective entropy high (agents disagree) → lower individual temperatures → force convergence. Collective entropy low (agents agree) → raise temperatures → push exploration. This maps directly to bee biology (individual response thresholds shift with pheromone concentration) and is literally criticality tuning: adjusting the control parameter based on the order parameter. Implementable immediately with current infrastructure.
-
-2. **Prompt context injection.** The aggregate buffer state — mean entropy, agreement level, dominant signal direction — is injected into each agent's prompt as contextual framing. The agent's output distribution changes because its input changes. Low-hanging fruit but may not produce strong enough coupling for measurable collective dynamics.
-
-3. **Activation steering from collective state.** Forward hooks in the transformer modify agent activations mid-generation based on aggregated hidden states from peer agents. This is the real pheromone: the signal doesn't enter as text, it nudges the model's internal computations directly. Requires moving from Ollama to transformers/vllm with full hidden state access. Not feasible on local hardware; requires ASU compute. This is representation engineering (cf. Zou et al., 2023) but with the steering vector derived from the collective rather than predetermined by researchers. Nobody has done this. It is the novel technical contribution if it can be demonstrated.
-
-### 9.3 Experiment design direction
-
-The experiment should demonstrate that a multi-agent LLM system can satisfy two of the three Kantian Individual criteria (information preservation per Krakauer, causal emergence per Hoel) while failing the third (constraint closure per Kauffman) — making it a superorganism by the companion paper's definition.
-
-**Task loop**: A stream of classification or reasoning tasks (e.g., MMLU subsets) where the colony processes repeated rounds. Three conditions: (a) agents alone (no coupling), (b) agents with temperature feedback, (c) agents with temperature feedback + prompt context or activation steering. Midstream perturbation: domain shift, ambiguous injection, or agent removal.
-
-**Measurements**: Accuracy over time, agreement/entropy dynamics, amplification (Daniels et al.), recovery speed post-perturbation. The prediction: coupled colony shows amplification, self-organizes toward criticality, and recovers from perturbation faster than uncoupled agents.
-
-**Constraint closure test**: Remove agents mid-run. Colony does not regenerate them. Structurally distinguishes superorganism from organism.
-
-Standard MAS benchmarks (MultiAgentBench/MARBLE, ACL 2025) evaluate task completion but not collective dynamics. The multi-agent debate format (Du et al., 2023) provides a useful loop structure (propose → see peers → revise) but nobody instruments the dynamics of the consensus process. Our contribution is measuring the process, not the outcome.
-
-### 9.4 Companion paper status
-
-A theoretical companion paper is in development: "Kantian Individuals, Superorganisms, and Artificial Intelligence." The argument:
-
-1. Kantian Individuals = synthesis of Krakauer (information preservation) + Kauffman (constraint closure) + Hoel (causal emergence). A testable framework.
-2. Superorganisms = Kantian Individuals without constraint closure. Sharpens a historically vague term.
-3. AI systems are more likely to build superorganisms than organisms. Engineering implications: the lack of constraint closure is a feature (replaceable, upgradeable, heterogeneous components).
-
-The capstone experiment provides empirical grounding for the companion paper's claims. The companion paper may become the capstone itself, pending discussion with Bryan Daniels.
-
-### 9.5 Beyond MAS: applicability to single composite models
-
-The measurement framework (amplification, decomposition, causal emergence) is not specific to multi-agent systems. It applies to any composite system: layers in a hybrid architecture, experts in a mixture-of-experts, attention heads in a transformer. The MAS testbed is the proof-of-concept where all components are visible and manipulable. The longer-term application is instrumenting the internal collective dynamics of single models — particularly hybrid architectures (e.g., OLMo Hybrid, Qwen 3.5) where attention and RNN/GDN layers interact in ways the developers themselves cannot yet explain (Lambert, 2026; Merrill et al., 2026).
-
-This connects to distillation: the teacher-student relationship is a two-agent system with asymmetric information flow. The finding that the best model is not necessarily the best teacher (Lambert, 2026) is consistent with Ghosh et al.'s finding that relational importance diverges from intrinsic importance.
-
-### 9.6 Open questions for Bryan
-
-- Is the companion paper viable as the capstone deliverable, with the Colony experiment as supporting empirical work?
-- Access to ASU compute for transformers/vllm-based hidden state extraction?
-- Activation steering from collective state: is this within scope, or is it a separate project?
-- What venue for the companion paper? ALIFE 2026? Complexity? Entropy?
-- The connection to hybrid architectures and distillation: worth mentioning to potential collaborators (e.g., Ai2/OLMo team) now, or wait until we have results?
-
-### 9.7 Knowledge gaps to address
-
-- Model internals: hidden state extraction, forward hooks, activation steering. Need hands-on experience with transformers library and Qwen model architecture before attempting the real signal extraction.
-- Daniels et al. (2016) formalism: need to implement amplification and decomposition as actual computations, not just conceptual references. This requires understanding the eigenvalue decomposition of the collective influence matrix.
-- Representation engineering literature (Zou et al., 2023; Li et al., 2024): need to understand how steering vectors are constructed, applied, and evaluated before proposing collective activation steering.
+This project sits at the intersection of complexity science and applied AI engineering. It tests whether formal theories of collectivity---developed for biological systems---transfer to the design of artificial multi-agent systems operating on a novel architectural substrate (hybrid attention). The meta-transformer framing (colony as outer transformer with heterogeneous heads) suggests that collective dynamics operate at multiple scales in deep learning systems, from attention heads to layers to agents.
 
 ## References
 
-- Cemri, M., Pan, M. Z., Yang, S., et al. (2025). Why do multi-agent LLM systems fail? Preprint, arXiv:2503.13657.
-- Daniels, B. C., Ellison, C. J., Krakauer, D. C., and Flack, J. C. (2016). Quantifying collectivity. *Current Opinion in Neurobiology*, 37:106--113.
-- Dang, Y., Qian, C., et al. (2025). Multi-agent collaboration via evolving orchestration. *NeurIPS 2025*.
-- Dresslar, P. (2026). Collective properties of honey bees and an analogy to multi-agent systems. CAS 503 Module 7, Arizona State University.
-- Ghosh, S., Nath, S., Manchanda, S., and Chakraborty, T. (2026). Disentangling causal importance from emergent structure in multi-expert orchestration. Preprint, arXiv:2602.04291.
-- Gundawar, N., et al. (2025). REALM-Bench: A benchmark for evaluating multi-agent systems on real-world, dynamic planning and scheduling tasks. Preprint, arXiv:2502.18836.
-- Hu, S., et al. (2025). Emergent social conventions and collective bias in LLM populations. *Science Advances*.
-- Li, Z., et al. (2026). Towards adaptive, scalable, and robust coordination of LLM agents: a dynamic ad-hoc networking perspective. Preprint, arXiv:2602.08009.
-- Lynch, C. M. and Daniels, B. C. (2026). Tuning regimes in ant foraging dynamics depend on the existence of bistability. *J. Royal Society Interface*, 23(225):20250838.
-- Romanczuk, P. and Daniels, B. C. (2023). Phase transitions and criticality in the collective behavior of animals. In *Order, Disorder and Criticality*. World Scientific.
-- Shpurov, I., Froese, T., and Chialvo, D. R. (2024). Beehive scale-free emergent dynamics. *Physics Letters A*, 514:129614.
+- Daniels, B. C., Ellison, C. J., Krakauer, D. C., and Flack, J. C. (2016). Quantifying collectivity. Current Opinion in Neurobiology, 37:106--113.
+- Du, Z., Wang, R., Bai, H., Cao, Z., Zhu, X., Cheng, Y., Zheng, B., Chen, W., and Ying, H. (2026). Enabling agents to communicate entirely in latent space. Preprint, arXiv:2511.09149.
+- Lynch, C. M. and Daniels, B. C. (2026). Tuning regimes in ant foraging dynamics depend on the existence of bistability. J. Royal Society Interface, 23(225):20250838.
+- Merrill, W., et al. (2026). OLMo Hybrid. Ai2.
+- Qwen Team (2026). Qwen3.5 technical report.
+- Ramesh, V. and Li, K. (2025). Communicating activations between language model agents. Preprint, arXiv:2501.14082.
+- Riedl, C., et al. (2024). Emergent coordination in multi-agent language models. Preprint, arXiv:2510.05174.
+- Romanczuk, P. and Daniels, B. C. (2023). Phase transitions and criticality in the collective behavior of animals. In Order, Disorder and Criticality. World Scientific.
+- Shi, X., Chiesa, M., Maguire, G. Q., and Kostic, D. (2026). KVComm: Enabling efficient LLM communication through selective KV sharing. Preprint, arXiv:2510.03346.
+- Shpurov, I., Froese, T., and Chialvo, D. R. (2024). Beehive scale-free emergent dynamics. Scientific Reports, 14(1):13404.
