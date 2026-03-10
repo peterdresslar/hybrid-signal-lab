@@ -1,7 +1,12 @@
 # Synopsis of Capstone Options
-## CAS Applied Project, Arizona State University
-## Advisor: Prof. Bryan Daniels
-## March 2026
+
+**Peter Dresslar**
+
+**CAS Capstone, Arizona State University**
+
+**Advisor: Prof. Bryan Daniels**
+
+**March 2026**
 
 Continuing my work from class, I am exploring the ways in which colony-wide signals can be generated and used to modulate the performance of individual AI agents in a multi-agent system (MAS). A major challenge for this work is that LLMs have notoriously opaque internal workings that are difficult to change once training is complete. Of course, contrary to the sensory and signalling capabilities of biological colony agents such as eusocial insects, modern AI agents particularly lack mechanisms for low-dimensional collective signal exchange. However, my limited initial experiments suggest that there may be a couple of control planes on which to experiment. The available literature on this topic---the centroid for which occurs perhaps three months ago---confirms some of these possibilities. There continues to be a stark lack of recognition of collective logic in even the most academic of these articles.
 
