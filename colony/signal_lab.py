@@ -12,11 +12,31 @@ import dotenv
 
 # ensure HF_TOKEN loaded from .env_development
 dotenv.load_dotenv(".env.development")
+
+# argparse
 parser = argparse.ArgumentParser(description="Signal Lab: exploring model internals via transformers.")
 parser.add_argument("--prompt", type=str, help="Path or filename to a prompt file in data/, or a direct string prompt.")
+parser.add_argument("--g", type = float, default = 1.0, help="Attention scaler")
 args = parser.parse_args()
 
-# Step 1: Load model and tokenizer
+g = args.g
+
+def make_attn_scaler(g):
+    # forward hook function scaling hidden states by g. Higher values will make the hybrid model focus more on attention, at higher compute cost. Lower values will use the GDN more.
+    def hook_fn(module, input, output):
+        if isinstance(output, tuple):
+            scaled = output[0] * g
+            return (scaled,) + output[1:]
+        elif isinstance(output, torch.Tensor):
+            return output * g
+        else:
+            # Dataclass or named tuple---modify in place
+            output[0] = output[0] * g
+            return output
+    return hook_fn
+
+
+# Load model and tokenizer
 DEVICE = "mps" if torch.backends.mps.is_available() else "cpu"
 MODEL_NAME = "Qwen/Qwen3.5-2B"
 
@@ -46,12 +66,28 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map=DEVICE,
     attn_implementation="eager",
 )
+
+# add hook(s)
+
+# Identify attention layer indices from the 3:1 pattern
+attn_layers = [i for i in range(len(model.model.layers)) 
+               if (i + 1) % 4 == 0]  # [3, 7, 11, 15, 19, 23]
+
+print(f"Hooking attention layers: {attn_layers}")
+
+hooks = []
+for idx in attn_layers:
+    layer = model.model.layers[idx]
+    handle = layer.register_forward_hook(make_attn_scaler(g))
+    hooks.append(handle)
+    print(f"  layer {idx}: scaling by {g}")
+
+
+
 model.eval()
 
 print(f"Model loaded: {model.config.num_hidden_layers} layers, "
       f"hidden_size={model.config.hidden_size}")
-
-# Step 2: Run a single forward pass requesting everything
 
 inputs = tokenizer(prompt, return_tensors="pt").to(DEVICE)
 
@@ -62,12 +98,24 @@ print(f"Input keys: {list(inputs.keys())}")
 for k, v in inputs.items():
     print(f"  {k}: shape={v.shape}, dtype={v.dtype}")
 
+# Run with hooks active
 with torch.no_grad():
-    outputs = model(
-        **inputs,
-        output_hidden_states=True,
-        output_attentions=True,
-    )
+    outputs_hooked = model(**inputs)
+
+logits_hooked = outputs_hooked.logits[0, -1, :]
+probs_hooked = torch.softmax(logits_hooked, dim=-1)
+top_probs_hooked, top_indices_hooked = torch.topk(probs_hooked, 10)
+
+print(f"\n--- Top predictions with g={g} (attention scaled) ---")
+for i in range(10):
+    token = tokenizer.decode(top_indices_hooked[i])
+    prob = top_probs_hooked[i].item()
+    print(f"  {i+1}. '{token}' ({prob*100:.1f}%)")
+
+# Remove hooks---model is back to normal
+for h in hooks:
+    h.remove()
+print(f"\nHooks removed. Model restored.")
 
 # ============================================================
 # FULL INVENTORY: everything in the outputs object
