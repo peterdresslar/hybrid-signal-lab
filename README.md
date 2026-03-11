@@ -53,3 +53,16 @@ Options:
 - `--out-dir <path>` — output directory (default `results/sweep_{timestamp}`).
 
 Results are written as JSONL to `<out-dir>/main.jsonl`, with model metadata in `<out-dir>/_meta.json`.
+
+### Short prompts
+
+The short probe prompts and their expected target tokens (used by the sweep to track target rank and probability across *g* values):
+
+| File | Prompt | Target |
+|------|--------|--------|
+| `short0.txt` | The color with the shortest wavelength is | violet |
+| `short1.txt` | 1, 1, 2, 3, 5, 8, 13, 21, | 34 |
+| `short2.txt` | The capital of Mongolia is | U |
+| `short3.txt` | She opened the door and he opened the | door |
+| `short4.txt` | roses are red, violets are blue, sugar is sweet, and | so |
+| `short5.txt` | import torch\nimport torch.nn as | nn |

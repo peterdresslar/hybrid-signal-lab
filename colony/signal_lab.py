@@ -115,18 +115,20 @@ def run_model_pass(model, tokenizer, prompt, g, device=DEVICE, prompt_id=None, t
     result = {
         "prompt_id": prompt_id if prompt_id else (prompt[:20] + "..."),
         "g": g,
-        "top_k_logits": top_logits.tolist(),
-        "top_k_indices": top_indices.tolist(),
-        "top_k_tokens": top_tokens,
         "target_token": target_token,
         "target_rank": target_rank,
         "target_prob": target_prob,
         "final_entropy_bits": final_entropy_bits,
-        "mean_entropy_bits": mean_entropy_bits,
         "kl_from_baseline": kl_from_baseline,
-        "attn_entropy_per_head_final": attn_entropy,
         "elapsed_time": elapsed_time
     }
+    
+    if return_verbose:
+        result["top_k_logits"] = top_logits.tolist()
+        result["top_k_indices"] = top_indices.tolist()
+        result["top_k_tokens"] = top_tokens
+        result["mean_entropy_bits"] = mean_entropy_bits
+        result["attn_entropy_per_head_final"] = attn_entropy
     
     if return_raw_logits:
         result["_raw_logits"] = final_logits

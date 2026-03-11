@@ -112,13 +112,9 @@ def main():
                 if len(encoded_target) > 0:
                     target_token_idx = encoded_target[0]
                 else:
-                    # fallback
-                    target_token_idx = baseline_result.get("top_k_indices", [baseline_result.get("_baseline_top_idx")])[0]
+                    target_token_idx = baseline_logits.argmax().item()
             else:
-                target_token_idx = baseline_result.get("top_k_indices", [baseline_result.get("_baseline_top_idx")])[0]
-                
-            # clean up temporary fallback variables
-            baseline_result.pop("_baseline_top_idx", None)
+                target_token_idx = baseline_logits.argmax().item()
             
             for rep in range(args.repetitions):
                 for g in g_values:
