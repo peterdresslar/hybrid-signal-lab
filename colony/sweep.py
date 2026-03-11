@@ -45,7 +45,8 @@ def main():
     parser.add_argument("--short-only", action="store_true", help="Run only short*.txt prompts.")
     parser.add_argument("--med-only", action="store_true", help="Run only med*.txt prompts.")
     parser.add_argument("--use-prompt", type=str, help="Specify exactly one prompt file to run.")
-    parser.add_argument("--out", type=str, default="sweep_results_{timestamp}.jsonl", help="Output JSONL file pattern. Use {timestamp} to inject current time.")
+    parser.add_argument("--verbose", action="store_true", help="Log heavier metrics (full top-k, attn. entropy) to a separate file.")
+    parser.add_argument("--out-dir", type=str, default="results/sweep_{timestamp}", help="Output directory pattern. Use {timestamp} to inject current time.")
     
     args = parser.parse_args()
     
@@ -54,10 +55,30 @@ def main():
         print("No prompts found to run.")
         return
         
-    out_file = args.out.replace("{timestamp}", datetime.now().strftime("%Y%m%d_%H%M%S"))
+    out_dir = args.out_dir.replace("{timestamp}", datetime.now().strftime("%Y%m%d_%H%M%S"))
+    os.makedirs(out_dir, exist_ok=True)
+    
+    out_file = os.path.join(out_dir, "main.jsonl")
+    verbose_file = os.path.join(out_dir, "verbose.jsonl") if args.verbose else None
     
     print(f"Loading model for sweep...")
     model, tokenizer = load_model_and_tokenizer()
+    
+    meta_file = os.path.join(out_dir, "_meta.json")
+    config_dict = {
+        key: getattr(model.config, key, None)
+        for key in ['model_type', 'num_hidden_layers', 'hidden_size',
+                     'intermediate_size', 'num_attention_heads',
+                     'num_key_value_heads', 'vocab_size']
+    }
+    metadata = {
+        "model": getattr(model.config, "name_or_path", "unknown"),
+        "device": DEVICE,
+        "config": config_dict
+    }
+    with open(meta_file, "w") as f_meta:
+        json.dump(metadata, f_meta, indent=2)
+    print(f"Saved metadata to {meta_file}")
     
     g_values = []
     current_g = 0.0
@@ -70,6 +91,7 @@ def main():
     print(f"Total runs: {total_runs}")
     
     with open(out_file, "w") as f_out:
+        f_verb = open(verbose_file, "w") if verbose_file else None
         for prompt_id in prompts_to_run:
             prompt_text = read_prompt(prompt_id)
             print(f"\nEvaluating prompt: {prompt_id}")
@@ -78,48 +100,76 @@ def main():
             baseline_result = run_model_pass(
                 model, tokenizer, prompt_text, 1.0, 
                 device=DEVICE, prompt_id=prompt_id, 
-                return_raw_logits=True
+                return_raw_logits=True,
+                return_verbose=args.verbose
             )
             baseline_logits = baseline_result.pop("_raw_logits")
             
             # Identify target token from our dictionary
             target_str = TARGET_DICTIONARY.get(prompt_id)
             if target_str is not None:
-                # Tokenize the specific target string to get its ID.
-                # If it happens to be multiple tokens, just take the first one 
-                # (e.g. " 34" -> " ", "3", "4" -> takes " ")
                 encoded_target = tokenizer.encode(target_str, add_special_tokens=False)
                 if len(encoded_target) > 0:
                     target_token_idx = encoded_target[0]
                 else:
-                    target_token_idx = baseline_result["top_k_indices"][0]
+                    # fallback
+                    target_token_idx = baseline_result.get("top_k_indices", [baseline_result.get("_baseline_top_idx")])[0]
             else:
-                # Fallback to the top prediction of the baseline
-                target_token_idx = baseline_result["top_k_indices"][0]
+                target_token_idx = baseline_result.get("top_k_indices", [baseline_result.get("_baseline_top_idx")])[0]
+                
+            # clean up temporary fallback variables
+            baseline_result.pop("_baseline_top_idx", None)
             
             for rep in range(args.repetitions):
                 for g in g_values:
                     # skip running baseline again if rep == 0 and g == 1.0
                     if rep == 0 and abs(g - 1.0) < 1e-4:
                         res = baseline_result.copy()
-                        # already ran, just add repetition tracking if we want to
+                        # populate target metrics that were skipped in the initial baseline run
+                        baseline_probs = torch.softmax(baseline_logits, dim=-1)
+                        if "target_token" not in res:
+                            res["target_token"] = tokenizer.decode(target_token_idx)
+                        res["target_prob"] = baseline_probs[target_token_idx].item()
+                        res["target_rank"] = (baseline_probs > baseline_probs[target_token_idx]).sum().item() + 1
                     else:
                         res = run_model_pass(
                             model, tokenizer, prompt_text, g, 
                             device=DEVICE, prompt_id=prompt_id,
                             target_token_id=target_token_idx,
-                            baseline_logits=baseline_logits
+                            baseline_logits=baseline_logits,
+                            return_verbose=args.verbose
                         )
                     
-                    res["repetition"] = rep + 1
+                    res["rep"] = rep + 1
                     
-                    # Dump to JSONL
-                    f_out.write(json.dumps(res) + "\n")
+                    # Separate core properties from verbose properties
+                    core_res = {
+                        "prompt_id": res["prompt_id"],
+                        "g": res["g"],
+                        "rep": res["rep"],
+                        "target_rank": res["target_rank"],
+                        "target_prob": res["target_prob"],
+                        "final_entropy_bits": res["final_entropy_bits"],
+                        "kl_from_baseline": res["kl_from_baseline"],
+                        "elapsed_time": res["elapsed_time"]
+                    }
+                    
+                    # Dump core to JSONL
+                    f_out.write(json.dumps(core_res) + "\n")
                     f_out.flush()
+                    
+                    if f_verb and args.verbose:
+                        # include everything in verbose except duplicate rep/g/prompt? 
+                        # we should keep keys so they align
+                        f_verb.write(json.dumps(res) + "\n")
+                        f_verb.flush()
                     
                     print(f"  [Rep {rep+1}] g={g:.2f} | Time: {res['elapsed_time']:.2f}s | Final Ent: {res['final_entropy_bits']:.2f} bits | Target Rank: {res.get('target_rank')}")
 
-    print(f"\nSweep complete! Saved to {out_file}")
+        if f_verb:
+            f_verb.close()
+
+    print(f"\nSweep complete! Saved results to directory: {out_dir}")
 
 if __name__ == "__main__":
     main()

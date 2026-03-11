@@ -51,7 +51,7 @@ def read_prompt(prompt_arg):
             return f.read().strip()
     return prompt_arg
 
-def run_model_pass(model, tokenizer, prompt, g, device=DEVICE, prompt_id=None, target_token_id=None, baseline_logits=None, return_raw_logits=False):
+def run_model_pass(model, tokenizer, prompt, g, device=DEVICE, prompt_id=None, target_token_id=None, baseline_logits=None, return_raw_logits=False, return_verbose=False):
     start_time = time.perf_counter()
     inputs = tokenizer(prompt, return_tensors="pt").to(device)
     
@@ -74,8 +74,9 @@ def run_model_pass(model, tokenizer, prompt, g, device=DEVICE, prompt_id=None, t
     final_logits = outputs.logits[0, -1, :].float()
     probs = torch.softmax(final_logits, dim=-1)
     
-    top_logits, top_indices = torch.topk(final_logits, 50)
-    top_tokens = [tokenizer.decode(idx) for idx in top_indices]
+    if return_verbose:
+        top_logits, top_indices = torch.topk(final_logits, 15)
+        top_tokens = [tokenizer.decode(idx) for idx in top_indices]
     
     target_token = None
     target_rank = None
@@ -87,9 +88,11 @@ def run_model_pass(model, tokenizer, prompt, g, device=DEVICE, prompt_id=None, t
         
     final_entropy_bits = -(probs * torch.log2(probs + 1e-10)).sum().item()
     
-    all_logits = outputs.logits[0, :, :].float()
-    all_probs = torch.softmax(all_logits, dim=-1)
-    mean_entropy_bits = -(all_probs * torch.log2(all_probs + 1e-10)).sum(dim=-1).mean().item()
+    mean_entropy_bits = None
+    if return_verbose:
+        all_logits = outputs.logits[0, :, :].float()
+        all_probs = torch.softmax(all_logits, dim=-1)
+        mean_entropy_bits = -(all_probs * torch.log2(all_probs + 1e-10)).sum(dim=-1).mean().item()
     
     kl_from_baseline = None
     if baseline_logits is not None:
@@ -102,28 +105,14 @@ def run_model_pass(model, tokenizer, prompt, g, device=DEVICE, prompt_id=None, t
             reduction='sum'
         ).item()
         
-    hidden_stack = []
-    if hasattr(outputs, 'hidden_states') and outputs.hidden_states is not None:
-        for hs in outputs.hidden_states[1:]: # skip embedding
-            hidden_stack.append(hs[0, -1, :].tolist())
-            
     attn_entropy = []
-    if hasattr(outputs, 'attentions') and outputs.attentions is not None:
+    if return_verbose and hasattr(outputs, 'attentions') and outputs.attentions is not None:
         for attn in outputs.attentions:
             last_token_attn = attn[0, :, -1, :].float()
             ent = -(last_token_attn * torch.log2(last_token_attn + 1e-10)).sum(dim=-1)
             attn_entropy.append(ent.tolist())
             
-    config_dict = {
-        key: getattr(model.config, key, None)
-        for key in ['model_type', 'num_hidden_layers', 'hidden_size',
-                     'intermediate_size', 'num_attention_heads',
-                     'num_key_value_heads', 'vocab_size']
-    }
-    
     result = {
-        "model": getattr(model.config, "name_or_path", MODEL_NAME),
-        "device": device,
         "prompt_id": prompt_id if prompt_id else (prompt[:20] + "..."),
         "g": g,
         "top_k_logits": top_logits.tolist(),
@@ -135,10 +124,8 @@ def run_model_pass(model, tokenizer, prompt, g, device=DEVICE, prompt_id=None, t
         "final_entropy_bits": final_entropy_bits,
         "mean_entropy_bits": mean_entropy_bits,
         "kl_from_baseline": kl_from_baseline,
-        "hidden_state_final_token": hidden_stack,
         "attn_entropy_per_head_final": attn_entropy,
-        "elapsed_time": elapsed_time,
-        "config": config_dict
+        "elapsed_time": elapsed_time
     }
     
     if return_raw_logits:
@@ -153,7 +140,17 @@ def run_model(prompt_source, g, model=None, tokenizer=None, device=DEVICE):
     prompt = read_prompt(prompt_source)
     prompt_id = prompt_source if os.path.isfile(prompt_source) or os.path.isfile(os.path.join("data", prompt_source)) else "direct_prompt"
     
-    summary = run_model_pass(model, tokenizer, prompt, g, device=device, prompt_id=prompt_id)
+    summary = run_model_pass(model, tokenizer, prompt, g, device=device, prompt_id=prompt_id, return_verbose=True)
+    
+    config_dict = {
+        key: getattr(model.config, key, None)
+        for key in ['model_type', 'num_hidden_layers', 'hidden_size',
+                     'intermediate_size', 'num_attention_heads',
+                     'num_key_value_heads', 'vocab_size']
+    }
+    summary["model"] = getattr(model.config, "name_or_path", MODEL_NAME)
+    summary["device"] = device
+    summary["config"] = config_dict
     
     out_path = "signal_lab_output.json"
     with open(out_path, "w") as f:
