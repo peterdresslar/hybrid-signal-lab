@@ -3,12 +3,38 @@
 Run with: uv run python -m colony.signal_lab
 """
 
+import argparse
+import os
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+import dotenv
+
+# ensure HF_TOKEN loaded from .env_development
+dotenv.load_dotenv(".env.development")
+parser = argparse.ArgumentParser(description="Signal Lab: exploring model internals via transformers.")
+parser.add_argument("--prompt", type=str, help="Path or filename to a prompt file in data/, or a direct string prompt.")
+args = parser.parse_args()
+
 # Step 1: Load model and tokenizer
 DEVICE = "mps" if torch.backends.mps.is_available() else "cpu"
-MODEL_NAME = "Qwen/Qwen3-1.7B"
+MODEL_NAME = "Qwen/Qwen3.5-2B"
+
+DEFAULT_PROMPT = "The color with the shortest wavelength is"
+
+if args.prompt:
+    if os.path.isfile(args.prompt):
+        with open(args.prompt, "r", encoding="utf-8") as f:
+            prompt = f.read().strip()
+    else:
+        data_path = os.path.join("data", args.prompt)
+        if os.path.isfile(data_path):
+            with open(data_path, "r", encoding="utf-8") as f:
+                prompt = f.read().strip()
+        else:
+            prompt = args.prompt
+else:
+    prompt = DEFAULT_PROMPT
 
 print(f"Device: {DEVICE}")
 print(f"Loading {MODEL_NAME}...")
@@ -26,7 +52,7 @@ print(f"Model loaded: {model.config.num_hidden_layers} layers, "
       f"hidden_size={model.config.hidden_size}")
 
 # Step 2: Run a single forward pass requesting everything
-prompt = "The color with the shortest wavelength is"
+
 inputs = tokenizer(prompt, return_tensors="pt").to(DEVICE)
 
 print(f"\nPrompt: '{prompt}'")
@@ -148,23 +174,25 @@ print(f"\n--- past_key_values ---")
 if outputs.past_key_values is not None:
     pkv = outputs.past_key_values
     print(f"Type: {type(pkv).__name__}")
-    # DynamicCache (transformers >= 4.36) uses .key_cache / .value_cache
     if hasattr(pkv, 'key_cache'):
         print(f"key_cache: {len(pkv.key_cache)} layers")
-        if len(pkv.key_cache) > 0:
-            print(f"  layer 0 key shape: {pkv.key_cache[0].shape}")
-            print(f"  layer 0 value shape: {pkv.value_cache[0].shape}")
-    elif hasattr(pkv, '__len__'):
-        print(f"Number of layers: {len(pkv)}")
-        try:
-            layer0 = pkv[0]
-            if isinstance(layer0, tuple):
-                print(f"Per layer: tuple of {len(layer0)} tensors (key, value)")
-                for j, t in enumerate(layer0):
-                    name = "key" if j == 0 else "value"
-                    print(f"  {name}: shape={t.shape}, dtype={t.dtype}")
-        except (TypeError, IndexError) as e:
-            print(f"  (not subscriptable: {e})")
+        for i, k in enumerate(pkv.key_cache):
+            if k is not None:
+                v = pkv.value_cache[i]
+                print(f"  layer {i}: ATTENTION  key={k.shape}, value={v.shape}")
+            else:
+                print(f"  layer {i}: GDN        (no KV cache)")
+    # Check for GDN recurrent state
+    if hasattr(pkv, 'conv_states'):
+        print(f"\nconv_states: {len(pkv.conv_states)} layers")
+        for i, cs in enumerate(pkv.conv_states):
+            if cs is not None:
+                print(f"  layer {i}: shape={cs.shape}")
+    if hasattr(pkv, 'recurrent_states'):
+        print(f"\nrecurrent_states: {len(pkv.recurrent_states)} layers")
+        for i, rs in enumerate(pkv.recurrent_states):
+            if rs is not None:
+                print(f"  layer {i}: shape={rs.shape}")
 else:
     print("None (not returned)")
 
@@ -188,7 +216,10 @@ config = model.config
 for key in ['model_type', 'num_hidden_layers', 'hidden_size',
             'intermediate_size', 'num_attention_heads',
             'num_key_value_heads', 'vocab_size', 'max_position_embeddings',
-            'rope_theta', 'rms_norm_eps', 'tie_word_embeddings']:
+            'rope_theta', 'rms_norm_eps', 'tie_word_embeddings',
+            'full_attention_interval', 'linear_num_key_heads',
+            'linear_num_value_heads', 'linear_key_head_dim',
+            'linear_value_head_dim']:
     val = getattr(config, key, 'N/A')
     print(f"  {key}: {val}")
 
@@ -265,12 +296,16 @@ summary = {
         if outputs.past_key_values is not None else None,
         "key_cache_layers": len(outputs.past_key_values.key_cache)
         if hasattr(outputs.past_key_values, 'key_cache') else None,
-        "key_shape": list(outputs.past_key_values.key_cache[0].shape)
-        if hasattr(outputs.past_key_values, 'key_cache')
-        and len(outputs.past_key_values.key_cache) > 0 else None,
-        "value_shape": list(outputs.past_key_values.value_cache[0].shape)
-        if hasattr(outputs.past_key_values, 'value_cache')
-        and len(outputs.past_key_values.value_cache) > 0 else None,
+        "layer_map": [
+            {
+                "layer": i,
+                "type": "attention" if k is not None else "gdn",
+                "key_shape": list(k.shape) if k is not None else None,
+                "value_shape": list(outputs.past_key_values.value_cache[i].shape)
+                if k is not None else None,
+            }
+            for i, k in enumerate(outputs.past_key_values.key_cache)
+        ] if hasattr(outputs.past_key_values, 'key_cache') else None,
     },
     "top_predictions": {
         "total_entropy_bits": float(total_entropy),

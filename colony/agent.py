@@ -74,7 +74,7 @@ class Agent(ABC):
 
 
 class OllamaAgent(Agent):
-    """Agent backed by a local Ollama model instance.
+    """Agent backed by a local Ollama model instance. Implements the abstract base class Agent.
 
     Requires ollama to be running locally with the specified model pulled.
     Extracts real entropy from token logprobs and thinking traces when available.
