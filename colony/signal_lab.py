@@ -1,12 +1,13 @@
 import argparse
-import os
 import time
 import json
+from pathlib import Path
 import torch
 import torch.nn.functional as F
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import dotenv
 import numpy as np
+from colony.model.prompt import Prompt
 
 # ensure HF_TOKEN loaded from .env_development
 dotenv.load_dotenv(".env.development")
@@ -16,6 +17,7 @@ MODEL_NAME_4B = "Qwen/Qwen3.5-4B-Base"
 MODEL_NAME_2B = "Qwen/Qwen3.5-2B-Base"
 MODEL_NAME_0_8B = "Qwen/Qwen3.5-0.8B-Base"
 QWEN_LAYERS = 24
+DATA_DIR = Path("data")
 
 def generate_g_vector_qwen35(g_value_or_vector: float | np.ndarray = 1.0):
     """
@@ -96,15 +98,105 @@ def load_model_and_tokenizer(model_name: str, device: str = DEVICE):
     print(f"Model loaded: {_model.config.num_hidden_layers} layers, hidden_size={_model.config.hidden_size}")
     return _model, tokenizer
 
+def _resolve_path(path_or_name: str) -> Path:
+    path = Path(path_or_name)
+    if path.is_file():
+        return path
+    data_path = DATA_DIR / path_or_name
+    if data_path.is_file():
+        return data_path
+    return path
+
+
+def _load_prompt_entries(json_path: Path) -> list[dict]:
+    with open(json_path, "r", encoding="utf-8") as file_handle:
+        data = json.load(file_handle)
+    if not isinstance(data, list):
+        raise ValueError(f"Prompt catalog must be a list: {json_path}")
+    return data
+
+
+def _prompt_from_catalog(json_path: Path, prompt_id: str) -> Prompt:
+    entries = _load_prompt_entries(json_path)
+    for entry in entries:
+        if isinstance(entry, dict) and entry.get("id") == prompt_id:
+            return Prompt.from_dict(entry, data_dir=json_path.parent, source=str(json_path))
+    raise ValueError(f"Prompt id '{prompt_id}' not found in {json_path}")
+
+
+def _all_prompt_catalogs() -> list[Path]:
+    if not DATA_DIR.is_dir():
+        return []
+    return sorted(DATA_DIR.glob("prompts*.json"))
+
+
+def resolve_prompt(prompt_arg: str) -> Prompt:
+    """
+    Resolve a prompt argument into a Prompt object.
+
+    Supported forms:
+    - direct string prompt
+    - text file path or file name in `data/`
+    - prompt id from any `data/prompts*.json` catalog (for example `short0`)
+    - explicit catalog selector `prompts_short.json:short0`
+    """
+    # Explicit selector: "<catalog_path_or_name>:<prompt_id>"
+    if ":" in prompt_arg:
+        left, right = prompt_arg.split(":", 1)
+        maybe_catalog = _resolve_path(left)
+        if maybe_catalog.is_file() and maybe_catalog.suffix == ".json":
+            return _prompt_from_catalog(maybe_catalog, right)
+
+    # Direct file path / data-relative file path
+    resolved_path = _resolve_path(prompt_arg)
+    if resolved_path.is_file():
+        if resolved_path.suffix == ".json":
+            entries = _load_prompt_entries(resolved_path)
+            if len(entries) == 1:
+                entry = entries[0]
+                if not isinstance(entry, dict):
+                    raise ValueError(f"Invalid prompt entry in {resolved_path}")
+                return Prompt.from_dict(entry, data_dir=resolved_path.parent, source=str(resolved_path))
+            raise ValueError(
+                f"Prompt catalog {resolved_path} contains multiple prompts. "
+                "Use '<catalog>:<id>' (for example 'prompts_short.json:short0')."
+            )
+
+        with open(resolved_path, "r", encoding="utf-8") as file_handle:
+            return Prompt(
+                id=resolved_path.name,
+                prompt_text=file_handle.read().strip(),
+                prompt_file=str(resolved_path),
+                source=str(resolved_path),
+            )
+
+    # Catalog prompt id lookup across all prompt catalogs.
+    prompt_matches = []
+    for catalog_path in _all_prompt_catalogs():
+        for entry in _load_prompt_entries(catalog_path):
+            if isinstance(entry, dict) and entry.get("id") == prompt_arg:
+                prompt_matches.append(
+                    Prompt.from_dict(entry, data_dir=catalog_path.parent, source=str(catalog_path))
+                )
+
+    if len(prompt_matches) == 1:
+        return prompt_matches[0]
+    if len(prompt_matches) > 1:
+        sources = ", ".join(sorted({match.source for match in prompt_matches if match.source}))
+        raise ValueError(
+            f"Prompt id '{prompt_arg}' is ambiguous across catalogs: {sources}. "
+            "Use '<catalog>:<id>' to disambiguate."
+        )
+
+    # Fallback: literal prompt string.
+    return Prompt.from_text(prompt_arg, prompt_id="direct_prompt")
+
+
 def read_prompt(prompt_arg):
-    if os.path.isfile(prompt_arg):
-        with open(prompt_arg, "r", encoding="utf-8") as f:
-            return f.read().strip()
-    data_path = os.path.join("data", prompt_arg)
-    if os.path.isfile(data_path):
-        with open(data_path, "r", encoding="utf-8") as f:
-            return f.read().strip()
-    return prompt_arg
+    """
+    Backwards-compatible helper that returns only the prompt text.
+    """
+    return resolve_prompt(prompt_arg).prompt_text
 
 def run_model_pass(model, tokenizer, prompt, g_vec, device=DEVICE, prompt_id=None, target_token_id=None, baseline_logits=None, return_raw_logits=False, return_verbose=False):
     start_time = time.perf_counter()
@@ -191,7 +283,7 @@ def run_model_pass(model, tokenizer, prompt, g_vec, device=DEVICE, prompt_id=Non
     return result
 
 def run_model(prompt_source, g_value_or_vector, model_key: str = "0_8B", device=DEVICE):
-    if model_key not in ["0_8B", "2B", "8B"]:
+    if model_key not in ["0_8B", "2B", "4B"]:
         raise ValueError(f"Invalid model key: {model_key}")
 
     model_name = {
@@ -204,10 +296,17 @@ def run_model(prompt_source, g_value_or_vector, model_key: str = "0_8B", device=
 
     g_vec = generate_g_vector_qwen35(g_value_or_vector)
         
-    prompt = read_prompt(prompt_source)
-    prompt_id = prompt_source if os.path.isfile(prompt_source) or os.path.isfile(os.path.join("data", prompt_source)) else "direct_prompt"
+    prompt = resolve_prompt(prompt_source)
     
-    summary = run_model_pass(model, tokenizer, prompt, g_vec, device=device, prompt_id=prompt_id, return_verbose=True)
+    summary = run_model_pass(
+        model,
+        tokenizer,
+        prompt.prompt_text,
+        g_vec,
+        device=device,
+        prompt_id=prompt.id,
+        return_verbose=True,
+    )
     
     config_dict = {
         key: getattr(model.config, key, None)

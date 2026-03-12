@@ -37,18 +37,17 @@ uv run python -m colony.signal_lab --prompt "The color with the shortest wavelen
 
 ### Running sweeps
 
-`sweep.py` automates running every prompt in the `data/` directory across a range of *g* values, collecting per-run metrics (target rank, target probability, final entropy, KL divergence from baseline) into a structured output directory.
+`sweep.py` automates running prompts across a cartridge-defined set of *g* vectors, collecting per-run metrics (target rank, target probability, final entropy, KL divergence from baseline) into a structured output directory.
 
 ```bash
-uv run python -m colony.sweep
+uv run python -m colony.sweep --cartridge uniform_check
 ```
 
 Options:
 
-- `--granularity` — step size between *g* values (default `0.25`, range 0.0–2.0).
+- `--cartridge` — required named sweep configuration from `colony/sweep_cartridges.py`.
+- `--model-key` — optional model selector (`0_8B`, `2B`, `4B`), default `0_8B`.
 - `--repetitions` — number of repetitions per prompt/g pair (default `1`).
-- `--short-only` / `--med-only` — restrict to short or medium prompts.
-- `--use-prompt <file>` — run a single specific prompt file.
 - `--verbose` — log full top-k and attention entropy to a separate `verbose.jsonl`.
 - `--out-dir <path>` — output directory (default `results/sweep_{timestamp}`).
 

@@ -6,8 +6,21 @@ CARTRIDGES = {
         "g_vectors": [
             [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
         ],
+        "prompt":"The color with the shortest wavelength is",
+        "target": "violet",
+        "model_key": "0_8B",
     },
-    "uniform_check": {
+    "test_cartridge_prompts": {
+        "description": "Test cartridge for checking prompt tier loading.",
+        "g_vectors": [
+            [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+        ],
+        "prompt_tiers":["short","brief"],
+        "model_key": "0_8B",
+    },
+
+
+    "uniform_check_lite": {
         "description": "Uniform scalar values expressed as vectors. Validates that vector path matches scalar path.",
         "g_vectors": [
             [0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
@@ -16,8 +29,10 @@ CARTRIDGES = {
             [1.25, 1.25, 1.25, 1.25, 1.25, 1.25],
             [1.5, 1.5, 1.5, 1.5, 1.5, 1.5],
         ],
+        "prompt_tiers":["short","brief"],
+        "model_key": "0_8B",
     },
-    "middle_bump": {
+    "middle_bump_lite": {
         "description": "Test middle-layer influence hypothesis. Layers 3-4 (0-indexed) get elevated gain.",
         "g_vectors": [
             [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
@@ -28,8 +43,10 @@ CARTRIDGES = {
             [0.8, 1.0, 1.3, 1.3, 1.0, 0.8],
             [0.8, 1.0, 1.5, 1.5, 1.0, 0.8],
         ],
+        "prompt_tiers":["short","brief"],
+        "model_key": "0_8B",
     },
-    "early_vs_late": {
+    "early_vs_late_lite": {
         "description": "Detailed early-vs-late probe: symmetric boosts/suppression, ramps, and antagonistic mixes across depth.",
         "g_vectors": [
             # baseline
@@ -75,17 +92,21 @@ CARTRIDGES = {
             [1.4, 1.2, 1.0, 1.0, 1.2, 1.4],  # high at edges, neutral center
             [0.6, 0.8, 1.0, 1.0, 0.8, 0.6],  # low at edges, neutral center
         ],
+        "prompt_tiers":["short","brief"],
+        "model_key": "0_8B",
     },
 }
 
 
+def list_cartridges() -> list[str]:
+    return sorted(CARTRIDGES.keys())
+
+
 def get_cartridge(name: str) -> dict:
     if name not in CARTRIDGES:
-        available = ", ".join(CARTRIDGES.keys())
+        available = ", ".join(list_cartridges())
         raise ValueError(f"Unknown cartridge '{name}'. Available: {available}")
-    cart = CARTRIDGES[name]
-    return {
-        "name": name,
-        "description": cart["description"],
-        "g_vectors": [np.array(v) for v in cart["g_vectors"]],
-    }
+    cart = dict(CARTRIDGES[name])
+    cart["name"] = name
+    cart["g_vectors"] = [np.array(v) for v in cart["g_vectors"]]
+    return cart

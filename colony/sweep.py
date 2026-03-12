@@ -5,11 +5,12 @@ import torch
 import traceback
 from pathlib import Path
 from datetime import datetime
+from typing import Any
 
 from colony.signal_lab import (
     load_model_and_tokenizer,
     run_model_pass,
-    read_prompt,
+    resolve_prompt,
     DEVICE,
     MODEL_NAME_0_8B,
     MODEL_NAME_2B,
@@ -17,77 +18,117 @@ from colony.signal_lab import (
     generate_g_vector_qwen35,
     g_vec_as_printable_array,
 )
-from colony.sweep_cartridges import get_cartridge
+from colony.model.prompt import Prompt
+from colony.sweep_cartridges import get_cartridge, list_cartridges
 
-TARGET_DICTIONARY = {
-    "short0.txt": " violet",
-    "short1.txt": " twenty-one",
-    "short2.txt": " U",
-    "short3.txt": " door",
-    "short4.txt": " so",
-    "short5.txt": " nn",
-    "med0.txt": " castle",
-    "med1.txt": " Pemb",
-    "med2.txt": " Stone",
-    "med3.txt": " Th",
-    "med4.txt": "5",
-    "med5.txt": " rain",
-    "long1.txt": " TRUMPET"
+TIER_TO_CATALOG = {
+    "short": "prompts_short.json",
+    "brief": "prompts_brief.json",
+    "med": "prompts_med.json",
+    "long": "prompts_long.json",
+    "extended": "prompts_extended.json",
 }
 
-def get_prompts(args):
-    data_dir = Path("data")
-    prompt_files = []
-    
-    if args.use_prompt:
-        prompt_files.append(args.use_prompt)
-    elif args.short_only:
-        prompt_files = [f.name for f in data_dir.glob("short*.txt")]
-    elif args.med_only:
-        prompt_files = [f.name for f in data_dir.glob("med*.txt")]
-    else:
-        prompt_files = [f.name for f in data_dir.glob("short*.txt")] + [f.name for f in data_dir.glob("med*.txt")]
-        
-    return sorted(prompt_files)
+
+def resolve_out_dir(out_dir_pattern: str) -> Path:
+    rendered = out_dir_pattern.replace("{timestamp}", datetime.now().strftime("%Y%m%d_%H%M%S"))
+    out_path = Path(rendered)
+    if out_path.is_absolute():
+        return out_path
+    if out_path.parts and out_path.parts[0] == "results":
+        return out_path
+    return Path("results") / out_path
+
+
+def _prompts_from_tiers(prompt_tiers: list[str]) -> list[Prompt]:
+    prompts: list[Prompt] = []
+    for tier in prompt_tiers:
+        if tier not in TIER_TO_CATALOG:
+            available = ", ".join(sorted(TIER_TO_CATALOG.keys()))
+            raise ValueError(f"Unknown prompt tier '{tier}'. Available tiers: {available}")
+
+        catalog_name = TIER_TO_CATALOG[tier]
+        catalog_path = Path("data") / catalog_name
+        with open(catalog_path, "r", encoding="utf-8") as file_handle:
+            entries = json.load(file_handle)
+        if not isinstance(entries, list):
+            raise ValueError(f"Prompt catalog must be a list: {catalog_path}")
+
+        for entry in entries:
+            if not isinstance(entry, dict) or "id" not in entry:
+                continue
+            prompts.append(resolve_prompt(f"{catalog_name}:{entry['id']}"))
+    return prompts
+
+
+def get_prompts_from_cartridge(cartridge: dict[str, Any]) -> list[Prompt]:
+    if cartridge.get("prompt"):
+        prompt_obj = Prompt.from_text(
+            cartridge["prompt"],
+            prompt_id=f"{cartridge['name']}_prompt",
+        )
+        if cartridge.get("target") is not None:
+            prompt_obj.target = cartridge["target"]
+        return [prompt_obj]
+
+    if cartridge.get("prompt_id"):
+        return [resolve_prompt(cartridge["prompt_id"])]
+
+    if cartridge.get("prompt_ids"):
+        return [resolve_prompt(prompt_id) for prompt_id in cartridge["prompt_ids"]]
+
+    if cartridge.get("prompt_tiers"):
+        prompts = _prompts_from_tiers(cartridge["prompt_tiers"])
+        # Deduplicate by prompt id while preserving order.
+        deduped_prompts: list[Prompt] = []
+        seen_ids: set[str] = set()
+        for prompt in prompts:
+            if prompt.id in seen_ids:
+                continue
+            deduped_prompts.append(prompt)
+            seen_ids.add(prompt.id)
+        return deduped_prompts
+
+    raise ValueError(
+        "Cartridge must define one of: 'prompt', 'prompt_id', 'prompt_ids', or 'prompt_tiers'."
+    )
 
 def main():
     parser = argparse.ArgumentParser(description="Sweep g values over different prompts.")
-    parser.add_argument("--granularity", type=float, default=0.25, help="Distance between scalar sweep values. Default 0.25. Ignored when --cartridge is set.")
-    parser.add_argument("--cartridge", type=str, default=None, help="Named cartridge of g_vec configurations to sweep. Mutually exclusive with scalar sweep.")
+    parser.add_argument("--cartridge", type=str, required=True, choices=list_cartridges(), help="Named cartridge of g_vec configurations to sweep.")
+    parser.add_argument("--model-key", type=str, default="0_8B", choices=["0_8B", "2B", "4B"], help="Model to use. Defaults to 0_8B.")
     parser.add_argument("--repetitions", type=int, default=1, help="Number of repetitions per prompt/g pair.")
-    parser.add_argument("--short-only", action="store_true", help="Run only short*.txt prompts.")
-    parser.add_argument("--med-only", action="store_true", help="Run only med*.txt prompts.")
-    parser.add_argument("--use-prompt", type=str, help="Specify exactly one prompt file to run.")
     parser.add_argument("--verbose", action="store_true", help="Log heavier metrics (full top-k, attn. entropy) to a separate file.")
     parser.add_argument("--out-dir", type=str, default="results/sweep_{timestamp}", help="Output directory pattern. Use {timestamp} to inject current time.")
-    parser.add_argument("--model-key", type=str, default="0_8B", help="Model to use. Please enter 0_8B, 2B, or 4B.")
     
     args = parser.parse_args()
-    
-    prompts_to_run = get_prompts(args)
+
+    cartridge = get_cartridge(args.cartridge)
+    prompts_to_run = get_prompts_from_cartridge(cartridge)
     if not prompts_to_run:
         print("No prompts found to run.")
         return
         
-    out_dir = args.out_dir.replace("{timestamp}", datetime.now().strftime("%Y%m%d_%H%M%S"))
+    out_dir = resolve_out_dir(args.out_dir)
     os.makedirs(out_dir, exist_ok=True)
     
-    out_file = os.path.join(out_dir, "main.jsonl")
-    verbose_file = os.path.join(out_dir, "verbose.jsonl") if args.verbose else None
-    error_file = os.path.join(out_dir, "errors.jsonl")
+    out_file = out_dir / "main.jsonl"
+    verbose_file = (out_dir / "verbose.jsonl") if args.verbose else None
+    error_file = out_dir / "errors.jsonl"
     
+    model_key = args.model_key
     model_name = {
         "0_8B": MODEL_NAME_0_8B,
         "2B": MODEL_NAME_2B,
         "4B": MODEL_NAME_4B
-    }[args.model_key]
+    }[model_key]
     print("Loading model for sweep...")
     model, tokenizer = load_model_and_tokenizer(
         model_name,
         device=DEVICE
     )
 
-    meta_file = os.path.join(out_dir, "_meta.json")
+    meta_file = out_dir / "_meta.json"
     config_dict = {
         key: getattr(model.config, key, None)
         for key in ['model_type', 'num_hidden_layers', 'hidden_size',
@@ -103,23 +144,19 @@ def main():
         json.dump(metadata, f_meta, indent=2)
     print(f"Saved metadata to {meta_file}")
     
-    cartridge = None
-    if args.cartridge:
-        cartridge = get_cartridge(args.cartridge)
-        g_vecs = [generate_g_vector_qwen35(g) for g in cartridge["g_vectors"]]
-        print(f"Cartridge '{cartridge['name']}': {cartridge['description']}")
-        print(f"  {len(g_vecs)} g_vec configurations to sweep.")
-        metadata["cartridge"] = cartridge["name"]
-        metadata["cartridge_description"] = cartridge["description"]
-        with open(meta_file, "w") as f_meta:
-            json.dump(metadata, f_meta, indent=2)
-    else:
-        g_scalars = []
-        current_g = 0.0
-        while current_g <= 2.0001:
-            g_scalars.append(current_g)
-            current_g += args.granularity
-        g_vecs = [generate_g_vector_qwen35(float(g)) for g in g_scalars]
+    g_vecs = [generate_g_vector_qwen35(g) for g in cartridge["g_vectors"]]
+    print(f"Cartridge '{cartridge['name']}': {cartridge['description']}")
+    print(f"  {len(g_vecs)} g_vec configurations to sweep.")
+    metadata["cartridge"] = cartridge["name"]
+    metadata["cartridge_description"] = cartridge["description"]
+    metadata["model_key"] = model_key
+    metadata["prompt_selection"] = {
+        key: cartridge[key]
+        for key in ["prompt", "prompt_id", "prompt_ids", "prompt_tiers", "target"]
+        if key in cartridge
+    }
+    with open(meta_file, "w") as f_meta:
+        json.dump(metadata, f_meta, indent=2)
 
     print(f"Will run {len(prompts_to_run)} prompts over {len(g_vecs)} g configurations ({args.repetitions} repetitions).")
     total_runs = len(prompts_to_run) * len(g_vecs) * args.repetitions
@@ -128,9 +165,10 @@ def main():
     with open(out_file, "w") as f_out:
         f_verb = open(verbose_file, "w") if verbose_file else None
         f_err = open(error_file, "w")
-        for prompt_id in prompts_to_run:
-            prompt_text = read_prompt(prompt_id)
-            print(f"\nEvaluating prompt: {prompt_id}")
+        for prompt in prompts_to_run:
+            prompt_id = prompt.id
+            prompt_text = prompt.prompt_text
+            print(f"\nEvaluating prompt: {prompt_id} (Type: {prompt.type})")
 
             try:
                 baseline_result = run_model_pass(
@@ -152,7 +190,9 @@ def main():
                 print(f"  [ERROR] baseline failed for {prompt_id}: {e}")
                 continue
 
-            target_str = TARGET_DICTIONARY.get(prompt_id)
+            target_str = prompt.target
+            if target_str is None and len(prompts_to_run) == 1:
+                target_str = cartridge.get("target")
             if target_str is not None:
                 encoded_target = tokenizer.encode(target_str, add_special_tokens=False)
                 if len(encoded_target) > 0:
