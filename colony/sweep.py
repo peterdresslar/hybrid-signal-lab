@@ -19,7 +19,7 @@ from colony.signal_lab import (
 
 TARGET_DICTIONARY = {
     "short0.txt": " violet",
-    "short1.txt": "34",
+    "short1.txt": " twenty-one",
     "short2.txt": " U",
     "short3.txt": " door",
     "short4.txt": " so",
