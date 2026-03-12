@@ -38,7 +38,7 @@ This design draws directly on honey bee colony coordination:
 
 ### 3.1 Attention Scaling and the *g* Response Surface
 
-In Qwen3.5's hybrid architecture, the residual stream is additive: each layer adds its output to a running sum. Forward hooks can scale the contribution of attention layers by a factor *g*:
+In Qwen3.5's hybrid architecture, the residual stream is additive: each layer adds its output to a running sum. Forward hooks can scale the contribution of attention layers by a factor (gain, implemented as a vector $\vec{g}$ or `g_vec`).
 
 - *g* = 0: Attention layers contribute nothing (equivalent to a pure-recurrent model)
 - *g* = 1: Normal operation (the trained balance)

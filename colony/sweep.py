@@ -5,11 +5,21 @@ import torch
 from pathlib import Path
 from datetime import datetime
 
-from colony.signal_lab import load_model_and_tokenizer, run_model_pass, read_prompt, DEVICE
+# imports
+from colony.signal_lab import (
+    load_model_and_tokenizer,
+    run_model_pass,
+    read_prompt,
+    DEVICE,
+    MODEL_NAME_0_8B,
+    MODEL_NAME_2B,
+    MODEL_NAME_4B,
+    generate_g_vector_qwen35,
+)
 
 TARGET_DICTIONARY = {
     "short0.txt": " violet",
-    "short1.txt": " 34",
+    "short1.txt": "34",
     "short2.txt": " U",
     "short3.txt": " door",
     "short4.txt": " so",
@@ -17,8 +27,8 @@ TARGET_DICTIONARY = {
     "med0.txt": " castle",
     "med1.txt": " Pemb",
     "med2.txt": " Stone",
-    "med3.txt": " Thes",
-    "med4.txt": " 5",
+    "med3.txt": " Th",
+    "med4.txt": "5",
     "med5.txt": " rain",
     "long1.txt": " TRUMPET"
 }
@@ -47,6 +57,7 @@ def main():
     parser.add_argument("--use-prompt", type=str, help="Specify exactly one prompt file to run.")
     parser.add_argument("--verbose", action="store_true", help="Log heavier metrics (full top-k, attn. entropy) to a separate file.")
     parser.add_argument("--out-dir", type=str, default="results/sweep_{timestamp}", help="Output directory pattern. Use {timestamp} to inject current time.")
+    parser.add_argument("--model-key", type=str, default="0_8B", help="Model to use. Please enter 0_8B, 2B, or 8B.")
     
     args = parser.parse_args()
     
@@ -61,9 +72,17 @@ def main():
     out_file = os.path.join(out_dir, "main.jsonl")
     verbose_file = os.path.join(out_dir, "verbose.jsonl") if args.verbose else None
     
-    print(f"Loading model for sweep...")
-    model, tokenizer = load_model_and_tokenizer()
-    
+    model_name = {
+        "0_8B": MODEL_NAME_0_8B,
+        "2B": MODEL_NAME_2B,
+        "4B": MODEL_NAME_4B
+    }[args.model_key]
+    print("Loading model for sweep...")
+    model, tokenizer = load_model_and_tokenizer(
+        model_name,
+        device=DEVICE
+    )
+
     meta_file = os.path.join(out_dir, "_meta.json")
     config_dict = {
         key: getattr(model.config, key, None)
@@ -98,7 +117,7 @@ def main():
             
             # Step 1: Run baseline (g=1.0) to get raw logits for KL divergence calculation
             baseline_result = run_model_pass(
-                model, tokenizer, prompt_text, 1.0, 
+                model, tokenizer, prompt_text, generate_g_vector_qwen35(1.0), 
                 device=DEVICE, prompt_id=prompt_id, 
                 return_raw_logits=True,
                 return_verbose=args.verbose
@@ -129,7 +148,7 @@ def main():
                         res["target_rank"] = (baseline_probs > baseline_probs[target_token_idx]).sum().item() + 1
                     else:
                         res = run_model_pass(
-                            model, tokenizer, prompt_text, g, 
+                            model, tokenizer, prompt_text, generate_g_vector_qwen35(float(g)),
                             device=DEVICE, prompt_id=prompt_id,
                             target_token_id=target_token_idx,
                             baseline_logits=baseline_logits,
@@ -138,16 +157,17 @@ def main():
                     
                     res["rep"] = rep + 1
                     
-                    # Separate core properties from verbose properties
+                    # output schema
                     core_res = {
                         "prompt_id": res["prompt_id"],
-                        "g": res["g"],
+                        "g_scalar": g,                 # keep scalar sweep value for easy plotting
+                        "g_vector": res["g_vector"],   # actual applied vector
                         "rep": res["rep"],
                         "target_rank": res["target_rank"],
                         "target_prob": res["target_prob"],
                         "final_entropy_bits": res["final_entropy_bits"],
                         "kl_from_baseline": res["kl_from_baseline"],
-                        "elapsed_time": res["elapsed_time"]
+                        "elapsed_time": res["elapsed_time"],
                     }
                     
                     # Dump core to JSONL
