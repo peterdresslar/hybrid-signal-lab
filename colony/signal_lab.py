@@ -12,9 +12,9 @@ import numpy as np
 dotenv.load_dotenv(".env.development")
 
 DEVICE = "mps" if torch.backends.mps.is_available() else "cpu"
-MODEL_NAME_4B = "Qwen/Qwen3.5-4B"
-MODEL_NAME_2B = "Qwen/Qwen3.5-2B"
-MODEL_NAME_0_8B = "Qwen/Qwen3.5-0.8B"
+MODEL_NAME_4B = "Qwen/Qwen3.5-4B-Base"
+MODEL_NAME_2B = "Qwen/Qwen3.5-2B-Base"
+MODEL_NAME_0_8B = "Qwen/Qwen3.5-0.8B-Base"
 QWEN_LAYERS = 24
 
 def generate_g_vector_qwen35(g_value_or_vector: float | np.ndarray = 1.0):
