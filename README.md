@@ -18,10 +18,24 @@ Requires Python ≥ 3.13. Install with [uv](https://docs.astral.sh/uv/):
 uv sync
 ```
 
-You will need a HuggingFace token with access to `Qwen/Qwen3.5-2B`. Create a `.env.development` file in the project root:
+You will need a Hugging Face token with access to the Qwen models. Create a `.env.development` file in the project root:
 
 ```
 HF_TOKEN=hf_your_token_here
+```
+
+`HUGGINGFACE_HUB_TOKEN` is also supported.
+
+Device selection defaults to auto-detection (`cuda` -> `mps` -> `cpu`). You can override with either:
+
+```bash
+export COLONY_DEVICE=cuda
+```
+
+or per command:
+
+```bash
+uv run python -m colony.signal_lab --device cuda ...
 ```
 
 ### Running Signal Lab standalone
@@ -34,6 +48,7 @@ uv run python -m colony.signal_lab --prompt "The color with the shortest wavelen
 
 - `--prompt` accepts a literal string, a path to a file, or a filename in the `data/` directory.
 - `--g` sets the attention scaler (default `1.0`, the unmodified model). Values below 1.0 suppress attention layers; values above 1.0 amplify them.
+- `--device` optionally overrides hardware (`auto`, `cuda`, `mps`, `cpu`).
 
 ### Running sweeps
 
@@ -46,7 +61,8 @@ uv run python -m colony.sweep --cartridge uniform_check
 Options:
 
 - `--cartridge` — required named sweep configuration from `colony/sweep_cartridges.py`.
-- `--model-key` — optional model selector (`0_8B`, `2B`, `4B`), default `0_8B`.
+- `--model-key` — optional model selector (`0_8B`, `2B`, `4B`, `9B`), default `0_8B`.
+- `--device` — optional hardware override (`auto`, `cuda`, `mps`, `cpu`).
 - `--repetitions` — number of repetitions per prompt/g pair (default `1`).
 - `--verbose` — log full top-k and attention entropy to a separate `verbose.jsonl`.
 - `--out-dir <path>` — output directory (default `results/sweep_{timestamp}`).

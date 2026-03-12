@@ -1,6 +1,7 @@
 import argparse
 import time
 import json
+import os
 from pathlib import Path
 import torch
 import torch.nn.functional as F
@@ -11,11 +12,56 @@ from colony.model.prompt import Prompt
 
 # ensure HF_TOKEN loaded from .env_development
 dotenv.load_dotenv(".env.development")
+dotenv.load_dotenv(".env")
 
-DEVICE = "mps" if torch.backends.mps.is_available() else "cpu"
+def resolve_device(requested_device: str | None = None) -> str:
+    """
+    Resolve runtime device.
+
+    Priority:
+    1) explicit argument
+    2) COLONY_DEVICE env var
+    3) auto-detect (cuda > mps > cpu)
+    """
+    env_device = os.getenv("COLONY_DEVICE")
+    raw_value = (requested_device or env_device or "auto").strip().lower()
+
+    if raw_value == "auto":
+        if torch.cuda.is_available():
+            return "cuda"
+        if torch.backends.mps.is_available():
+            return "mps"
+        return "cpu"
+
+    valid = {"cuda", "mps", "cpu"}
+    if raw_value not in valid:
+        valid_str = ", ".join(sorted(valid | {"auto"}))
+        raise ValueError(f"Invalid device '{raw_value}'. Expected one of: {valid_str}.")
+
+    if raw_value == "cuda" and not torch.cuda.is_available():
+        raise RuntimeError("Device 'cuda' requested, but CUDA is not available in this environment.")
+    if raw_value == "mps" and not torch.backends.mps.is_available():
+        raise RuntimeError("Device 'mps' requested, but MPS is not available in this environment.")
+    return raw_value
+
+
+def resolve_hf_token() -> str | None:
+    """
+    Resolve a Hugging Face token from common env var names.
+    """
+    for key in ("HF_TOKEN", "HUGGINGFACE_HUB_TOKEN"):
+        value = os.getenv(key)
+        if value:
+            return value
+    return None
+
+
+DEVICE = resolve_device()
 MODEL_NAME_4B = "Qwen/Qwen3.5-4B-Base"
 MODEL_NAME_2B = "Qwen/Qwen3.5-2B-Base"
 MODEL_NAME_0_8B = "Qwen/Qwen3.5-0.8B-Base"
+MODEL_NAME_9B = "Qwen/Qwen3.5-9B-Base"
+MODEL_NAME_35B = "Qwen/Qwen3.5-35B-A3B-Base"
 QWEN_LAYERS = 24
 DATA_DIR = Path("data")
 
@@ -80,20 +126,40 @@ def load_model_and_tokenizer(model_name: str, device: str = DEVICE):
         model_name: The name of the model to load.
         device: The device to load the model on.
     """
-    if model_name not in [MODEL_NAME_0_8B, MODEL_NAME_2B, MODEL_NAME_4B]:
+    if model_name not in [MODEL_NAME_0_8B, MODEL_NAME_2B, MODEL_NAME_4B, MODEL_NAME_9B]:
         raise ValueError(f"Invalid model: {model_name}")
 
+    device = resolve_device(device)
+    hf_token = resolve_hf_token()
+
     print(f"Device: {device}")
+    if device == "cuda":
+        gpu_name = torch.cuda.get_device_name(0)
+        print(f"CUDA GPU: {gpu_name}")
+    if not hf_token:
+        print(
+            "Warning: no HF token found in HF_TOKEN/HUGGINGFACE_HUB_TOKEN. "
+            "If model download fails, set one of these env vars."
+        )
     print(f"Loading {model_name}...")
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    _model = AutoModelForCausalLM.from_pretrained(
-        model_name,
-        dtype=torch.float16,
-        device_map=device,
-        attn_implementation="eager",
-        output_hidden_states=True,
-        output_attentions=True
-    )
+    try:
+        tokenizer = AutoTokenizer.from_pretrained(model_name, token=hf_token)
+        _model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            token=hf_token,
+            dtype=torch.float16,
+            device_map=device,
+            attn_implementation="eager",
+            output_hidden_states=True,
+            output_attentions=True
+        )
+    except Exception as exc:
+        if not hf_token:
+            raise RuntimeError(
+                "Failed to load model and no Hugging Face token was found. "
+                "Set HF_TOKEN or HUGGINGFACE_HUB_TOKEN on this machine."
+            ) from exc
+        raise
     _model.eval()
     print(f"Model loaded: {_model.config.num_hidden_layers} layers, hidden_size={_model.config.hidden_size}")
     return _model, tokenizer
@@ -283,13 +349,14 @@ def run_model_pass(model, tokenizer, prompt, g_vec, device=DEVICE, prompt_id=Non
     return result
 
 def run_model(prompt_source, g_value_or_vector, model_key: str = "0_8B", device=DEVICE):
-    if model_key not in ["0_8B", "2B", "4B"]:
+    if model_key not in ["0_8B", "2B", "4B", "9B"]:
         raise ValueError(f"Invalid model key: {model_key}")
 
     model_name = {
         "0_8B": MODEL_NAME_0_8B,
         "2B": MODEL_NAME_2B,
-        "4B": MODEL_NAME_4B
+        "4B": MODEL_NAME_4B,
+        "9B": MODEL_NAME_9B,
     }[model_key]
 
     model, tokenizer = load_model_and_tokenizer(model_name, device)
@@ -330,7 +397,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Signal Lab: exploring model internals via transformers.")
     parser.add_argument("--prompt", type=str, default="The color with the shortest wavelength is", help="Path or filename to a prompt file in data/, or a direct string prompt.")
     parser.add_argument("--g", type=float, default=1.0, help="Attention scaler")
-    parser.add_argument("--model-key", type=str, default="0_8B", help="Model to use. Please enter 0_8B, 2B, or 4B.")
+    parser.add_argument("--model-key", type=str, default="0_8B", help="Model to use. Please enter 0_8B, 2B, 4B, or 9B.")
+    parser.add_argument(
+        "--device",
+        type=str,
+        default=None,
+        help="Device to use: auto (default), cuda, mps, or cpu. Also supports COLONY_DEVICE env var.",
+    )
     args = parser.parse_args()
     
-    run_model(args.prompt, args.g, args.model_key)
+    run_model(args.prompt, args.g, args.model_key, device=resolve_device(args.device))

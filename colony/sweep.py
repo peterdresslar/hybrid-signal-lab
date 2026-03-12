@@ -11,10 +11,11 @@ from colony.signal_lab import (
     load_model_and_tokenizer,
     run_model_pass,
     resolve_prompt,
-    DEVICE,
+    resolve_device,
     MODEL_NAME_0_8B,
     MODEL_NAME_2B,
     MODEL_NAME_4B,
+    MODEL_NAME_9B,
     generate_g_vector_qwen35,
     g_vec_as_printable_array,
 )
@@ -96,12 +97,14 @@ def get_prompts_from_cartridge(cartridge: dict[str, Any]) -> list[Prompt]:
 def main():
     parser = argparse.ArgumentParser(description="Sweep g values over different prompts.")
     parser.add_argument("--cartridge", type=str, required=True, choices=list_cartridges(), help="Named cartridge of g_vec configurations to sweep.")
-    parser.add_argument("--model-key", type=str, default="0_8B", choices=["0_8B", "2B", "4B"], help="Model to use. Defaults to 0_8B.")
+    parser.add_argument("--model-key", type=str, default="0_8B", choices=["0_8B", "2B", "4B", "9B"], help="Model to use. Defaults to 0_8B.")
+    parser.add_argument("--device", type=str, default=None, help="Device override: auto (default), cuda, mps, or cpu. Also supports COLONY_DEVICE env var.")
     parser.add_argument("--repetitions", type=int, default=1, help="Number of repetitions per prompt/g pair.")
     parser.add_argument("--verbose", action="store_true", help="Log heavier metrics (full top-k, attn. entropy) to a separate file.")
     parser.add_argument("--out-dir", type=str, default="results/sweep_{timestamp}", help="Output directory pattern. Use {timestamp} to inject current time.")
     
     args = parser.parse_args()
+    runtime_device = resolve_device(args.device)
 
     cartridge = get_cartridge(args.cartridge)
     prompts_to_run = get_prompts_from_cartridge(cartridge)
@@ -120,12 +123,13 @@ def main():
     model_name = {
         "0_8B": MODEL_NAME_0_8B,
         "2B": MODEL_NAME_2B,
-        "4B": MODEL_NAME_4B
+        "4B": MODEL_NAME_4B,
+        "9B": MODEL_NAME_9B,
     }[model_key]
     print("Loading model for sweep...")
     model, tokenizer = load_model_and_tokenizer(
         model_name,
-        device=DEVICE
+        device=runtime_device
     )
 
     meta_file = out_dir / "_meta.json"
@@ -137,7 +141,7 @@ def main():
     }
     metadata = {
         "model": getattr(model.config, "name_or_path", "unknown"),
-        "device": DEVICE,
+        "device": runtime_device,
         "config": config_dict
     }
     with open(meta_file, "w") as f_meta:
@@ -173,7 +177,7 @@ def main():
             try:
                 baseline_result = run_model_pass(
                     model, tokenizer, prompt_text, generate_g_vector_qwen35(1.0),
-                    device=DEVICE, prompt_id=prompt_id,
+                    device=runtime_device, prompt_id=prompt_id,
                     return_raw_logits=True,
                     return_verbose=args.verbose
                 )
@@ -218,7 +222,7 @@ def main():
                         else:
                             res = run_model_pass(
                                 model, tokenizer, prompt_text, g_vec,
-                                device=DEVICE, prompt_id=prompt_id,
+                                device=runtime_device, prompt_id=prompt_id,
                                 target_token_id=target_token_idx,
                                 baseline_logits=baseline_logits,
                                 return_verbose=args.verbose
