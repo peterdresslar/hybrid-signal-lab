@@ -11,7 +11,8 @@ import dotenv
 dotenv.load_dotenv(".env.development")
 
 DEVICE = "mps" if torch.backends.mps.is_available() else "cpu"
-MODEL_NAME = "Qwen/Qwen3.5-2B"
+# MODEL_NAME = "Qwen/Qwen3.5-2B"
+MODEL_NAME = "Qwen/Qwen3.5-0.8B"
 
 def make_attn_scaler(g):
     def hook_fn(module, input, output):
