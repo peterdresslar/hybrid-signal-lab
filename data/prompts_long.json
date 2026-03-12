@@ -1,0 +1,40 @@
+[
+  {
+    "id": "long0",
+    "prompt_file": "med4.txt",
+    "description": "Rossler attractor simulation code, complete parameter value",
+    "target": "5",
+    "target_full": "5.7",
+    "type": "code_comprehension",
+    "tokens_approx": 601,
+    "note": "Originally med4.txt."
+  },
+  {
+    "id": "long1",
+    "prompt_file": "med3.txt",
+    "description": "Narrative short story, recall character name from first sentence",
+    "target": " Th",
+    "target_full": "Thessaly Vane",
+    "type": "long_range_retrieval",
+    "tokens_approx": 636,
+    "note": "Originally med3.txt. Target is subword fragment - needs multi-token scoring."
+  },
+  {
+    "id": "long2",
+    "prompt_file": "med5.txt",
+    "description": "NWS weather forecast discussion, predict forecast content",
+    "target": " rain",
+    "type": "domain_knowledge",
+    "tokens_approx": 831,
+    "note": "Originally med5.txt."
+  },
+  {
+    "id": "long3",
+    "prompt_file": "med0.txt",
+    "description": "Wikipedia article about Gallus Dressler, complete final sentence",
+    "target": " castle",
+    "type": "long_range_retrieval",
+    "tokens_approx": 981,
+    "note": "Originally med0.txt."
+  }
+]

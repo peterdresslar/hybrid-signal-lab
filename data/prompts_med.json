@@ -1,0 +1,22 @@
+[
+  {
+    "id": "med0",
+    "prompt_file": "med1.txt",
+    "description": "Fictional city narrative, retrieve bakery location",
+    "target": " Pemb",
+    "target_full": "Pembury Lane",
+    "type": "factual_retrieval",
+    "tokens_approx": 223,
+    "note": "Originally med1.txt. Target is first token of multi-token answer."
+  },
+  {
+    "id": "med1",
+    "prompt_file": "med2.txt",
+    "description": "Price list with real and nonsense items, identify most expensive",
+    "target": " Stone",
+    "target_full": "Stone House dry-cured sausage",
+    "type": "reasoning_numerical",
+    "tokens_approx": 291,
+    "note": "Originally med2.txt. Target is first token of multi-token answer. Requires scanning and comparing prices."
+  }
+]

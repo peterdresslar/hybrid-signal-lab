@@ -1,0 +1,11 @@
+[
+  {
+    "id": "extended0",
+    "prompt_file": "long1.txt",
+    "description": "Extended context task",
+    "target": " TRUMPET",
+    "type": "long_range_retrieval",
+    "tokens_approx": 6943,
+    "note": "Originally long1.txt."
+  }
+]
