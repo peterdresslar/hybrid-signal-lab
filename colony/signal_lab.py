@@ -335,11 +335,43 @@ def run_model_pass(
         ).item()
         
     attn_entropy = []
+    attn_entropy_valid_layers = []
+    attn_entropy_skipped = []
     if return_verbose and hasattr(outputs, 'attentions') and outputs.attentions is not None:
-        for attn in outputs.attentions:
+        for layer_pos, attn in enumerate(outputs.attentions):
+            if attn is None:
+                attn_entropy_skipped.append(
+                    {"layer_offset": layer_pos, "reason": "none_attention_tensor"}
+                )
+                continue
+
+            # Expect [batch, heads, target_len, source_len].
+            if attn.ndim != 4:
+                attn_entropy_skipped.append(
+                    {
+                        "layer_offset": layer_pos,
+                        "reason": "unexpected_rank",
+                        "shape": list(attn.shape),
+                    }
+                )
+                continue
+
+            source_len = int(attn.shape[-1])
+            if source_len <= 1:
+                # Entropy is always zero when there is only one source token; skip as non-informative.
+                attn_entropy_skipped.append(
+                    {
+                        "layer_offset": layer_pos,
+                        "reason": "degenerate_source_len",
+                        "shape": list(attn.shape),
+                    }
+                )
+                continue
+
             last_token_attn = attn[0, :, -1, :].float()
             ent = -(last_token_attn * torch.log2(last_token_attn + 1e-10)).sum(dim=-1)
             attn_entropy.append(ent.tolist())
+            attn_entropy_valid_layers.append(layer_pos)
             
     result = {
         "prompt_id": prompt_id if prompt_id else (prompt[:20] + "..."),
@@ -360,9 +392,14 @@ def run_model_pass(
         result["top_k_tokens"] = top_tokens
         result["mean_entropy_bits"] = mean_entropy_bits
         result["attn_entropy_per_head_final"] = attn_entropy
-        if attn_entropy:
-            # Align entropy entries to the layer positions we actually scale.
-            result["attn_entropy_layer_indices"] = attn_layers[: len(attn_entropy)]
+        if attn_entropy_valid_layers:
+            result["attn_entropy_layer_indices"] = [
+                attn_layers[layer_offset]
+                for layer_offset in attn_entropy_valid_layers
+                if layer_offset < len(attn_layers)
+            ]
+        if attn_entropy_skipped:
+            result["attn_entropy_skipped_layers"] = attn_entropy_skipped
     
     if return_raw_logits:
         result["_raw_logits"] = final_logits

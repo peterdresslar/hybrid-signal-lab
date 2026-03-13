@@ -1,0 +1,165 @@
+{
+  "prompt_id": "direct_prompt",
+  "model_type": "qwen3_5_text",
+  "g_attention_scales": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "attention_layer_indices": [
+    3,
+    7,
+    11,
+    15,
+    19,
+    23
+  ],
+  "target_token": null,
+  "target_rank": null,
+  "target_prob": null,
+  "final_entropy_bits": 7.521335124969482,
+  "kl_from_baseline": null,
+  "elapsed_time": 3.3594991670106538,
+  "top_k_logits": [
+    12.5703125,
+    11.453125,
+    11.1640625,
+    11.1171875,
+    10.7578125,
+    10.6015625,
+    9.84375,
+    9.828125,
+    9.8046875,
+    9.7890625,
+    9.78125,
+    9.7109375,
+    9.59375,
+    9.3125,
+    9.1640625
+  ],
+  "top_k_indices": [
+    11,
+    198,
+    13,
+    0,
+    271,
+    585,
+    4858,
+    1814,
+    821,
+    321,
+    1017,
+    3709,
+    353,
+    1603,
+    660
+  ],
+  "top_k_tokens": [
+    ",",
+    "\n",
+    ".",
+    "!",
+    "\n\n",
+    " i",
+    " everyone",
+    " world",
+    " my",
+    " and",
+    " there",
+    "\uff0c",
+    " I",
+    " good",
+    " all"
+  ],
+  "mean_entropy_bits": 7.521335124969482,
+  "attn_entropy_per_head_final": [
+    [
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0
+    ],
+    [
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0
+    ],
+    [
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0
+    ],
+    [
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0
+    ],
+    [
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0
+    ],
+    [
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0,
+      -0.0
+    ]
+  ],
+  "attn_entropy_layer_indices": [
+    3,
+    7,
+    11,
+    15,
+    19,
+    23
+  ],
+  "model": "Qwen/Qwen3.5-0.8B-Base",
+  "device": "mps",
+  "config": {
+    "model_type": "qwen3_5_text",
+    "num_hidden_layers": 24,
+    "hidden_size": 1024,
+    "intermediate_size": 3584,
+    "num_attention_heads": 8,
+    "num_key_value_heads": 2,
+    "vocab_size": 248320
+  },
+  "g_spec": {
+    "g_function": "constant",
+    "g_params": {
+      "value": 1.0
+    }
+  }
+}
