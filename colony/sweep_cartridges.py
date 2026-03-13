@@ -44,6 +44,18 @@ CARTRIDGES = {
         "prompt_tiers": ["short", "brief"],
         "model_key": "0_8B",
     },
+        "uniform_check": {
+        "description": "Uniform scalar values across depth using model-agnostic function specs.",
+        "g_specs": [
+            _constant(0.5),
+            _constant(0.75),
+            _constant(1.0, name="baseline"),
+            _constant(1.25),
+            _constant(1.5),
+        ],
+        "prompt_tiers": ["short", "brief", "med", "long"],
+        "model_key": "0_8B",
+    },
     "middle_bump_lite": {
         "description": "Middle-depth influence probe via normalized-depth control points.",
         "g_specs": [

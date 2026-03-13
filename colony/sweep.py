@@ -1,3 +1,5 @@
+"""Sweep harness — run g-profile configurations across prompt batteries."""
+
 import argparse
 import os
 import json
@@ -7,22 +9,11 @@ from pathlib import Path
 from datetime import datetime
 from typing import Any
 
-from colony.signal_lab import (
-    load_model_and_tokenizer,
-    run_model_pass,
-    score_target_sequence,
-    resolve_prompt,
-    resolve_device,
-    get_attention_layer_indices,
-    MODEL_NAME_0_8B,
-    MODEL_NAME_2B,
-    MODEL_NAME_4B,
-    MODEL_NAME_9B,
-    MODEL_NAME_35B,
-    MODEL_NAME_OLMO
-)
+from colony.signal_lab import resolve_prompt, resolve_device
 from colony.model.g_profile import build_attention_scales_from_spec, printable_scales
 from colony.model.prompt import Prompt
+from colony.model import VALID_MODEL_KEYS
+from colony.agent import Agent
 from colony.sweep_cartridges import get_cartridge, list_cartridges
 
 TIER_TO_CATALOG = {
@@ -83,7 +74,6 @@ def get_prompts_from_cartridge(cartridge: dict[str, Any]) -> list[Prompt]:
 
     if cartridge.get("prompt_tiers"):
         prompts = _prompts_from_tiers(cartridge["prompt_tiers"])
-        # Deduplicate by prompt id while preserving order.
         deduped_prompts: list[Prompt] = []
         seen_ids: set[str] = set()
         for prompt in prompts:
@@ -100,7 +90,7 @@ def get_prompts_from_cartridge(cartridge: dict[str, Any]) -> list[Prompt]:
 def main():
     parser = argparse.ArgumentParser(description="Sweep g profiles over different prompts.")
     parser.add_argument("--cartridge", type=str, required=True, choices=list_cartridges(), help="Named cartridge of g profile configurations to sweep.")
-    parser.add_argument("--model-key", type=str, default="0_8B", choices=["0_8B", "2B", "4B", "9B", "35B", "OLMO"], help="Model to use. Defaults to 0_8B.")
+    parser.add_argument("--model-key", type=str, default="0_8B", choices=VALID_MODEL_KEYS, help="Model to use. Defaults to 0_8B.")
     parser.add_argument("--device", type=str, default=None, help="Device override: auto (default), cuda, mps, or cpu. Also supports COLONY_DEVICE env var.")
     parser.add_argument("--repetitions", type=int, default=1, help="Number of repetitions per prompt/g pair.")
     parser.add_argument("--verbose", action="store_true", help="Log heavier metrics (full top-k, attn. entropy) to a separate file.")
@@ -123,37 +113,20 @@ def main():
     error_file = out_dir / "errors.jsonl"
     
     model_key = args.model_key
-    model_name = {
-        "0_8B": MODEL_NAME_0_8B,
-        "2B": MODEL_NAME_2B,
-        "4B": MODEL_NAME_4B,
-        "9B": MODEL_NAME_9B,
-        "35B": MODEL_NAME_35B,
-        "OLMO": MODEL_NAME_OLMO,
-    }[model_key]
-    print(f"Loading model for sweep: {model_name}")
-    model, tokenizer = load_model_and_tokenizer(
-        model_name,
-        device=runtime_device
-    )
+    print(f"Loading model for sweep: {model_key}")
+    agent = Agent.from_model_key(model_key, runtime_device)
 
     meta_file = out_dir / "_meta.json"
-    config_dict = {
-        key: getattr(model.config, key, None)
-        for key in ['model_type', 'num_hidden_layers', 'hidden_size',
-                     'intermediate_size', 'num_attention_heads',
-                     'num_key_value_heads', 'vocab_size']
-    }
-    metadata = {
-        "model": getattr(model.config, "name_or_path", "unknown"),
+    metadata: dict[str, Any] = {
+        "model": agent.backend.model_name,
         "device": runtime_device,
-        "config": config_dict
+        "config": agent.backend.config_summary,
     }
     with open(meta_file, "w") as f_meta:
         json.dump(metadata, f_meta, indent=2)
     print(f"Saved metadata to {meta_file}")
     
-    attn_layers = get_attention_layer_indices(model)
+    attn_layers = agent.get_attention_layer_indices()
     g_specs = cartridge["g_specs"]
     g_runs: list[dict[str, Any]] = []
     for idx, g_spec in enumerate(g_specs):
@@ -197,14 +170,12 @@ def main():
             print(f"\nEvaluating prompt: {prompt_id} (Type: {prompt.type})")
 
             try:
-                baseline_result = run_model_pass(
-                    model,
-                    tokenizer,
+                baseline_result = agent.run_pass(
                     prompt_text,
                     np.ones(len(attn_layers), dtype=float),
-                    device=runtime_device, prompt_id=prompt_id,
+                    prompt_id=prompt_id,
                     return_raw_logits=True,
-                    return_verbose=args.verbose
+                    return_verbose=args.verbose,
                 )
                 baseline_logits = baseline_result.pop("_raw_logits")
             except Exception as e:
@@ -233,11 +204,11 @@ def main():
                         if rep == 0 and is_baseline:
                             res = baseline_result.copy()
                         else:
-                            res = run_model_pass(
-                                model, tokenizer, prompt_text, g_scales,
-                                device=runtime_device, prompt_id=prompt_id,
+                            res = agent.run_pass(
+                                prompt_text, g_scales,
+                                prompt_id=prompt_id,
                                 baseline_logits=baseline_logits,
-                                return_verbose=args.verbose
+                                return_verbose=args.verbose,
                             )
                     except Exception as e:
                         err = {
@@ -245,7 +216,7 @@ def main():
                             "rep": rep + 1,
                             "g_profile": g_run["name"],
                             "g_scales": printable,
-                            "stage": "run_model_pass",
+                            "stage": "run_pass",
                             "error": repr(e),
                             "traceback": traceback.format_exc(),
                         }
@@ -256,13 +227,10 @@ def main():
 
                     if target_str is not None:
                         try:
-                            target_metrics = score_target_sequence(
-                                model,
-                                tokenizer,
+                            target_metrics = agent.score_target(
                                 prompt_text,
                                 target_str,
                                 g_scales,
-                                device=runtime_device,
                             )
                         except Exception as e:
                             err = {
@@ -270,7 +238,7 @@ def main():
                                 "rep": rep + 1,
                                 "g_profile": g_run["name"],
                                 "g_scales": printable,
-                                "stage": "score_target_sequence",
+                                "stage": "score_target",
                                 "error": repr(e),
                                 "traceback": traceback.format_exc(),
                             }
@@ -281,7 +249,6 @@ def main():
 
                         if target_metrics is not None:
                             res.update(target_metrics)
-                            # Keep first-token rank/prob fields as quick diagnostics.
                             res["target_token"] = target_metrics["target_tokens"][0]
                             res["target_rank"] = target_metrics["target_first_token_rank"]
                             res["target_prob"] = target_metrics["target_first_token_prob"]
