@@ -41,7 +41,7 @@
     "id": "med4",
     "prompt_file": "med_new4.txt",
     "description": "Python TaskManager class, complete object lifecycle with close()",
-    "target": "close",
+    "target": " close",
     "type": "syntactic_pattern",
     "tokens_approx": 280,
     "note": "Requires understanding class API (init/use/cleanup pattern), not just sklearn conventions."
