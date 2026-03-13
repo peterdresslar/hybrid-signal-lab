@@ -1,0 +1,9 @@
+The quarterly facilities report for Greystone Industrial Park cataloged measurements from the October inspection cycle across its four main buildings. Building A, the oldest structure on the lot, provides 12,400 square feet of usable floor space with ceiling heights averaging 14 feet in the warehouse section and 9 feet in the attached office wing. Its electrical system, last upgraded in 2019, supports a maximum load of 340 kilowatts. Annual energy costs for Building A run approximately $38,100.
+
+Building B was constructed in 2021 as a modern flex-space and offers 8,750 square feet divided across two floors. The ground floor contains a light manufacturing area while the upper floor houses administrative offices. The HVAC system in Building B maintains temperatures between 68 and 72 degrees Fahrenheit year-round, consuming roughly 195 kilowatts at peak demand. Annual energy costs total approximately $47,200, the second highest in the park.
+
+Building C is the machine shop, occupying 15,300 square feet on a single open floor. It runs three-phase power rated at 480 volts with peak electrical consumption of 520 kilowatts, and includes a dedicated compressed-air system at 125 PSI. The loading dock adjacent to Building C accommodates vehicles up to 53 feet in length. Annual energy costs for Building C are approximately $91,800, making it by far the most expensive building to operate.
+
+Building D, the newest addition completed in January, provides 6,200 square feet of climate-controlled storage. Humidity is maintained at exactly 45 percent and temperature at a constant 62 degrees. Peak electrical load is only 85 kilowatts, with annual costs of $12,500.
+
+According to the report, the building with the highest peak electrical demand in kilowatts is Building
