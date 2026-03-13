@@ -1,7 +1,6 @@
 import argparse
 import os
 import json
-import torch
 import traceback
 import numpy as np
 from pathlib import Path
@@ -11,6 +10,7 @@ from typing import Any
 from colony.signal_lab import (
     load_model_and_tokenizer,
     run_model_pass,
+    score_target_sequence,
     resolve_prompt,
     resolve_device,
     get_attention_layer_indices,
@@ -222,14 +222,6 @@ def main():
             target_str = prompt.target
             if target_str is None and len(prompts_to_run) == 1:
                 target_str = cartridge.get("target")
-            if target_str is not None:
-                encoded_target = tokenizer.encode(target_str, add_special_tokens=False)
-                if len(encoded_target) > 0:
-                    target_token_idx = encoded_target[0]
-                else:
-                    target_token_idx = baseline_logits.argmax().item()
-            else:
-                target_token_idx = baseline_logits.argmax().item()
 
             for rep in range(args.repetitions):
                 for g_run in g_runs:
@@ -240,16 +232,10 @@ def main():
                     try:
                         if rep == 0 and is_baseline:
                             res = baseline_result.copy()
-                            baseline_probs = torch.softmax(baseline_logits, dim=-1)
-                            if "target_token" not in res:
-                                res["target_token"] = tokenizer.decode(target_token_idx)
-                            res["target_prob"] = baseline_probs[target_token_idx].item()
-                            res["target_rank"] = (baseline_probs > baseline_probs[target_token_idx]).sum().item() + 1
                         else:
                             res = run_model_pass(
                                 model, tokenizer, prompt_text, g_scales,
                                 device=runtime_device, prompt_id=prompt_id,
-                                target_token_id=target_token_idx,
                                 baseline_logits=baseline_logits,
                                 return_verbose=args.verbose
                             )
@@ -268,6 +254,38 @@ def main():
                         print(f"  [ERROR] Rep {rep+1} g={printable} failed: {e}")
                         continue
 
+                    if target_str is not None:
+                        try:
+                            target_metrics = score_target_sequence(
+                                model,
+                                tokenizer,
+                                prompt_text,
+                                target_str,
+                                g_scales,
+                                device=runtime_device,
+                            )
+                        except Exception as e:
+                            err = {
+                                "prompt_id": prompt_id,
+                                "rep": rep + 1,
+                                "g_profile": g_run["name"],
+                                "g_scales": printable,
+                                "stage": "score_target_sequence",
+                                "error": repr(e),
+                                "traceback": traceback.format_exc(),
+                            }
+                            f_err.write(json.dumps(err) + "\n")
+                            f_err.flush()
+                            print(f"  [ERROR] Rep {rep+1} g={printable} target scoring failed: {e}")
+                            continue
+
+                        if target_metrics is not None:
+                            res.update(target_metrics)
+                            # Keep first-token rank/prob fields as quick diagnostics.
+                            res["target_token"] = target_metrics["target_tokens"][0]
+                            res["target_rank"] = target_metrics["target_first_token_rank"]
+                            res["target_prob"] = target_metrics["target_first_token_prob"]
+
                     res["rep"] = rep + 1
 
                     core_res = {
@@ -277,8 +295,15 @@ def main():
                         "g_spec": g_run["g_spec"],
                         "g_attention_scales": res["g_attention_scales"],
                         "rep": res["rep"],
-                        "target_rank": res["target_rank"],
-                        "target_prob": res["target_prob"],
+                        "target_text": res.get("target_text"),
+                        "target_num_tokens": res.get("target_num_tokens"),
+                        "target_seq_logprob": res.get("target_seq_logprob"),
+                        "target_avg_logprob": res.get("target_avg_logprob"),
+                        "target_geo_mean_prob": res.get("target_geo_mean_prob"),
+                        "target_first_token_rank": res.get("target_first_token_rank"),
+                        "target_first_token_prob": res.get("target_first_token_prob"),
+                        "target_rank": res.get("target_rank"),
+                        "target_prob": res.get("target_prob"),
                         "final_entropy_bits": res["final_entropy_bits"],
                         "kl_from_baseline": res["kl_from_baseline"],
                         "elapsed_time": res["elapsed_time"],
@@ -294,7 +319,11 @@ def main():
                     print(
                         f"  [Rep {rep+1}] g_profile={g_run['name']} scales={printable} | "
                         f"Time: {res['elapsed_time']:.2f}s | Final Ent: {res['final_entropy_bits']:.2f} bits | "
-                        f"Target Rank: {res.get('target_rank')}"
+                        f"Target Rank: {res.get('target_rank')} | "
+                        f"Target p(tok): "
+                        f"{(res.get('target_geo_mean_prob') if res.get('target_geo_mean_prob') is not None else float('nan')):.4f} | "
+                        f"Target Avg LogP: "
+                        f"{(res.get('target_avg_logprob') if res.get('target_avg_logprob') is not None else float('nan')):.4f}"
                     )
 
         if f_verb:

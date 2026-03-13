@@ -12,6 +12,8 @@ wheels/
 # results
 results/
 
+# macos
+.DS_Store
 
 # dotenv
 .environments

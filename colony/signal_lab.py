@@ -347,6 +347,92 @@ def run_model_pass(
 
     return result
 
+
+def score_target_sequence(
+    model,
+    tokenizer,
+    prompt: str,
+    target_text: str,
+    g_attention_scales: np.ndarray | list[float],
+    device=DEVICE,
+):
+    """
+    Score an entire target continuation token-by-token under teacher forcing.
+
+    Returns sequence-level metrics plus per-token diagnostics:
+    - `target_seq_logprob`: sum of log probabilities over target tokens
+    - `target_avg_logprob`: mean log probability per target token
+    - `target_geo_mean_prob`: exp(mean log probability)
+    - `target_token_*`: per-token ids/text/logprobs/probs/ranks
+    """
+    prompt_ids = tokenizer.encode(prompt, add_special_tokens=False)
+    target_ids = tokenizer.encode(target_text, add_special_tokens=False)
+    if not target_ids:
+        return None
+
+    if not prompt_ids:
+        raise ValueError("Target sequence scoring requires a non-empty prompt.")
+
+    all_ids = prompt_ids + target_ids
+    input_ids = torch.tensor([all_ids], dtype=torch.long, device=device)
+
+    attn_layers = get_attention_layer_indices(model)
+    scales = np.asarray(g_attention_scales, dtype=float)
+    if scales.ndim != 1 or scales.size != len(attn_layers):
+        raise ValueError(
+            f"g_attention_scales length ({scales.size}) must equal "
+            f"attention layer count ({len(attn_layers)})."
+        )
+
+    hooks = []
+    for idx, scale in zip(attn_layers, scales.tolist()):
+        layer = model.model.layers[idx]
+        handle = layer.register_forward_hook(attention_scaler_hook(scale))
+        hooks.append(handle)
+
+    with torch.no_grad():
+        outputs = model(input_ids=input_ids)
+
+    for handle in hooks:
+        handle.remove()
+
+    logits = outputs.logits[0].float()  # [seq_len, vocab]
+    prompt_len = len(prompt_ids)
+
+    token_logprobs = []
+    token_probs = []
+    token_ranks = []
+    for offset, token_id in enumerate(target_ids):
+        # Logits at position t predict token at position t+1.
+        logit_pos = prompt_len + offset - 1
+        token_logits = logits[logit_pos]
+        token_log_probs = F.log_softmax(token_logits, dim=-1)
+        lp = token_log_probs[token_id]
+        prob = torch.exp(lp)
+        rank = (token_logits > token_logits[token_id]).sum().item() + 1
+        token_logprobs.append(lp.item())
+        token_probs.append(prob.item())
+        token_ranks.append(rank)
+
+    seq_logprob = float(np.sum(token_logprobs))
+    avg_logprob = float(np.mean(token_logprobs))
+    geo_mean_prob = float(np.exp(avg_logprob))
+
+    return {
+        "target_text": target_text,
+        "target_num_tokens": len(target_ids),
+        "target_token_ids": target_ids,
+        "target_tokens": [tokenizer.decode(token_id) for token_id in target_ids],
+        "target_token_logprobs": token_logprobs,
+        "target_token_probs": token_probs,
+        "target_token_ranks": token_ranks,
+        "target_seq_logprob": seq_logprob,
+        "target_avg_logprob": avg_logprob,
+        "target_geo_mean_prob": geo_mean_prob,
+        "target_first_token_rank": token_ranks[0],
+        "target_first_token_prob": token_probs[0],
+    }
+
 def _parse_csv_floats(raw_value: str | None) -> list[float] | None:
     if raw_value is None:
         return None
