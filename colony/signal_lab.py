@@ -3,12 +3,18 @@ import time
 import json
 import os
 from pathlib import Path
+from typing import Any
 import torch
 import torch.nn.functional as F
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import dotenv
 import numpy as np
 from colony.model.prompt import Prompt
+from colony.model.g_profile import (
+    VALID_G_FUNCTIONS,
+    build_attention_scales_from_spec,
+    printable_scales,
+)
 
 # ensure HF_TOKEN loaded from .env_development
 dotenv.load_dotenv(".env.development")
@@ -62,39 +68,14 @@ MODEL_NAME_2B = "Qwen/Qwen3.5-2B-Base"
 MODEL_NAME_0_8B = "Qwen/Qwen3.5-0.8B-Base"
 MODEL_NAME_9B = "Qwen/Qwen3.5-9B-Base"
 MODEL_NAME_35B = "Qwen/Qwen3.5-35B-A3B-Base"
-QWEN_LAYERS = 24
+MODEL_NAME_OLMO = "allenai/Olmo-Hybrid-7B"
 DATA_DIR = Path("data")
 
-def generate_g_vector_qwen35(g_value_or_vector: float | np.ndarray = 1.0):
-    """
-    Generate a g vector of length `num_layers`. Can send an argument for single-value g, or a vector of length 6.
+def get_attention_layer_indices(model) -> list[int]:
+    return [i for i in range(len(model.model.layers)) if (i + 1) % 4 == 0]
 
-    If a single value is passed as an argument, the output will place that value every fourth position in the output vector.
-    If a vector is passed as an argument, the output will place the values in the vector at the corresponding positions.
-    
-    Args:
-        g_value_or_vector: The g value or vector to generate.
 
-    Returns:
-        A numpy array of length 24.
-    """
-    output_vec= np.zeros(QWEN_LAYERS)
-
-    if isinstance(g_value_or_vector, float):
-        output_vec[3::4] = g_value_or_vector
-    elif isinstance(g_value_or_vector, np.ndarray) and len(g_value_or_vector) == 6:
-        output_vec[3::4] = g_value_or_vector
-    else:
-        raise ValueError(f"Invalid type for g: {type(g_value_or_vector)}")
-    return output_vec
-
-def g_vec_as_printable_array(g_vec: np.ndarray):
-    """
-    Convert a g vector to a printable array without all the extra zeroes. Should return a list of exactly 6 floats.
-    """
-    return g_vec[3::4].tolist()
-
-def attention_scaler_hook(idx: int, g_vec: np.ndarray):
+def attention_scaler_hook(scale: float):
     """
     A forward hook function that scales the attention output of layer `idx` by the corresponding element of `g`.
     Note that there is a bit of trickiness here in that not each layer is an attention layer. The g_vec vector is 
@@ -109,12 +90,12 @@ def attention_scaler_hook(idx: int, g_vec: np.ndarray):
     """
     def hook_fn(module, input, output):
         if isinstance(output, tuple):
-            scaled = output[0] * g_vec[idx]
+            scaled = output[0] * scale
             return (scaled,) + output[1:]
         elif isinstance(output, torch.Tensor):
-            return output * g_vec[idx]
+            return output * scale
         else:
-            output[0] = output[0] * g_vec[idx]
+            output[0] = output[0] * scale
             return output
     return hook_fn
 
@@ -126,7 +107,7 @@ def load_model_and_tokenizer(model_name: str, device: str = DEVICE):
         model_name: The name of the model to load.
         device: The device to load the model on.
     """
-    if model_name not in [MODEL_NAME_0_8B, MODEL_NAME_2B, MODEL_NAME_4B, MODEL_NAME_9B]:
+    if model_name not in [MODEL_NAME_0_8B, MODEL_NAME_2B, MODEL_NAME_4B, MODEL_NAME_9B, MODEL_NAME_35B, MODEL_NAME_OLMO]: # ready for a refactor!
         raise ValueError(f"Invalid model: {model_name}")
 
     device = resolve_device(device)
@@ -264,16 +245,33 @@ def read_prompt(prompt_arg):
     """
     return resolve_prompt(prompt_arg).prompt_text
 
-def run_model_pass(model, tokenizer, prompt, g_vec, device=DEVICE, prompt_id=None, target_token_id=None, baseline_logits=None, return_raw_logits=False, return_verbose=False):
+def run_model_pass(
+    model,
+    tokenizer,
+    prompt,
+    g_attention_scales: np.ndarray | list[float],
+    device=DEVICE,
+    prompt_id=None,
+    target_token_id=None,
+    baseline_logits=None,
+    return_raw_logits=False,
+    return_verbose=False,
+):
     start_time = time.perf_counter()
     inputs = tokenizer(prompt, return_tensors="pt").to(device)
-    
-    attn_layers = [i for i in range(len(model.model.layers)) if (i + 1) % 4 == 0]
+
+    attn_layers = get_attention_layer_indices(model)
+    scales = np.asarray(g_attention_scales, dtype=float)
+    if scales.ndim != 1 or scales.size != len(attn_layers):
+        raise ValueError(
+            f"g_attention_scales length ({scales.size}) must equal "
+            f"attention layer count ({len(attn_layers)})."
+        )
     hooks = []
-    
-    for idx in attn_layers:
+
+    for idx, scale in zip(attn_layers, scales.tolist()):
         layer = model.model.layers[idx]
-        handle = layer.register_forward_hook(attention_scaler_hook(idx, g_vec))
+        handle = layer.register_forward_hook(attention_scaler_hook(scale))
         hooks.append(handle)
 
     with torch.no_grad():
@@ -327,7 +325,8 @@ def run_model_pass(model, tokenizer, prompt, g_vec, device=DEVICE, prompt_id=Non
             
     result = {
         "prompt_id": prompt_id if prompt_id else (prompt[:20] + "..."),
-        "g_vector": g_vec_as_printable_array(g_vec),
+        "g_attention_scales": printable_scales(scales),
+        "attention_layer_indices": attn_layers,
         "target_token": target_token,
         "target_rank": target_rank,
         "target_prob": target_prob,
@@ -348,7 +347,21 @@ def run_model_pass(model, tokenizer, prompt, g_vec, device=DEVICE, prompt_id=Non
 
     return result
 
-def run_model(prompt_source, g_value_or_vector, model_key: str = "0_8B", device=DEVICE):
+def _parse_csv_floats(raw_value: str | None) -> list[float] | None:
+    if raw_value is None:
+        return None
+    values = [piece.strip() for piece in raw_value.split(",") if piece.strip()]
+    if not values:
+        return None
+    return [float(piece) for piece in values]
+
+
+def run_model(
+    prompt_source,
+    model_key: str = "0_8B",
+    device=DEVICE,
+    g_spec: dict[str, Any] | None = None,
+):
     if model_key not in ["0_8B", "2B", "4B", "9B"]:
         raise ValueError(f"Invalid model key: {model_key}")
 
@@ -360,8 +373,9 @@ def run_model(prompt_source, g_value_or_vector, model_key: str = "0_8B", device=
     }[model_key]
 
     model, tokenizer = load_model_and_tokenizer(model_name, device)
-
-    g_vec = generate_g_vector_qwen35(g_value_or_vector)
+    attn_layers = get_attention_layer_indices(model)
+    resolved_g_spec = g_spec or {"g_function": "constant", "g_params": {"value": 1.0}}
+    g_scales = build_attention_scales_from_spec(resolved_g_spec, attention_slots=len(attn_layers))
         
     prompt = resolve_prompt(prompt_source)
     
@@ -369,7 +383,7 @@ def run_model(prompt_source, g_value_or_vector, model_key: str = "0_8B", device=
         model,
         tokenizer,
         prompt.prompt_text,
-        g_vec,
+        g_scales,
         device=device,
         prompt_id=prompt.id,
         return_verbose=True,
@@ -384,6 +398,7 @@ def run_model(prompt_source, g_value_or_vector, model_key: str = "0_8B", device=
     summary["model"] = model_name
     summary["device"] = device
     summary["config"] = config_dict
+    summary["g_spec"] = resolved_g_spec
     
     out_path = "signal_lab_output.json"
     with open(out_path, "w") as f:
@@ -391,13 +406,42 @@ def run_model(prompt_source, g_value_or_vector, model_key: str = "0_8B", device=
         
     print(f"\nSummary written to {out_path}")
     print(f"Elapsed time: {summary['elapsed_time']:.3f}s")
-    print(f"Top prediction (g={g_vec_as_printable_array(g_vec)}): index {summary['top_k_indices'][0]} logit {summary['top_k_logits'][0]:.3f}")
+    print(
+        "Top prediction "
+        f"(g_function={resolved_g_spec.get('g_function')}, "
+        f"scales={summary['g_attention_scales']}): "
+        f"index {summary['top_k_indices'][0]} logit {summary['top_k_logits'][0]:.3f}"
+    )
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Signal Lab: exploring model internals via transformers.")
     parser.add_argument("--prompt", type=str, default="The color with the shortest wavelength is", help="Path or filename to a prompt file in data/, or a direct string prompt.")
-    parser.add_argument("--g", type=float, default=1.0, help="Attention scaler")
     parser.add_argument("--model-key", type=str, default="0_8B", help="Model to use. Please enter 0_8B, 2B, 4B, or 9B.")
+    parser.add_argument(
+        "--g-function",
+        type=str,
+        default="constant",
+        choices=sorted(VALID_G_FUNCTIONS),
+        help="g profile function family.",
+    )
+    parser.add_argument(
+        "--g",
+        type=float,
+        default=1.0,
+        help="Constant value shortcut when --g-function=constant.",
+    )
+    parser.add_argument(
+        "--g-vector",
+        type=str,
+        default=None,
+        help="Comma-separated control-point values for --g-function=control_points.",
+    )
+    parser.add_argument(
+        "--g-params-json",
+        type=str,
+        default=None,
+        help="JSON object with extra g function params (for example '{\"slope\": 0.4, \"intercept\": 1.0}').",
+    )
     parser.add_argument(
         "--device",
         type=str,
@@ -405,5 +449,20 @@ if __name__ == "__main__":
         help="Device to use: auto (default), cuda, mps, or cpu. Also supports COLONY_DEVICE env var.",
     )
     args = parser.parse_args()
-    
-    run_model(args.prompt, args.g, args.model_key, device=resolve_device(args.device))
+
+    g_params = json.loads(args.g_params_json) if args.g_params_json else {}
+    if not isinstance(g_params, dict):
+        raise ValueError("--g-params-json must decode to a JSON object.")
+
+    if args.g_function == "constant" and "value" not in g_params:
+        g_params["value"] = args.g
+
+    g_spec = {
+        "g_function": args.g_function,
+        "g_params": g_params,
+    }
+    g_vector = _parse_csv_floats(args.g_vector)
+    if g_vector is not None:
+        g_spec["g_vector"] = g_vector
+
+    run_model(args.prompt, args.model_key, device=resolve_device(args.device), g_spec=g_spec)

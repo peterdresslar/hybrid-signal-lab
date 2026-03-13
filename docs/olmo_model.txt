@@ -1,0 +1,410 @@
+OlmoHybridForCausalLM(
+  (model): OlmoHybridModel(
+    (embed_tokens): Embedding(100352, 3840, padding_idx=100277)
+    (layers): ModuleList(
+      (0-2): 3 x OlmoHybridLinearAttentionDecoderLayer(
+        (mlp): OlmoHybridMLP(
+          (gate_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (up_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (down_proj): Linear(in_features=11008, out_features=3840, bias=False)
+          (act_fn): SiLUActivation()
+        )
+        (input_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (post_attention_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (linear_attn): OlmoHybridGatedDeltaNet(
+          (q_proj): Linear(in_features=3840, out_features=2880, bias=False)
+          (k_proj): Linear(in_features=3840, out_features=2880, bias=False)
+          (v_proj): Linear(in_features=3840, out_features=5760, bias=False)
+          (a_proj): Linear(in_features=3840, out_features=30, bias=False)
+          (b_proj): Linear(in_features=3840, out_features=30, bias=False)
+          (g_proj): Linear(in_features=3840, out_features=5760, bias=False)
+          (o_proj): Linear(in_features=5760, out_features=3840, bias=False)
+          (q_conv1d): OlmoHybridShortConvolution(
+            2880, 2880, kernel_size=(4,), stride=(1,), padding=(3,), groups=2880, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (k_conv1d): OlmoHybridShortConvolution(
+            2880, 2880, kernel_size=(4,), stride=(1,), padding=(3,), groups=2880, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (v_conv1d): OlmoHybridShortConvolution(
+            5760, 5760, kernel_size=(4,), stride=(1,), padding=(3,), groups=5760, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (o_norm): OlmoHybridRMSNormGated()
+        )
+      )
+      (3): OlmoHybridAttentionDecoderLayer(
+        (self_attn): OlmoHybridAttention(
+          (q_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (k_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (v_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (o_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (q_norm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+          (k_norm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        )
+        (mlp): OlmoHybridMLP(
+          (gate_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (up_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (down_proj): Linear(in_features=11008, out_features=3840, bias=False)
+          (act_fn): SiLUActivation()
+        )
+        (post_attention_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (post_feedforward_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+      )
+      (4-6): 3 x OlmoHybridLinearAttentionDecoderLayer(
+        (mlp): OlmoHybridMLP(
+          (gate_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (up_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (down_proj): Linear(in_features=11008, out_features=3840, bias=False)
+          (act_fn): SiLUActivation()
+        )
+        (input_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (post_attention_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (linear_attn): OlmoHybridGatedDeltaNet(
+          (q_proj): Linear(in_features=3840, out_features=2880, bias=False)
+          (k_proj): Linear(in_features=3840, out_features=2880, bias=False)
+          (v_proj): Linear(in_features=3840, out_features=5760, bias=False)
+          (a_proj): Linear(in_features=3840, out_features=30, bias=False)
+          (b_proj): Linear(in_features=3840, out_features=30, bias=False)
+          (g_proj): Linear(in_features=3840, out_features=5760, bias=False)
+          (o_proj): Linear(in_features=5760, out_features=3840, bias=False)
+          (q_conv1d): OlmoHybridShortConvolution(
+            2880, 2880, kernel_size=(4,), stride=(1,), padding=(3,), groups=2880, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (k_conv1d): OlmoHybridShortConvolution(
+            2880, 2880, kernel_size=(4,), stride=(1,), padding=(3,), groups=2880, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (v_conv1d): OlmoHybridShortConvolution(
+            5760, 5760, kernel_size=(4,), stride=(1,), padding=(3,), groups=5760, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (o_norm): OlmoHybridRMSNormGated()
+        )
+      )
+      (7): OlmoHybridAttentionDecoderLayer(
+        (self_attn): OlmoHybridAttention(
+          (q_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (k_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (v_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (o_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (q_norm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+          (k_norm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        )
+        (mlp): OlmoHybridMLP(
+          (gate_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (up_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (down_proj): Linear(in_features=11008, out_features=3840, bias=False)
+          (act_fn): SiLUActivation()
+        )
+        (post_attention_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (post_feedforward_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+      )
+      (8-10): 3 x OlmoHybridLinearAttentionDecoderLayer(
+        (mlp): OlmoHybridMLP(
+          (gate_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (up_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (down_proj): Linear(in_features=11008, out_features=3840, bias=False)
+          (act_fn): SiLUActivation()
+        )
+        (input_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (post_attention_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (linear_attn): OlmoHybridGatedDeltaNet(
+          (q_proj): Linear(in_features=3840, out_features=2880, bias=False)
+          (k_proj): Linear(in_features=3840, out_features=2880, bias=False)
+          (v_proj): Linear(in_features=3840, out_features=5760, bias=False)
+          (a_proj): Linear(in_features=3840, out_features=30, bias=False)
+          (b_proj): Linear(in_features=3840, out_features=30, bias=False)
+          (g_proj): Linear(in_features=3840, out_features=5760, bias=False)
+          (o_proj): Linear(in_features=5760, out_features=3840, bias=False)
+          (q_conv1d): OlmoHybridShortConvolution(
+            2880, 2880, kernel_size=(4,), stride=(1,), padding=(3,), groups=2880, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (k_conv1d): OlmoHybridShortConvolution(
+            2880, 2880, kernel_size=(4,), stride=(1,), padding=(3,), groups=2880, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (v_conv1d): OlmoHybridShortConvolution(
+            5760, 5760, kernel_size=(4,), stride=(1,), padding=(3,), groups=5760, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (o_norm): OlmoHybridRMSNormGated()
+        )
+      )
+      (11): OlmoHybridAttentionDecoderLayer(
+        (self_attn): OlmoHybridAttention(
+          (q_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (k_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (v_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (o_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (q_norm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+          (k_norm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        )
+        (mlp): OlmoHybridMLP(
+          (gate_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (up_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (down_proj): Linear(in_features=11008, out_features=3840, bias=False)
+          (act_fn): SiLUActivation()
+        )
+        (post_attention_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (post_feedforward_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+      )
+      (12-14): 3 x OlmoHybridLinearAttentionDecoderLayer(
+        (mlp): OlmoHybridMLP(
+          (gate_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (up_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (down_proj): Linear(in_features=11008, out_features=3840, bias=False)
+          (act_fn): SiLUActivation()
+        )
+        (input_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (post_attention_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (linear_attn): OlmoHybridGatedDeltaNet(
+          (q_proj): Linear(in_features=3840, out_features=2880, bias=False)
+          (k_proj): Linear(in_features=3840, out_features=2880, bias=False)
+          (v_proj): Linear(in_features=3840, out_features=5760, bias=False)
+          (a_proj): Linear(in_features=3840, out_features=30, bias=False)
+          (b_proj): Linear(in_features=3840, out_features=30, bias=False)
+          (g_proj): Linear(in_features=3840, out_features=5760, bias=False)
+          (o_proj): Linear(in_features=5760, out_features=3840, bias=False)
+          (q_conv1d): OlmoHybridShortConvolution(
+            2880, 2880, kernel_size=(4,), stride=(1,), padding=(3,), groups=2880, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (k_conv1d): OlmoHybridShortConvolution(
+            2880, 2880, kernel_size=(4,), stride=(1,), padding=(3,), groups=2880, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (v_conv1d): OlmoHybridShortConvolution(
+            5760, 5760, kernel_size=(4,), stride=(1,), padding=(3,), groups=5760, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (o_norm): OlmoHybridRMSNormGated()
+        )
+      )
+      (15): OlmoHybridAttentionDecoderLayer(
+        (self_attn): OlmoHybridAttention(
+          (q_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (k_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (v_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (o_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (q_norm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+          (k_norm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        )
+        (mlp): OlmoHybridMLP(
+          (gate_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (up_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (down_proj): Linear(in_features=11008, out_features=3840, bias=False)
+          (act_fn): SiLUActivation()
+        )
+        (post_attention_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (post_feedforward_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+      )
+      (16-18): 3 x OlmoHybridLinearAttentionDecoderLayer(
+        (mlp): OlmoHybridMLP(
+          (gate_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (up_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (down_proj): Linear(in_features=11008, out_features=3840, bias=False)
+          (act_fn): SiLUActivation()
+        )
+        (input_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (post_attention_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (linear_attn): OlmoHybridGatedDeltaNet(
+          (q_proj): Linear(in_features=3840, out_features=2880, bias=False)
+          (k_proj): Linear(in_features=3840, out_features=2880, bias=False)
+          (v_proj): Linear(in_features=3840, out_features=5760, bias=False)
+          (a_proj): Linear(in_features=3840, out_features=30, bias=False)
+          (b_proj): Linear(in_features=3840, out_features=30, bias=False)
+          (g_proj): Linear(in_features=3840, out_features=5760, bias=False)
+          (o_proj): Linear(in_features=5760, out_features=3840, bias=False)
+          (q_conv1d): OlmoHybridShortConvolution(
+            2880, 2880, kernel_size=(4,), stride=(1,), padding=(3,), groups=2880, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (k_conv1d): OlmoHybridShortConvolution(
+            2880, 2880, kernel_size=(4,), stride=(1,), padding=(3,), groups=2880, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (v_conv1d): OlmoHybridShortConvolution(
+            5760, 5760, kernel_size=(4,), stride=(1,), padding=(3,), groups=5760, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (o_norm): OlmoHybridRMSNormGated()
+        )
+      )
+      (19): OlmoHybridAttentionDecoderLayer(
+        (self_attn): OlmoHybridAttention(
+          (q_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (k_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (v_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (o_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (q_norm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+          (k_norm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        )
+        (mlp): OlmoHybridMLP(
+          (gate_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (up_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (down_proj): Linear(in_features=11008, out_features=3840, bias=False)
+          (act_fn): SiLUActivation()
+        )
+        (post_attention_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (post_feedforward_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+      )
+      (20-22): 3 x OlmoHybridLinearAttentionDecoderLayer(
+        (mlp): OlmoHybridMLP(
+          (gate_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (up_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (down_proj): Linear(in_features=11008, out_features=3840, bias=False)
+          (act_fn): SiLUActivation()
+        )
+        (input_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (post_attention_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (linear_attn): OlmoHybridGatedDeltaNet(
+          (q_proj): Linear(in_features=3840, out_features=2880, bias=False)
+          (k_proj): Linear(in_features=3840, out_features=2880, bias=False)
+          (v_proj): Linear(in_features=3840, out_features=5760, bias=False)
+          (a_proj): Linear(in_features=3840, out_features=30, bias=False)
+          (b_proj): Linear(in_features=3840, out_features=30, bias=False)
+          (g_proj): Linear(in_features=3840, out_features=5760, bias=False)
+          (o_proj): Linear(in_features=5760, out_features=3840, bias=False)
+          (q_conv1d): OlmoHybridShortConvolution(
+            2880, 2880, kernel_size=(4,), stride=(1,), padding=(3,), groups=2880, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (k_conv1d): OlmoHybridShortConvolution(
+            2880, 2880, kernel_size=(4,), stride=(1,), padding=(3,), groups=2880, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (v_conv1d): OlmoHybridShortConvolution(
+            5760, 5760, kernel_size=(4,), stride=(1,), padding=(3,), groups=5760, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (o_norm): OlmoHybridRMSNormGated()
+        )
+      )
+      (23): OlmoHybridAttentionDecoderLayer(
+        (self_attn): OlmoHybridAttention(
+          (q_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (k_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (v_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (o_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (q_norm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+          (k_norm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        )
+        (mlp): OlmoHybridMLP(
+          (gate_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (up_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (down_proj): Linear(in_features=11008, out_features=3840, bias=False)
+          (act_fn): SiLUActivation()
+        )
+        (post_attention_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (post_feedforward_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+      )
+      (24-26): 3 x OlmoHybridLinearAttentionDecoderLayer(
+        (mlp): OlmoHybridMLP(
+          (gate_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (up_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (down_proj): Linear(in_features=11008, out_features=3840, bias=False)
+          (act_fn): SiLUActivation()
+        )
+        (input_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (post_attention_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (linear_attn): OlmoHybridGatedDeltaNet(
+          (q_proj): Linear(in_features=3840, out_features=2880, bias=False)
+          (k_proj): Linear(in_features=3840, out_features=2880, bias=False)
+          (v_proj): Linear(in_features=3840, out_features=5760, bias=False)
+          (a_proj): Linear(in_features=3840, out_features=30, bias=False)
+          (b_proj): Linear(in_features=3840, out_features=30, bias=False)
+          (g_proj): Linear(in_features=3840, out_features=5760, bias=False)
+          (o_proj): Linear(in_features=5760, out_features=3840, bias=False)
+          (q_conv1d): OlmoHybridShortConvolution(
+            2880, 2880, kernel_size=(4,), stride=(1,), padding=(3,), groups=2880, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (k_conv1d): OlmoHybridShortConvolution(
+            2880, 2880, kernel_size=(4,), stride=(1,), padding=(3,), groups=2880, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (v_conv1d): OlmoHybridShortConvolution(
+            5760, 5760, kernel_size=(4,), stride=(1,), padding=(3,), groups=5760, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (o_norm): OlmoHybridRMSNormGated()
+        )
+      )
+      (27): OlmoHybridAttentionDecoderLayer(
+        (self_attn): OlmoHybridAttention(
+          (q_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (k_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (v_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (o_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (q_norm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+          (k_norm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        )
+        (mlp): OlmoHybridMLP(
+          (gate_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (up_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (down_proj): Linear(in_features=11008, out_features=3840, bias=False)
+          (act_fn): SiLUActivation()
+        )
+        (post_attention_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (post_feedforward_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+      )
+      (28-30): 3 x OlmoHybridLinearAttentionDecoderLayer(
+        (mlp): OlmoHybridMLP(
+          (gate_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (up_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (down_proj): Linear(in_features=11008, out_features=3840, bias=False)
+          (act_fn): SiLUActivation()
+        )
+        (input_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (post_attention_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (linear_attn): OlmoHybridGatedDeltaNet(
+          (q_proj): Linear(in_features=3840, out_features=2880, bias=False)
+          (k_proj): Linear(in_features=3840, out_features=2880, bias=False)
+          (v_proj): Linear(in_features=3840, out_features=5760, bias=False)
+          (a_proj): Linear(in_features=3840, out_features=30, bias=False)
+          (b_proj): Linear(in_features=3840, out_features=30, bias=False)
+          (g_proj): Linear(in_features=3840, out_features=5760, bias=False)
+          (o_proj): Linear(in_features=5760, out_features=3840, bias=False)
+          (q_conv1d): OlmoHybridShortConvolution(
+            2880, 2880, kernel_size=(4,), stride=(1,), padding=(3,), groups=2880, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (k_conv1d): OlmoHybridShortConvolution(
+            2880, 2880, kernel_size=(4,), stride=(1,), padding=(3,), groups=2880, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (v_conv1d): OlmoHybridShortConvolution(
+            5760, 5760, kernel_size=(4,), stride=(1,), padding=(3,), groups=5760, bias=False
+            (act_fn): SiLUActivation()
+          )
+          (o_norm): OlmoHybridRMSNormGated()
+        )
+      )
+      (31): OlmoHybridAttentionDecoderLayer(
+        (self_attn): OlmoHybridAttention(
+          (q_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (k_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (v_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (o_proj): Linear(in_features=3840, out_features=3840, bias=False)
+          (q_norm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+          (k_norm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        )
+        (mlp): OlmoHybridMLP(
+          (gate_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (up_proj): Linear(in_features=3840, out_features=11008, bias=False)
+          (down_proj): Linear(in_features=11008, out_features=3840, bias=False)
+          (act_fn): SiLUActivation()
+        )
+        (post_attention_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+        (post_feedforward_layernorm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+      )
+    )
+    (norm): OlmoHybridRMSNorm((3840,), eps=1e-06)
+    (rotary_emb): OlmoHybridRotaryEmbedding()
+  )
+  (lm_head): Linear(in_features=3840, out_features=100352, bias=False)
+)

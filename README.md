@@ -40,22 +40,25 @@ uv run python -m colony.signal_lab --device cuda ...
 
 ### Running Signal Lab standalone
 
-`signal_lab.py` is a diagnostic tool for running a single forward pass through the model with a given attention scaling factor. It reports top-k logits, entropy, and attention statistics, and writes a full summary to `signal_lab_output.json`.
+`signal_lab.py` is a diagnostic tool for running a single forward pass through the model with a configurable attention scaling profile. It reports top-k logits, entropy, and attention statistics, and writes a full summary to `signal_lab_output.json`.
 
 ```bash
-uv run python -m colony.signal_lab --prompt "The color with the shortest wavelength is" --g 1.0
+uv run python -m colony.signal_lab --prompt "The color with the shortest wavelength is" --g-function constant --g 1.0
 ```
 
 - `--prompt` accepts a literal string, a path to a file, or a filename in the `data/` directory.
-- `--g` sets the attention scaler (default `1.0`, the unmodified model). Values below 1.0 suppress attention layers; values above 1.0 amplify them.
+- `--g-function` selects the profile family (`constant`, `linear`, `gaussian`, `step`, `control_points`).
+- `--g` is a shortcut for the constant profile value.
+- `--g-vector` provides comma-separated control points for `control_points`.
+- `--g-params-json` provides extra family parameters (for example slope/intercept, gaussian center/width, or step threshold).
 - `--device` optionally overrides hardware (`auto`, `cuda`, `mps`, `cpu`).
 
 ### Running sweeps
 
-`sweep.py` automates running prompts across a cartridge-defined set of *g* vectors, collecting per-run metrics (target rank, target probability, final entropy, KL divergence from baseline) into a structured output directory.
+`sweep.py` automates running prompts across a cartridge-defined set of *g* profile specifications (`g_specs`), collecting per-run metrics (target rank, target probability, final entropy, KL divergence from baseline) into a structured output directory.
 
 ```bash
-uv run python -m colony.sweep --cartridge uniform_check
+uv run python -m colony.sweep --cartridge uniform_check_lite
 ```
 
 Options:

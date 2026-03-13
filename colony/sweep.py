@@ -3,6 +3,7 @@ import os
 import json
 import torch
 import traceback
+import numpy as np
 from pathlib import Path
 from datetime import datetime
 from typing import Any
@@ -12,13 +13,15 @@ from colony.signal_lab import (
     run_model_pass,
     resolve_prompt,
     resolve_device,
+    get_attention_layer_indices,
     MODEL_NAME_0_8B,
     MODEL_NAME_2B,
     MODEL_NAME_4B,
     MODEL_NAME_9B,
-    generate_g_vector_qwen35,
-    g_vec_as_printable_array,
+    MODEL_NAME_35B,
+    MODEL_NAME_OLMO
 )
+from colony.model.g_profile import build_attention_scales_from_spec, printable_scales
 from colony.model.prompt import Prompt
 from colony.sweep_cartridges import get_cartridge, list_cartridges
 
@@ -95,9 +98,9 @@ def get_prompts_from_cartridge(cartridge: dict[str, Any]) -> list[Prompt]:
     )
 
 def main():
-    parser = argparse.ArgumentParser(description="Sweep g values over different prompts.")
-    parser.add_argument("--cartridge", type=str, required=True, choices=list_cartridges(), help="Named cartridge of g_vec configurations to sweep.")
-    parser.add_argument("--model-key", type=str, default="0_8B", choices=["0_8B", "2B", "4B", "9B"], help="Model to use. Defaults to 0_8B.")
+    parser = argparse.ArgumentParser(description="Sweep g profiles over different prompts.")
+    parser.add_argument("--cartridge", type=str, required=True, choices=list_cartridges(), help="Named cartridge of g profile configurations to sweep.")
+    parser.add_argument("--model-key", type=str, default="0_8B", choices=["0_8B", "2B", "4B", "9B", "35B", "OLMO"], help="Model to use. Defaults to 0_8B.")
     parser.add_argument("--device", type=str, default=None, help="Device override: auto (default), cuda, mps, or cpu. Also supports COLONY_DEVICE env var.")
     parser.add_argument("--repetitions", type=int, default=1, help="Number of repetitions per prompt/g pair.")
     parser.add_argument("--verbose", action="store_true", help="Log heavier metrics (full top-k, attn. entropy) to a separate file.")
@@ -125,8 +128,10 @@ def main():
         "2B": MODEL_NAME_2B,
         "4B": MODEL_NAME_4B,
         "9B": MODEL_NAME_9B,
+        "35B": MODEL_NAME_35B,
+        "OLMO": MODEL_NAME_OLMO,
     }[model_key]
-    print("Loading model for sweep...")
+    print(f"Loading model for sweep: {model_name}")
     model, tokenizer = load_model_and_tokenizer(
         model_name,
         device=runtime_device
@@ -148,12 +153,29 @@ def main():
         json.dump(metadata, f_meta, indent=2)
     print(f"Saved metadata to {meta_file}")
     
-    g_vecs = [generate_g_vector_qwen35(g) for g in cartridge["g_vectors"]]
+    attn_layers = get_attention_layer_indices(model)
+    g_specs = cartridge["g_specs"]
+    g_runs: list[dict[str, Any]] = []
+    for idx, g_spec in enumerate(g_specs):
+        g_scales = build_attention_scales_from_spec(g_spec, attention_slots=len(attn_layers))
+        g_runs.append(
+            {
+                "index": idx,
+                "name": g_spec.get("name", f"g_spec_{idx}"),
+                "g_spec": g_spec,
+                "g_scales": g_scales,
+                "printable_scales": printable_scales(g_scales),
+            }
+        )
+
     print(f"Cartridge '{cartridge['name']}': {cartridge['description']}")
-    print(f"  {len(g_vecs)} g_vec configurations to sweep.")
+    print(f"  {len(g_runs)} g profile configurations to sweep.")
     metadata["cartridge"] = cartridge["name"]
     metadata["cartridge_description"] = cartridge["description"]
     metadata["model_key"] = model_key
+    metadata["attention_layer_indices"] = attn_layers
+    metadata["attention_slot_count"] = len(attn_layers)
+    metadata["g_specs"] = g_specs
     metadata["prompt_selection"] = {
         key: cartridge[key]
         for key in ["prompt", "prompt_id", "prompt_ids", "prompt_tiers", "target"]
@@ -162,8 +184,8 @@ def main():
     with open(meta_file, "w") as f_meta:
         json.dump(metadata, f_meta, indent=2)
 
-    print(f"Will run {len(prompts_to_run)} prompts over {len(g_vecs)} g configurations ({args.repetitions} repetitions).")
-    total_runs = len(prompts_to_run) * len(g_vecs) * args.repetitions
+    print(f"Will run {len(prompts_to_run)} prompts over {len(g_runs)} g configurations ({args.repetitions} repetitions).")
+    total_runs = len(prompts_to_run) * len(g_runs) * args.repetitions
     print(f"Total runs: {total_runs}")
 
     with open(out_file, "w") as f_out:
@@ -176,7 +198,10 @@ def main():
 
             try:
                 baseline_result = run_model_pass(
-                    model, tokenizer, prompt_text, generate_g_vector_qwen35(1.0),
+                    model,
+                    tokenizer,
+                    prompt_text,
+                    np.ones(len(attn_layers), dtype=float),
                     device=runtime_device, prompt_id=prompt_id,
                     return_raw_logits=True,
                     return_verbose=args.verbose
@@ -207,9 +232,10 @@ def main():
                 target_token_idx = baseline_logits.argmax().item()
 
             for rep in range(args.repetitions):
-                for g_vec in g_vecs:
-                    printable = g_vec_as_printable_array(g_vec)
-                    is_baseline = all(abs(v - 1.0) < 1e-4 for v in printable)
+                for g_run in g_runs:
+                    g_scales = g_run["g_scales"]
+                    printable = g_run["printable_scales"]
+                    is_baseline = bool(np.allclose(g_scales, 1.0, atol=1e-4))
 
                     try:
                         if rep == 0 and is_baseline:
@@ -221,7 +247,7 @@ def main():
                             res["target_rank"] = (baseline_probs > baseline_probs[target_token_idx]).sum().item() + 1
                         else:
                             res = run_model_pass(
-                                model, tokenizer, prompt_text, g_vec,
+                                model, tokenizer, prompt_text, g_scales,
                                 device=runtime_device, prompt_id=prompt_id,
                                 target_token_id=target_token_idx,
                                 baseline_logits=baseline_logits,
@@ -231,7 +257,8 @@ def main():
                         err = {
                             "prompt_id": prompt_id,
                             "rep": rep + 1,
-                            "g_vector": printable,
+                            "g_profile": g_run["name"],
+                            "g_scales": printable,
                             "stage": "run_model_pass",
                             "error": repr(e),
                             "traceback": traceback.format_exc(),
@@ -245,7 +272,10 @@ def main():
 
                     core_res = {
                         "prompt_id": res["prompt_id"],
-                        "g_vector": res["g_vector"],
+                        "g_profile": g_run["name"],
+                        "g_function": g_run["g_spec"].get("g_function"),
+                        "g_spec": g_run["g_spec"],
+                        "g_attention_scales": res["g_attention_scales"],
                         "rep": res["rep"],
                         "target_rank": res["target_rank"],
                         "target_prob": res["target_prob"],
@@ -261,7 +291,11 @@ def main():
                         f_verb.write(json.dumps(res) + "\n")
                         f_verb.flush()
 
-                    print(f"  [Rep {rep+1}] g={printable} | Time: {res['elapsed_time']:.2f}s | Final Ent: {res['final_entropy_bits']:.2f} bits | Target Rank: {res.get('target_rank')}")
+                    print(
+                        f"  [Rep {rep+1}] g_profile={g_run['name']} scales={printable} | "
+                        f"Time: {res['elapsed_time']:.2f}s | Final Ent: {res['final_entropy_bits']:.2f} bits | "
+                        f"Target Rank: {res.get('target_rank')}"
+                    )
 
         if f_verb:
             f_verb.close()
