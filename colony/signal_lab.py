@@ -71,8 +71,26 @@ MODEL_NAME_35B = "Qwen/Qwen3.5-35B-A3B-Base"
 MODEL_NAME_OLMO = "allenai/Olmo-Hybrid-7B"
 DATA_DIR = Path("data")
 
+def is_olmo_model(model) -> bool:
+    model_type = str(getattr(model.config, "model_type", "")).lower()
+    return "olmo" in model_type
+
+
 def get_attention_layer_indices(model) -> list[int]:
-    return [i for i in range(len(model.model.layers)) if (i + 1) % 4 == 0]
+    layers = model.model.layers
+    if is_olmo_model(model):
+        # OLMo-Hybrid alternates linear-attention blocks with full-attention blocks.
+        # The report confirms full attention lives on decoder layers exposing `self_attn`.
+        return [i for i, layer in enumerate(layers) if hasattr(layer, "self_attn")]
+    return [i for i in range(len(layers)) if (i + 1) % 4 == 0]
+
+
+def get_attention_scaling_module(model, layer_idx: int):
+    layer = model.model.layers[layer_idx]
+    if hasattr(layer, "self_attn"):
+        # Scale full-attention contribution directly where available.
+        return layer.self_attn
+    return layer
 
 
 def attention_scaler_hook(scale: float):
@@ -270,8 +288,8 @@ def run_model_pass(
     hooks = []
 
     for idx, scale in zip(attn_layers, scales.tolist()):
-        layer = model.model.layers[idx]
-        handle = layer.register_forward_hook(attention_scaler_hook(scale))
+        module = get_attention_scaling_module(model, idx)
+        handle = module.register_forward_hook(attention_scaler_hook(scale))
         hooks.append(handle)
 
     with torch.no_grad():
@@ -325,6 +343,7 @@ def run_model_pass(
             
     result = {
         "prompt_id": prompt_id if prompt_id else (prompt[:20] + "..."),
+        "model_type": getattr(model.config, "model_type", None),
         "g_attention_scales": printable_scales(scales),
         "attention_layer_indices": attn_layers,
         "target_token": target_token,
@@ -341,6 +360,9 @@ def run_model_pass(
         result["top_k_tokens"] = top_tokens
         result["mean_entropy_bits"] = mean_entropy_bits
         result["attn_entropy_per_head_final"] = attn_entropy
+        if attn_entropy:
+            # Align entropy entries to the layer positions we actually scale.
+            result["attn_entropy_layer_indices"] = attn_layers[: len(attn_entropy)]
     
     if return_raw_logits:
         result["_raw_logits"] = final_logits
@@ -386,8 +408,8 @@ def score_target_sequence(
 
     hooks = []
     for idx, scale in zip(attn_layers, scales.tolist()):
-        layer = model.model.layers[idx]
-        handle = layer.register_forward_hook(attention_scaler_hook(scale))
+        module = get_attention_scaling_module(model, idx)
+        handle = module.register_forward_hook(attention_scaler_hook(scale))
         hooks.append(handle)
 
     with torch.no_grad():
@@ -448,7 +470,7 @@ def run_model(
     device=DEVICE,
     g_spec: dict[str, Any] | None = None,
 ):
-    if model_key not in ["0_8B", "2B", "4B", "9B"]:
+    if model_key not in ["0_8B", "2B", "4B", "9B", "35B", "OLMO"]:
         raise ValueError(f"Invalid model key: {model_key}")
 
     model_name = {
@@ -456,6 +478,8 @@ def run_model(
         "2B": MODEL_NAME_2B,
         "4B": MODEL_NAME_4B,
         "9B": MODEL_NAME_9B,
+        "35B": MODEL_NAME_35B,
+        "OLMO": MODEL_NAME_OLMO,
     }[model_key]
 
     model, tokenizer = load_model_and_tokenizer(model_name, device)
@@ -502,7 +526,7 @@ def run_model(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Signal Lab: exploring model internals via transformers.")
     parser.add_argument("--prompt", type=str, default="The color with the shortest wavelength is", help="Path or filename to a prompt file in data/, or a direct string prompt.")
-    parser.add_argument("--model-key", type=str, default="0_8B", help="Model to use. Please enter 0_8B, 2B, 4B, or 9B.")
+    parser.add_argument("--model-key", type=str, default="0_8B", help="Model to use. Please enter 0_8B, 2B, 4B, 9B, 35B, or OLMO.")
     parser.add_argument(
         "--g-function",
         type=str,
