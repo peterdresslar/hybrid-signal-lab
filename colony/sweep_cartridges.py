@@ -119,7 +119,7 @@ CARTRIDGES = {
             _control_points([1.4, 1.2, 1.0, 1.0, 1.2, 1.4], name="edges_high"),
             _control_points([0.6, 0.8, 1.0, 1.0, 0.8, 0.6], name="edges_low"),
         ],
-        "prompt_tiers": ["short", "brief", "med", "long", "extended"],
+        "prompt_tiers": ["short", "brief", "med", "long"],
         "model_key": "0_8B",
     },
 }
