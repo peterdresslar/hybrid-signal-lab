@@ -2,8 +2,8 @@
 set -euo pipefail
 
 LOG_FILE="early-late-run.txt"
-CARTRIDGE="early_vs_late"
-MODELS=("0_8B" "2B" "9B")
+CARTRIDGE="kitchen_sink"
+MODELS=("0_8B" "2B" "9B", "OLMO"))
 
 # Start fresh each time.
 : > "$LOG_FILE"
@@ -17,7 +17,7 @@ for model in "${MODELS[@]}"; do
     --cartridge "$CARTRIDGE" \
     --model-key "$model" \
     --verbose \
-    --out-dir "docs/runs_data/early_late/test_early_late_${model}{timestamp}" \
+    --out-dir "docs/runs_data/early_late/kitchen_sink/${model}{timestamp}" \
     2>&1 | tee -a "$LOG_FILE"
 
   echo "" | tee -a "$LOG_FILE"

@@ -134,6 +134,54 @@ CARTRIDGES = {
         "prompt_tiers": ["short", "brief", "med", "long"],
         "model_key": "0_8B",
     },
+    "kitchen_sink": {
+        "description": "Comprehensive sweep: uniform scalars, early/late, middle, ramps, edges, and extreme profiles across all prompt tiers.",
+        "g_specs": [
+            # uniform scalars
+            _constant(0.0, name="off"),
+            _constant(0.25),
+            _constant(0.5),
+            _constant(0.75),
+            _constant(1.0, name="baseline"),
+            _constant(1.25),
+            _constant(1.5),
+            _constant(2.0),
+            _constant(3.0),
+            # early boost / suppress
+            _control_points([1.3, 1.3, 1.3, 1.0, 1.0, 1.0], name="early_boost_1.3"),
+            _control_points([1.5, 1.5, 1.5, 1.0, 1.0, 1.0], name="early_boost_1.5"),
+            _control_points([0.7, 0.7, 0.7, 1.0, 1.0, 1.0], name="early_suppress_0.7"),
+            _control_points([0.5, 0.5, 0.5, 1.0, 1.0, 1.0], name="early_suppress_0.5"),
+            # late boost / suppress
+            _control_points([1.0, 1.0, 1.0, 1.3, 1.3, 1.3], name="late_boost_1.3"),
+            _control_points([1.0, 1.0, 1.0, 1.5, 1.5, 1.5], name="late_boost_1.5"),
+            _control_points([1.0, 1.0, 1.0, 0.7, 0.7, 0.7], name="late_suppress_0.7"),
+            _control_points([1.0, 1.0, 1.0, 0.5, 0.5, 0.5], name="late_suppress_0.5"),
+            # middle bump / suppress
+            _control_points([1.0, 1.0, 1.5, 1.5, 1.0, 1.0], name="middle_bump_1.5"),
+            _control_points([1.0, 1.0, 0.5, 0.5, 1.0, 1.0], name="middle_suppress_0.5"),
+            _control_points([0.8, 1.0, 1.5, 1.5, 1.0, 0.8], name="middle_bump_1.5_edges_0.8"),
+            # crossover
+            _control_points([1.5, 1.5, 1.5, 0.5, 0.5, 0.5], name="early_high_late_low"),
+            _control_points([0.5, 0.5, 0.5, 1.5, 1.5, 1.5], name="late_high_early_low"),
+            # ramps
+            _control_points([0.6, 0.8, 1.0, 1.2, 1.4, 1.6], name="ramp_up"),
+            _control_points([1.6, 1.4, 1.2, 1.0, 0.8, 0.6], name="ramp_down"),
+            _control_points([0.8, 0.9, 1.0, 1.1, 1.2, 1.3], name="ramp_up_gentle"),
+            _control_points([1.3, 1.2, 1.1, 1.0, 0.9, 0.8], name="ramp_down_gentle"),
+            # edges
+            _control_points([1.4, 1.2, 1.0, 1.0, 1.2, 1.4], name="edges_high"),
+            _control_points([0.6, 0.8, 1.0, 1.0, 0.8, 0.6], name="edges_low"),
+            # extreme / stress
+            _control_points([2.0, 2.0, 2.0, 0.0, 0.0, 0.0], name="early_only_2x"),
+            _control_points([0.0, 0.0, 0.0, 2.0, 2.0, 2.0], name="late_only_2x"),
+            _control_points([0.0, 0.0, 1.0, 1.0, 0.0, 0.0], name="middle_only"),
+            _control_points([1.0, 0.0, 1.0, 0.0, 1.0, 0.0], name="alternating"),
+            _control_points([0.0, 1.0, 0.0, 1.0, 0.0, 1.0], name="alternating_inv"),
+        ],
+        "prompt_tiers": ["short", "brief", "med", "long"],
+        "model_key": "0_8B",
+    },
 }
 
 
