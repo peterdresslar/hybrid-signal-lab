@@ -138,15 +138,13 @@ CARTRIDGES = {
         "description": "Comprehensive sweep: uniform scalars, early/late, middle, ramps, edges, and extreme profiles across all prompt tiers.",
         "g_specs": [
             # uniform scalars
-            _constant(0.0, name="off"),
+            _constant(1.0, name="baseline"),
             _constant(0.25),
             _constant(0.5),
             _constant(0.75),
-            _constant(1.0, name="baseline"),
             _constant(1.25),
             _constant(1.5),
             _constant(2.0),
-            _constant(3.0),
             # early boost / suppress
             _control_points([1.3, 1.3, 1.3, 1.0, 1.0, 1.0], name="early_boost_1.3"),
             _control_points([1.5, 1.5, 1.5, 1.0, 1.0, 1.0], name="early_boost_1.5"),
