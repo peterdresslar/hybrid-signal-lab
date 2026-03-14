@@ -3,7 +3,7 @@ set -euo pipefail
 
 LOG_FILE="early-late-run.txt"
 CARTRIDGE="kitchen_sink"
-MODELS=("0_8B" "2B" "9B", "OLMO"))
+MODELS=("0_8B" "2B" "9B" "OLMO")
 
 # Start fresh each time.
 : > "$LOG_FILE"
