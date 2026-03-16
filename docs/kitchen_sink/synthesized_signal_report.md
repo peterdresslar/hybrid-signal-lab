@@ -1,6 +1,6 @@
 # Kitchen Sink Signal Report
 
-**Generated**: 2026-03-14
+**Generated**: 2026-03-14 (v2, with independent analysis integration)
 **Data**: `results/kitchen_sink/` — 4 models × 22 prompts × 31 g-profiles = 2,728 observations
 
 ## 1. Dataset Overview
@@ -25,23 +25,15 @@
 
 ### g-Profile Battery
 
-31 profiles spanning:
-
-- **Uniform scalars** (7): constant values from 0.25 to 2.0
-- **Regional boost/suppress** (8): early or late layers at 0.5/0.7/1.3/1.5
-- **Middle profiles** (3): middle bump/suppress, middle+edge combo
-- **Ramps** (4): monotonic increase/decrease across layers (steep and gentle)
-- **Edge profiles** (2): U-shape and inverted-U across layers
-- **Cross patterns** (2): early-high/late-low and inverse
-- **Extreme/ablation** (5): early-only-2x, late-only-2x, middle-only, alternating on/off
+31 profiles spanning: **uniform scalars** (7), **regional boost/suppress** (8), **middle profiles** (3), **ramps** (4), **edge profiles** (2), **cross patterns** (2), **extreme/ablation** (5).
 
 ## 2. Headroom: How Much Improvement Exists?
 
-For each model × prompt, we compare the best non-baseline g-profile against the baseline (g=1.0).
+For each model × prompt, we compare the best non-baseline g-profile against baseline (g=1.0).
 
 ### Qwen3.5-0.8B
 
-Improved 21/22 prompts. Mean Δprob = +0.1447, max Δprob = +0.7026.
+Improved 21/22 prompts. Mean Δprob = +0.1447.
 
 | Prompt | Type | BL prob | Best prob | Δ | BL rank → Best | Best profile |
 |--------|------|---------|-----------|---|---------------|-------------|
@@ -70,7 +62,7 @@ Improved 21/22 prompts. Mean Δprob = +0.1447, max Δprob = +0.7026.
 
 ### Qwen3.5-2B
 
-Improved 20/22 prompts. Mean Δprob = +0.1151, max Δprob = +0.4978.
+Improved 20/22 prompts. Mean Δprob = +0.1151.
 
 | Prompt | Type | BL prob | Best prob | Δ | BL rank → Best | Best profile |
 |--------|------|---------|-----------|---|---------------|-------------|
@@ -99,7 +91,7 @@ Improved 20/22 prompts. Mean Δprob = +0.1151, max Δprob = +0.4978.
 
 ### Qwen3.5-9B
 
-Improved 20/22 prompts. Mean Δprob = +0.1476, max Δprob = +0.5175.
+Improved 20/22 prompts. Mean Δprob = +0.1476.
 
 | Prompt | Type | BL prob | Best prob | Δ | BL rank → Best | Best profile |
 |--------|------|---------|-----------|---|---------------|-------------|
@@ -128,7 +120,7 @@ Improved 20/22 prompts. Mean Δprob = +0.1476, max Δprob = +0.5175.
 
 ### OLMo-Hybrid-7B
 
-Improved 18/22 prompts. Mean Δprob = +0.1151, max Δprob = +0.5374.
+Improved 18/22 prompts. Mean Δprob = +0.1151.
 
 | Prompt | Type | BL prob | Best prob | Δ | BL rank → Best | Best profile |
 |--------|------|---------|-----------|---|---------------|-------------|
@@ -155,26 +147,71 @@ Improved 18/22 prompts. Mean Δprob = +0.1151, max Δprob = +0.5374.
 | short4 | cultural_memorized | 0.7182 | 0.7957 | +0.0776 | 1→1 | ramp_up |
 | short5 | syntactic_pattern | 0.9750 | 0.9797 | +0.0047 | 1→1 | ramp_up_gentle |
 
-### Damage from Bad Profiles
+### 2.1 Headroom by Prompt Type
 
-The worst profile per prompt shows how much damage a bad choice causes.
+Mean headroom pooled across models, ranked by type. This informs battery design for Experiment 1.
 
-| Model | Mean worst Δprob | Max damage | Prompts where worst < 0.001 prob |
-|-------|-----------------|------------|----------------------------------|
+| Type | Mean headroom | Median | n (model×prompt) |
+|------|--------------|--------|-----------------|
+| factual_retrieval | +0.3902 | +0.3694 | 4 |
+| structural_copying | +0.2917 | +0.2879 | 8 |
+| long_range_retrieval | +0.1766 | +0.1618 | 8 |
+| factual_recall | +0.1727 | +0.1313 | 16 |
+| syntactic_pattern | +0.1104 | +0.0104 | 12 |
+| algorithmic | +0.0774 | +0.0693 | 8 |
+| reasoning_tracking | +0.0763 | +0.0359 | 8 |
+| cultural_memorized | +0.0627 | +0.0148 | 8 |
+| domain_knowledge | +0.0348 | +0.0245 | 4 |
+| reasoning_numerical | +0.0312 | +0.0175 | 8 |
+| code_comprehension | -0.0054 | +0.0019 | 4 |
+
+Factual retrieval and structural copying have the most room for improvement. Code comprehension and domain knowledge have essentially none — these prompts are either already solved or not solvable by g-perturbation.
+
+### 2.2 Damage from Bad Profiles
+
+| Model | Mean worst Δprob | Max damage | Prompts driven < 0.001 prob |
+|-------|-----------------|------------|----------------------------|
 | Qwen3.5-0.8B | -0.3875 | -0.9965 | 22/22 |
 | Qwen3.5-2B | -0.5266 | -0.9988 | 22/22 |
 | Qwen3.5-9B | -0.5793 | -0.9995 | 22/22 |
 | OLMo-Hybrid-7B | -0.4722 | -0.9968 | 22/22 |
 
-The asymmetry matters: the best profile typically gains +0.05–0.5 in probability, while the worst profile can drive probability to near zero. A control system must avoid catastrophic profiles even more than it must find optimal ones.
+The asymmetry matters: best profiles gain +0.05–0.5 in probability while worst profiles drive probability to near zero. A controller must avoid catastrophic profiles even more than it must find optimal ones.
 
 ## 3. Baseline Signal Inventory
 
-Signals available from a single forward pass at g=1.0, before any colony interaction.
+Signals available from a single forward pass at g=1.0.
 
-### 3.1 Final-Token Entropy (bits)
+### 3.1 Top-1 Logit Margin
 
-The entropy of the output distribution over the vocabulary. High entropy = model is uncertain.
+The difference between the first and second logits in the output distribution. A small margin means the model's top prediction is barely winning — the operating point is unstable and likely to benefit from intervention.
+
+| Prompt | Type | 0.8B | 2B | 9B | OLMO |
+|--------|------|------|----|----|------|
+| brief0 | factual_recall | 1.156 | 0.844 | 0.453 | 0.234 |
+| brief1 | algorithmic | 3.297 | 4.391 | 4.922 | 3.766 |
+| brief2 | structural_copying | 0.445 | 0.922 | 0.594 | 0.375 |
+| brief3 | syntactic_pattern | 2.359 | 2.367 | 4.578 | 0.688 |
+| brief4 | cultural_memorized | 3.516 | 4.297 | 6.875 | 6.662 |
+| brief5 | factual_recall | 3.266 | 3.328 | 2.875 | 4.133 |
+| long0 | code_comprehension | 6.453 | 8.062 | 6.906 | 0.801 |
+| long1 | long_range_retrieval | 0.078 | 3.250 | 3.906 | 0.227 |
+| long2 | domain_knowledge | 1.516 | 1.938 | 1.422 | 1.180 |
+| long3 | long_range_retrieval | 2.125 | 2.859 | 2.688 | 0.523 |
+| med0 | factual_retrieval | 0.594 | 2.977 | 0.031 | 0.602 |
+| med1 | reasoning_numerical | 1.234 | 0.195 | 0.234 | 0.312 |
+| med2 | reasoning_tracking | 0.336 | 1.156 | 0.359 | 0.180 |
+| med3 | reasoning_numerical | 3.828 | 4.781 | 4.969 | 1.152 |
+| med4 | syntactic_pattern | 0.258 | 0.727 | 0.641 | 0.857 |
+| med5 | reasoning_tracking | 1.242 | 1.609 | 5.453 | 2.738 |
+| short0 | factual_recall | 0.188 | 0.125 | 0.625 | 0.246 |
+| short1 | algorithmic | 2.875 | 2.047 | 3.172 | 3.243 |
+| short2 | factual_recall | 0.195 | 0.719 | 1.664 | 1.539 |
+| short3 | structural_copying | 2.211 | 1.438 | 1.211 | 2.188 |
+| short4 | cultural_memorized | 0.648 | 0.125 | 1.438 | 3.086 |
+| short5 | syntactic_pattern | 6.469 | 7.500 | 8.484 | 4.754 |
+
+### 3.2 Final-Token Entropy (bits)
 
 | Prompt | Type | 0.8B | 2B | 9B | OLMO |
 |--------|------|------|----|----|------|
@@ -201,9 +238,7 @@ The entropy of the output distribution over the vocabulary. High entropy = model
 | short4 | cultural_memorized | 9.53 | 9.29 | 1.65 | 3.39 |
 | short5 | syntactic_pattern | 0.04 | 0.02 | 0.01 | 0.28 |
 
-### 3.2 Mean Sequence Entropy (bits)
-
-Average entropy across all token positions, not just the final token. Captures overall model confidence on the context.
+### 3.3 Mean Sequence Entropy (bits)
 
 | Prompt | Type | 0.8B | 2B | 9B | OLMO |
 |--------|------|------|----|----|------|
@@ -230,11 +265,9 @@ Average entropy across all token positions, not just the final token. Captures o
 | short4 | cultural_memorized | 4.87 | 4.96 | 3.33 | 3.27 |
 | short5 | syntactic_pattern | 1.75 | 1.74 | 1.71 | 1.37 |
 
-### 3.3 Attention Entropy Profile (per-layer mean, baseline)
+### 3.4 Attention Entropy Profile (per-layer mean, baseline)
 
-Mean entropy across heads at each attention layer. This is the core signal for per-layer g-profile selection.
-
-#### Qwen3.5-0.8B (6 attention layers at indices [3, 7, 11, 15, 19, 23])
+#### Qwen3.5-0.8B (6 attention layers at [3, 7, 11, 15, 19, 23])
 
 | Prompt | Type | L3 | L7 | L11 | L15 | L19 | L23 | Gradient |
 |--------|------|------|------|------|------|------|------|----------|
@@ -261,7 +294,7 @@ Mean entropy across heads at each attention layer. This is the core signal for p
 | short4 | cultural_memorized | 2.71 | 2.54 | 3.01 | 2.91 | 3.53 | 2.67 | +0.282 |
 | short5 | syntactic_pattern | 2.05 | 1.80 | 1.94 | 1.98 | 2.21 | 1.88 | +0.099 |
 
-#### Qwen3.5-2B (6 attention layers at indices [3, 7, 11, 15, 19, 23])
+#### Qwen3.5-2B (6 attention layers at [3, 7, 11, 15, 19, 23])
 
 | Prompt | Type | L3 | L7 | L11 | L15 | L19 | L23 | Gradient |
 |--------|------|------|------|------|------|------|------|----------|
@@ -288,7 +321,7 @@ Mean entropy across heads at each attention layer. This is the core signal for p
 | short4 | cultural_memorized | 2.63 | 2.75 | 2.91 | 2.82 | 3.29 | 2.85 | +0.228 |
 | short5 | syntactic_pattern | 2.18 | 1.77 | 1.59 | 1.63 | 1.87 | 1.77 | -0.093 |
 
-#### Qwen3.5-9B (8 attention layers at indices [3, 7, 11, 15, 19, 23, 27, 31])
+#### Qwen3.5-9B (8 attention layers at [3, 7, 11, 15, 19, 23, 27, 31])
 
 | Prompt | Type | L3 | L7 | L11 | L15 | L19 | L23 | L27 | L31 | Gradient |
 |--------|------|------|------|------|------|------|------|------|------|----------|
@@ -315,7 +348,7 @@ Mean entropy across heads at each attention layer. This is the core signal for p
 | short4 | cultural_memorized | 3.11 | 3.06 | 2.87 | 2.94 | 2.66 | 3.00 | 3.19 | 2.95 | -0.047 |
 | short5 | syntactic_pattern | 2.32 | 2.12 | 1.99 | 2.18 | 1.86 | 2.02 | 1.83 | 1.83 | -0.267 |
 
-#### OLMo-Hybrid-7B (8 attention layers at indices [3, 7, 11, 15, 19, 23, 27, 31])
+#### OLMo-Hybrid-7B (8 attention layers at [3, 7, 11, 15, 19, 23, 27, 31])
 
 | Prompt | Type | L3 | L7 | L11 | L15 | L19 | L23 | L27 | L31 | Gradient |
 |--------|------|------|------|------|------|------|------|------|------|----------|
@@ -342,275 +375,115 @@ Mean entropy across heads at each attention layer. This is the core signal for p
 | short4 | cultural_memorized | 2.81 | 2.73 | 2.62 | 2.23 | 1.99 | 1.25 | 1.26 | 1.42 | -1.117 |
 | short5 | syntactic_pattern | 1.98 | 1.00 | 1.66 | 1.25 | 1.11 | 0.66 | 0.81 | 0.82 | -0.624 |
 
-## 4. Response Surface Characterization
+## 4. Signal-to-Optimum Correlations
 
-How does each prompt respond across the 31 g-profiles? We characterize the *shape* of the response.
+Can baseline signals predict headroom or the optimal g-profile?
 
-### 4.1 Response Surface Statistics
+### 4.1 Headroom Prediction (all models pooled, n=88)
 
-For each model × prompt, statistics over all 31 profiles:
+| Signal | Pearson r | p | Spearman ρ | p | Assessment |
+|--------|-----------|---|-----------|---|-----------|
+| Logit margin | -0.367 | 0.0004*** | -0.426 | 0.0000 | **strong** |
+| Top-5 spread | -0.375 | 0.0003*** | -0.402 | 0.0001 | **strong** |
+| Baseline prob | -0.331 | 0.0016** | -0.299 | 0.0046 | weak |
+| Final entropy | +0.173 | 0.1070 | +0.350 | 0.0008 | moderate |
+| Mean entropy | +0.275 | 0.0094** | +0.411 | 0.0001 | **strong** |
+| Mean attn entropy | -0.138 | 0.2000 | -0.153 | 0.1542 | negligible |
+| Attn gradient | +0.097 | 0.3693 | +0.075 | 0.4866 | negligible |
+| Last-layer attn H | -0.145 | 0.1767 | -0.180 | 0.0926 | negligible |
+| Head var | -0.085 | 0.4306 | -0.094 | 0.3836 | negligible |
+| Min head H | -0.061 | 0.5747 | -0.053 | 0.6252 | negligible |
 
-| Model | Prompt | Type | Prob: min/med/max | Entropy: min/med/max | Profiles with rank=1 |
-|-------|--------|------|-------------------|---------------------|---------------------|
-| Qwen3.5-0.8B | brief0 | factual_recall | 0.0000/0.1490/0.3127 | 1.3/3.2/17.9 | 5/31 |
-| Qwen3.5-0.8B | brief1 | algorithmic | 0.0000/0.9014/0.9400 | 0.6/0.9/17.9 | 29/31 |
-| Qwen3.5-0.8B | brief2 | structural_copying | 0.0000/0.2438/0.4537 | 2.5/5.6/17.9 | 21/31 |
-| Qwen3.5-0.8B | brief3 | syntactic_pattern | 0.0000/0.0079/0.7194 | 1.6/5.9/17.9 | 7/31 |
-| Qwen3.5-0.8B | brief4 | cultural_memorized | 0.0000/0.6982/0.9780 | 0.2/1.6/17.9 | 26/31 |
-| Qwen3.5-0.8B | brief5 | factual_recall | 0.0000/0.3753/0.9941 | 0.1/4.1/17.9 | 24/31 |
-| Qwen3.5-0.8B | long0 | code_comprehension | 0.0000/0.9519/0.9982 | 0.0/0.4/17.9 | 26/31 |
-| Qwen3.5-0.8B | long1 | long_range_retrieval | 0.0000/0.0180/0.4385 | 6.3/9.4/17.9 | 11/31 |
-| Qwen3.5-0.8B | long2 | domain_knowledge | 0.0000/0.0077/0.0305 | 5.2/7.1/17.9 | 5/31 |
-| Qwen3.5-0.8B | long3 | long_range_retrieval | 0.0000/0.2595/0.6491 | 3.2/6.5/17.9 | 26/31 |
-| Qwen3.5-0.8B | med0 | factual_retrieval | 0.0000/0.0175/0.8058 | 1.7/4.5/17.9 | 12/31 |
-| Qwen3.5-0.8B | med1 | reasoning_numerical | 0.0000/0.0011/0.0157 | 7.4/9.5/17.9 | 5/31 |
-| Qwen3.5-0.8B | med2 | reasoning_tracking | 0.0000/0.0035/0.0246 | 1.9/5.9/17.9 | 5/31 |
-| Qwen3.5-0.8B | med3 | reasoning_numerical | 0.0000/0.5161/0.9831 | 0.2/1.9/17.9 | 27/31 |
-| Qwen3.5-0.8B | med4 | syntactic_pattern | 0.0000/0.0015/0.0544 | 6.0/8.5/17.9 | 5/31 |
-| Qwen3.5-0.8B | med5 | reasoning_tracking | 0.0000/0.0092/0.0629 | 1.9/5.3/17.9 | 5/31 |
-| Qwen3.5-0.8B | short0 | factual_recall | 0.0000/0.0173/0.1418 | 3.9/5.8/17.9 | 8/31 |
-| Qwen3.5-0.8B | short1 | algorithmic | 0.0000/0.8741/0.9945 | 0.1/1.0/17.9 | 29/31 |
-| Qwen3.5-0.8B | short2 | factual_recall | 0.0000/0.0035/0.3810 | 5.3/6.6/17.9 | 11/31 |
-| Qwen3.5-0.8B | short3 | structural_copying | 0.0000/0.3328/0.7054 | 3.0/5.8/17.9 | 29/31 |
-| Qwen3.5-0.8B | short4 | cultural_memorized | 0.0000/0.0029/0.0264 | 0.7/9.4/17.9 | 5/31 |
-| Qwen3.5-0.8B | short5 | syntactic_pattern | 0.0000/0.9845/0.9971 | 0.0/0.2/17.9 | 26/31 |
-| Qwen3.5-2B | brief0 | factual_recall | 0.0000/0.4630/0.7263 | 1.8/2.5/17.9 | 22/31 |
-| Qwen3.5-2B | brief1 | algorithmic | 0.0000/0.9126/0.9734 | 0.3/0.9/17.9 | 28/31 |
-| Qwen3.5-2B | brief2 | structural_copying | 0.0000/0.1601/0.3934 | 2.9/4.8/17.9 | 12/31 |
-| Qwen3.5-2B | brief3 | syntactic_pattern | 0.0000/0.0421/0.5717 | 1.7/4.1/17.9 | 6/31 |
-| Qwen3.5-2B | brief4 | cultural_memorized | 0.0000/0.9006/0.9926 | 0.1/0.6/17.9 | 27/31 |
-| Qwen3.5-2B | brief5 | factual_recall | 0.0000/0.7166/0.9519 | 0.5/2.2/17.9 | 26/31 |
-| Qwen3.5-2B | long0 | code_comprehension | 0.0000/0.9756/0.9995 | 0.0/0.3/17.9 | 27/31 |
-| Qwen3.5-2B | long1 | long_range_retrieval | 0.0000/0.4260/0.8867 | 1.5/5.8/17.9 | 25/31 |
-| Qwen3.5-2B | long2 | domain_knowledge | 0.0000/0.0165/0.0403 | 3.9/6.3/17.9 | 5/31 |
-| Qwen3.5-2B | long3 | long_range_retrieval | 0.0000/0.6299/0.8815 | 1.4/4.0/17.9 | 26/31 |
-| Qwen3.5-2B | med0 | factual_retrieval | 0.0000/0.7023/0.9901 | 0.2/2.6/17.9 | 24/31 |
-| Qwen3.5-2B | med1 | reasoning_numerical | 0.0000/0.0024/0.0187 | 6.7/9.4/17.9 | 5/31 |
-| Qwen3.5-2B | med2 | reasoning_tracking | 0.0000/0.0254/0.1072 | 2.6/4.4/17.9 | 5/31 |
-| Qwen3.5-2B | med3 | reasoning_numerical | 0.0000/0.7754/0.9958 | 0.1/1.2/17.9 | 28/31 |
-| Qwen3.5-2B | med4 | syntactic_pattern | 0.0000/0.1148/0.4807 | 3.7/6.6/17.9 | 14/31 |
-| Qwen3.5-2B | med5 | reasoning_tracking | 0.0000/0.2468/0.7989 | 1.2/3.3/17.9 | 16/31 |
-| Qwen3.5-2B | short0 | factual_recall | 0.0000/0.0307/0.1161 | 3.5/5.6/17.9 | 7/31 |
-| Qwen3.5-2B | short1 | algorithmic | 0.0000/0.7707/0.9430 | 0.5/1.5/17.9 | 29/31 |
-| Qwen3.5-2B | short2 | factual_recall | 0.0000/0.0224/0.2295 | 1.9/5.4/17.9 | 8/31 |
-| Qwen3.5-2B | short3 | structural_copying | 0.0000/0.4205/0.7295 | 2.9/5.3/17.9 | 28/31 |
-| Qwen3.5-2B | short4 | cultural_memorized | 0.0000/0.0293/0.2939 | 1.3/9.2/17.9 | 14/31 |
-| Qwen3.5-2B | short5 | syntactic_pattern | 0.0000/0.9383/0.9988 | 0.0/0.6/17.9 | 26/31 |
-| Qwen3.5-9B | brief0 | factual_recall | 0.0000/0.3577/0.7819 | 1.2/2.0/17.9 | 19/31 |
-| Qwen3.5-9B | brief1 | algorithmic | 0.0000/0.8773/0.9901 | 0.1/1.2/17.9 | 27/31 |
-| Qwen3.5-9B | brief2 | structural_copying | 0.0000/0.1599/0.6337 | 1.5/5.3/17.9 | 18/31 |
-| Qwen3.5-9B | brief3 | syntactic_pattern | 0.0000/0.0013/0.0171 | 0.4/2.9/17.9 | 5/31 |
-| Qwen3.5-9B | brief4 | cultural_memorized | 0.0000/0.9422/0.9987 | 0.0/0.6/17.9 | 26/31 |
-| Qwen3.5-9B | brief5 | factual_recall | 0.0000/0.6468/0.8307 | 1.4/2.6/17.9 | 24/31 |
-| Qwen3.5-9B | long0 | code_comprehension | 0.0000/0.9274/0.9993 | 0.0/0.6/17.9 | 26/31 |
-| Qwen3.5-9B | long1 | long_range_retrieval | 0.0000/0.2130/0.9834 | 0.2/6.5/17.9 | 25/31 |
-| Qwen3.5-9B | long2 | domain_knowledge | 0.0000/0.0220/0.0501 | 4.4/5.7/17.9 | 5/31 |
-| Qwen3.5-9B | long3 | long_range_retrieval | 0.0000/0.7441/0.9537 | 0.6/3.0/17.9 | 26/31 |
-| Qwen3.5-9B | med0 | factual_retrieval | 0.0000/0.2711/0.7886 | 1.7/3.5/17.9 | 21/31 |
-| Qwen3.5-9B | med1 | reasoning_numerical | 0.0000/0.0019/0.0937 | 4.0/9.5/17.9 | 5/31 |
-| Qwen3.5-9B | med2 | reasoning_tracking | 0.0000/0.1034/0.5375 | 2.8/4.6/17.9 | 15/31 |
-| Qwen3.5-9B | med3 | reasoning_numerical | 0.0000/0.8202/0.9966 | 0.0/1.1/17.9 | 26/31 |
-| Qwen3.5-9B | med4 | syntactic_pattern | 0.0000/0.0909/0.7113 | 1.5/4.5/17.9 | 12/31 |
-| Qwen3.5-9B | med5 | reasoning_tracking | 0.0000/0.1287/0.9916 | 0.1/3.2/17.9 | 19/31 |
-| Qwen3.5-9B | short0 | factual_recall | 0.0000/0.1415/0.3355 | 2.9/5.3/17.9 | 19/31 |
-| Qwen3.5-9B | short1 | algorithmic | 0.0000/0.8537/0.9601 | 0.4/1.2/17.9 | 30/31 |
-| Qwen3.5-9B | short2 | factual_recall | 0.0000/0.3079/0.5646 | 2.8/5.0/17.9 | 23/31 |
-| Qwen3.5-9B | short3 | structural_copying | 0.0000/0.4904/0.9085 | 0.8/4.2/17.9 | 28/31 |
-| Qwen3.5-9B | short4 | cultural_memorized | 0.0000/0.2760/0.8671 | 0.9/4.0/17.9 | 22/31 |
-| Qwen3.5-9B | short5 | syntactic_pattern | 0.0000/0.9910/0.9995 | 0.0/0.1/17.9 | 27/31 |
-| OLMo-Hybrid-7B | brief0 | factual_recall | 0.0000/0.4778/0.8651 | 0.8/2.3/16.6 | 22/31 |
-| OLMo-Hybrid-7B | brief1 | algorithmic | 0.0000/0.8208/0.9770 | 0.3/2.0/16.6 | 30/31 |
-| OLMo-Hybrid-7B | brief2 | structural_copying | 0.0000/0.0771/0.6821 | 1.9/4.3/16.6 | 11/31 |
-| OLMo-Hybrid-7B | brief3 | syntactic_pattern | 0.0000/0.1659/0.6035 | 1.0/4.4/16.6 | 10/31 |
-| OLMo-Hybrid-7B | brief4 | cultural_memorized | 0.0000/0.8866/0.9984 | 0.0/1.3/16.6 | 28/31 |
-| OLMo-Hybrid-7B | brief5 | factual_recall | 0.0000/0.6867/0.9239 | 0.8/2.7/16.6 | 26/31 |
-| OLMo-Hybrid-7B | long0 | code_comprehension | 0.0000/0.1609/0.5155 | 2.1/2.9/16.6 | 13/31 |
-| OLMo-Hybrid-7B | long1 | long_range_retrieval | 0.0000/0.0167/0.1210 | 3.6/9.8/16.6 | 17/31 |
-| OLMo-Hybrid-7B | long2 | domain_knowledge | 0.0000/0.0150/0.0984 | 3.8/5.7/16.6 | 5/31 |
-| OLMo-Hybrid-7B | long3 | long_range_retrieval | 0.0000/0.0377/0.1358 | 5.6/7.4/16.6 | 7/31 |
-| OLMo-Hybrid-7B | med0 | factual_retrieval | 0.0000/0.0551/0.3819 | 1.7/3.9/16.6 | 7/31 |
-| OLMo-Hybrid-7B | med1 | reasoning_numerical | 0.0000/0.0010/0.0040 | 8.1/10.1/16.6 | 5/31 |
-| OLMo-Hybrid-7B | med2 | reasoning_tracking | 0.0000/0.0063/0.0972 | 3.8/6.9/16.6 | 5/31 |
-| OLMo-Hybrid-7B | med3 | reasoning_numerical | 0.0000/0.2262/0.6251 | 1.7/3.0/16.6 | 26/31 |
-| OLMo-Hybrid-7B | med4 | syntactic_pattern | 0.0000/0.0179/0.3120 | 0.8/7.1/16.6 | 10/31 |
-| OLMo-Hybrid-7B | med5 | reasoning_tracking | 0.0000/0.4261/0.9923 | 0.1/3.8/16.6 | 21/31 |
-| OLMo-Hybrid-7B | short0 | factual_recall | 0.0000/0.1654/0.6421 | 3.1/4.9/16.6 | 16/31 |
-| OLMo-Hybrid-7B | short1 | algorithmic | 0.0000/0.8861/0.9620 | 0.4/1.0/16.6 | 30/31 |
-| OLMo-Hybrid-7B | short2 | factual_recall | 0.0000/0.0825/0.6358 | 3.6/6.0/16.6 | 20/31 |
-| OLMo-Hybrid-7B | short3 | structural_copying | 0.0000/0.5033/0.8549 | 1.6/5.0/16.6 | 29/31 |
-| OLMo-Hybrid-7B | short4 | cultural_memorized | 0.0000/0.3416/0.7957 | 2.6/7.1/16.6 | 26/31 |
-| OLMo-Hybrid-7B | short5 | syntactic_pattern | 0.0000/0.9173/0.9797 | 0.2/0.9/16.6 | 26/31 |
+**The logit margin is the strongest single predictor of headroom.** A small gap between the top two logits means the model's current answer is barely winning — it is operating near a decision boundary where g-perturbation can tip the balance. This outperforms both final entropy (nonlinear monotonic relationship) and baseline probability (obvious but weaker).
 
-### 4.2 Profile Family Performance
+**Mean attention entropy** is a serious contender (Spearman ρ = 0.41), suggesting that when the attention system is diffuse at baseline, there is more room for g-profiles to concentrate it productively.
 
-Grouping the 31 profiles into families, what is the mean Δprob from baseline?
+### 4.2 Per-Model Breakdown (Top Signals)
 
-| Family | n profiles | Mean Δprob (all) | Mean Δprob (0.8B) | Mean Δprob (2B) | Mean Δprob (9B) | Mean Δprob (OLMO) |
-|--------|-----------|-----------------|-------------------|-----------------|-----------------|-------------------|
-| uniform | 6 | -0.2806 | -0.2211 | -0.3054 | -0.3353 | -0.2606 |
-| early_regional | 4 | -0.1498 | -0.1164 | -0.1638 | -0.1775 | -0.1416 |
-| late_regional | 4 | -0.0485 | -0.0185 | -0.0144 | -0.0760 | -0.0851 |
-| middle | 4 | -0.1777 | -0.1311 | -0.1687 | -0.1960 | -0.2150 |
-| ramp_up | 2 | -0.0034 | +0.0190 | +0.0137 | +0.0085 | -0.0550 |
-| ramp_down | 2 | -0.0556 | -0.0557 | -0.0676 | -0.0430 | -0.0562 |
-| edges | 2 | -0.0150 | +0.0180 | -0.0315 | +0.0154 | -0.0618 |
-| cross | 2 | -0.2533 | -0.1931 | -0.2500 | -0.3403 | -0.2297 |
-| ablation | 2 | -0.4914 | -0.3875 | -0.5266 | -0.5793 | -0.4722 |
-| alternating | 2 | -0.4914 | -0.3875 | -0.5266 | -0.5793 | -0.4722 |
+| Signal → headroom | 0.8B r(p) | 2B r(p) | 9B r(p) | OLMO r(p) |
+|-------------------|-----------|---------|---------|-----------|
+| Logit margin | r=-0.274 ρ=-0.368 | r=-0.300 ρ=-0.275 | r=-0.662 ρ=-0.790 | r=-0.281 ρ=-0.286 |
+| Baseline prob | r=-0.329 ρ=-0.126 | r=-0.328 ρ=-0.294 | r=-0.436 ρ=-0.538 | r=-0.279 ρ=-0.302 |
+| Final H | r=+0.151 ρ=+0.263 | r=+0.146 ρ=+0.286 | r=+0.352 ρ=+0.650 | r=+0.135 ρ=+0.305 |
+| Mean attn H | r=-0.051 ρ=-0.191 | r=-0.182 ρ=-0.296 | r=+0.022 ρ=+0.028 | r=-0.361 ρ=-0.234 |
 
-## 5. Signal-to-Optimum Correlations
+The logit margin signal is especially strong on Qwen3.5-9B (Pearson r = −0.66, Spearman ρ = −0.79). On the smaller models and OLMO it is weaker individually but still the best available scalar.
 
-Can baseline signals predict which g-profile family works best, or how much headroom exists?
-
-### 5.1 Pearson and Spearman Correlations (all models pooled, n=88)
+### 4.3 Optimal g-Profile Prediction
 
 | Signal → Target | Pearson r | p | Spearman ρ | p |
 |-----------------|-----------|---|-----------|---|
-| final_entropy → prob_delta | +0.173 | 0.1070 | +0.350 | 0.0008 |
-| bl_prob → prob_delta | -0.331 | 0.0016** | -0.299 | 0.0046 |
-| mean_entropy → prob_delta | +0.275 | 0.0094** | +0.411 | 0.0001 |
-| attn_ent_mean → prob_delta | -0.138 | 0.2000 | -0.153 | 0.1542 |
-| attn_ent_gradient → prob_delta | +0.097 | 0.3693 | +0.075 | 0.4866 |
-| attn_ent_last → prob_delta | -0.145 | 0.1767 | -0.180 | 0.0926 |
-| attn_ent_head_var → prob_delta | -0.085 | 0.4306 | -0.094 | 0.3836 |
 | final_entropy → best_g_mean | -0.106 | 0.3242 | -0.195 | 0.0689 |
-| final_entropy → best_g_tilt | -0.121 | 0.2601 | -0.133 | 0.2181 |
-| attn_ent_gradient → best_g_mean | -0.076 | 0.4831 | -0.017 | 0.8757 |
+| logit_margin → best_g_mean | +0.172 | 0.1100 | +0.187 | 0.0805 |
 | attn_ent_gradient → best_g_tilt | -0.074 | 0.4925 | -0.067 | 0.5334 |
-| attn_ent_last → best_g_mean | -0.119 | 0.2683 | +0.014 | 0.8936 |
 | attn_ent_last → best_g_tilt | +0.126 | 0.2409 | +0.112 | 0.2982 |
-| attn_ent_min_head → prob_delta | -0.061 | 0.5747 | -0.053 | 0.6252 |
-| attn_ent_std_across_layers → prob_delta | +0.053 | 0.6259 | -0.016 | 0.8842 |
 | attn_ent_std_across_layers → best_g_tilt | +0.065 | 0.5493 | +0.054 | 0.6148 |
 
-### 5.2 Per-Model Correlations
+These correlations are weak. Baseline signals can predict *whether* a prompt has headroom but cannot yet predict *which specific g-profile* will capture it. This is the gap the expanded battery needs to close.
 
-Key correlations broken out by model to check consistency:
+### 4.4 Mutual Information: Signal → Optimal Profile Family
 
-| Signal → Target | 0.8B r(p) | 2B r(p) | 9B r(p) | OLMO r(p) |
-|-----------------|-----------|---------|---------|-----------|
-| final_entropy → prob_delta | +0.151(0.503) | +0.146(0.517) | +0.352(0.108) | +0.135(0.548) |
-| bl_prob → prob_delta | -0.329(0.135) | -0.328(0.137) | -0.436(0.043) | -0.279(0.209) |
-| attn_ent_gradient → best_g_tilt | -0.037(0.870) | -0.008(0.972) | +0.011(0.962) | -0.433(0.044) |
-| attn_ent_last → best_g_mean | -0.008(0.971) | +0.043(0.849) | +0.201(0.369) | -0.348(0.112) |
+| Signal | MI with profile family | MI with best_g_mean (3 bins) | MI with best_g_tilt (3 bins) |
+|--------|----------------------|-------------------------------|------------------------------|
+| final_entropy | 0.1929 | 0.0368 | 0.0206 |
+| mean_entropy | 0.0993 | 0.0074 | 0.0048 |
+| logit_margin | 0.1036 | 0.0281 | 0.0320 |
+| attn_ent_gradient | 0.0702 | 0.0144 | 0.0482 |
+| attn_ent_last | 0.1370 | 0.0239 | 0.0188 |
+| attn_ent_head_var | 0.1288 | 0.0458 | 0.0454 |
+| attn_ent_min_head | 0.0724 | 0.0098 | 0.0385 |
+| attn_ent_std_across_layers | 0.0806 | 0.0583 | 0.0464 |
 
-## 6. Response Surface Geometry
+## 5. Profile Family Risk-Reward Characterization
 
-### 6.1 Prompt Clustering by Response Surface Shape
+Grouping profiles by family and evaluating both their potential gain and their distribution shift (|ΔH| from baseline as a KL proxy, since full KL was not stored).
 
-Each prompt's response to the 31 g-profiles defines a 31-dimensional vector (target_prob per profile). We cluster prompts by the *shape* of this response surface.
+| Family | Mean Δprob | Mean |ΔH| (KL proxy) | Max gain | Max damage | n |
+|--------|-----------|---------------------|----------|------------|---|
+| ramp_up | -0.0034 | 0.654 | +0.5374 | -0.4983 | 176 |
+| edges | -0.0150 | 0.738 | +0.7026 | -0.7133 | 176 |
+| ramp_down | -0.0556 | 0.796 | +0.3535 | -0.6792 | 176 |
+| late_regional | -0.0485 | 1.059 | +0.4978 | -0.9345 | 352 |
+| early_regional | -0.1498 | 1.686 | +0.4621 | -0.9943 | 352 |
+| cross | -0.2533 | 2.583 | +0.3991 | -0.9956 | 176 |
+| uniform | -0.2806 | 3.933 | +0.6928 | -0.9995 | 528 |
+| middle | -0.1777 | 4.243 | +0.5593 | -0.9995 | 352 |
+| ablation | -0.4914 | 14.300 | -0.0010 | -0.9995 | 176 |
+| alternating | -0.4914 | 14.300 | -0.0010 | -0.9995 | 176 |
 
-#### Qwen3.5-0.8B
+**Key finding**: `ramp_up`, `edges`, and `late_regional` are the sweet spot — low distribution shift yet containing the largest individual wins. Ablation and alternating profiles are uniformly catastrophic (mean Δprob = −0.49, never produce any gain).
 
-PCA on shape-normalized response surfaces (31 profiles per prompt):
+### 5.1 Restricted Safe Action Space
 
-- PC1 explains 38.3%
-- PC2 explains 19.7%
-- PC3 explains 12.3%
-- First 3 PCs: 70.3% total
+A controller searching over a 9-profile safe subset rather than all 31:
 
-K-means (k=3) clusters:
+- **Safe profiles**: ramp_up, ramp_up_gentle, ramp_down_gentle, edges_high, edges_low, late_boost_1.3, late_suppress_0.7, constant_0.75, constant_1.25
+- **Oracle headroom captured**: 81.9% (+0.1069 vs oracle +0.1306)
+- **Worst safe Δprob**: -0.8348 (vs full worst -0.9995)
 
-- **Cluster 0**: brief0, brief1, brief2, brief4, long0, med1, med3, med5, short0, short1, short4, short5
-  Types: factual_recall, algorithmic, structural_copying, cultural_memorized, code_comprehension, reasoning_numerical, reasoning_numerical, reasoning_tracking, factual_recall, algorithmic, cultural_memorized, syntactic_pattern
-- **Cluster 1**: brief5, long2, long3, med0, med4, short2, short3
-  Types: factual_recall, domain_knowledge, long_range_retrieval, factual_retrieval, syntactic_pattern, factual_recall, structural_copying
-- **Cluster 2**: brief3, long1, med2
-  Types: syntactic_pattern, long_range_retrieval, reasoning_tracking
+The safe subset captures ~82% of oracle headroom while dramatically reducing worst-case damage. A first controller should search this subset rather than the full battery.
 
-#### Qwen3.5-2B
+## 6. Early/Late Asymmetry
 
-PCA on shape-normalized response surfaces (31 profiles per prompt):
+### 6.1 Directional Win Counts
 
-- PC1 explains 27.5%
-- PC2 explains 20.0%
-- PC3 explains 16.9%
-- First 3 PCs: 64.4% total
+Paired comparisons reveal a strong directional bias in which half of the attention stack to perturb:
 
-K-means (k=3) clusters:
+| Comparison | Early-heavy wins | Late-heavy wins | Ties |
+|-----------|-----------------|----------------|------|
+| early_high vs late_high | 76/88 | 9/88 | 3/88 |
+| early_suppress vs late_suppress | 9/88 | 74/88 | 5/88 |
+| early_boost vs late_boost | 24/88 | 59/88 | 5/88 |
+| ramp_down (early-heavy) vs ramp_up (late-heavy) | 39/88 | 47/88 | 2/88 |
 
-- **Cluster 0**: brief1, brief2, long2, short1, short3, short4
-  Types: algorithmic, structural_copying, domain_knowledge, algorithmic, structural_copying, cultural_memorized
-- **Cluster 1**: brief0, brief4, brief5, long0, long1, long3, med0, med1, med3, med4, med5, short2, short5
-  Types: factual_recall, cultural_memorized, factual_recall, code_comprehension, long_range_retrieval, long_range_retrieval, factual_retrieval, reasoning_numerical, reasoning_numerical, syntactic_pattern, reasoning_tracking, factual_recall, syntactic_pattern
-- **Cluster 2**: brief3, med2, short0
-  Types: syntactic_pattern, reasoning_tracking, factual_recall
+**Pattern**: early_high_late_low beats its inverse 76/88 times. Late suppression beats early suppression 74/88 times. The model generally benefits from preserving or boosting early attention and reducing late attention. Late boost still wins more often than early boost (59 vs 24), but the effect is weaker.
 
-#### Qwen3.5-9B
+**However**: the baseline attention entropy gradient does *not* predict this directional preference (r ≈ 0). The asymmetry appears to be a near-universal property of these architectures rather than a prompt-specific signal. This means a controller should have a prior toward early-heavy profiles, not because the signal says so for each prompt, but because the architecture favors it.
 
-PCA on shape-normalized response surfaces (31 profiles per prompt):
+### 6.2 Early vs Late Detail
 
-- PC1 explains 27.6%
-- PC2 explains 17.7%
-- PC3 explains 13.0%
-- First 3 PCs: 58.3% total
-
-K-means (k=3) clusters:
-
-- **Cluster 0**: brief3
-  Types: syntactic_pattern
-- **Cluster 1**: brief0, brief1, brief2, brief4, brief5, long0, long2, long3, med0, med2, med3, short0, short1, short2, short3, short5
-  Types: factual_recall, algorithmic, structural_copying, cultural_memorized, factual_recall, code_comprehension, domain_knowledge, long_range_retrieval, factual_retrieval, reasoning_tracking, reasoning_numerical, factual_recall, algorithmic, factual_recall, structural_copying, syntactic_pattern
-- **Cluster 2**: long1, med1, med4, med5, short4
-  Types: long_range_retrieval, reasoning_numerical, syntactic_pattern, reasoning_tracking, cultural_memorized
-
-#### OLMo-Hybrid-7B
-
-PCA on shape-normalized response surfaces (31 profiles per prompt):
-
-- PC1 explains 27.7%
-- PC2 explains 21.5%
-- PC3 explains 12.1%
-- First 3 PCs: 61.3% total
-
-K-means (k=3) clusters:
-
-- **Cluster 0**: long2, med0, med2, short2
-  Types: domain_knowledge, factual_retrieval, reasoning_tracking, factual_recall
-- **Cluster 1**: brief0, brief1, brief3, brief4, brief5, long0, long1, long3, med1, med3, med4, med5, short0, short1, short3, short4, short5
-  Types: factual_recall, algorithmic, syntactic_pattern, cultural_memorized, factual_recall, code_comprehension, long_range_retrieval, long_range_retrieval, reasoning_numerical, reasoning_numerical, syntactic_pattern, reasoning_tracking, factual_recall, algorithmic, structural_copying, cultural_memorized, syntactic_pattern
-- **Cluster 2**: brief2
-  Types: structural_copying
-
-### 6.2 Cross-Model Response Consistency
-
-For each prompt, how correlated are the response surfaces across models? High correlation = the same profiles help/hurt regardless of model.
-
-| Prompt | Type | 0.8B↔2B | 0.8B↔9B | 2B↔9B | 2B↔OLMO | 9B↔OLMO |
-|--------|------|---------|---------|-------|---------|---------|
-| brief0 | factual_recall | 0.678 | 0.707 | 0.800 | 0.739 | 0.918 |
-| brief1 | algorithmic | 0.954 | 0.956 | 0.934 | 0.904 | 0.872 |
-| brief2 | structural_copying | 0.320 | 0.562 | 0.571 | 0.399 | -0.181 |
-| brief3 | syntactic_pattern | 0.166 | 0.346 | 0.001 | 0.193 | 0.204 |
-| brief4 | cultural_memorized | 0.955 | 0.975 | 0.956 | 0.820 | 0.791 |
-| brief5 | factual_recall | 0.872 | 0.670 | 0.890 | 0.932 | 0.965 |
-| long0 | code_comprehension | 0.998 | 0.968 | 0.964 | 0.759 | 0.780 |
-| long1 | long_range_retrieval | 0.392 | 0.481 | 0.931 | 0.656 | 0.663 |
-| long2 | domain_knowledge | 0.240 | 0.528 | 0.790 | 0.232 | 0.476 |
-| long3 | long_range_retrieval | 0.922 | 0.783 | 0.851 | 0.776 | 0.657 |
-| med0 | factual_retrieval | 0.627 | 0.722 | 0.840 | 0.715 | 0.628 |
-| med1 | reasoning_numerical | 0.193 | 0.757 | 0.209 | 0.551 | 0.490 |
-| med2 | reasoning_tracking | 0.386 | 0.675 | 0.527 | 0.752 | 0.352 |
-| med3 | reasoning_numerical | 0.975 | 0.934 | 0.970 | 0.867 | 0.821 |
-| med4 | syntactic_pattern | 0.247 | 0.094 | 0.803 | 0.506 | 0.692 |
-| med5 | reasoning_tracking | 0.585 | 0.473 | 0.832 | 0.650 | 0.739 |
-| short0 | factual_recall | 0.313 | 0.755 | 0.413 | 0.706 | 0.379 |
-| short1 | algorithmic | 0.939 | 0.961 | 0.953 | 0.977 | 0.984 |
-| short2 | factual_recall | 0.695 | 0.325 | 0.720 | 0.498 | 0.448 |
-| short3 | structural_copying | 0.755 | 0.776 | 0.944 | 0.754 | 0.767 |
-| short4 | cultural_memorized | 0.557 | 0.326 | 0.279 | 0.420 | 0.945 |
-| short5 | syntactic_pattern | 0.997 | 0.952 | 0.953 | 0.929 | 0.919 |
-
-## 7. Per-Layer Sensitivity Analysis
-
-Which attention layers matter most? We compare profiles that differ only in early vs late regions.
-
-### 7.1 Early vs Late: Differential Sensitivity
-
-Comparing `early_boost_1.5` vs `late_boost_1.5` and `early_suppress_0.5` vs `late_suppress_0.5`:
-
-| Model | Prompt | Type | early_boost_1.5 prob | late_boost_1.5 prob | Δ(late-early) | early_sup_0.5 prob | late_sup_0.5 prob | Δ(late-early) |
-|-------|--------|------|---------------------|--------------------|--------------|--------------------|----------------------|--------------|
+| Model | Prompt | Type | early_boost_1.5 | late_boost_1.5 | Δ(late−early) | early_sup_0.5 | late_sup_0.5 | Δ(late−early) |
+|-------|--------|------|----------------|---------------|--------------|--------------|-------------|--------------|
 | Qwen3.5-0.8B | brief0 | factual_recall | 0.2162 | 0.2004 | -0.0158 | 0.0488 | 0.0296 | -0.0192 |
 | Qwen3.5-0.8B | brief1 | algorithmic | 0.9339 | 0.9051 | -0.0287 | 0.2957 | 0.9109 | +0.6153 |
 | Qwen3.5-0.8B | brief2 | structural_copying | 0.2078 | 0.4537 | +0.2459 | 0.0074 | 0.1590 | +0.1516 |
@@ -700,9 +573,96 @@ Comparing `early_boost_1.5` vs `late_boost_1.5` and `early_suppress_0.5` vs `lat
 | OLMo-Hybrid-7B | short4 | cultural_memorized | 0.2471 | 0.7244 | +0.4773 | 0.1266 | 0.0611 | -0.0655 |
 | OLMo-Hybrid-7B | short5 | syntactic_pattern | 0.9543 | 0.9770 | +0.0227 | 0.4428 | 0.3188 | -0.1240 |
 
-### 7.2 Ablation: Which Layers Can Be Zeroed?
+## 7. Response Surface Geometry
 
-The extreme profiles (`early_only_2x`, `late_only_2x`, `middle_only`) zero out half the attention layers. How much prediction survives?
+### 7.1 PCA and Clustering
+
+#### Qwen3.5-0.8B
+
+PCA on shape-normalized response surfaces: PC1=38.3%, PC2=19.7%, PC3=12.3% (first 3: 70.3%)
+
+- **Cluster 0**: brief0, brief1, brief2, brief4, long0, med1, med3, med5, short0, short1, short4, short5 — types: factual_recall, algorithmic, structural_copying, cultural_memorized, code_comprehension, reasoning_numerical, reasoning_numerical, reasoning_tracking, factual_recall, algorithmic, cultural_memorized, syntactic_pattern
+- **Cluster 1**: brief5, long2, long3, med0, med4, short2, short3 — types: factual_recall, domain_knowledge, long_range_retrieval, factual_retrieval, syntactic_pattern, factual_recall, structural_copying
+- **Cluster 2**: brief3, long1, med2 — types: syntactic_pattern, long_range_retrieval, reasoning_tracking
+
+#### Qwen3.5-2B
+
+PCA on shape-normalized response surfaces: PC1=27.5%, PC2=20.0%, PC3=16.9% (first 3: 64.4%)
+
+- **Cluster 0**: brief1, brief2, long2, short1, short3, short4 — types: algorithmic, structural_copying, domain_knowledge, algorithmic, structural_copying, cultural_memorized
+- **Cluster 1**: brief0, brief4, brief5, long0, long1, long3, med0, med1, med3, med4, med5, short2, short5 — types: factual_recall, cultural_memorized, factual_recall, code_comprehension, long_range_retrieval, long_range_retrieval, factual_retrieval, reasoning_numerical, reasoning_numerical, syntactic_pattern, reasoning_tracking, factual_recall, syntactic_pattern
+- **Cluster 2**: brief3, med2, short0 — types: syntactic_pattern, reasoning_tracking, factual_recall
+
+#### Qwen3.5-9B
+
+PCA on shape-normalized response surfaces: PC1=27.6%, PC2=17.7%, PC3=13.0% (first 3: 58.3%)
+
+- **Cluster 0**: brief3 — types: syntactic_pattern
+- **Cluster 1**: brief0, brief1, brief2, brief4, brief5, long0, long2, long3, med0, med2, med3, short0, short1, short2, short3, short5 — types: factual_recall, algorithmic, structural_copying, cultural_memorized, factual_recall, code_comprehension, domain_knowledge, long_range_retrieval, factual_retrieval, reasoning_tracking, reasoning_numerical, factual_recall, algorithmic, factual_recall, structural_copying, syntactic_pattern
+- **Cluster 2**: long1, med1, med4, med5, short4 — types: long_range_retrieval, reasoning_numerical, syntactic_pattern, reasoning_tracking, cultural_memorized
+
+#### OLMo-Hybrid-7B
+
+PCA on shape-normalized response surfaces: PC1=27.7%, PC2=21.5%, PC3=12.1% (first 3: 61.3%)
+
+- **Cluster 0**: long2, med0, med2, short2 — types: domain_knowledge, factual_retrieval, reasoning_tracking, factual_recall
+- **Cluster 1**: brief0, brief1, brief3, brief4, brief5, long0, long1, long3, med1, med3, med4, med5, short0, short1, short3, short4, short5 — types: factual_recall, algorithmic, syntactic_pattern, cultural_memorized, factual_recall, code_comprehension, long_range_retrieval, long_range_retrieval, reasoning_numerical, reasoning_numerical, syntactic_pattern, reasoning_tracking, factual_recall, algorithmic, structural_copying, cultural_memorized, syntactic_pattern
+- **Cluster 2**: brief2 — types: structural_copying
+
+### 7.2 Cross-Model Response Consistency
+
+| Prompt | Type | 0.8B↔2B | 0.8B↔9B | 2B↔9B | 2B↔OLMO | 9B↔OLMO |
+|--------|------|---------|---------|-------|---------|---------|
+| brief0 | factual_recall | 0.678 | 0.707 | 0.800 | 0.739 | 0.918 |
+| brief1 | algorithmic | 0.954 | 0.956 | 0.934 | 0.904 | 0.872 |
+| brief2 | structural_copying | 0.320 | 0.562 | 0.571 | 0.399 | -0.181 |
+| brief3 | syntactic_pattern | 0.166 | 0.346 | 0.001 | 0.193 | 0.204 |
+| brief4 | cultural_memorized | 0.955 | 0.975 | 0.956 | 0.820 | 0.791 |
+| brief5 | factual_recall | 0.872 | 0.670 | 0.890 | 0.932 | 0.965 |
+| long0 | code_comprehension | 0.998 | 0.968 | 0.964 | 0.759 | 0.780 |
+| long1 | long_range_retrieval | 0.392 | 0.481 | 0.931 | 0.656 | 0.663 |
+| long2 | domain_knowledge | 0.240 | 0.528 | 0.790 | 0.232 | 0.476 |
+| long3 | long_range_retrieval | 0.922 | 0.783 | 0.851 | 0.776 | 0.657 |
+| med0 | factual_retrieval | 0.627 | 0.722 | 0.840 | 0.715 | 0.628 |
+| med1 | reasoning_numerical | 0.193 | 0.757 | 0.209 | 0.551 | 0.490 |
+| med2 | reasoning_tracking | 0.386 | 0.675 | 0.527 | 0.752 | 0.352 |
+| med3 | reasoning_numerical | 0.975 | 0.934 | 0.970 | 0.867 | 0.821 |
+| med4 | syntactic_pattern | 0.247 | 0.094 | 0.803 | 0.506 | 0.692 |
+| med5 | reasoning_tracking | 0.585 | 0.473 | 0.832 | 0.650 | 0.739 |
+| short0 | factual_recall | 0.313 | 0.755 | 0.413 | 0.706 | 0.379 |
+| short1 | algorithmic | 0.939 | 0.961 | 0.953 | 0.977 | 0.984 |
+| short2 | factual_recall | 0.695 | 0.325 | 0.720 | 0.498 | 0.448 |
+| short3 | structural_copying | 0.755 | 0.776 | 0.944 | 0.754 | 0.767 |
+| short4 | cultural_memorized | 0.557 | 0.326 | 0.279 | 0.420 | 0.945 |
+| short5 | syntactic_pattern | 0.997 | 0.952 | 0.953 | 0.929 | 0.919 |
+
+## 8. Topological Data Analysis
+
+Persistent homology on each model's 22 prompts in 31-dimensional response space.
+
+### Qwen3.5-0.8B
+
+**H0**: 22 features. Finite lifetimes: min=0.104, med=2.142, max=7.025
+**H1**: 1 loops. Lifetimes: 0.699
+
+### Qwen3.5-2B
+
+**H0**: 22 features. Finite lifetimes: min=0.319, med=2.280, max=5.698
+**H1**: No loops detected — the response landscape is topologically simple within clusters.
+
+### Qwen3.5-9B
+
+**H0**: 22 features. Finite lifetimes: min=0.323, med=2.797, max=8.457
+**H1**: 2 loops. Lifetimes: 0.251, 0.165
+
+### OLMo-Hybrid-7B
+
+**H0**: 22 features. Finite lifetimes: min=0.399, med=2.649, max=6.783
+**H1**: No loops detected — the response landscape is topologically simple within clusters.
+
+## 9. Layer Ablation
+
+Which attention layers can be zeroed without catastrophe?
 
 | Model | Prompt | Type | BL prob | early_only_2x | late_only_2x | middle_only | alternating | alt_inv |
 |-------|--------|------|---------|--------------|-------------|------------|------------|---------|
@@ -795,254 +755,143 @@ The extreme profiles (`early_only_2x`, `late_only_2x`, `middle_only`) zero out h
 | OLMo-Hybrid-7B | short4 | cultural_memorized | 0.7182 | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.0000 |
 | OLMo-Hybrid-7B | short5 | syntactic_pattern | 0.9750 | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.0000 |
 
-## 8. Advanced Signal Extraction
+## 10. Baseline Signal Fingerprints
 
-### 8.1 Signal Space: Baseline Fingerprints
+Full signal vector per prompt at baseline — the input a controller would see.
 
-Each prompt at baseline occupies a point in a multi-dimensional signal space. Key dimensions:
+| Model | Prompt | Type | Final H | Mean H | Margin | Top5 Spread | Attn Mean | Attn Grad | Attn Last | Head Var |
+|-------|--------|------|---------|--------|--------|-------------|-----------|-----------|-----------|----------|
+| Qwen3.5-0.8B | brief0 | factual_recall | 2.58 | 3.03 | 1.156 | 3.844 | 4.175 | +0.182 | 4.09 | 1.424 |
+| Qwen3.5-0.8B | brief1 | algorithmic | 0.82 | 1.17 | 3.297 | 5.664 | 4.359 | -1.039 | 3.80 | 1.498 |
+| Qwen3.5-0.8B | brief2 | structural_copying | 5.19 | 4.36 | 0.445 | 2.773 | 4.527 | -0.042 | 3.77 | 0.859 |
+| Qwen3.5-0.8B | brief3 | syntactic_pattern | 2.57 | 0.93 | 2.359 | 2.992 | 3.603 | -0.093 | 3.71 | 2.047 |
+| Qwen3.5-0.8B | brief4 | cultural_memorized | 0.22 | 1.29 | 3.516 | 7.562 | 3.753 | -0.151 | 4.16 | 1.659 |
+| Qwen3.5-0.8B | brief5 | factual_recall | 1.31 | 2.36 | 3.266 | 4.844 | 3.458 | -0.430 | 3.53 | 1.327 |
+| Qwen3.5-0.8B | long0 | code_comprehension | 0.08 | 1.26 | 6.453 | 7.734 | 4.573 | -0.118 | 4.85 | 1.783 |
+| Qwen3.5-0.8B | long1 | long_range_retrieval | 9.61 | 4.26 | 0.078 | 0.242 | 5.418 | +0.042 | 4.91 | 2.918 |
+| Qwen3.5-0.8B | long2 | domain_knowledge | 6.94 | 3.95 | 1.516 | 2.062 | 6.348 | +0.556 | 5.68 | 2.799 |
+| Qwen3.5-0.8B | long3 | long_range_retrieval | 4.71 | 3.59 | 2.125 | 3.055 | 4.797 | -0.687 | 4.08 | 2.887 |
+| Qwen3.5-0.8B | med0 | factual_retrieval | 5.07 | 4.43 | 0.594 | 1.070 | 5.004 | -0.608 | 4.33 | 2.383 |
+| Qwen3.5-0.8B | med1 | reasoning_numerical | 8.83 | 4.24 | 1.234 | 2.141 | 5.540 | -0.479 | 4.26 | 1.847 |
+| Qwen3.5-0.8B | med2 | reasoning_tracking | 3.83 | 4.10 | 0.336 | 3.656 | 5.313 | -0.447 | 4.44 | 1.892 |
+| Qwen3.5-0.8B | med3 | reasoning_numerical | 0.40 | 2.82 | 3.828 | 6.445 | 4.976 | -0.652 | 4.78 | 2.007 |
+| Qwen3.5-0.8B | med4 | syntactic_pattern | 7.50 | 0.74 | 0.258 | 0.797 | 5.480 | -0.924 | 4.81 | 2.136 |
+| Qwen3.5-0.8B | med5 | reasoning_tracking | 4.04 | 4.37 | 1.242 | 2.008 | 5.309 | -0.595 | 4.31 | 1.774 |
+| Qwen3.5-0.8B | short0 | factual_recall | 5.17 | 4.61 | 0.188 | 1.016 | 2.092 | -0.100 | 1.67 | 0.326 |
+| Qwen3.5-0.8B | short1 | algorithmic | 1.05 | 1.80 | 2.875 | 4.875 | 3.272 | -0.589 | 3.44 | 0.774 |
+| Qwen3.5-0.8B | short2 | factual_recall | 6.49 | 7.01 | 0.195 | 0.906 | 1.635 | -0.358 | 1.22 | 0.291 |
+| Qwen3.5-0.8B | short3 | structural_copying | 4.48 | 6.07 | 2.211 | 3.414 | 2.052 | -0.317 | 1.89 | 0.320 |
+| Qwen3.5-0.8B | short4 | cultural_memorized | 9.53 | 4.87 | 0.648 | 1.484 | 2.894 | +0.282 | 2.67 | 0.568 |
+| Qwen3.5-0.8B | short5 | syntactic_pattern | 0.04 | 1.75 | 6.469 | 8.102 | 1.976 | +0.099 | 1.88 | 0.416 |
+| Qwen3.5-2B | brief0 | factual_recall | 2.15 | 2.62 | 0.844 | 3.891 | 4.181 | -0.078 | 3.98 | 1.401 |
+| Qwen3.5-2B | brief1 | algorithmic | 0.59 | 1.05 | 4.391 | 5.516 | 4.676 | -0.688 | 4.09 | 1.298 |
+| Qwen3.5-2B | brief2 | structural_copying | 4.30 | 3.98 | 0.922 | 2.609 | 4.625 | -0.031 | 4.08 | 0.890 |
+| Qwen3.5-2B | brief3 | syntactic_pattern | 1.70 | 0.83 | 2.367 | 4.328 | 3.885 | +0.066 | 4.19 | 2.040 |
+| Qwen3.5-2B | brief4 | cultural_memorized | 0.11 | 0.76 | 4.297 | 10.602 | 3.988 | -0.326 | 4.27 | 1.292 |
+| Qwen3.5-2B | brief5 | factual_recall | 1.19 | 2.14 | 3.328 | 4.328 | 3.499 | -0.543 | 3.41 | 1.530 |
+| Qwen3.5-2B | long0 | code_comprehension | 0.03 | 1.02 | 8.062 | 8.953 | 4.817 | -0.196 | 4.70 | 1.548 |
+| Qwen3.5-2B | long1 | long_range_retrieval | 3.28 | 3.51 | 3.250 | 4.484 | 5.314 | -0.533 | 4.44 | 2.460 |
+| Qwen3.5-2B | long2 | domain_knowledge | 6.01 | 3.41 | 1.938 | 2.492 | 6.505 | +0.301 | 5.48 | 2.853 |
+| Qwen3.5-2B | long3 | long_range_retrieval | 2.90 | 3.21 | 2.859 | 4.234 | 4.695 | -0.494 | 4.30 | 3.397 |
+| Qwen3.5-2B | med0 | factual_retrieval | 2.14 | 4.13 | 2.977 | 3.758 | 4.900 | -0.868 | 4.29 | 2.430 |
+| Qwen3.5-2B | med1 | reasoning_numerical | 8.46 | 4.03 | 0.195 | 1.383 | 5.560 | -0.850 | 4.12 | 1.918 |
+| Qwen3.5-2B | med2 | reasoning_tracking | 3.20 | 3.51 | 1.156 | 2.594 | 5.329 | -0.628 | 4.41 | 1.946 |
+| Qwen3.5-2B | med3 | reasoning_numerical | 0.19 | 2.54 | 4.781 | 6.922 | 5.139 | -0.635 | 5.00 | 2.091 |
+| Qwen3.5-2B | med4 | syntactic_pattern | 3.94 | 0.61 | 0.727 | 3.453 | 5.612 | -0.729 | 4.70 | 1.698 |
+| Qwen3.5-2B | med5 | reasoning_tracking | 1.81 | 3.87 | 1.609 | 3.781 | 5.252 | -0.855 | 4.24 | 1.783 |
+| Qwen3.5-2B | short0 | factual_recall | 5.05 | 4.20 | 0.125 | 0.906 | 1.975 | -0.211 | 1.52 | 0.273 |
+| Qwen3.5-2B | short1 | algorithmic | 1.70 | 1.74 | 2.047 | 4.922 | 3.566 | -0.176 | 3.61 | 0.510 |
+| Qwen3.5-2B | short2 | factual_recall | 4.94 | 6.27 | 0.719 | 1.703 | 1.755 | -0.127 | 1.57 | 0.207 |
+| Qwen3.5-2B | short3 | structural_copying | 4.20 | 5.46 | 1.438 | 3.617 | 2.051 | -0.397 | 2.00 | 0.410 |
+| Qwen3.5-2B | short4 | cultural_memorized | 9.29 | 4.96 | 0.125 | 0.414 | 2.875 | +0.228 | 2.85 | 0.445 |
+| Qwen3.5-2B | short5 | syntactic_pattern | 0.02 | 1.74 | 7.500 | 10.234 | 1.800 | -0.093 | 1.77 | 0.404 |
+| Qwen3.5-9B | brief0 | factual_recall | 1.80 | 2.23 | 0.453 | 3.844 | 4.452 | -0.620 | 4.11 | 1.026 |
+| Qwen3.5-9B | brief1 | algorithmic | 0.53 | 0.95 | 4.922 | 5.547 | 4.650 | -0.670 | 4.11 | 1.014 |
+| Qwen3.5-9B | brief2 | structural_copying | 3.76 | 3.55 | 0.594 | 2.234 | 4.582 | -0.363 | 3.95 | 0.731 |
+| Qwen3.5-9B | brief3 | syntactic_pattern | 0.73 | 0.84 | 4.578 | 4.812 | 3.943 | -0.503 | 3.99 | 1.692 |
+| Qwen3.5-9B | brief4 | cultural_memorized | 0.02 | 0.58 | 6.875 | 10.508 | 4.247 | -0.823 | 4.38 | 1.224 |
+| Qwen3.5-9B | brief5 | factual_recall | 1.49 | 1.90 | 2.875 | 4.570 | 3.756 | -0.551 | 3.82 | 1.228 |
+| Qwen3.5-9B | long0 | code_comprehension | 0.05 | 0.74 | 6.906 | 8.180 | 4.857 | -0.205 | 4.66 | 1.836 |
+| Qwen3.5-9B | long1 | long_range_retrieval | 2.27 | 2.72 | 3.906 | 4.930 | 5.224 | -0.528 | 4.64 | 2.587 |
+| Qwen3.5-9B | long2 | domain_knowledge | 5.11 | 2.66 | 1.422 | 2.594 | 6.448 | +0.046 | 5.89 | 1.777 |
+| Qwen3.5-9B | long3 | long_range_retrieval | 2.16 | 2.75 | 2.688 | 3.547 | 4.995 | -0.912 | 4.81 | 3.070 |
+| Qwen3.5-9B | med0 | factual_retrieval | 3.57 | 3.70 | 0.031 | 1.719 | 5.034 | -0.446 | 4.15 | 1.829 |
+| Qwen3.5-9B | med1 | reasoning_numerical | 8.06 | 3.62 | 0.234 | 0.953 | 5.612 | -0.606 | 4.50 | 1.300 |
+| Qwen3.5-9B | med2 | reasoning_tracking | 4.34 | 2.90 | 0.359 | 1.820 | 5.499 | -0.848 | 4.09 | 1.645 |
+| Qwen3.5-9B | med3 | reasoning_numerical | 0.23 | 2.27 | 4.969 | 6.203 | 5.311 | -0.464 | 4.95 | 1.659 |
+| Qwen3.5-9B | med4 | syntactic_pattern | 2.91 | 0.49 | 0.641 | 4.102 | 5.570 | -0.913 | 4.66 | 1.610 |
+| Qwen3.5-9B | med5 | reasoning_tracking | 0.12 | 3.00 | 5.453 | 8.469 | 5.262 | -0.601 | 5.21 | 1.878 |
+| Qwen3.5-9B | short0 | factual_recall | 4.58 | 4.22 | 0.625 | 1.812 | 1.963 | -0.232 | 1.76 | 0.253 |
+| Qwen3.5-9B | short1 | algorithmic | 0.99 | 1.48 | 3.172 | 4.758 | 3.239 | -0.199 | 3.34 | 0.687 |
+| Qwen3.5-9B | short2 | factual_recall | 4.59 | 6.07 | 1.664 | 1.789 | 1.561 | -0.199 | 1.45 | 0.214 |
+| Qwen3.5-9B | short3 | structural_copying | 3.02 | 5.13 | 1.211 | 4.203 | 2.108 | -0.311 | 2.16 | 0.396 |
+| Qwen3.5-9B | short4 | cultural_memorized | 1.65 | 3.33 | 1.438 | 5.531 | 2.972 | -0.047 | 2.95 | 0.353 |
+| Qwen3.5-9B | short5 | syntactic_pattern | 0.01 | 1.71 | 8.484 | 10.727 | 2.020 | -0.267 | 1.83 | 0.289 |
+| OLMo-Hybrid-7B | brief0 | factual_recall | 1.80 | 2.69 | 0.234 | 4.072 | 3.495 | -1.397 | 2.83 | 2.596 |
+| OLMo-Hybrid-7B | brief1 | algorithmic | 1.08 | 1.33 | 3.766 | 5.151 | 3.808 | -1.066 | 2.93 | 2.106 |
+| OLMo-Hybrid-7B | brief2 | structural_copying | 4.22 | 3.61 | 0.375 | 1.066 | 3.296 | -1.054 | 2.06 | 2.355 |
+| OLMo-Hybrid-7B | brief3 | syntactic_pattern | 2.04 | 2.09 | 0.688 | 5.086 | 4.543 | -1.357 | 3.36 | 2.541 |
+| OLMo-Hybrid-7B | brief4 | cultural_memorized | 0.04 | 0.60 | 6.662 | 9.095 | 2.818 | -1.669 | 1.72 | 2.935 |
+| OLMo-Hybrid-7B | brief5 | factual_recall | 0.77 | 2.14 | 4.133 | 4.680 | 3.265 | -1.453 | 2.82 | 2.371 |
+| OLMo-Hybrid-7B | long0 | code_comprehension | 2.35 | 1.66 | 0.801 | 2.634 | 5.842 | -0.517 | 6.37 | 3.748 |
+| OLMo-Hybrid-7B | long1 | long_range_retrieval | 9.82 | 3.62 | 0.227 | 0.625 | 5.198 | -1.248 | 5.77 | 5.302 |
+| OLMo-Hybrid-7B | long2 | domain_knowledge | 4.72 | 3.25 | 1.180 | 2.188 | 6.749 | +0.137 | 7.36 | 4.301 |
+| OLMo-Hybrid-7B | long3 | long_range_retrieval | 6.67 | 3.27 | 0.523 | 0.625 | 6.349 | -0.583 | 6.64 | 4.821 |
+| OLMo-Hybrid-7B | med0 | factual_retrieval | 3.22 | 4.28 | 0.602 | 3.602 | 4.278 | -1.154 | 3.34 | 3.435 |
+| OLMo-Hybrid-7B | med1 | reasoning_numerical | 9.43 | 4.28 | 0.312 | 0.898 | 4.403 | -0.812 | 3.45 | 3.720 |
+| OLMo-Hybrid-7B | med2 | reasoning_tracking | 6.06 | 3.48 | 0.180 | 0.969 | 4.398 | -1.446 | 3.25 | 3.864 |
+| OLMo-Hybrid-7B | med3 | reasoning_numerical | 2.39 | 3.40 | 1.152 | 2.135 | 4.799 | -0.732 | 4.84 | 3.346 |
+| OLMo-Hybrid-7B | med4 | syntactic_pattern | 7.07 | 1.51 | 0.857 | 1.342 | 5.657 | -0.641 | 5.74 | 3.029 |
+| OLMo-Hybrid-7B | med5 | reasoning_tracking | 0.59 | 3.55 | 2.738 | 6.351 | 4.648 | -0.897 | 3.90 | 3.670 |
+| OLMo-Hybrid-7B | short0 | factual_recall | 3.94 | 4.77 | 0.246 | 2.539 | 1.179 | -0.741 | 0.67 | 0.640 |
+| OLMo-Hybrid-7B | short1 | algorithmic | 0.84 | 1.54 | 3.243 | 5.514 | 2.405 | -1.276 | 1.58 | 1.948 |
+| OLMo-Hybrid-7B | short2 | factual_recall | 5.19 | 6.66 | 1.539 | 2.125 | 1.693 | -0.062 | 1.41 | 0.261 |
+| OLMo-Hybrid-7B | short3 | structural_copying | 4.40 | 5.00 | 2.188 | 3.188 | 1.318 | -0.951 | 0.57 | 0.793 |
+| OLMo-Hybrid-7B | short4 | cultural_memorized | 3.39 | 3.27 | 3.086 | 4.654 | 2.039 | -1.117 | 1.42 | 1.425 |
+| OLMo-Hybrid-7B | short5 | syntactic_pattern | 0.28 | 1.37 | 4.754 | 6.247 | 1.161 | -0.624 | 0.82 | 0.753 |
 
-| Model | Prompt | Type | Final H | Mean H | Attn Grad | Attn Last | Head Var | Sharpest L |
-|-------|--------|------|---------|--------|-----------|-----------|----------|-----------|
-| Qwen3.5-0.8B | brief0 | factual_recall | 2.58 | 3.03 | +0.182 | 4.09 | 1.424 | L15 |
-| Qwen3.5-0.8B | brief1 | algorithmic | 0.82 | 1.17 | -1.039 | 3.80 | 1.498 | L23 |
-| Qwen3.5-0.8B | brief2 | structural_copying | 5.19 | 4.36 | -0.042 | 3.77 | 0.859 | L23 |
-| Qwen3.5-0.8B | brief3 | syntactic_pattern | 2.57 | 0.93 | -0.093 | 3.71 | 2.047 | L15 |
-| Qwen3.5-0.8B | brief4 | cultural_memorized | 0.22 | 1.29 | -0.151 | 4.16 | 1.659 | L15 |
-| Qwen3.5-0.8B | brief5 | factual_recall | 1.31 | 2.36 | -0.430 | 3.53 | 1.327 | L15 |
-| Qwen3.5-0.8B | long0 | code_comprehension | 0.08 | 1.26 | -0.118 | 4.85 | 1.783 | L15 |
-| Qwen3.5-0.8B | long1 | long_range_retrieval | 9.61 | 4.26 | +0.042 | 4.91 | 2.918 | L15 |
-| Qwen3.5-0.8B | long2 | domain_knowledge | 6.94 | 3.95 | +0.556 | 5.68 | 2.799 | L23 |
-| Qwen3.5-0.8B | long3 | long_range_retrieval | 4.71 | 3.59 | -0.687 | 4.08 | 2.887 | L15 |
-| Qwen3.5-0.8B | med0 | factual_retrieval | 5.07 | 4.43 | -0.608 | 4.33 | 2.383 | L15 |
-| Qwen3.5-0.8B | med1 | reasoning_numerical | 8.83 | 4.24 | -0.479 | 4.26 | 1.847 | L23 |
-| Qwen3.5-0.8B | med2 | reasoning_tracking | 3.83 | 4.10 | -0.447 | 4.44 | 1.892 | L23 |
-| Qwen3.5-0.8B | med3 | reasoning_numerical | 0.40 | 2.82 | -0.652 | 4.78 | 2.007 | L15 |
-| Qwen3.5-0.8B | med4 | syntactic_pattern | 7.50 | 0.74 | -0.924 | 4.81 | 2.136 | L23 |
-| Qwen3.5-0.8B | med5 | reasoning_tracking | 4.04 | 4.37 | -0.595 | 4.31 | 1.774 | L23 |
-| Qwen3.5-0.8B | short0 | factual_recall | 5.17 | 4.61 | -0.100 | 1.67 | 0.326 | L23 |
-| Qwen3.5-0.8B | short1 | algorithmic | 1.05 | 1.80 | -0.589 | 3.44 | 0.774 | L19 |
-| Qwen3.5-0.8B | short2 | factual_recall | 6.49 | 7.01 | -0.358 | 1.22 | 0.291 | L23 |
-| Qwen3.5-0.8B | short3 | structural_copying | 4.48 | 6.07 | -0.317 | 1.89 | 0.320 | L15 |
-| Qwen3.5-0.8B | short4 | cultural_memorized | 9.53 | 4.87 | +0.282 | 2.67 | 0.568 | L7 |
-| Qwen3.5-0.8B | short5 | syntactic_pattern | 0.04 | 1.75 | +0.099 | 1.88 | 0.416 | L7 |
-| Qwen3.5-2B | brief0 | factual_recall | 2.15 | 2.62 | -0.078 | 3.98 | 1.401 | L15 |
-| Qwen3.5-2B | brief1 | algorithmic | 0.59 | 1.05 | -0.688 | 4.09 | 1.298 | L15 |
-| Qwen3.5-2B | brief2 | structural_copying | 4.30 | 3.98 | -0.031 | 4.08 | 0.890 | L23 |
-| Qwen3.5-2B | brief3 | syntactic_pattern | 1.70 | 0.83 | +0.066 | 4.19 | 2.040 | L11 |
-| Qwen3.5-2B | brief4 | cultural_memorized | 0.11 | 0.76 | -0.326 | 4.27 | 1.292 | L15 |
-| Qwen3.5-2B | brief5 | factual_recall | 1.19 | 2.14 | -0.543 | 3.41 | 1.530 | L15 |
-| Qwen3.5-2B | long0 | code_comprehension | 0.03 | 1.02 | -0.196 | 4.70 | 1.548 | L7 |
-| Qwen3.5-2B | long1 | long_range_retrieval | 3.28 | 3.51 | -0.533 | 4.44 | 2.460 | L23 |
-| Qwen3.5-2B | long2 | domain_knowledge | 6.01 | 3.41 | +0.301 | 5.48 | 2.853 | L23 |
-| Qwen3.5-2B | long3 | long_range_retrieval | 2.90 | 3.21 | -0.494 | 4.30 | 3.397 | L15 |
-| Qwen3.5-2B | med0 | factual_retrieval | 2.14 | 4.13 | -0.868 | 4.29 | 2.430 | L15 |
-| Qwen3.5-2B | med1 | reasoning_numerical | 8.46 | 4.03 | -0.850 | 4.12 | 1.918 | L23 |
-| Qwen3.5-2B | med2 | reasoning_tracking | 3.20 | 3.51 | -0.628 | 4.41 | 1.946 | L23 |
-| Qwen3.5-2B | med3 | reasoning_numerical | 0.19 | 2.54 | -0.635 | 5.00 | 2.091 | L19 |
-| Qwen3.5-2B | med4 | syntactic_pattern | 3.94 | 0.61 | -0.729 | 4.70 | 1.698 | L23 |
-| Qwen3.5-2B | med5 | reasoning_tracking | 1.81 | 3.87 | -0.855 | 4.24 | 1.783 | L23 |
-| Qwen3.5-2B | short0 | factual_recall | 5.05 | 4.20 | -0.211 | 1.52 | 0.273 | L23 |
-| Qwen3.5-2B | short1 | algorithmic | 1.70 | 1.74 | -0.176 | 3.61 | 0.510 | L15 |
-| Qwen3.5-2B | short2 | factual_recall | 4.94 | 6.27 | -0.127 | 1.57 | 0.207 | L23 |
-| Qwen3.5-2B | short3 | structural_copying | 4.20 | 5.46 | -0.397 | 2.00 | 0.410 | L15 |
-| Qwen3.5-2B | short4 | cultural_memorized | 9.29 | 4.96 | +0.228 | 2.85 | 0.445 | L3 |
-| Qwen3.5-2B | short5 | syntactic_pattern | 0.02 | 1.74 | -0.093 | 1.77 | 0.404 | L11 |
-| Qwen3.5-9B | brief0 | factual_recall | 1.80 | 2.23 | -0.620 | 4.11 | 1.026 | L19 |
-| Qwen3.5-9B | brief1 | algorithmic | 0.53 | 0.95 | -0.670 | 4.11 | 1.014 | L19 |
-| Qwen3.5-9B | brief2 | structural_copying | 3.76 | 3.55 | -0.363 | 3.95 | 0.731 | L31 |
-| Qwen3.5-9B | brief3 | syntactic_pattern | 0.73 | 0.84 | -0.503 | 3.99 | 1.692 | L15 |
-| Qwen3.5-9B | brief4 | cultural_memorized | 0.02 | 0.58 | -0.823 | 4.38 | 1.224 | L19 |
-| Qwen3.5-9B | brief5 | factual_recall | 1.49 | 1.90 | -0.551 | 3.82 | 1.228 | L27 |
-| Qwen3.5-9B | long0 | code_comprehension | 0.05 | 0.74 | -0.205 | 4.66 | 1.836 | L11 |
-| Qwen3.5-9B | long1 | long_range_retrieval | 2.27 | 2.72 | -0.528 | 4.64 | 2.587 | L11 |
-| Qwen3.5-9B | long2 | domain_knowledge | 5.11 | 2.66 | +0.046 | 5.89 | 1.777 | L31 |
-| Qwen3.5-9B | long3 | long_range_retrieval | 2.16 | 2.75 | -0.912 | 4.81 | 3.070 | L19 |
-| Qwen3.5-9B | med0 | factual_retrieval | 3.57 | 3.70 | -0.446 | 4.15 | 1.829 | L31 |
-| Qwen3.5-9B | med1 | reasoning_numerical | 8.06 | 3.62 | -0.606 | 4.50 | 1.300 | L31 |
-| Qwen3.5-9B | med2 | reasoning_tracking | 4.34 | 2.90 | -0.848 | 4.09 | 1.645 | L31 |
-| Qwen3.5-9B | med3 | reasoning_numerical | 0.23 | 2.27 | -0.464 | 4.95 | 1.659 | L7 |
-| Qwen3.5-9B | med4 | syntactic_pattern | 2.91 | 0.49 | -0.913 | 4.66 | 1.610 | L31 |
-| Qwen3.5-9B | med5 | reasoning_tracking | 0.12 | 3.00 | -0.601 | 5.21 | 1.878 | L19 |
-| Qwen3.5-9B | short0 | factual_recall | 4.58 | 4.22 | -0.232 | 1.76 | 0.253 | L27 |
-| Qwen3.5-9B | short1 | algorithmic | 0.99 | 1.48 | -0.199 | 3.34 | 0.687 | L27 |
-| Qwen3.5-9B | short2 | factual_recall | 4.59 | 6.07 | -0.199 | 1.45 | 0.214 | L27 |
-| Qwen3.5-9B | short3 | structural_copying | 3.02 | 5.13 | -0.311 | 2.16 | 0.396 | L19 |
-| Qwen3.5-9B | short4 | cultural_memorized | 1.65 | 3.33 | -0.047 | 2.95 | 0.353 | L19 |
-| Qwen3.5-9B | short5 | syntactic_pattern | 0.01 | 1.71 | -0.267 | 1.83 | 0.289 | L31 |
-| OLMo-Hybrid-7B | brief0 | factual_recall | 1.80 | 2.69 | -1.397 | 2.83 | 2.596 | L23 |
-| OLMo-Hybrid-7B | brief1 | algorithmic | 1.08 | 1.33 | -1.066 | 2.93 | 2.106 | L31 |
-| OLMo-Hybrid-7B | brief2 | structural_copying | 4.22 | 3.61 | -1.054 | 2.06 | 2.355 | L31 |
-| OLMo-Hybrid-7B | brief3 | syntactic_pattern | 2.04 | 2.09 | -1.357 | 3.36 | 2.541 | L31 |
-| OLMo-Hybrid-7B | brief4 | cultural_memorized | 0.04 | 0.60 | -1.669 | 1.72 | 2.935 | L27 |
-| OLMo-Hybrid-7B | brief5 | factual_recall | 0.77 | 2.14 | -1.453 | 2.82 | 2.371 | L27 |
-| OLMo-Hybrid-7B | long0 | code_comprehension | 2.35 | 1.66 | -0.517 | 6.37 | 3.748 | L23 |
-| OLMo-Hybrid-7B | long1 | long_range_retrieval | 9.82 | 3.62 | -1.248 | 5.77 | 5.302 | L27 |
-| OLMo-Hybrid-7B | long2 | domain_knowledge | 4.72 | 3.25 | +0.137 | 7.36 | 4.301 | L19 |
-| OLMo-Hybrid-7B | long3 | long_range_retrieval | 6.67 | 3.27 | -0.583 | 6.64 | 4.821 | L23 |
-| OLMo-Hybrid-7B | med0 | factual_retrieval | 3.22 | 4.28 | -1.154 | 3.34 | 3.435 | L27 |
-| OLMo-Hybrid-7B | med1 | reasoning_numerical | 9.43 | 4.28 | -0.812 | 3.45 | 3.720 | L27 |
-| OLMo-Hybrid-7B | med2 | reasoning_tracking | 6.06 | 3.48 | -1.446 | 3.25 | 3.864 | L27 |
-| OLMo-Hybrid-7B | med3 | reasoning_numerical | 2.39 | 3.40 | -0.732 | 4.84 | 3.346 | L27 |
-| OLMo-Hybrid-7B | med4 | syntactic_pattern | 7.07 | 1.51 | -0.641 | 5.74 | 3.029 | L27 |
-| OLMo-Hybrid-7B | med5 | reasoning_tracking | 0.59 | 3.55 | -0.897 | 3.90 | 3.670 | L27 |
-| OLMo-Hybrid-7B | short0 | factual_recall | 3.94 | 4.77 | -0.741 | 0.67 | 0.640 | L31 |
-| OLMo-Hybrid-7B | short1 | algorithmic | 0.84 | 1.54 | -1.276 | 1.58 | 1.948 | L27 |
-| OLMo-Hybrid-7B | short2 | factual_recall | 5.19 | 6.66 | -0.062 | 1.41 | 0.261 | L31 |
-| OLMo-Hybrid-7B | short3 | structural_copying | 4.40 | 5.00 | -0.951 | 0.57 | 0.793 | L31 |
-| OLMo-Hybrid-7B | short4 | cultural_memorized | 3.39 | 3.27 | -1.117 | 1.42 | 1.425 | L23 |
-| OLMo-Hybrid-7B | short5 | syntactic_pattern | 0.28 | 1.37 | -0.624 | 0.82 | 0.753 | L23 |
+## 11. Synthesis
 
-### 8.2 Mutual Information: Signal → Optimal Profile Family
+### 11.1 Headroom
 
-We discretize baseline signals into tertiles and compute mutual information with the best profile family.
+- 90% of model×prompt pairs improve under non-baseline g-profiles.
+- Mean improvement: +0.1454. Several cases exceed +0.50.
+- Damage from bad profiles is severe: worst profiles drive probability to near zero.
+- **Headroom by type**: factual retrieval (+0.39), structural copying (+0.29), and long-range retrieval (+0.18) dominate. Code comprehension has no headroom. Battery expansion should prioritize high-headroom types.
 
-| Signal | MI (bits) with best profile family | MI with best_g_mean (3 bins) | MI with best_g_tilt (3 bins) |
-|--------|----------------------------------|-------------------------------|------------------------------|
-| final_entropy | 0.1929 | 0.0368 | 0.0206 |
-| mean_entropy | 0.0993 | 0.0074 | 0.0048 |
-| attn_ent_gradient | 0.0702 | 0.0144 | 0.0482 |
-| attn_ent_last | 0.1370 | 0.0239 | 0.0188 |
-| attn_ent_head_var | 0.1288 | 0.0458 | 0.0454 |
-| attn_ent_min_head | 0.0724 | 0.0098 | 0.0385 |
-| attn_ent_std_across_layers | 0.0806 | 0.0583 | 0.0464 |
+### 11.2 Signal Quality Ranking
 
-### 8.3 Topological Data Analysis: Persistent Homology of Response Surfaces
+Signals ranked by Spearman correlation with headroom (pooled, n=88):
 
-We treat each model's 22 prompts as points in 31-dimensional space (target_prob per g-profile) and compute persistent homology to identify topological features — connected components (H0) and loops (H1) — in the response landscape.
+| Rank | Signal | Spearman ρ | Notes |
+|------|--------|-----------|-------|
+| 1 | **Top-1 logit margin** | −0.43 | Strongest signal. Especially powerful on 9B (ρ = −0.79). |
+| 2 | **Mean attention entropy** | +0.41 | Diffuse attention = more headroom. |
+| 3 | **Top-5 logit spread** | −0.40 | Correlated with margin but slightly weaker. |
+| 4 | **Final-token entropy** | +0.35 | Monotonic but nonlinear. |
+| 5 | **Baseline probability** | −0.30 | Obvious triage signal. |
+| 6 | Attn entropy head variance | — | Weak individually. |
+| 7 | Attn entropy gradient | — | Effectively null for headroom prediction. |
 
-#### Qwen3.5-0.8B
+**The logit margin is the recommended primary signal for Experiment 1.** It is cheap to compute (requires only the top-2 logits), has the strongest correlation with headroom, and has a clear mechanistic interpretation: a small margin means the model is near a decision boundary where g-perturbation can tip the outcome.
 
-**H0 (connected components)**: 22 features
-- Lifetimes: min=0.104, median=2.142, max=7.025
-- The gap between the longest-lived finite H0 feature and the persistent component indicates how cleanly the prompts separate into clusters.
+### 11.3 Architectural Priors
 
-**H1 (loops)**: 1 features
-- Lifetimes: min=0.699, median=0.699, max=0.699
-- Long-lived H1 features indicate non-trivial topology: there exist closed paths through response-surface space that cannot be contracted, suggesting qualitatively distinct regimes.
+- **Early-heavy profiles are generally better than late-heavy.** `early_high_late_low` wins 76/88, `late_suppress` wins 74/88. This is an architectural property, not a prompt-specific signal.
+- **Moderate profiles contain most of the gain.** `ramp_up`, `edges`, and `late_regional` achieve the highest gains at the lowest distribution shift. `ablation` and `alternating` never help.
+- **A safe 9-profile subset captures 82% of oracle headroom** while dramatically reducing catastrophic risk.
 
-#### Qwen3.5-2B
+### 11.4 What Doesn't Work
 
-**H0 (connected components)**: 22 features
-- Lifetimes: min=0.319, median=2.280, max=5.698
-- The gap between the longest-lived finite H0 feature and the persistent component indicates how cleanly the prompts separate into clusters.
+- **Attention entropy gradient** does not predict optimal g-tilt (r ≈ 0 on most models). The early/late phenomenon is real but the scalar summary is inadequate.
+- **Scalar attention summaries** lose too much information. The full layer-means vector should be used.
+- **Mutual information** between discretized signals and optimal profile family is low. Simple binning destroys the signal.
 
-**H1 (loops)**: No features detected.
+### 11.5 Recommended Path for Experiment 1
 
-#### Qwen3.5-9B
-
-**H0 (connected components)**: 22 features
-- Lifetimes: min=0.323, median=2.797, max=8.457
-- The gap between the longest-lived finite H0 feature and the persistent component indicates how cleanly the prompts separate into clusters.
-
-**H1 (loops)**: 2 features
-- Lifetimes: min=0.165, median=0.208, max=0.251
-- Long-lived H1 features indicate non-trivial topology: there exist closed paths through response-surface space that cannot be contracted, suggesting qualitatively distinct regimes.
-
-#### OLMo-Hybrid-7B
-
-**H0 (connected components)**: 22 features
-- Lifetimes: min=0.399, median=2.649, max=6.783
-- The gap between the longest-lived finite H0 feature and the persistent component indicates how cleanly the prompts separate into clusters.
-
-**H1 (loops)**: No features detected.
-
-### 8.4 KL Divergence from Baseline Across Profiles
-
-How much does each g-profile perturb the output distribution? (Using KL divergence where available, entropy as proxy where not.)
-
-KL from baseline available for 2640/2640 non-baseline records.
-
-Mean KL from baseline by profile family:
-
-- **ablation**: mean=9.912, std=1.952, max=12.417
-- **alternating**: mean=9.912, std=1.952, max=12.417
-- **cross**: mean=2.339, std=2.566, max=10.887
-- **early_regional**: mean=1.270, std=2.003, max=14.074
-- **edges**: mean=0.266, std=0.461, max=3.295
-- **late_regional**: mean=0.272, std=0.447, max=3.487
-- **middle**: mean=2.728, std=4.285, max=12.417
-- **ramp_down**: mean=0.289, std=0.557, max=4.561
-- **ramp_up**: mean=0.237, std=0.429, max=3.732
-- **uniform**: mean=4.016, std=4.423, max=21.486
-
-## 9. Attention Entropy Under Perturbation
-
-How does the attention entropy profile change when we apply different g-profiles? This reveals which layers' attention is *reactive* vs *inert* to gain scaling.
-
-### 9.1 Attention Entropy Shift (Qwen3.5-2B, selected profiles)
-
-| Prompt | Profile | L3 | L7 | L11 | L15 | L19 | L23 |
-|--------|---------|------|------|------|------|------|------|
-| short0 | baseline | 2.09 | 2.14 | 2.01 | 2.04 | 2.05 | 1.52 |
-| short0 | constant_0.5 | 2.09 | 2.20 | 1.95 | 1.26 | 1.91 | 1.59 |
-| short0 | constant_1.5 | 2.09 | 2.07 | 1.99 | 1.97 | 1.98 | 1.20 |
-| short0 | ramp_up | 2.09 | 2.24 | 1.99 | 1.96 | 2.46 | 1.72 |
-| short0 | late_boost_1.5 | 2.09 | 2.14 | 2.01 | 2.04 | 2.02 | 1.45 |
-| short0 | early_only_2x | 2.09 | 2.05 | 1.76 | 1.82 | 2.81 | 2.81 |
-| short5 | baseline | 2.18 | 1.77 | 1.59 | 1.63 | 1.87 | 1.77 |
-| short5 | constant_0.5 | 2.18 | 1.86 | 1.56 | 1.48 | 1.97 | 1.27 |
-| short5 | constant_1.5 | 2.18 | 1.80 | 1.57 | 1.62 | 2.22 | 1.37 |
-| short5 | ramp_up | 2.18 | 1.94 | 1.90 | 1.54 | 1.74 | 1.73 |
-| short5 | late_boost_1.5 | 2.18 | 1.77 | 1.59 | 1.63 | 1.96 | 1.63 |
-| short5 | early_only_2x | 2.18 | 1.88 | 1.67 | 1.42 | 2.81 | 2.81 |
-| brief2 | baseline | 4.78 | 4.38 | 4.76 | 4.72 | 5.04 | 4.08 |
-| brief2 | constant_0.5 | 4.78 | 4.66 | 4.91 | 4.57 | 4.23 | 4.32 |
-| brief2 | constant_1.5 | 4.78 | 4.32 | 4.92 | 4.59 | 4.96 | 3.86 |
-| brief2 | ramp_up | 4.78 | 4.60 | 4.69 | 4.65 | 4.94 | 3.90 |
-| brief2 | late_boost_1.5 | 4.78 | 4.38 | 4.76 | 4.72 | 5.01 | 3.88 |
-| brief2 | early_only_2x | 4.78 | 4.48 | 4.97 | 4.42 | 6.09 | 6.09 |
-| med0 | baseline | 5.93 | 5.40 | 4.67 | 3.80 | 5.32 | 4.29 |
-| med0 | constant_0.5 | 5.93 | 5.74 | 5.79 | 5.36 | 5.81 | 5.42 |
-| med0 | constant_1.5 | 5.93 | 5.15 | 4.85 | 4.54 | 5.48 | 4.30 |
-| med0 | ramp_up | 5.93 | 5.69 | 5.11 | 3.48 | 4.77 | 3.80 |
-| med0 | late_boost_1.5 | 5.93 | 5.40 | 4.67 | 3.80 | 5.32 | 4.04 |
-| med0 | early_only_2x | 5.93 | 5.09 | 5.40 | 5.09 | 7.80 | 7.80 |
-| long1 | baseline | 6.98 | 4.91 | 4.86 | 4.74 | 5.96 | 4.44 |
-| long1 | constant_0.5 | 6.98 | 6.25 | 6.96 | 4.73 | 7.15 | 7.25 |
-| long1 | constant_1.5 | 6.98 | 4.53 | 4.90 | 4.66 | 5.20 | 3.65 |
-| long1 | ramp_up | 6.98 | 5.75 | 5.02 | 5.27 | 5.67 | 4.21 |
-| long1 | late_boost_1.5 | 6.98 | 4.91 | 4.86 | 4.74 | 5.74 | 3.82 |
-| long1 | early_only_2x | 6.98 | 4.32 | 5.30 | 5.08 | 9.31 | 9.31 |
-
-## 10. Synthesis: What Signal Is There?
-
-### 10.1 Headroom Summary
-
-- **90%** of model×prompt pairs have a non-baseline g-profile that improves target probability.
-- Mean improvement when one exists: **+0.1454** in target probability.
-- The improvement is not small: median best-profile Δprob is **0.0835**, and several cases show >0.5 absolute improvement.
-- Damage from bad profiles is severe: worst profiles frequently drive target probability near zero.
-
-### 10.2 Signal Quality Assessment
-
-**What works:**
-
-- **Baseline target probability** (bl_prob) is the strongest single predictor of headroom (r = −0.33, p = 0.002). Prompts the model already handles well have less room for improvement. This is obvious but useful as a triage signal.
-- **Final-token entropy** correlates with headroom via Spearman rank (ρ = 0.35, p < 0.001) but not Pearson — the relationship is monotonic but nonlinear.
-- **Response surface shape** is low-dimensional: the first 3 PCs explain 60–75% of variance in how prompts respond to g-perturbation. This means the effective dimensionality of the control problem is much lower than 31.
-
-**What doesn't work (yet):**
-
-- **Attention entropy gradient** (early-vs-late) does not reliably predict whether the optimal profile tilts early or late (r ≈ 0 for most models). The one exception is OLMO (r = −0.43, p = 0.04) — worth investigating whether this reflects a genuine architectural difference.
-- **Per-layer attention entropy** features show weak individual correlations with the optimal g-profile parameters. The signal is there in aggregate (the clustering works) but no single scalar extracts it.
-- **Mutual information** between discretized signals and optimal profile family is low across the board, suggesting that simple binning loses too much information.
-
-### 10.3 Implications for Signal-Guided Control
-
-1. **A simple entropy-threshold controller can avoid catastrophes.** The worst profiles are the extreme ones (ablation, alternating). A controller that stays within the "moderate" region (g ∈ [0.5, 1.5]) already avoids most damage.
-
-2. **The response surface is clusterable.** Prompts group into 2–3 response-surface types that are partially (but not perfectly) aligned with the hand-labeled completion types. A controller that can identify the response-surface cluster from baseline signals gets most of the available headroom.
-
-3. **The single-agent ceiling may be modest but real.** With 22 prompts, the correlations are noisy. Expanding to 200+ prompts (per the experiment plan) will either reveal stronger signal or confirm that single-agent signal-to-g mapping hits a wall — both are informative.
-
-4. **Cross-model consistency is mixed.** Some prompts (especially syntactic and algorithmic) show highly correlated response surfaces across all 4 models. Others (factual recall, reasoning) are model-specific. A universal controller is unlikely; a per-model-family controller is more realistic.
-
-5. **The attention entropy profile is an underexploited signal.** It has 6–8 dimensions (one per attention layer) and captures within-model information about which layers are doing work. Current scalar summaries (gradient, mean) lose too much. The next step should use the full layer-means vector as input to a small classifier or nearest-neighbor lookup.
-
-### 10.4 Recommended Next Steps for Experiment 1
-
-1. **Expand battery to 200+ prompts** with known types (COUNTERFACT, MIB). The current 22 are insufficient for learning a mapping.
-2. **Use the full attention-entropy vector** (6–8 dims) as the input signal, not scalar summaries.
-3. **Train a simple nearest-neighbor or small MLP** on the expanded battery: input = (final_entropy, mean_entropy, attn_ent_vector), output = best g-profile family (or best g_mean + g_tilt).
-4. **Evaluate with leave-one-out or bootstrap CIs** per task category.
-5. **Establish the single-agent ceiling**: what fraction of the oracle headroom can signal-guided selection capture? This is the number the colony must beat.
+1. **Primary input features**: logit margin, mean attention entropy, final entropy, full attention-entropy layer vector (6–8 dims).
+2. **Restricted action space**: search the safe 9-profile subset, not all 31.
+3. **Expand battery**: 200+ prompts weighted toward factual retrieval, structural copying, and long-range retrieval (high headroom types).
+4. **Simple controller first**: nearest-neighbor or logistic regression from signal space to safe profile subset. Establish the single-agent ceiling.
+5. **Evaluation**: leave-one-out with bootstrap CIs per task type. Report fraction of oracle headroom captured.
+6. **The colony must beat this ceiling** to justify its existence.
