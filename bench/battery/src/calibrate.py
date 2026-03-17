@@ -19,6 +19,7 @@ Usage:
 """
 
 import argparse
+import hashlib
 import json
 import time
 from pathlib import Path
@@ -133,7 +134,7 @@ def main():
                 continue
 
             t0 = time.time()
-            prompt_for_model, adapter_name = adapt_prompt(item)
+            prompt_for_model, adapter_name, prompt_render_version = adapt_prompt(item)
             result = run_baseline(model, tokenizer, prompt_for_model, item["target"], args.device)
             elapsed = time.time() - t0
 
@@ -147,6 +148,8 @@ def main():
                 "tier": item["tier"],
                 "model": args.model,
                 "adapter": adapter_name,
+                "prompt_render_version": prompt_render_version,
+                "rendered_prompt_sha256": hashlib.sha256(prompt_for_model.encode()).hexdigest(),
                 **result,
                 "time_s": round(elapsed, 3),
             }
