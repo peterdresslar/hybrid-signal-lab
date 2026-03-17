@@ -52,6 +52,14 @@ def load_counterfact(cache_dir: str = None):
     ds = load_dataset("NeelNanda/counterfact-tracing", split="train", cache_dir=cache_dir)
     return ds
 
+
+def _is_good_factual_recall_prompt(prompt: str) -> bool:
+    """Filter out CounterFact prompt patterns that read awkwardly as clozes."""
+    blocked_phrases = [
+        " is a part of the continent of",
+    ]
+    return not any(phrase in prompt for phrase in blocked_phrases)
+
 def extract_factual_recall(ds, n: int = 80, seed: int = 42) -> list[dict]:
     """Extract factual recall prompts from COUNTERFACT.
 
@@ -68,6 +76,8 @@ def extract_factual_recall(ds, n: int = 80, seed: int = 42) -> list[dict]:
         subject = row.get("subject", "")
 
         if not prompt or not target:
+            continue
+        if not _is_good_factual_recall_prompt(prompt):
             continue
 
         # We want prompts that end mid-sentence (cloze style)
@@ -157,9 +167,7 @@ def extract_factual_retrieval(ds, n: int = 40, seed: int = 43) -> list[dict]:
 
         # Wrap in context template
         template = rng.choice(context_templates)
-        # Lowercase the first char of prompt if it starts uppercase after "that "
-        prompt_lower = prompt[0].lower() + prompt[1:] if prompt[0].isupper() else prompt
-        full_prompt = template.format(subject=subject, prompt=prompt_lower)
+        full_prompt = template.format(subject=subject, prompt=prompt)
 
         tok_count = approx_tokens(full_prompt)
 
@@ -757,6 +765,279 @@ def generate_reasoning_tracking(n: int = 40, seed: int = 48) -> list[dict]:
 # Generators: Syntactic Pattern
 # ---------------------------------------------------------------------------
 
+def _lm_syneval_switch_number(words: list[str], verb: bool = False) -> list[str]:
+    """Switch singular/plural number for LM_syneval-style terminals."""
+    switched = []
+    for word in words:
+        if word.split()[0] == "is":
+            switched.append(" ".join(["are"] + word.split()[1:]))
+        elif verb:
+            if len(word.split()) > 1:
+                switched.append(" ".join([word.split()[0][:-1]] + word.split()[1:]))
+            else:
+                switched.append(word[:-1])
+        else:
+            switched.append(word + "s")
+    return switched
+
+
+def _lm_syneval_get_case_name(
+    preterms: list[str],
+    match: tuple[list[int], list[int]],
+    vary: list[int],
+    opt: str = "sing",
+    v_opt: str = "sing",
+) -> str:
+    """Recreate LM_syneval's variant naming to filter sing_* cases."""
+    parts = [opt]
+    for group in match:
+        parts.extend(preterms[idx] for idx in group)
+    if vary:
+        parts.append(v_opt)
+        parts.extend(preterms[idx] for idx in vary)
+    return "_".join(parts)
+
+
+def _lm_syneval_switch_numbers(
+    base_sent: list[list[str]],
+    variables: list[int],
+    preterms: list[str],
+) -> list[list[str]]:
+    """Switch the number for selected terminal slots."""
+    new_sent = base_sent[:]
+    for idx in variables:
+        new_sent[idx] = _lm_syneval_switch_number(
+            new_sent[idx],
+            verb=preterms[idx].endswith("V"),
+        )
+    return new_sent
+
+
+def _lm_syneval_make_variable_sents(
+    terminals: dict[str, list[str]],
+    preterms: list[str],
+    match: tuple[list[int], list[int]],
+    vary: list[int],
+) -> dict[str, tuple[list[list[str]], list[list[str]]]]:
+    """Generate grammatical/ungrammatical sentence templates per case variant."""
+    all_sents = {}
+    base_sent = [terminals[p] for p in preterms]
+    prefixes = ["sing", "plur"]
+
+    for i, prefix in enumerate(prefixes):
+        singular_grammatical = base_sent[:]
+        plural_grammatical = _lm_syneval_switch_numbers(base_sent, vary, preterms)
+
+        singular_ungrammatical = _lm_syneval_switch_numbers(
+            singular_grammatical,
+            match[1],
+            preterms,
+        )
+        plural_ungrammatical = _lm_syneval_switch_numbers(
+            plural_grammatical,
+            match[1],
+            preterms,
+        )
+
+        if i == 1:
+            singular_ungrammatical = _lm_syneval_switch_numbers(
+                singular_grammatical,
+                match[0],
+                preterms,
+            )
+            plural_ungrammatical = _lm_syneval_switch_numbers(
+                plural_grammatical,
+                match[0],
+                preterms,
+            )
+
+        singular_grammatical = _lm_syneval_switch_numbers(
+            singular_grammatical,
+            match[0] + match[1],
+            preterms,
+        )
+        plural_grammatical = _lm_syneval_switch_numbers(
+            plural_grammatical,
+            match[0] + match[1],
+            preterms,
+        )
+
+        singular_name = _lm_syneval_get_case_name(preterms, match, vary, opt=prefix, v_opt="sing")
+        all_sents[singular_name] = (singular_grammatical, singular_ungrammatical)
+
+        if vary:
+            plural_name = _lm_syneval_get_case_name(preterms, match, vary, opt=prefix, v_opt="plur")
+            all_sents[plural_name] = (plural_grammatical, plural_ungrammatical)
+
+    return all_sents
+
+
+def _lm_syneval_expand_sentence(
+    sent: list[list[str]],
+    terminals: dict[str, list[str]],
+    partial: str = "",
+):
+    """Expand LM_syneval terminal lists into concrete sentences."""
+    if len(sent) == 1:
+        for word in sent[0]:
+            repeats_number_variant = (
+                word.split(" ")[0] + " " + " ".join(word.split(" ")[1:]) in partial
+                if word.endswith("s") and len(word.split()) > 1
+                else False
+            )
+            repeats_singular_variant = (
+                word.split(" ")[0][:-1] + " " + " ".join(word.split(" ")[1:]) in partial
+                if word.endswith("s") and len(word.split()) > 1
+                else False
+            )
+            repeats_copula_variant = (
+                (word.startswith("is") and "are " + word[3:] in partial)
+                or (word.startswith("are") and "is " + word[4:] in partial)
+            )
+
+            if (
+                word not in partial
+                and word not in terminals["D"]
+                and word not in terminals["C"]
+                and not repeats_number_variant
+                and not repeats_singular_variant
+                and not repeats_copula_variant
+            ):
+                yield partial + word
+    else:
+        for word in sent[0]:
+            for expanded in _lm_syneval_expand_sentence(
+                sent[1:],
+                terminals=terminals,
+                partial=partial + word + " ",
+            ):
+                yield expanded
+
+
+def _lm_syneval_pair_to_item(
+    good_sentence: str,
+    bad_sentence: str,
+    case_name: str,
+    variant_name: str,
+) -> dict | None:
+    """Convert a grammatical/ungrammatical pair into a local cloze item."""
+    good_tokens = good_sentence.split()
+    bad_tokens = bad_sentence.split()
+    if not good_tokens or not bad_tokens:
+        return None
+
+    first_diff = next(
+        (idx for idx, (good_tok, bad_tok) in enumerate(zip(good_tokens, bad_tokens)) if good_tok != bad_tok),
+        None,
+    )
+    if first_diff is None:
+        return None
+
+    good_end = len(good_tokens)
+    bad_end = len(bad_tokens)
+    while good_end > first_diff and bad_end > first_diff and good_tokens[good_end - 1] == bad_tokens[bad_end - 1]:
+        good_end -= 1
+        bad_end -= 1
+
+    # Only keep pairs where the contrast occurs at the end, so the shared
+    # prefix is a valid cloze prompt rather than a truncated sentence.
+    if good_end != len(good_tokens) or bad_end != len(bad_tokens):
+        return None
+
+    good_span = good_tokens[first_diff:good_end]
+    bad_span = bad_tokens[first_diff:bad_end]
+    prefix = good_tokens[:first_diff]
+
+    if len(prefix) < 2:
+        return None
+    if not (1 <= len(good_span) <= 4 and 1 <= len(bad_span) <= 4):
+        return None
+
+    prompt = " ".join(prefix)
+    target = " " + " ".join(good_span)
+
+    return {
+        "prompt": prompt,
+        "target": target,
+        "type": "syntactic_pattern",
+        "source": "lm_syneval",
+        "metadata": {
+            "pattern": "agreement_minimal_pair",
+            "case": case_name,
+            "variant": variant_name,
+            "contrast": " ".join(bad_span),
+        },
+    }
+
+
+def _build_lm_syneval_agreement_candidates(seed: int = 49) -> list[dict]:
+    """Adapt a subset of LM_syneval agreement cases into cloze items."""
+    rng = random.Random(seed)
+
+    terminals = {
+        "D": ["the"],
+        "C": ["that"],
+        "MS": ["author", "pilot", "surgeon", "farmer", "manager", "customer", "officer", "teacher", "senator", "consultant"],
+        "ES": ["guard", "chef", "architect", "skater", "dancer", "minister", "taxi driver", "assistant", "executive", "parent"],
+        "IS": ["movie", "book", "game", "song", "picture", "painting", "novel", "poem", "show"],
+        "MV": ["laughs", "swims", "smiles", "is tall", "is old", "is young", "is short"],
+        "EV": ["likes", "admires", "hates", "loves"],
+        "IV": ["is good", "is bad", "is new", "is popular", "is unpopular", "brings joy to people", "interests people"],
+        "P": ["next to", "behind", "in front of", "near", "to the side of", "across from"],
+        "IP": ["from", "by"],
+        "BS": ["mechanic", "banker"],
+        "BV": ["said", "thought", "knew"],
+        "AND": ["and"],
+        "LMV": [
+            "knows many different foreign languages",
+            "likes to watch television shows",
+            "is twenty three years old",
+            "enjoys playing tennis with colleagues",
+            "writes in a journal every day",
+        ],
+    }
+
+    rules = {
+        "simple_agrmt": (["D", "MS", "MV"], ([1], [2]), []),
+        "prep_anim": (["D", "MS", "P", "D", "ES", "MV"], ([1], [5]), [4]),
+        "prep_inanim": (["D", "IS", "IP", "D", "ES", "IV"], ([1], [5]), [4]),
+        "subj_rel": (["D", "MS", "C", "EV", "D", "ES", "MV"], ([1, 3], [6]), [5]),
+        "sent_comp": (["D", "BS", "BV", "D", "MS", "MV"], ([4], [5]), [1]),
+        "vp_coord": (["D", "MS", "MV", "AND", "MV"], ([1, 2], [4]), []),
+        "long_vp_coord": (["D", "MS", "LMV", "AND", "LMV"], ([1, 2], [4]), []),
+        "obj_rel_across_anim": (["D", "MS", "C", "D", "ES", "EV", "MV"], ([1], [6]), [4, 5]),
+        "obj_rel_within_anim": (["D", "MS", "C", "D", "ES", "EV", "MV"], ([4], [5]), [1, 6]),
+        "obj_rel_no_comp_across_anim": (["D", "MS", "D", "ES", "EV", "MV"], ([1], [5]), [3, 4]),
+        "obj_rel_no_comp_within_anim": (["D", "MS", "D", "ES", "EV", "MV"], ([3], [4]), [1, 5]),
+    }
+
+    candidates = []
+    seen = set()
+
+    for case_name, (preterms, match, vary) in rules.items():
+        variant_templates = _lm_syneval_make_variable_sents(terminals, preterms, match, vary)
+        for variant_name, (good_template, bad_template) in variant_templates.items():
+            if not variant_name.startswith("plur_"):
+                continue
+
+            good_sentences = list(_lm_syneval_expand_sentence(good_template, terminals))
+            bad_sentences = list(_lm_syneval_expand_sentence(bad_template, terminals))
+
+            for good_sentence, bad_sentence in zip(good_sentences, bad_sentences):
+                item = _lm_syneval_pair_to_item(good_sentence, bad_sentence, case_name, variant_name)
+                if item is None:
+                    continue
+
+                key = (item["prompt"], item["target"])
+                if key in seen:
+                    continue
+                seen.add(key)
+                candidates.append(item)
+
+    rng.shuffle(candidates)
+    return candidates
+
+
 def generate_syntactic_pattern(n: int = 25, seed: int = 49) -> list[dict]:
     """Generate syntactic pattern completion prompts.
 
@@ -824,32 +1105,31 @@ def generate_syntactic_pattern(n: int = 25, seed: int = 49) -> list[dict]:
             "metadata": {"pattern": "parallelism"}
         })
 
-    # Type 3: Determiner/article prediction
-    for i in range(n - len(items)):
-        # Contexts where the next word is highly constrained by syntax
-        contexts = [
-            ("I saw a big", " dog"),
-            ("She went to the", " store"),
-            ("There is a very important", " meeting"),
-            ("He picked up the heavy", " box"),
-            ("They walked through the dark", " forest"),
-            ("I need to buy some fresh", " bread"),
-            ("The children played in the", " park"),
-            ("We watched the beautiful", " sunset"),
-            ("He opened the old wooden", " door"),
-            ("She wore a long red", " dress"),
-        ]
+    # Type 3: LM_syneval-style agreement extraction
+    agreement_candidates = _build_lm_syneval_agreement_candidates(seed=seed)
+    for item in agreement_candidates[:max(0, n - len(items))]:
+        items.append(item)
 
-        prompt, target = rng.choice(contexts)
-        items.append({
-            "prompt": prompt,
-            "target": target,
-            "type": "syntactic_pattern",
-            "source": "gen_syntax",
-            "metadata": {"pattern": "determiner_context"}
-        })
+    unique_items = []
+    seen_prompts = set()
+    for item in items:
+        if item["prompt"] in seen_prompts:
+            continue
+        seen_prompts.add(item["prompt"])
+        unique_items.append(item)
 
-    for i, item in enumerate(items[:n]):
+    if len(unique_items) < n:
+        for item in agreement_candidates:
+            if item["prompt"] in seen_prompts:
+                continue
+            seen_prompts.add(item["prompt"])
+            unique_items.append(item)
+            if len(unique_items) >= n:
+                break
+
+    for i, item in enumerate(unique_items[:n]):
+        if item["prompt"] and item["prompt"][0].islower():
+            item["prompt"] = item["prompt"][0].upper() + item["prompt"][1:]
         tok_count = approx_tokens(item["prompt"])
         item.update({
             "tokens_approx": tok_count,
@@ -857,7 +1137,7 @@ def generate_syntactic_pattern(n: int = 25, seed: int = 49) -> list[dict]:
         })
         item["id"] = make_id("sp", item.get("source", "gen"), i)
 
-    return items[:n]
+    return unique_items[:n]
 
 
 # ---------------------------------------------------------------------------
@@ -934,11 +1214,25 @@ def generate_long_range_retrieval(n: int = 30, seed: int = 50) -> list[dict]:
             target = target_template.format(city=city)
             question_filled = question
 
-        # Add varying amounts of filler
+        # Add varying amounts of filler and insert the fact at a randomized
+        # early position, biased toward the front half of the context.
         n_fillers = rng.randint(3, 8)
-        filler_text = " ".join(rng.sample(fillers, min(n_fillers, len(fillers))))
+        sampled_fillers = rng.sample(fillers, min(n_fillers, len(fillers)))
+        insertion_slots = len(sampled_fillers) + 1
+        max_insert_idx = max(1, insertion_slots // 2)
+        insert_mode = max(0, round(max_insert_idx * 0.6))
+        fact_insert_idx = min(
+            max_insert_idx,
+            int(round(rng.triangular(0, max_insert_idx, insert_mode))),
+        )
 
-        prompt = f"{fact_filled} {filler_text} {question_filled}"
+        context_parts = (
+            sampled_fillers[:fact_insert_idx]
+            + [fact_filled]
+            + sampled_fillers[fact_insert_idx:]
+            + [question_filled]
+        )
+        prompt = " ".join(context_parts)
 
         tok_count = approx_tokens(prompt)
         items.append({
@@ -949,7 +1243,11 @@ def generate_long_range_retrieval(n: int = 30, seed: int = 50) -> list[dict]:
             "tokens_approx": tok_count,
             "tier": tier_from_tokens(tok_count),
             "source": "gen_long_range",
-            "metadata": {"n_fillers": n_fillers}
+            "metadata": {
+                "n_fillers": n_fillers,
+                "fact_insert_idx": fact_insert_idx,
+                "fact_insert_frac": round(fact_insert_idx / max(1, len(sampled_fillers)), 3),
+            }
         })
 
     return items[:n]
