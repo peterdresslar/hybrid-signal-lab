@@ -26,6 +26,11 @@ from pathlib import Path
 import torch
 import torch.nn.functional as F
 
+try:
+    from .adapters import adapt_prompt
+except ImportError:
+    from adapters import adapt_prompt
+
 
 def load_model(model_name: str, device: str = "cuda"):
     """Load model and tokenizer. Adapt to match your signal_lab.py setup."""
@@ -105,7 +110,7 @@ def main():
     parser.add_argument("--battery", type=str, required=True)
     parser.add_argument("--model", type=str, required=True)
     parser.add_argument("--output", type=str, default="calibration_results.jsonl")
-    parser.add_argument("--device", type=str, default="cuda")
+    parser.add_argument("--device", type=str, default="mps")
     parser.add_argument("--resume-from", type=int, default=0,
                         help="Resume from this item index (for crash recovery)")
     args = parser.parse_args()
@@ -128,7 +133,8 @@ def main():
                 continue
 
             t0 = time.time()
-            result = run_baseline(model, tokenizer, item["prompt"], item["target"], args.device)
+            prompt_for_model, adapter_name = adapt_prompt(item)
+            result = run_baseline(model, tokenizer, prompt_for_model, item["target"], args.device)
             elapsed = time.time() - t0
 
             if result is None:
@@ -140,6 +146,7 @@ def main():
                 "type": item["type"],
                 "tier": item["tier"],
                 "model": args.model,
+                "adapter": adapter_name,
                 **result,
                 "time_s": round(elapsed, 3),
             }
