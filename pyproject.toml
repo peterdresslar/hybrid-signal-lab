@@ -11,6 +11,7 @@ dependencies = [
     "torch>=2.10.0",
     "accelerate>=1.13.0",
     "dotenv>=0.9.9",
+    "datasets>=4.8.2",
 ]
 
 [build-system]
