@@ -138,6 +138,26 @@ def run_baseline(model, tokenizer, prompt: str, target: str, device: str = "cuda
     }
 
 
+def prepare_paths(battery_arg: str, output_arg: str, resume_from: int) -> tuple[Path, Path, str]:
+    """Validate battery/output paths before loading a model."""
+    battery_path = Path(battery_arg).expanduser()
+    if not battery_path.exists():
+        raise FileNotFoundError(f"Battery file does not exist: {battery_path}")
+    if battery_path.is_dir():
+        raise IsADirectoryError(f"Battery path must be a file, not a directory: {battery_path}")
+
+    output_path = Path(output_arg).expanduser()
+    if output_path.exists() and output_path.is_dir():
+        raise IsADirectoryError(
+            f"Output path must be a file, not a directory: {output_path}\n"
+            f"Try something like: {output_path / 'calibration.jsonl'}"
+        )
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    mode = "a" if resume_from > 0 else "w"
+    return battery_path, output_path, mode
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--battery", type=str, required=True)
@@ -153,17 +173,21 @@ def main():
                         help="Resume from this item index (for crash recovery)")
     args = parser.parse_args()
 
+    battery_path, output_path, mode = prepare_paths(
+        args.battery,
+        args.output,
+        args.resume_from,
+    )
+
     # Load battery
-    with open(args.battery) as f:
+    with open(battery_path) as f:
         battery = json.load(f)
+    if not isinstance(battery, list):
+        raise ValueError(f"Battery file must contain a JSON list of items: {battery_path}")
     print(f"Loaded {len(battery)} candidates")
 
     # Load model
     model, tokenizer = load_model(args.model, args.device)
-
-    # Run calibration
-    output_path = Path(args.output)
-    mode = "a" if args.resume_from > 0 else "w"
 
     with open(output_path, mode) as f:
         for idx, item in enumerate(battery):

@@ -1,8 +1,12 @@
 # Battery Builder — Attention Is In The Air
 
-Generates a ~400-candidate prompt battery for g-profile sweep experiments.
+Generates a ~445-candidate prompt battery for g-profile sweep experiments.
 After generation, run a baseline calibration sweep and filter to ~200 items
 in the sweet spot (baseline p(tok) ∈ [0.05, 0.85]).
+
+Durable source pools live under `bench/battery/data/sources/`. Generated
+battery builds, calibration runs, and joined/sorted analysis artifacts belong
+under `bench/battery/data/v2_battery/internals/`.
 
 ## Target Distribution (oversampled for high-headroom types)
 
@@ -17,9 +21,9 @@ in the sweet spot (baseline p(tok) ∈ [0.05, 0.85]).
 | algorithmic | 30 | Generator |
 | cultural_memorized | 25 | LAMBADA + curated |
 | syntactic_pattern | 25 | Generator + adapted LM_syneval-style agreement templates |
-| domain_knowledge | 15 | Generator |
+| domain_knowledge | 60 | Curated + Wikipedia-derived |
 | code_comprehension | 15 | Generator |
-| **Total** | **400** | |
+| **Total** | **445** | |
 
 ## Usage
 
@@ -42,6 +46,7 @@ python filter_battery.py --results calibration_results.jsonl --output battery_fi
 - COUNTERFACT: [Meng et al., "Locating and Editing Factual Associations in GPT"](https://arxiv.org/abs/2202.05262), with the battery using the [`NeelNanda/counterfact-tracing`](https://huggingface.co/datasets/NeelNanda/counterfact-tracing) Hugging Face dataset for `factual_recall` and `factual_retrieval`.
 - LAMBADA: [Paperno et al., "The LAMBADA dataset: Word prediction requiring a broad discourse context"](https://arxiv.org/abs/1606.06031), with the battery using the [`EleutherAI/lambada_openai`](https://huggingface.co/datasets/EleutherAI/lambada_openai) Hugging Face dataset for `cultural_memorized`.
 - Targeted syntactic evaluation: [Marvin and Linzen, "Targeted Syntactic Evaluation of Language Models"](https://aclanthology.org/D18-1151/) and the accompanying [`BeckyMarvin/LM_syneval`](https://github.com/BeckyMarvin/LM_syneval) templates, which inform the agreement-style `syntactic_pattern` items.
+- Wikipedia-derived domain knowledge items are curated from random article summaries and longer article-derived extracts using the Wikimedia APIs, including the [random summary endpoint](https://en.wikipedia.org/api/rest_v1/page/random/summary).
 
 ## Output Format
 
