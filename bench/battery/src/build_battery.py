@@ -1257,11 +1257,15 @@ def generate_long_range_retrieval(n: int = 30, seed: int = 50) -> list[dict]:
 # Generators: Domain Knowledge
 # ---------------------------------------------------------------------------
 
-def generate_domain_knowledge(n: int = 15, seed: int = 51) -> list[dict]:
+def generate_domain_knowledge(n: int = 60, seed: int = 51) -> list[dict]:
     """Generate domain knowledge prompts.
 
     These test specialized knowledge in science, history, geography, etc.
     Longer prompts that establish a domain context.
+
+    Sources:
+      - 18 hand-crafted "easy" items (curated_domain)
+      - 60 items curated from random Wikipedia pages (gen-wikipedia-random)
     """
     rng = random.Random(seed)
 
@@ -1270,88 +1274,351 @@ def generate_domain_knowledge(n: int = 15, seed: int = 51) -> list[dict]:
         {
             "prompt": "In organic chemistry, the process by which a carboxylic acid reacts with an alcohol to form an ester and water is called",
             "target": " esterification",
+            "source": "curated_domain",
         },
         {
             "prompt": "The phenomenon in quantum mechanics where measuring one particle instantaneously affects another particle regardless of distance is known as quantum",
             "target": " entanglement",
+            "source": "curated_domain",
         },
         {
             "prompt": "In machine learning, the technique of randomly dropping neurons during training to prevent overfitting is called",
             "target": " dropout",
+            "source": "curated_domain",
         },
         {
             "prompt": "The treaty that ended World War I and imposed heavy reparations on Germany was the Treaty of",
             "target": " Versailles",
+            "source": "curated_domain",
         },
         {
             "prompt": "In economics, the theory that increasing the money supply leads to proportional increases in price levels is known as the quantity theory of",
             "target": " money",
+            "source": "curated_domain",
         },
         {
             "prompt": "The deepest known point in Earth's oceans, located in the western Pacific, is called the Mariana",
             "target": " Trench",
+            "source": "curated_domain",
         },
         {
             "prompt": "In genetics, the molecule that carries amino acids to the ribosome during protein synthesis is transfer",
             "target": " RNA",
+            "source": "curated_domain",
         },
         {
             "prompt": "The architectural style characterized by pointed arches, ribbed vaults, and flying buttresses that dominated medieval Europe is called",
             "target": " Gothic",
+            "source": "curated_domain",
         },
         {
             "prompt": "In music theory, a chord consisting of a root, major third, and perfect fifth is called a major",
             "target": " triad",
+            "source": "curated_domain",
         },
         {
             "prompt": "The mathematical constant approximately equal to 2.71828, which is the base of the natural logarithm, is known as Euler's",
             "target": " number",
+            "source": "curated_domain",
         },
         {
             "prompt": "In neuroscience, the gap between two neurons where neurotransmitters are released to transmit signals is called the synaptic",
             "target": " cleft",
+            "source": "curated_domain",
         },
         {
             "prompt": "The effect where light from distant galaxies is shifted toward longer wavelengths due to the expansion of the universe is called",
             "target": " redshift",
+            "source": "curated_domain",
         },
         {
             "prompt": "In computer science, the data structure that follows the Last-In-First-Out principle is called a",
             "target": " stack",
+            "source": "curated_domain",
         },
         {
             "prompt": "The philosophical thought experiment involving a cat that is simultaneously alive and dead until observed was proposed by",
             "target": " Schrödinger",
+            "source": "curated_domain",
         },
         {
             "prompt": "In ecology, the maximum population size that an environment can sustain indefinitely is called the carrying",
             "target": " capacity",
+            "source": "curated_domain",
         },
         {
             "prompt": "The ancient trade route connecting China to the Mediterranean, facilitating the exchange of silk, spices, and ideas, was known as the Silk",
             "target": " Road",
+            "source": "curated_domain",
         },
         {
             "prompt": "In thermodynamics, the law stating that entropy of an isolated system always increases is the second law of",
             "target": " thermodynamics",
+            "source": "curated_domain",
         },
         {
             "prompt": "The cognitive bias where people overestimate their abilities or knowledge is known as the Dunning-",
             "target": "Kruger",  # No leading space: follows hyphen
+            "source": "curated_domain",
         },
     ]
 
-    rng.shuffle(domain_items)
-    selected = domain_items[:n]
+    # Items curated from random Wikipedia pages (harder, more obscure)
+    wikipedia_items = [
+        {
+            "prompt": "In semiconductor research, a solaristor is a compact two-terminal device that combines a transistor with a solar cell, achieving current modulation through a memresistive effect. It is classified as a self-powered",
+            "target": " phototransistor",
+        },
+        {
+            "prompt": "In Norse mythology, the three goddesses Urðr, Verðandi, and Skuld weave the threads of fate and tend to the world tree Yggdrasil. They are collectively known as the",
+            "target": " Norns",
+        },
+        {
+            "prompt": "In aviation, when a propeller-driven aircraft has its engine mounted with the propeller in front so that it is pulled through the air, this arrangement is called a",
+            "target": " tractor",
+        },
+        {
+            "prompt": "In sleep science, brief sub-second interruptions of sleep characterized by partial cortical activation without full consciousness, detectable through EEG as short bursts of brain activity, are called",
+            "target": " microarousals",
+        },
+        {
+            "prompt": "The traditional Nordic mesophilic fermented milk product, particularly popular in Finland, that is similar to yoghurt but has a distinctive malleable or 'long' texture when left unmixed, is called",
+            "target": " viili",
+        },
+        {
+            "prompt": "In the medieval military hierarchy, a knight who led a company of troops under his own banner, ranking above a Knight Bachelor but below an earl, was known as a knight",
+            "target": " banneret",
+        },
+        {
+            "prompt": "The white brimless felt skull cap traditionally worn by Albanians as part of their national costume, whose height and shape varies by region, is known as a",
+            "target": " qeleshe",
+        },
+        {
+            "prompt": "The abdication of Louis Philippe I during the French Revolution of 1848 led directly to the foundation of the French",
+            "target": " Second Republic",
+        },
+        {
+            "prompt": "In the traditional Latin Requiem Mass, the antiphon sung by the choir as the body is being taken out of the church, later set to music by composers such as Fauré and Duruflé, is called",
+            "target": " In paradisum",
+        },
+        {
+            "prompt": "The 1981 Pulitzer Prize-winning nonfiction book by Tracy Kidder, which chronicles the creation of a new minicomputer at Data General Corporation, is titled The Soul of a New",
+            "target": " Machine",
+        },
+        {
+            "prompt": "During World War I, the three Hanseatic city-states of Bremen, Hamburg, and Lübeck, as members of the German Empire, each established their own version of a shared military decoration known as the",
+            "target": " Hanseatic Cross",
+        },
+        {
+            "prompt": "The genus Parnassius, a group of high-altitude butterflies in the swallowtail family Papilionidae found in mountainous regions of Asia and Europe, are commonly known as the snow",
+            "target": " Apollos",
+        },
+        {
+            "prompt": "The second-largest metropolitan area in Iran, a transportation hub and industrial center extending along the Zayandeh Rud river that is home to steel industries and nuclear facilities, is centered on the city of",
+            "target": " Isfahan",
+        },
+        {
+            "prompt": "In March 1782, during the American War of Independence, British and Spanish forces fought for control of an island off the Caribbean coast of present-day Honduras in the Battle of",
+            "target": " Roatán",
+        },
+        {
+            "prompt": "The marine echinoderms of the order Ophiurida, characterized by their long flexible arms radiating from a central disc, are commonly known as",
+            "target": " brittle stars",
+        },
+        {
+            "prompt": "The British mountaineer who disappeared near the summit of Mount Everest in 1924 alongside his climbing partner Andrew Irvine, whose body was not found until 1999, was",
+            "target": " George Mallory",
+        },
+        {
+            "prompt": "Eutrephoceras, an extinct genus of nautilus that lived from the Late Jurassic to the Miocene, is characterized by a highly rounded shell with slightly sinuous suture patterns, described in paleontology as an",
+            "target": " involute",
+        },
+        {
+            "prompt": "The Ghanaian cultural phenomenon of year-end festivities that gained international prominence alongside the government's 2019 'Year of Return' initiative is colloquially known as",
+            "target": " Detty December",
+        },
+        {
+            "prompt": "The American frontiersman Daniel Boone was born on November 2, 1734, in Oley Township in what is now Berks County,",
+            "target": " Pennsylvania",
+        },
+        {
+            "prompt": "In linguistics, the umlaut diacritic indicates a historical sound shift in which former back vowels came to be pronounced as",
+            "target": " front vowels",
+        },
+        {
+            "prompt": "The form of political protest that uses humour, carnival, and whimsical antics as a strategy of peaceful non-compliance, gaining currency in the 1990s anti-globalization movement, is known as",
+            "target": " tactical frivolity",
+        },
+        {
+            "prompt": "The American analytic philosopher who held the Edgar Pierce Chair at Harvard and attacked the distinction between analytic and synthetic statements in his 1951 paper 'Two Dogmas of Empiricism' was Willard Van Orman",
+            "target": " Quine",
+        },
+        {
+            "prompt": "The American author who wrote the 1969 novel The Godfather and co-adapted it into a film trilogy with Francis Ford Coppola, winning Academy Awards for Best Adapted Screenplay for the first two films, was",
+            "target": " Mario Puzo",
+        },
+        {
+            "prompt": "The small, rustic horse breed native to the Pyrenees and Ariégeois mountains of southern France, always black in color and still occasionally referred to by the older name Ariégeois pony, is the",
+            "target": " Mérens",
+        },
+        {
+            "prompt": "The annual September festival of the Wolayta people of southern Ethiopia, whose name means 'the beginning' and marks the New Year as a bridge from old to new and dark to light, is called",
+            "target": " Gifaataa",
+        },
+        {
+            "prompt": "The English mathematician whose most famous contributions to mathematical analysis include the theorem and series that express functions as infinite sums of terms calculated from their derivatives at a single point was",
+            "target": " Brook Taylor",
+        },
+        {
+            "prompt": "The largest island of the Seychelles, containing the capital city of Victoria and accommodating 86 percent of the country's population, named after a French governor of Isle de France, is",
+            "target": " Mahé",
+        },
+        {
+            "prompt": "The 1793 Gothic novel by Eliza Parsons that is listed among the seven 'horrid novels' recommended by Isabella Thorpe in Jane Austen's Northanger Abbey, predating both Radcliffe's Udolpho and Lewis's The Monk, is titled The Castle of",
+            "target": " Wolfenbach",
+        },
+        {
+            "prompt": "In military ordnance, the type of fuse consisting of a long probe affixed to a bomb's nose that detonates an aerial bomb at or above ground level to maximize surface blast damage is called a",
+            "target": " daisy cutter",
+        },
+        {
+            "prompt": "The endangered variety of the Spanish language descended from 18th-century colonists who established Los Adaes and Nacogdoches, still spoken by a few communities along the border between Texas and Louisiana, is known as",
+            "target": " Sabine River Spanish",
+        },
+        {
+            "prompt": "In 1685, during the Morean War, Venetian forces led by Hannibal von Degenfeld defeated the Ottoman Empire's Kapudan Pasha at the Battle of Kalamata, completing the conquest of the",
+            "target": " Mani Peninsula",
+        },
+        {
+            "prompt": "In livestock husbandry, an animal that cannot stand on its own and is therefore to be killed is referred to by the industry term",
+            "target": " downer",
+        },
+        {
+            "prompt": "The Swedish diplomat nicknamed 'Svarta nejlikan' who rescued hundreds of Norwegian Jews during World War II and later helped over 1,200 Chileans escape Pinochet's dictatorship, earning the title 'the Raoul Wallenberg of the 1970s,' was",
+            "target": " Harald Edelstam",
+        },
+        {
+            "prompt": "The structural design used in many 19th-century American covered bridges, combining a multiple kingpost truss with a reinforcing arch, patented by Theodore Burr in 1817, is known as a",
+            "target": " Burr Truss",
+        },
+        {
+            "prompt": "The United States Army warrant officer who intervened to stop the Mỹ Lai massacre on March 16, 1968, alongside Glenn Andreotta and Lawrence Colburn, by landing his helicopter between American troops and Vietnamese civilians, was",
+            "target": " Hugh Thompson",
+        },
+        {
+            "prompt": "In ancient Rome, the eagle standard that served as the most important symbol of a legion, carried by a specially designated soldier known as an aquilifer, was called an",
+            "target": " aquila",
+        },
+        {
+            "prompt": "The influential 1758 legal treatise on international law, formally titled The Law of Nations: Or, Principles of the Law of Nature Applied to the Conduct and Affairs of Nations and Sovereigns, was written by Emerich de",
+            "target": " Vattel",
+        },
+        {
+            "prompt": "The building constructed in Munich between 1933 and 1937 for Adolf Hitler's personal use, which unlike many Nazi-era structures still stands and now houses the University of Music and Performing Arts Munich, is known as the",
+            "target": " Führerbau",
+        },
+        {
+            "prompt": "The American jazz tenor saxophonist who won 15 Grammy Awards, appeared on more than 900 albums as both leader and sideman, and was inducted into the DownBeat Hall of Fame in 2007, was",
+            "target": " Michael Brecker",
+        },
+        {
+            "prompt": "The synthetic opioid analgesic closely related to methadone, also known by the names methadol and racemethadol, that produces similar effects including analgesia and sedation, has the chemical name",
+            "target": " dimepheptanol",
+        },
+        {
+            "prompt": "The brief 1827 conflict in what is now Wisconsin, triggered when Ho-Chunk people reacted to lead miners trespassing on their lands and to false rumors about the execution of tribal prisoners, is known as the",
+            "target": " Winnebago War",
+        },
+        {
+            "prompt": "The short-lived communist state established in Hungary in 1919, governed by the revolutionary Béla Kun before its collapse after 133 days, was known as the Hungarian",
+            "target": " Soviet Republic",
+        },
+        {
+            "prompt": "The obelisk structure built in the mid-18th century by the Conolly family on their Castletown Estate, located between Celbridge and Maynooth in County Kildare, Ireland, now a national monument, is known as",
+            "target": " Conolly's Folly",
+        },
+        {
+            "prompt": "Joseph Heller's second novel, published in 1974, which uses stream-of-consciousness narration by a businessman named Bob Slocum to explore his job, family, and psyche, is titled",
+            "target": " Something Happened",
+        },
+        {
+            "prompt": "The Colombian woman who became one of the most important figures in the country's independence movement, choosing death over submission to Spanish colonial rule, and who is the subject of a major 2010 telenovela, was Policarpa",
+            "target": " Salavarrieta",
+        },
+        {
+            "prompt": "The Taoist temple located in Weaverville, California, still in active use, that holds the distinction of being the oldest Chinese temple in the state, is preserved as the Weaverville",
+            "target": " Joss House",
+        },
+        {
+            "prompt": "The specific type of magnetic resonance imaging used primarily to determine flow velocities in blood vessels and other fluids, also providing a means of magnetic resonance angiography, is known as",
+            "target": " phase contrast MRI",
+        },
+        {
+            "prompt": "Egypt's sole participant in its only appearance at the Winter Olympic Games, competing in alpine skiing at the 1984 Games in Sarajevo, was",
+            "target": " Jamil El Reedy",
+        },
+        {
+            "prompt": "The largest family of bats, whose Latin name Vespertilionidae derives from the word for 'evening' and includes over 400 species worldwide, is commonly known as the",
+            "target": " vesper bats",
+        },
+        {
+            "prompt": "The prominent geological formation extending from New York through Ontario to Wisconsin, along whose western end the Wisconsin Ledge wine-growing region was established in 2012, is called the Niagara",
+            "target": " Escarpment",
+        },
+        {
+            "prompt": "The ancient Greek philosophical concept that celestial bodies produce inaudible harmonious tones as they move through space, reflecting the mathematical order of the cosmos, is known as the music of the",
+            "target": " spheres",
+        },
+        {
+            "prompt": "In the 1942 Canadian plebiscite on compulsory overseas military service, while 66 percent of Canadians voted in favour, the only province to have a majority voting against conscription was",
+            "target": " Quebec",
+        },
+        {
+            "prompt": "The public research university in Berlin founded in 1810 by the Prussian educational reformer and linguist who articulated the ideal of uniting teaching and research is named after Wilhelm von",
+            "target": " Humboldt",
+        },
+        {
+            "prompt": "In human genetics, the large multigene family encoding the proteins responsible for detecting airborne chemicals in the nasal epithelium, such as the gene OR51T1, is the family of",
+            "target": " olfactory receptors",
+        },
+        {
+            "prompt": "The influential monthly German-language magazine that served as a major platform for Jewish intellectual discourse from 1916 to 1928, co-founded by the philosopher Martin Buber and publisher Salman Schocken, was titled",
+            "target": " Der Jude",
+        },
+        {
+            "prompt": "The British space tourism company whose rocket NOVA 1, launched from Morecambe Bay in 2001, holds the UK record for the largest successful rocket launch from the British mainland, is called",
+            "target": " Starchaser Industries",
+        },
+        {
+            "prompt": "The California railroad intended to connect San Francisco to Santa Cruz that never completed construction due to the 1906 San Francisco Earthquake, operating as two disconnected segments until 1920, was the",
+            "target": " Ocean Shore Railroad",
+        },
+        {
+            "prompt": "The four-floor tower house in Aberdeenshire, Scotland, standing on the south bank of the River Dee approximately two miles east of the royal residence of Balmoral Castle, is called",
+            "target": " Abergeldie Castle",
+        },
+        {
+            "prompt": "The French composer who served as cantor in Geneva under John Calvin and is best known for creating the melody now universally associated with the Doxology hymn 'Praise God, from Whom All Blessings Flow' was",
+            "target": " Louis Bourgeois",
+        },
+        {
+            "prompt": "The island in the Thousand Islands archipelago of the Saint Lawrence River, located in Jefferson County, New York, that is famous for the Boldt Castle built as a monument to its owner's wife, is called",
+            "target": " Heart Island",
+        },
+    ]
+
+    all_items = domain_items + [{**item, "source": "gen-wikipedia-random"} for item in wikipedia_items]
+
+    rng.shuffle(all_items)
+    selected = all_items[:n]
 
     for i, item in enumerate(selected):
         tok_count = approx_tokens(item["prompt"])
         item.update({
-            "id": make_id("dk", "curated", i),
+            "id": make_id("dk", item.get("source", "curated"), i),
             "type": "domain_knowledge",
             "tokens_approx": tok_count,
             "tier": tier_from_tokens(tok_count),
-            "source": "curated_domain",
             "metadata": {}
         })
 
@@ -1465,7 +1732,7 @@ GENERATED_TYPES = {
     "algorithmic":          (generate_algorithmic,           30),
     "syntactic_pattern":    (generate_syntactic_pattern,     25),
     "long_range_retrieval": (generate_long_range_retrieval,  30),
-    "domain_knowledge":     (generate_domain_knowledge,      15),
+    "domain_knowledge":     (generate_domain_knowledge,      60),
     "code_comprehension":   (generate_code_comprehension,    15),
 }
 
