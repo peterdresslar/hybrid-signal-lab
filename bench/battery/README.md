@@ -57,3 +57,33 @@ python filter_battery.py --results calibration_results.jsonl --output battery_fi
   "metadata": {}
 }
 ```
+
+
+
+## Running calibration
+
+For instance:
+
+```sh
+uv run -m bench.battery.src.calibrate \
+  --battery bench/battery/data/v2_battery/internals/v2_0/all_candidates.json \
+  --model Qwen/Qwen3.5-2B-Base \
+  --output bench/battery/data/v2_battery/internals/v2_0/calibration.jsonl
+
+uv run -m bench.battery.src.calibrate \
+  --battery /root/workspace/data/battery35/all_candidates.json \
+  --model Qwen/Qwen3.5-2B-Base \
+  --output /root/workspace/data/battery35/calibration.jsonl
+
+uv run -m bench.battery.src.calibrate \
+  --battery /root/workspace/data/battery35/all_candidates.json \
+  --model Qwen/Qwen3.5-35B-A3B-Base \
+  --output /root/workspace/data/battery35/calibration35.jsonl \
+  --device cuda
+
+uv run -m bench.battery.src.calibrate \
+  --battery /root/workspace/data/all_candidates.json \
+  --model Qwen/Qwen3.5-122B-A10B \
+  --output /root/workspace/data/calibration122.jsonl \
+  --device cuda
+```

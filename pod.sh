@@ -16,7 +16,7 @@ mkdir -p "$HF_HOME" "$UV_CACHE_DIR"
 
 # ── install uv ──
 curl -LsSf https://astral.sh/uv/install.sh | sh
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin/:$PATH"
 
 # ── install gh ──
 mkdir -p /etc/apt/keyrings

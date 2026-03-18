@@ -39,21 +39,51 @@ def load_model(model_name: str, device: str = "cuda"):
 
     print(f"Loading {model_name}...")
     tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model_kwargs = {
+        "dtype": torch.bfloat16,
+    }
+
+    if device == "auto":
+        model_kwargs["device_map"] = "auto"
+    elif device == "cuda":
+        model_kwargs["device_map"] = "auto" if torch.cuda.device_count() > 1 else "cuda"
+    else:
+        model_kwargs["device_map"] = device
+
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
-        torch_dtype=torch.bfloat16,
-        device_map=device,
+        **model_kwargs,
     )
     model.eval()
     print(f"  Loaded. {sum(p.numel() for p in model.parameters()) / 1e9:.1f}B params")
     return model, tokenizer
 
 
+def get_model_input_device(model, requested_device: str) -> torch.device:
+    """Return the device where prompt tokens should be placed."""
+    input_embeddings = model.get_input_embeddings()
+    if input_embeddings is not None and hasattr(input_embeddings, "weight"):
+        return input_embeddings.weight.device
+
+    device_map = getattr(model, "hf_device_map", None)
+    if device_map:
+        for mapped_device in device_map.values():
+            if isinstance(mapped_device, int):
+                return torch.device(f"cuda:{mapped_device}")
+            if mapped_device not in {"cpu", "disk"}:
+                return torch.device(mapped_device)
+
+    if requested_device == "cuda" and torch.cuda.is_available():
+        return torch.device("cuda")
+    return torch.device(requested_device)
+
+
 def run_baseline(model, tokenizer, prompt: str, target: str, device: str = "cuda"):
     """Run a single forward pass at baseline and extract signals."""
 
     # Tokenize
-    input_ids = tokenizer.encode(prompt, return_tensors="pt").to(device)
+    input_device = get_model_input_device(model, device)
+    input_ids = tokenizer.encode(prompt, return_tensors="pt").to(input_device)
     target_ids = tokenizer.encode(target, add_special_tokens=False)
 
     if len(target_ids) == 0:
@@ -66,6 +96,7 @@ def run_baseline(model, tokenizer, prompt: str, target: str, device: str = "cuda
         outputs = model(input_ids, output_attentions=True, output_hidden_states=True)
 
     logits = outputs.logits[0, -1, :]  # Last token logits
+    logits_log2 = torch.log(torch.tensor(2.0, device=logits.device))
     probs = F.softmax(logits, dim=-1)
 
     # Target probability and rank
@@ -75,13 +106,13 @@ def run_baseline(model, tokenizer, prompt: str, target: str, device: str = "cuda
 
     # Entropy
     log_probs = torch.log(probs + 1e-10)
-    entropy = -(probs * log_probs).sum().item() / torch.log(torch.tensor(2.0)).item()
+    entropy = (-(probs * log_probs).sum() / logits_log2).item()
 
     # Mean sequence entropy (over all positions)
     all_logits = outputs.logits[0]  # [seq_len, vocab]
     all_probs = F.softmax(all_logits, dim=-1)
     all_log_probs = torch.log(all_probs + 1e-10)
-    all_entropies = -(all_probs * all_log_probs).sum(dim=-1) / torch.log(torch.tensor(2.0, device=device))
+    all_entropies = -(all_probs * all_log_probs).sum(dim=-1) / logits_log2
     mean_seq_entropy = all_entropies.mean().item()
 
     # Attention entropy per layer (if available)
@@ -93,7 +124,8 @@ def run_baseline(model, tokenizer, prompt: str, target: str, device: str = "cuda
             # Entropy of last token's attention over all positions, averaged over heads
             last_attn = attn[:, -1, :]  # [heads, seq]
             log_attn = torch.log(last_attn + 1e-10)
-            head_entropies = -(last_attn * log_attn).sum(dim=-1) / torch.log(torch.tensor(2.0, device=device))
+            attn_log2 = torch.log(torch.tensor(2.0, device=last_attn.device))
+            head_entropies = -(last_attn * log_attn).sum(dim=-1) / attn_log2
             attn_entropies.append(head_entropies.mean().item())
 
     return {
@@ -102,7 +134,7 @@ def run_baseline(model, tokenizer, prompt: str, target: str, device: str = "cuda
         "final_entropy": entropy,
         "mean_seq_entropy": mean_seq_entropy,
         "attn_entropy_profile": attn_entropies,
-        "target_avg_logp": log_probs[target_token_id].item() / torch.log(torch.tensor(2.0)).item(),
+        "target_avg_logp": (log_probs[target_token_id] / logits_log2).item(),
     }
 
 
@@ -111,7 +143,12 @@ def main():
     parser.add_argument("--battery", type=str, required=True)
     parser.add_argument("--model", type=str, required=True)
     parser.add_argument("--output", type=str, default="calibration_results.jsonl")
-    parser.add_argument("--device", type=str, default="mps")
+    parser.add_argument(
+        "--device",
+        type=str,
+        default="mps",
+        help="Execution target: cpu, mps, cuda, cuda:N, or auto. 'cuda' auto-shards across multiple GPUs.",
+    )
     parser.add_argument("--resume-from", type=int, default=0,
                         help="Resume from this item index (for crash recovery)")
     args = parser.parse_args()
