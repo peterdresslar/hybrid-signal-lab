@@ -1,3 +1,7 @@
+# Commentaries
+
+This file is completely managed by Claude
+
 ## AttnRes (Kimi Team, arXiv:2603.15031, March 2026)
 
 ### Summary
@@ -17,3 +21,19 @@ Replaces fixed residual accumulation (h_l = h_{l-1} + f_{l-1}(h_{l-1})) with lea
 
 ### Citation
 Chen, G., Zhang, Y., Su, J., et al. (2026). Attention Residuals. arXiv:2603.15031 [cs.CL].
+
+
+## LLM-JEPA (Huang, LeCun, Balestriero, arXiv:2509.14252, October 2025)
+
+### Summary
+First JEPA-based training objective for LLMs. Adds an embedding-space prediction loss alongside standard next-token prediction, using natural "views" (e.g., text description + code) of the same underlying knowledge. Maintains generative capabilities while improving abstract representation quality. Consistent improvements across Llama3, Gemma2, OpenELM, and OLMo families. Key finding: minimizing the standard LLM loss does NOT implicitly minimize the JEPA objective—the embedding-space structure must be explicitly trained. Promotes near-linear transformations between view representations in embedding space.
+
+### Relevance to Our Work
+- Central finding echoes our premise: standard next-token prediction leaves information on the table in the embedding space. Our gain vector intervention and their JEPA loss are different levers targeting the same insight.
+- Their "views" concept (multiple representations of the same knowledge) has a structural parallel to our colony design: multiple LLM instances producing different perspectives on the same prompt, with the collective signal capturing what no single forward pass surfaces.
+- Tested on OLMo—our primary hybrid model—with positive results, suggesting this model family is particularly amenable to embedding-space interventions.
+- Their finding that the JEPA objective acts as a regularizer without harming generative capability is relevant to our concern about whether gain vector interventions might degrade output quality.
+- Potential future direction: could a colony-generated signal serve as an inference-time analog of the JEPA training objective? Rather than learning embedding structure through backpropagation, learn it through collective signal generation at inference time.
+
+### Citation
+Huang, H., LeCun, Y., & Balestriero, R. (2025). LLM-JEPA: Large Language Models Meet Joint Embedding Predictive Architectures. arXiv:2509.14252 [cs.CL].

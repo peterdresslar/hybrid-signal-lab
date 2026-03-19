@@ -1,0 +1,2 @@
+type,best_g_profile,best_g_family,mean_delta_target_prob,pct_delta_target_prob_positive,sign_test_p_delta_target_prob,mean_delta_target_rank,n
+algorithmic,constant_1.5,constant,0.08,54.17,0.05,1299.29,24
