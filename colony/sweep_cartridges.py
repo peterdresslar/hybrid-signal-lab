@@ -177,7 +177,7 @@ CARTRIDGES = {
             _control_points([1.0, 0.0, 1.0, 0.0, 1.0, 0.0], name="alternating"),
             _control_points([0.0, 1.0, 0.0, 1.0, 0.0, 1.0], name="alternating_inv"),
         ],
-        "prompt_tiers": ["short", "brief", "med", "long"],
+        "prompt_tiers": ["short", "brief", "med", "long", "extended"],
         "model_key": "0_8B",
     },
 }

@@ -3,6 +3,7 @@
 import argparse
 import os
 import json
+import time
 import traceback
 import numpy as np
 from pathlib import Path
@@ -239,6 +240,8 @@ def main():
     print(f"Will run {len(prompts_to_run)} prompts over {len(g_runs)} g configurations ({args.repetitions} repetitions).")
     total_runs = len(prompts_to_run) * len(g_runs) * args.repetitions
     print(f"Total runs: {total_runs}")
+    completed_runs = 0
+    sweep_start_time = time.time()
 
     with open(out_file, "w") as f_out:
         f_verb = open(verbose_file, "w") if verbose_file else None
@@ -357,6 +360,7 @@ def main():
 
                     f_out.write(json.dumps(core_res) + "\n")
                     f_out.flush()
+                    completed_runs += 1
 
                     if f_verb and args.verbose:
                         f_verb.write(json.dumps(res) + "\n")
@@ -376,7 +380,11 @@ def main():
             f_verb.close()
         f_err.close()
 
+    elapsed_s = time.time() - sweep_start_time
     print(f"\nSweep complete! Saved results to directory: {out_dir}")
+    print(f"Run time: {elapsed_s:.2f}s")
+    print(f"Planned runs: {total_runs}")
+    print(f"Completed runs: {completed_runs}")
 
 if __name__ == "__main__":
     main()
