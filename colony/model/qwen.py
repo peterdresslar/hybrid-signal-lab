@@ -13,6 +13,7 @@ QWEN_MODELS: dict[str, str] = {
     "2B": "Qwen/Qwen3.5-2B-Base",
     "4B": "Qwen/Qwen3.5-4B-Base",
     "9B": "Qwen/Qwen3.5-9B-Base",
+    "27B": "Qwen/Qwen3.5-27B-Base",
     "35B": "Qwen/Qwen3.5-35B-A3B-Base",
 }
 

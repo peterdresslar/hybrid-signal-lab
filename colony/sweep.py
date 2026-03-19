@@ -9,7 +9,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import Any
 
-from colony.signal_lab import resolve_prompt, resolve_device
+from colony.signal_lab import resolve_prompt, resolve_device, resolve_prompt_collection
 from colony.model.g_profile import build_attention_scales_from_spec, printable_scales
 from colony.model.prompt import Prompt
 from colony.model import VALID_MODEL_KEYS
@@ -35,6 +35,13 @@ def resolve_out_dir(out_dir_pattern: str) -> Path:
     return Path("results") / out_path
 
 
+def _parse_csv_strings(raw_value: str | None) -> list[str] | None:
+    if raw_value is None:
+        return None
+    values = [piece.strip() for piece in raw_value.split(",") if piece.strip()]
+    return values or None
+
+
 def _prompts_from_tiers(prompt_tiers: list[str]) -> list[Prompt]:
     prompts: list[Prompt] = []
     for tier in prompt_tiers:
@@ -56,6 +63,22 @@ def _prompts_from_tiers(prompt_tiers: list[str]) -> list[Prompt]:
     return prompts
 
 
+def _prompts_from_battery(cartridge: dict[str, Any]) -> list[Prompt]:
+    battery_path = cartridge["prompt_battery"]
+    requested_ids: list[str] | None = None
+    if cartridge.get("prompt_id"):
+        requested_ids = [cartridge["prompt_id"]]
+    elif cartridge.get("prompt_ids"):
+        requested_ids = list(cartridge["prompt_ids"])
+
+    return resolve_prompt_collection(
+        battery_path,
+        prompt_ids=requested_ids,
+        prompt_tiers=cartridge.get("prompt_tiers"),
+        prompt_types=cartridge.get("prompt_types"),
+    )
+
+
 def get_prompts_from_cartridge(cartridge: dict[str, Any]) -> list[Prompt]:
     if cartridge.get("prompt"):
         prompt_obj = Prompt.from_text(
@@ -65,6 +88,17 @@ def get_prompts_from_cartridge(cartridge: dict[str, Any]) -> list[Prompt]:
         if cartridge.get("target") is not None:
             prompt_obj.target = cartridge["target"]
         return [prompt_obj]
+
+    if cartridge.get("prompt_battery"):
+        prompts = _prompts_from_battery(cartridge)
+        deduped_prompts: list[Prompt] = []
+        seen_ids: set[str] = set()
+        for prompt in prompts:
+            if prompt.id in seen_ids:
+                continue
+            deduped_prompts.append(prompt)
+            seen_ids.add(prompt.id)
+        return deduped_prompts
 
     if cartridge.get("prompt_id"):
         return [resolve_prompt(cartridge["prompt_id"])]
@@ -84,8 +118,38 @@ def get_prompts_from_cartridge(cartridge: dict[str, Any]) -> list[Prompt]:
         return deduped_prompts
 
     raise ValueError(
-        "Cartridge must define one of: 'prompt', 'prompt_id', 'prompt_ids', or 'prompt_tiers'."
+        "Cartridge must define one of: 'prompt', 'prompt_battery', "
+        "'prompt_id', 'prompt_ids', or 'prompt_tiers'."
     )
+
+
+def apply_prompt_selection_overrides(
+    cartridge: dict[str, Any],
+    *,
+    prompt_battery: str | None,
+    prompt_id: str | None,
+    prompt_ids: list[str] | None,
+    prompt_tiers: list[str] | None,
+    prompt_types: list[str] | None,
+) -> dict[str, Any]:
+    """Apply CLI prompt-selection overrides without mutating the base cartridge."""
+    overridden = dict(cartridge)
+    if prompt_battery is None:
+        return overridden
+
+    for key in ["prompt", "prompt_id", "prompt_ids", "prompt_tiers", "prompt_types", "target"]:
+        overridden.pop(key, None)
+
+    overridden["prompt_battery"] = prompt_battery
+    if prompt_id is not None:
+        overridden["prompt_id"] = prompt_id
+    if prompt_ids is not None:
+        overridden["prompt_ids"] = prompt_ids
+    if prompt_tiers is not None:
+        overridden["prompt_tiers"] = prompt_tiers
+    if prompt_types is not None:
+        overridden["prompt_types"] = prompt_types
+    return overridden
 
 def main():
     parser = argparse.ArgumentParser(description="Sweep g profiles over different prompts.")
@@ -95,11 +159,26 @@ def main():
     parser.add_argument("--repetitions", type=int, default=1, help="Number of repetitions per prompt/g pair.")
     parser.add_argument("--verbose", action="store_true", help="Log heavier metrics (full top-k, attn. entropy) to a separate file.")
     parser.add_argument("--out-dir", type=str, default="results/sweep_{timestamp}", help="Output directory pattern. Use {timestamp} to inject current time.")
+    parser.add_argument("--prompt-battery", type=str, default=None, help="Battery directory or JSON file to use instead of the cartridge's built-in prompt selection.")
+    parser.add_argument("--prompt-id", type=str, default=None, help="Single prompt id within --prompt-battery.")
+    parser.add_argument("--prompt-ids", type=str, default=None, help="Comma-separated prompt ids within --prompt-battery.")
+    parser.add_argument("--prompt-tiers", type=str, default=None, help="Comma-separated tiers to select from --prompt-battery.")
+    parser.add_argument("--prompt-types", type=str, default=None, help="Comma-separated types to select from --prompt-battery.")
     
     args = parser.parse_args()
     runtime_device = resolve_device(args.device)
 
-    cartridge = get_cartridge(args.cartridge)
+    if args.prompt_id and args.prompt_ids:
+        raise ValueError("Use only one of --prompt-id or --prompt-ids.")
+
+    cartridge = apply_prompt_selection_overrides(
+        get_cartridge(args.cartridge),
+        prompt_battery=args.prompt_battery,
+        prompt_id=args.prompt_id,
+        prompt_ids=_parse_csv_strings(args.prompt_ids),
+        prompt_tiers=_parse_csv_strings(args.prompt_tiers),
+        prompt_types=_parse_csv_strings(args.prompt_types),
+    )
     prompts_to_run = get_prompts_from_cartridge(cartridge)
     if not prompts_to_run:
         print("No prompts found to run.")
@@ -151,7 +230,7 @@ def main():
     metadata["g_specs"] = g_specs
     metadata["prompt_selection"] = {
         key: cartridge[key]
-        for key in ["prompt", "prompt_id", "prompt_ids", "prompt_tiers", "target"]
+        for key in ["prompt", "prompt_battery", "prompt_id", "prompt_ids", "prompt_tiers", "prompt_types", "target"]
         if key in cartridge
     }
     with open(meta_file, "w") as f_meta:

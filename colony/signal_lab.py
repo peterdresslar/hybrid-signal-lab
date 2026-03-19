@@ -76,6 +76,48 @@ def _load_prompt_entries(json_path: Path) -> list[dict]:
     return data
 
 
+def _resolve_prompt_collection_paths(path_or_name: str | Path) -> list[Path]:
+    """Resolve a prompt collection to one or more JSON files."""
+    resolved = _resolve_path(str(path_or_name))
+    if resolved.is_file():
+        if resolved.suffix != ".json":
+            raise ValueError(f"Prompt collection must be JSON: {resolved}")
+        return [resolved]
+
+    if resolved.is_dir():
+        combined_path = resolved / "all_candidates.json"
+        if combined_path.is_file():
+            return [combined_path]
+
+        manifest_path = resolved / "manifest.json"
+        if manifest_path.is_file():
+            with open(manifest_path, "r", encoding="utf-8") as file_handle:
+                manifest = json.load(file_handle)
+            manifest_types = manifest.get("types", {}) if isinstance(manifest, dict) else {}
+            paths: list[Path] = []
+            if isinstance(manifest_types, dict):
+                for spec in manifest_types.values():
+                    if not isinstance(spec, dict):
+                        continue
+                    rel_file = spec.get("file")
+                    if not isinstance(rel_file, str):
+                        continue
+                    candidate_path = resolved / rel_file
+                    if candidate_path.is_file():
+                        paths.append(candidate_path)
+            if paths:
+                return paths
+
+        json_paths = [
+            path for path in sorted(resolved.glob("*.json"))
+            if path.name != "manifest.json"
+        ]
+        if json_paths:
+            return json_paths
+
+    raise FileNotFoundError(f"Could not resolve prompt collection: {path_or_name}")
+
+
 def _prompt_from_catalog(json_path: Path, prompt_id: str) -> Prompt:
     entries = _load_prompt_entries(json_path)
     for entry in entries:
@@ -84,10 +126,85 @@ def _prompt_from_catalog(json_path: Path, prompt_id: str) -> Prompt:
     raise ValueError(f"Prompt id '{prompt_id}' not found in {json_path}")
 
 
+def _prompt_from_collection(path_or_name: str | Path, prompt_id: str) -> Prompt:
+    """Resolve a prompt id from a JSON prompt collection or battery directory."""
+    collection_paths = _resolve_prompt_collection_paths(path_or_name)
+    matches: list[Prompt] = []
+    for json_path in collection_paths:
+        for entry in _load_prompt_entries(json_path):
+            if isinstance(entry, dict) and entry.get("id") == prompt_id:
+                matches.append(
+                    Prompt.from_dict(entry, data_dir=json_path.parent, source=str(json_path))
+                )
+
+    if len(matches) == 1:
+        return matches[0]
+    if len(matches) > 1:
+        sources = ", ".join(sorted({match.source for match in matches if match.source}))
+        raise ValueError(
+            f"Prompt id '{prompt_id}' is ambiguous within collection {path_or_name}: {sources}"
+        )
+    raise ValueError(f"Prompt id '{prompt_id}' not found in collection {path_or_name}")
+
+
 def _all_prompt_catalogs() -> list[Path]:
     if not DATA_DIR.is_dir():
         return []
     return sorted(DATA_DIR.glob("prompts*.json"))
+
+
+def resolve_prompt_collection(
+    collection_arg: str,
+    *,
+    prompt_ids: list[str] | None = None,
+    prompt_tiers: list[str] | None = None,
+    prompt_types: list[str] | None = None,
+) -> list[Prompt]:
+    """Resolve a prompt collection or battery bundle into Prompt objects."""
+    collection_paths = _resolve_prompt_collection_paths(collection_arg)
+    records: list[tuple[dict[str, Any], Path]] = []
+    for json_path in collection_paths:
+        for entry in _load_prompt_entries(json_path):
+            if not isinstance(entry, dict):
+                continue
+            if "prompt" not in entry and "prompt_file" not in entry:
+                continue
+            records.append((entry, json_path))
+
+    if prompt_tiers is not None:
+        allowed_tiers = set(prompt_tiers)
+        records = [
+            (entry, json_path)
+            for entry, json_path in records
+            if entry.get("tier") in allowed_tiers
+        ]
+
+    if prompt_types is not None:
+        allowed_types = set(prompt_types)
+        records = [
+            (entry, json_path)
+            for entry, json_path in records
+            if entry.get("type") in allowed_types
+        ]
+
+    deduped_by_id: dict[str, Prompt] = {}
+    for entry, json_path in records:
+        prompt = Prompt.from_dict(entry, data_dir=json_path.parent, source=str(json_path))
+        deduped_by_id.setdefault(prompt.id, prompt)
+
+    selected = list(deduped_by_id.values())
+
+    if prompt_ids is not None:
+        by_id = {prompt.id: prompt for prompt in selected}
+        missing = [prompt_id for prompt_id in prompt_ids if prompt_id not in by_id]
+        if missing:
+            missing_str = ", ".join(missing)
+            raise ValueError(
+                f"Prompt ids not found in collection {collection_arg}: {missing_str}"
+            )
+        selected = [by_id[prompt_id] for prompt_id in prompt_ids]
+
+    return selected
 
 
 def resolve_prompt(prompt_arg: str) -> Prompt:
@@ -102,8 +219,8 @@ def resolve_prompt(prompt_arg: str) -> Prompt:
     if ":" in prompt_arg:
         left, right = prompt_arg.split(":", 1)
         maybe_catalog = _resolve_path(left)
-        if maybe_catalog.is_file() and maybe_catalog.suffix == ".json":
-            return _prompt_from_catalog(maybe_catalog, right)
+        if (maybe_catalog.is_file() and maybe_catalog.suffix == ".json") or maybe_catalog.is_dir():
+            return _prompt_from_collection(maybe_catalog, right)
 
     resolved_path = _resolve_path(prompt_arg)
     if resolved_path.is_file():
@@ -164,6 +281,13 @@ def _parse_csv_floats(raw_value: str | None) -> list[float] | None:
     return [float(piece) for piece in values]
 
 
+def _parse_csv_strings(raw_value: str | None) -> list[str] | None:
+    if raw_value is None:
+        return None
+    values = [piece.strip() for piece in raw_value.split(",") if piece.strip()]
+    return values or None
+
+
 def run_model(
     prompt_source: str,
     model_key: str = "0_8B",
@@ -220,6 +344,26 @@ if __name__ == "__main__":
         help="Path or filename to a prompt file in data/, or a direct string prompt.",
     )
     parser.add_argument(
+        "--prompt-battery", type=str, default=None,
+        help="Battery directory or JSON file for prompt lookup.",
+    )
+    parser.add_argument(
+        "--prompt-id", type=str, default=None,
+        help="Prompt id within --prompt-battery.",
+    )
+    parser.add_argument(
+        "--prompt-ids", type=str, default=None,
+        help="Comma-separated prompt ids within --prompt-battery. Requires exactly one resolved prompt.",
+    )
+    parser.add_argument(
+        "--prompt-tier", type=str, default=None,
+        help="Single tier filter within --prompt-battery.",
+    )
+    parser.add_argument(
+        "--prompt-type", type=str, default=None,
+        help="Single type filter within --prompt-battery.",
+    )
+    parser.add_argument(
         "--model-key", type=str, default="0_8B",
         help=f"Model to use. One of: {', '.join(VALID_MODEL_KEYS)}.",
     )
@@ -261,4 +405,30 @@ if __name__ == "__main__":
     if g_vector is not None:
         g_spec["g_vector"] = g_vector
 
-    run_model(args.prompt, args.model_key, device=args.device, g_spec=g_spec)
+    prompt_source = args.prompt
+    if args.prompt_battery is not None:
+        if args.prompt and args.prompt != parser.get_default("prompt"):
+            raise ValueError("Use either --prompt or --prompt-battery-based selection, not both.")
+
+        prompt_ids = None
+        if args.prompt_id and args.prompt_ids:
+            raise ValueError("Use only one of --prompt-id or --prompt-ids.")
+        if args.prompt_id:
+            prompt_ids = [args.prompt_id]
+        elif args.prompt_ids:
+            prompt_ids = _parse_csv_strings(args.prompt_ids)
+
+        prompts = resolve_prompt_collection(
+            args.prompt_battery,
+            prompt_ids=prompt_ids,
+            prompt_tiers=[args.prompt_tier] if args.prompt_tier else None,
+            prompt_types=[args.prompt_type] if args.prompt_type else None,
+        )
+        if len(prompts) != 1:
+            raise ValueError(
+                f"--prompt-battery selection resolved to {len(prompts)} prompts; "
+                "refine with --prompt-id, --prompt-tier, or --prompt-type."
+            )
+        prompt_source = f"{args.prompt_battery}:{prompts[0].id}"
+
+    run_model(prompt_source, args.model_key, device=args.device, g_spec=g_spec)
