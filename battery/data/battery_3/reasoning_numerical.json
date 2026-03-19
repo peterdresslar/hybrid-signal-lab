@@ -1,0 +1,482 @@
+[
+  {
+    "id": "rn_gen_0000",
+    "prompt": "Ethan had 13 shells. Ethan gave 4 to Bob and then found 4 more. How many shells does Ethan have now? Answer:",
+    "target": " 13",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rn_gen_0001",
+    "prompt": "There are 6 boxes with 2 rocks in each box, plus 4 extra rocks. The total number of rocks is",
+    "target": " 16",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rn_gen_0002",
+    "prompt": "Owen is 20 years old. Caleb is 5 years older than Owen. Caleb is",
+    "target": " 25",
+    "type": "reasoning_numerical",
+    "tokens_approx": 18,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rn_gen_0003",
+    "prompt": "Theo has 15 papers and wants to split them equally among 5 friends. Each friend gets",
+    "target": " 3",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rn_gen_0004",
+    "prompt": "Jack has 13 pears. Quinn has 1 more than Jack. Leo has 3 fewer than Quinn. How many does Leo have? Answer:",
+    "target": " 11",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 4
+    }
+  },
+  {
+    "id": "rn_gen_0005",
+    "prompt": "Frank started with 14 shirts. On Monday Frank got 2 more, on Tuesday got 2 more, and on Wednesday got 7 more. How many shirts does Frank have in total? Answer:",
+    "target": " 25",
+    "type": "reasoning_numerical",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 5
+    }
+  },
+  {
+    "id": "rn_gen_0006",
+    "prompt": "A box had 29 tokens. Ella removed 5 of them. The remaining tokens were divided equally into 4 bags. How many tokens were placed in each bag? Answer:",
+    "target": " 6",
+    "type": "reasoning_numerical",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 6
+    }
+  },
+  {
+    "id": "rn_gen_0007",
+    "prompt": "Carol had 13 paintbrushes. Then Carol bought 8 more and gave 2 to Ruby. If 4 people each have that same final number of paintbrushes, how many paintbrushes do they have altogether? Answer:",
+    "target": " 76",
+    "type": "reasoning_numerical",
+    "tokens_approx": 42,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 7
+    }
+  },
+  {
+    "id": "rn_gen_0008",
+    "prompt": "Liam had 11 pencils. Liam gave 2 to Naomi and then found 1 more. How many pencils does Liam have now? Answer:",
+    "target": " 10",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rn_gen_0009",
+    "prompt": "There are 3 boxes with 8 blocks in each box, plus 0 extra blocks. The total number of blocks is",
+    "target": " 24",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rn_gen_0010",
+    "prompt": "Nathan is 38 years old. Kim is 4 years younger than Nathan. Kim is",
+    "target": " 34",
+    "type": "reasoning_numerical",
+    "tokens_approx": 18,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rn_gen_0011",
+    "prompt": "Milo has 18 puzzles and wants to split them equally among 6 friends. Each friend gets",
+    "target": " 3",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rn_gen_0012",
+    "prompt": "Dave has 28 paintbrushes. Grace has 4 more than Dave. Leo has 3 fewer than Grace. How many does Leo have? Answer:",
+    "target": " 29",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 4
+    }
+  },
+  {
+    "id": "rn_gen_0013",
+    "prompt": "Jack started with 5 tickets. On Monday Jack got 4 more, on Tuesday got 1 more, and on Wednesday got 6 more. How many tickets does Jack have in total? Answer:",
+    "target": " 16",
+    "type": "reasoning_numerical",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 5
+    }
+  },
+  {
+    "id": "rn_gen_0014",
+    "prompt": "A box had 24 beads. Nora removed 6 of them. The remaining beads were divided equally into 3 bags. How many beads were placed in each bag? Answer:",
+    "target": " 6",
+    "type": "reasoning_numerical",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 6
+    }
+  },
+  {
+    "id": "rn_gen_0015",
+    "prompt": "Ivy had 30 jars. Then Ivy bought 9 more and gave 3 to Stella. If 3 people each have that same final number of jars, how many jars do they have altogether? Answer:",
+    "target": " 108",
+    "type": "reasoning_numerical",
+    "tokens_approx": 42,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 7
+    }
+  },
+  {
+    "id": "rn_gen_0016",
+    "prompt": "Felix had 22 shells. Felix gave 18 to Jasper and then found 5 more. How many shells does Felix have now? Answer:",
+    "target": " 9",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rn_gen_0017",
+    "prompt": "There are 3 boxes with 3 glasses in each box, plus 4 extra glasses. The total number of glasses is",
+    "target": " 13",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rn_gen_0018",
+    "prompt": "Stella is 18 years old. Elena is 15 years older than Stella. Elena is",
+    "target": " 33",
+    "type": "reasoning_numerical",
+    "tokens_approx": 18,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rn_gen_0019",
+    "prompt": "Frank has 30 stars and wants to split them equally among 6 friends. Each friend gets",
+    "target": " 5",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rn_gen_0020",
+    "prompt": "Daniel has 24 hats. Nina has 8 more than Daniel. Ava has 9 fewer than Nina. How many does Ava have? Answer:",
+    "target": " 23",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 4
+    }
+  },
+  {
+    "id": "rn_gen_0021",
+    "prompt": "Ethan started with 12 shirts. On Monday Ethan got 6 more, on Tuesday got 2 more, and on Wednesday got 5 more. How many shirts does Ethan have in total? Answer:",
+    "target": " 25",
+    "type": "reasoning_numerical",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 5
+    }
+  },
+  {
+    "id": "rn_gen_0022",
+    "prompt": "A box had 19 marbles. Paige removed 5 of them. The remaining marbles were divided equally into 2 bags. How many marbles were placed in each bag? Answer:",
+    "target": " 7",
+    "type": "reasoning_numerical",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 6
+    }
+  },
+  {
+    "id": "rn_gen_0023",
+    "prompt": "Theo had 13 oranges. Then Theo bought 12 more and gave 5 to Hank. If 4 people each have that same final number of oranges, how many oranges do they have altogether? Answer:",
+    "target": " 80",
+    "type": "reasoning_numerical",
+    "tokens_approx": 42,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 7
+    }
+  },
+  {
+    "id": "rn_gen_0024",
+    "prompt": "Theo had 16 candies. Theo gave 13 to Iris and then found 3 more. How many candies does Theo have now? Answer:",
+    "target": " 6",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rn_gen_0025",
+    "prompt": "There are 2 boxes with 6 widgets in each box, plus 2 extra widgets. The total number of widgets is",
+    "target": " 14",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rn_gen_0026",
+    "prompt": "Sofia is 38 years old. Ben is 15 years younger than Sofia. Ben is",
+    "target": " 23",
+    "type": "reasoning_numerical",
+    "tokens_approx": 18,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rn_gen_0027",
+    "prompt": "James has 24 cookies and wants to split them equally among 2 friends. Each friend gets",
+    "target": " 12",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rn_gen_0028",
+    "prompt": "Eli has 7 stones. Sofia has 9 more than Eli. Hank has 3 fewer than Sofia. How many does Hank have? Answer:",
+    "target": " 13",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 4
+    }
+  },
+  {
+    "id": "rn_gen_0029",
+    "prompt": "Kai started with 17 toys. On Monday Kai got 4 more, on Tuesday got 4 more, and on Wednesday got 5 more. How many toys does Kai have in total? Answer:",
+    "target": " 30",
+    "type": "reasoning_numerical",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 5
+    }
+  },
+  {
+    "id": "rn_gen_0030",
+    "prompt": "A box had 32 markers. Nora removed 2 of them. The remaining markers were divided equally into 6 bags. How many markers were placed in each bag? Answer:",
+    "target": " 5",
+    "type": "reasoning_numerical",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 6
+    }
+  },
+  {
+    "id": "rn_gen_0031",
+    "prompt": "Jasper had 20 beads. Then Jasper bought 2 more and gave 4 to Jack. If 4 people each have that same final number of beads, how many beads do they have altogether? Answer:",
+    "target": " 72",
+    "type": "reasoning_numerical",
+    "tokens_approx": 42,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 7
+    }
+  },
+  {
+    "id": "rn_gen_0032",
+    "prompt": "Jack had 27 beads. Jack gave 21 to Alice and then found 1 more. How many beads does Jack have now? Answer:",
+    "target": " 7",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rn_gen_0033",
+    "prompt": "There are 2 boxes with 8 vouchers in each box, plus 2 extra vouchers. The total number of vouchers is",
+    "target": " 18",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rn_gen_0034",
+    "prompt": "Dave is 32 years old. Thomas is 12 years younger than Dave. Thomas is",
+    "target": " 20",
+    "type": "reasoning_numerical",
+    "tokens_approx": 18,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rn_gen_0035",
+    "prompt": "Ivy has 30 bracelets and wants to split them equally among 6 friends. Each friend gets",
+    "target": " 5",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rn_gen_0036",
+    "prompt": "Jasper has 18 stickers. Sadie has 4 more than Jasper. Naomi has 2 fewer than Sadie. How many does Naomi have? Answer:",
+    "target": " 20",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 4
+    }
+  },
+  {
+    "id": "rn_gen_0037",
+    "prompt": "Owen started with 5 marbles. On Monday Owen got 2 more, on Tuesday got 1 more, and on Wednesday got 7 more. How many marbles does Owen have in total? Answer:",
+    "target": " 15",
+    "type": "reasoning_numerical",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 5
+    }
+  },
+  {
+    "id": "rn_gen_0038",
+    "prompt": "A box had 17 cookies. Maya removed 8 of them. The remaining cookies were divided equally into 3 bags. How many cookies were placed in each bag? Answer:",
+    "target": " 3",
+    "type": "reasoning_numerical",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 6
+    }
+  },
+  {
+    "id": "rn_gen_0039",
+    "prompt": "Felix had 18 carrots. Then Felix bought 9 more and gave 4 to Owen. If 2 people each have that same final number of carrots, how many carrots do they have altogether? Answer:",
+    "target": " 46",
+    "type": "reasoning_numerical",
+    "tokens_approx": 42,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 7
+    }
+  }
+]

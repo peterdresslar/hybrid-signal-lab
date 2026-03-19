@@ -1,0 +1,12 @@
+group,n_models,best_mean_rank_model,best_mean_rank,worst_mean_rank_model,worst_mean_rank,mean_rank_span,best_rank1_model,best_rank1_pct,worst_rank1_model,worst_rank1_pct,rank1_pct_span
+factual_retrieval,4,Qwen/Qwen3.5-35B-A3B,87.4,Qwen/Qwen3.5-2B-Base,821.98,734.58,Qwen/Qwen3.5-35B-A3B,15.0,Qwen/Qwen3.5-2B-Base,7.5,7.5
+factual_recall,4,Qwen/Qwen3.5-35B-A3B,428.39,Qwen/Qwen3.5-2B-Base,1136.14,707.75,allenai/Olmo-Hybrid-7B,18.75,Qwen/Qwen3.5-2B-Base,12.5,6.25
+long_range_retrieval,4,allenai/Olmo-Hybrid-7B,9.23,Qwen/Qwen3.5-9B-Base,370.53,361.3,Qwen/Qwen3.5-35B-A3B,90.0,allenai/Olmo-Hybrid-7B,63.33,26.67
+syntactic_pattern,4,Qwen/Qwen3.5-2B-Base,1053.2,Qwen/Qwen3.5-9B-Base,1378.24,325.04,Qwen/Qwen3.5-2B-Base,16.0,Qwen/Qwen3.5-35B-A3B,12.0,4.0
+algorithmic,4,Qwen/Qwen3.5-9B-Base,4.53,allenai/Olmo-Hybrid-7B,201.43,196.9,allenai/Olmo-Hybrid-7B,66.67,Qwen/Qwen3.5-2B-Base,20.0,46.67
+domain_knowledge,4,Qwen/Qwen3.5-35B-A3B,95.47,allenai/Olmo-Hybrid-7B,290.88,195.42,Qwen/Qwen3.5-35B-A3B,46.67,Qwen/Qwen3.5-2B-Base,33.33,13.33
+structural_copying,4,Qwen/Qwen3.5-35B-A3B,13.2,allenai/Olmo-Hybrid-7B,59.24,46.04,Qwen/Qwen3.5-35B-A3B,16.33,Qwen/Qwen3.5-2B-Base,6.12,10.2
+reasoning_numerical,4,allenai/Olmo-Hybrid-7B,1.07,Qwen/Qwen3.5-2B-Base,10.38,9.3,allenai/Olmo-Hybrid-7B,92.5,Qwen/Qwen3.5-2B-Base,25.0,67.5
+reasoning_tracking,4,Qwen/Qwen3.5-9B-Base,2.17,Qwen/Qwen3.5-2B-Base,7.47,5.3,Qwen/Qwen3.5-9B-Base,55.0,Qwen/Qwen3.5-2B-Base,27.5,27.5
+cultural_memorized,4,Qwen/Qwen3.5-9B-Base,1.68,Qwen/Qwen3.5-2B-Base,5.56,3.88,Qwen/Qwen3.5-35B-A3B,84.0,Qwen/Qwen3.5-2B-Base,76.0,8.0
+code_comprehension,4,allenai/Olmo-Hybrid-7B,1.27,Qwen/Qwen3.5-9B-Base,3.73,2.47,allenai/Olmo-Hybrid-7B,73.33,Qwen/Qwen3.5-2B-Base,0.0,73.33

@@ -1,0 +1,5 @@
+file,label,row_count,model,models_json,render_versions_json,adapters_json,path
+c2B.jsonl,c2B,434,Qwen/Qwen3.5-2B-Base,"[""Qwen/Qwen3.5-2B-Base""]","[""prompt_render_v3_identity_default""]","[""identity""]",/Users/peterdresslar/Workspace/cas-capstone-dresslar/battery/data/battery_3/c2B.jsonl
+c35B.jsonl,c35B,434,Qwen/Qwen3.5-35B-A3B,"[""Qwen/Qwen3.5-35B-A3B""]","[""prompt_render_v3_identity_default""]","[""identity""]",/Users/peterdresslar/Workspace/cas-capstone-dresslar/battery/data/battery_3/c35B.jsonl
+c9B.jsonl,c9B,434,Qwen/Qwen3.5-9B-Base,"[""Qwen/Qwen3.5-9B-Base""]","[""prompt_render_v3_identity_default""]","[""identity""]",/Users/peterdresslar/Workspace/cas-capstone-dresslar/battery/data/battery_3/c9B.jsonl
+cO.jsonl,cO,434,allenai/Olmo-Hybrid-7B,"[""allenai/Olmo-Hybrid-7B""]","[""prompt_render_v3_identity_default""]","[""identity""]",/Users/peterdresslar/Workspace/cas-capstone-dresslar/battery/data/battery_3/cO.jsonl

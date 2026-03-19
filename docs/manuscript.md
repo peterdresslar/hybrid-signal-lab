@@ -67,9 +67,7 @@ This part of the project is actively under planning and development.
 
 It is our attention to pursue intervention signal generation through the use of multiple LLM instances operating in a collective fashion. We call this group a colony, a name chosen with specific intent.
 
-Note that an intervention, at this time, appears most likely to be (in the simplest available realization) the selective application of a gain vector appropriate to a condition or perturbation the colony is undegoing.
-
-
+Note that an intervention, at this time, appears most likely to be (in the simplest available realization) the selective application of a gain vector appropriate to a condition or perturbation the colony is undergoing.
 
 
 ### Technical Notes
