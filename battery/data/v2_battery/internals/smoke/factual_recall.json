@@ -1,0 +1,14 @@
+[
+  {
+    "prompt": "Fan Death was started in",
+    "target": " Brooklyn",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Fan Death"
+    },
+    "id": "fr_counterfact_0000"
+  }
+]

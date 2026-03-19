@@ -1394,8 +1394,8 @@ def generate_domain_knowledge(n: int = 60, seed: int = 51) -> list[dict]:
         return normalized
 
     # JSON-backed domain items live in:
-    #   bench/battery/data/sources/wikipedia_domain_items.json
-    #   bench/battery/data/sources/long_domain_items.json
+    #   battery/data/sources/wikipedia_domain_items.json
+    #   battery/data/sources/long_domain_items.json
     all_items = (
         [_normalize_domain_item(item, "curated_domain") for item in domain_items]
         + [_normalize_domain_item(item, "gen-wikipedia-random") for item in wikipedia_items]

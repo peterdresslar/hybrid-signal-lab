@@ -1,0 +1,602 @@
+[
+  {
+    "prompt": "In the context of mid-20th-century Australian political history, the transition from the long-serving government of Sir Robert Menzies to his successor's administration was a pivotal moment for the Liberal Party and for the nation. Menzies had served as Prime Minister for an unbroken stretch of over sixteen years, from December 1949 to January 1966, making his the longest continuous premiership in Australian history \u2014 a record that still stands. Under Menzies, Australia had committed troops to the Korean War and the Malayan Emergency, joined the SEATO and ANZUS alliances, and begun to move away from the White Australia policy, though that process would take decades to complete. When Menzies retired on 26 January 1966 at the age of 71, the leadership of the Liberal Party passed to a figure who had served loyally as Treasurer and Deputy Leader. This successor had been born in Sydney in 1908, educated at Melbourne Grammar School and the University of Melbourne, where he studied law, and had practiced as a solicitor before entering federal politics. He was widely regarded as a modernizer who would bring a more youthful and energetic style to the office, and he quickly proved popular with the electorate. His government's first ministry, designated the 41st ministry of the Government of Australia, retained many of the key figures from the Menzies era while making some notable changes in portfolio assignments. This initial ministry lasted until the 1966 federal election in November, which the government won in a landslide partly driven by public support for Australia's commitment of combat troops to Vietnam. A reshuffled second ministry was sworn in on 14 December 1966. Tragically, this Prime Minister would disappear while swimming at Cheviot Beach in Victoria on 17 December 1967, one of the most mysterious events in Australian political history. Despite an extensive search involving military and civilian resources, his body was never found, and he was presumed drowned. The 41st ministry of the Government of Australia, which succeeded the Tenth Menzies ministry in January 1966, was led by Prime Minister",
+    "target": " Harold Holt",
+    "source": "gen-wikipedia-random-long",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random-long_0000",
+    "type": "domain_knowledge",
+    "tokens_approx": 440,
+    "tier": "long"
+  },
+  {
+    "prompt": "The short-lived communist state established in Hungary in 1919, governed by the revolutionary B\u00e9la Kun before its collapse after 133 days, was known as the Hungarian",
+    "target": " Soviet Republic",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0001",
+    "type": "domain_knowledge",
+    "tokens_approx": 33,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The Colombian woman who became one of the most important figures in the country's independence movement, choosing death over submission to Spanish colonial rule, and who is the subject of a major 2010 telenovela, was Policarpa",
+    "target": " Salavarrieta",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0002",
+    "type": "domain_knowledge",
+    "tokens_approx": 46,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The mathematical constant approximately equal to 2.71828, which is the base of the natural logarithm, is known as Euler's",
+    "target": " number",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0003",
+    "type": "domain_knowledge",
+    "tokens_approx": 24,
+    "tier": "short"
+  },
+  {
+    "prompt": "The British mountaineer who disappeared near the summit of Mount Everest in 1924 alongside his climbing partner Andrew Irvine, whose body was not found until 1999, was",
+    "target": " George Mallory",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0004",
+    "type": "domain_knowledge",
+    "tokens_approx": 35,
+    "tier": "brief"
+  },
+  {
+    "prompt": "In the traditional Latin Requiem Mass, the antiphon sung by the choir as the body is being taken out of the church, later set to music by composers such as Faur\u00e9 and Durufl\u00e9, is called",
+    "target": " In paradisum",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0005",
+    "type": "domain_knowledge",
+    "tokens_approx": 45,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The phenomenon in quantum mechanics where measuring one particle instantaneously affects another particle regardless of distance is known as quantum",
+    "target": " entanglement",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0006",
+    "type": "domain_knowledge",
+    "tokens_approx": 26,
+    "tier": "short"
+  },
+  {
+    "prompt": "The ancient Greek philosophical concept that celestial bodies produce inaudible harmonious tones as they move through space, reflecting the mathematical order of the cosmos, is known as the music of the",
+    "target": " spheres",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0007",
+    "type": "domain_knowledge",
+    "tokens_approx": 40,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The ancient trade route connecting China to the Mediterranean, facilitating the exchange of silk, spices, and ideas, was known as the Silk",
+    "target": " Road",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0008",
+    "type": "domain_knowledge",
+    "tokens_approx": 28,
+    "tier": "short"
+  },
+  {
+    "prompt": "The obelisk structure built in the mid-18th century by the Conolly family on their Castletown Estate, located between Celbridge and Maynooth in County Kildare, Ireland, now a national monument, is known as",
+    "target": " Conolly's Folly",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0009",
+    "type": "domain_knowledge",
+    "tokens_approx": 41,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The Taoist temple located in Weaverville, California, still in active use, that holds the distinction of being the oldest Chinese temple in the state, is preserved as the Weaverville",
+    "target": " Joss House",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0010",
+    "type": "domain_knowledge",
+    "tokens_approx": 37,
+    "tier": "brief"
+  },
+  {
+    "prompt": "In neuroscience, the gap between two neurons where neurotransmitters are released to transmit signals is called the synaptic",
+    "target": " cleft",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0011",
+    "type": "domain_knowledge",
+    "tokens_approx": 23,
+    "tier": "short"
+  },
+  {
+    "prompt": "The United States Army warrant officer who intervened to stop the M\u1ef9 Lai massacre on March 16, 1968, alongside Glenn Andreotta and Lawrence Colburn, by landing his helicopter between American troops and Vietnamese civilians, was",
+    "target": " Hugh Thompson",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0012",
+    "type": "domain_knowledge",
+    "tokens_approx": 45,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The California railroad intended to connect San Francisco to Santa Cruz that never completed construction due to the 1906 San Francisco Earthquake, operating as two disconnected segments until 1920, was the",
+    "target": " Ocean Shore Railroad",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0013",
+    "type": "domain_knowledge",
+    "tokens_approx": 40,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The structural design used in many 19th-century American covered bridges, combining a multiple kingpost truss with a reinforcing arch, patented by Theodore Burr in 1817, is known as a",
+    "target": " Burr Truss",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0014",
+    "type": "domain_knowledge",
+    "tokens_approx": 37,
+    "tier": "brief"
+  },
+  {
+    "prompt": "Among the historic churches of the American South, those built of logs represent a vanishing architectural tradition that dates to the earliest years of European settlement in the region. Log construction was the default building technique on the frontier, where sawmills were scarce and milled lumber had to be transported over great distances at considerable expense. Settlers constructed their first churches \u2014 like their homes, barns, and schools \u2014 from logs hewn from the surrounding forests, notching the corners and daubing the gaps with clay or mortar. In Alabama, where the rapid expansion of cotton cultivation in the antebellum period brought waves of settlers who quickly built frame and brick churches as communities prospered, log construction was typically a temporary expedient that gave way to more permanent structures within a generation. As a result, very few log churches survive in the state \u2014 most were demolished, burned, or simply collapsed as their timbers rotted. One notable exception stands in McIntosh, a small community in Washington County in the southwestern part of the state, along the Tombigbee River. The church had its beginning in 1860, when a local resident named John C. Rush and his wife donated land for the construction of a place of worship for the Methodist community. The building was completed before the year ended, just months before the outbreak of the Civil War that would devastate the region. The building was constructed using the saddle-notch technique common to the region, with logs hewn flat on two sides and fitted together without the use of nails \u2014 a method that required considerable skill but produced structures of surprising durability. It was named in honor of James Osgood Andrew, a bishop in the Methodist Episcopal Church, South, who was himself a figure of considerable historical significance: it was the controversy over Andrew's ownership of enslaved people that precipitated the 1844 split of the Methodist Episcopal Church into its Northern and Southern branches, a denominational schism that foreshadowed the larger national division by seventeen years. This historic Methodist log church building in McIntosh, Alabama, named for Bishop James Osgood Andrew, is known as",
+    "target": " Andrews Chapel",
+    "source": "gen-wikipedia-random-long",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random-long_0015",
+    "type": "domain_knowledge",
+    "tokens_approx": 458,
+    "tier": "long"
+  },
+  {
+    "prompt": "In livestock husbandry, an animal that cannot stand on its own and is therefore to be killed is referred to by the industry term",
+    "target": " downer",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0016",
+    "type": "domain_knowledge",
+    "tokens_approx": 31,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The small, rustic horse breed native to the Pyrenees and Ari\u00e9geois mountains of southern France, always black in color and still occasionally referred to by the older name Ari\u00e9geois pony, is the",
+    "target": " M\u00e9rens",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0017",
+    "type": "domain_knowledge",
+    "tokens_approx": 41,
+    "tier": "brief"
+  },
+  {
+    "prompt": "Egypt's sole participant in its only appearance at the Winter Olympic Games, competing in alpine skiing at the 1984 Games in Sarajevo, was",
+    "target": " Jamil El Reedy",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0018",
+    "type": "domain_knowledge",
+    "tokens_approx": 29,
+    "tier": "short"
+  },
+  {
+    "prompt": "The second-largest metropolitan area in Iran, a transportation hub and industrial center extending along the Zayandeh Rud river that is home to steel industries and nuclear facilities, is centered on the city of",
+    "target": " Isfahan",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0019",
+    "type": "domain_knowledge",
+    "tokens_approx": 42,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The building constructed in Munich between 1933 and 1937 for Adolf Hitler's personal use, which unlike many Nazi-era structures still stands and now houses the University of Music and Performing Arts Munich, is known as the",
+    "target": " F\u00fchrerbau",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0020",
+    "type": "domain_knowledge",
+    "tokens_approx": 46,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The influential monthly German-language magazine that served as a major platform for Jewish intellectual discourse from 1916 to 1928, co-founded by the philosopher Martin Buber and publisher Salman Schocken, was titled",
+    "target": " Der Jude",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0021",
+    "type": "domain_knowledge",
+    "tokens_approx": 40,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The 1793 Gothic novel by Eliza Parsons that is listed among the seven 'horrid novels' recommended by Isabella Thorpe in Jane Austen's Northanger Abbey, predating both Radcliffe's Udolpho and Lewis's The Monk, is titled The Castle of",
+    "target": " Wolfenbach",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0022",
+    "type": "domain_knowledge",
+    "tokens_approx": 48,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The marine echinoderms of the order Ophiurida, characterized by their long flexible arms radiating from a central disc, are commonly known as",
+    "target": " brittle stars",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0023",
+    "type": "domain_knowledge",
+    "tokens_approx": 28,
+    "tier": "short"
+  },
+  {
+    "prompt": "The road network of the state of Iowa follows a grid-like pattern that reflects the rectangular survey system used to divide the Midwest into townships and sections in the 19th century, a system established by the Land Ordinance of 1785 and visible from the air as the patchwork of square-mile fields that characterizes the region's landscape. State highways in Iowa are numbered and maintained by the Iowa Department of Transportation, and they serve as critical arterial links between the small towns and farming communities that dot the landscape of one of America's most productive agricultural regions \u2014 a state that leads the nation in corn and hog production and ranks near the top in soybeans, eggs, and ethanol. In the southeastern corner of the state, where the terrain is hillier and more wooded than the flat prairies to the north and west, one particular state highway runs from west to east across a landscape of rolling hills, corn and soybean fields, and small river valleys carved by tributaries of the Des Moines and Mississippi Rivers. The highway has a total length of approximately 65 miles, connecting a series of small communities \u2014 none with a population exceeding a few thousand \u2014 between two major federal highways. Its western terminus is at an intersection with U.S. Highway 34, a transcontinental route, in the area between the communities of Agency and Batavia in Jefferson County. From there, the road winds eastward through the counties of southeastern Iowa, passing through or near several small towns whose economies are tied to agriculture and, in some cases, to the institutional presence of a state prison or community college. The region through which the highway passes was originally inhabited by the Meskwaki (Fox) and Sauk peoples, and the Meskwaki Settlement near Tama, Iowa \u2014 one of the few Native American communities in the country established by tribal purchase rather than federal reservation \u2014 lies to the north. Its eastern terminus is at the community of Wever, in Lee County, where it meets U.S. Highway 61, the major north-south route that runs along the Mississippi River from New Orleans to the Canadian border. This state highway running approximately 65 miles through southeastern Iowa, from US-34 to US-61 at Wever, is designated Iowa Highway",
+    "target": " 16",
+    "source": "gen-wikipedia-random-long",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random-long_0024",
+    "type": "domain_knowledge",
+    "tokens_approx": 488,
+    "tier": "long"
+  },
+  {
+    "prompt": "The prominent geological formation extending from New York through Ontario to Wisconsin, along whose western end the Wisconsin Ledge wine-growing region was established in 2012, is called the Niagara",
+    "target": " Escarpment",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0025",
+    "type": "domain_knowledge",
+    "tokens_approx": 37,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The Royal Air Force has produced a number of senior officers whose careers spanned the full arc of 20th-century British military history, from the interwar period through the Second World War and into the Cold War era of decolonization and limited conflicts. These officers often served in multiple theaters and held commands that reflected Britain's shrinking but still substantial global military commitments. One such officer, born in New Zealand in 1906, traveled to Britain as a young man and joined the Royal Air Force during the interwar period, when the RAF was still establishing itself as an independent service branch. He rose to the rank of squadron commander during the Second World War, gaining operational experience in both European and Mediterranean theaters that would inform his later command decisions. In the postwar years, he ascended to senior leadership positions within the RAF and the broader British military establishment, reflecting the continued prominence of Commonwealth-born officers in the British armed forces. His most consequential command came during the Suez Crisis of 1956, when he served as the British air commander for the Anglo-French military intervention in Egypt \u2014 Operation Musketeer, an operation that, while militarily successful in its immediate objectives of seizing the Canal Zone, became a political catastrophe that marked the definitive end of British and French imperial pretensions in the Middle East and led to the resignation of Prime Minister Anthony Eden. Following the Suez debacle, he went on to serve as Air Officer Commanding-in-Chief of Transport Command, responsible for the RAF's global airlift capability at a time when Britain was withdrawing from bases east of Suez, and subsequently as Commander of British Forces Cyprus during a period of significant intercommunal tension on the island. He eventually rose to the rank of Air Chief Marshal. This New Zealand-born RAF Air Chief Marshal, who commanded British air forces during the Suez War, was Sir Denis Hensley Fulton",
+    "target": " Barnett",
+    "source": "gen-wikipedia-random-long",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random-long_0026",
+    "type": "domain_knowledge",
+    "tokens_approx": 412,
+    "tier": "long"
+  },
+  {
+    "prompt": "In music theory, a chord consisting of a root, major third, and perfect fifth is called a major",
+    "target": " triad",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0027",
+    "type": "domain_knowledge",
+    "tokens_approx": 23,
+    "tier": "short"
+  },
+  {
+    "prompt": "In linguistics, the umlaut diacritic indicates a historical sound shift in which former back vowels came to be pronounced as",
+    "target": " front vowels",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0028",
+    "type": "domain_knowledge",
+    "tokens_approx": 26,
+    "tier": "short"
+  },
+  {
+    "prompt": "The French composer who served as cantor in Geneva under John Calvin and is best known for creating the melody now universally associated with the Doxology hymn 'Praise God, from Whom All Blessings Flow' was",
+    "target": " Louis Bourgeois",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0029",
+    "type": "domain_knowledge",
+    "tokens_approx": 45,
+    "tier": "brief"
+  },
+  {
+    "prompt": "In the annals of 20th-century American publishing, few books have had as immediate and lasting an impact on the public understanding of war as the memoir published in 1977 by a young Marine lieutenant who had been among the first American combat troops to land in Vietnam in March 1965. The author, a Chicago-born journalist who had studied English literature at Loyola University before enlisting in the Marine Corps, served as an infantry officer in the 9th Marine Expeditionary Brigade \u2014 one of the first major American ground combat units deployed to Southeast Asia \u2014 and later as a staff officer tasked with tracking enemy casualties \u2014 a role that exposed him to the bureaucratic machinery of body counts that defined American strategy in the conflict. His memoir broke sharply from the sanitized accounts that had dominated earlier war literature; it described with unflinching honesty the boredom, terror, moral confusion, and occasional exhilaration of combat in the jungles and rice paddies of Quang Tri province. The book's central tension lies in the author's realization that the idealism with which he enlisted \u2014 shaped by the rhetoric of Kennedy's inauguration and the muscular confidence of postwar America \u2014 was systematically destroyed by the realities of a war fought without clear objectives, territorial gains, or meaningful benchmarks of progress. He wrote with particular power about the way that combat transformed young men, stripping away their moral certainties and replacing them with a primal focus on survival that could, under pressure, shade into atrocity. After returning from Vietnam, the author joined the Chicago Tribune and later won a Pulitzer Prize as part of a team investigating voter fraud in Chicago, before returning to Vietnam to cover the fall of Saigon in 1975. He went on to write numerous novels, nonfiction works, and additional memoirs over a career spanning five decades, but his reputation rests primarily on that first searing account of his sixteen months in country. The author of this landmark Vietnam War memoir, titled A Rumor of War, is",
+    "target": " Philip Caputo",
+    "source": "gen-wikipedia-random-long",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random-long_0030",
+    "type": "domain_knowledge",
+    "tokens_approx": 438,
+    "tier": "long"
+  },
+  {
+    "prompt": "The endangered variety of the Spanish language descended from 18th-century colonists who established Los Adaes and Nacogdoches, still spoken by a few communities along the border between Texas and Louisiana, is known as",
+    "target": " Sabine River Spanish",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0031",
+    "type": "domain_knowledge",
+    "tokens_approx": 42,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The largest island of the Seychelles, containing the capital city of Victoria and accommodating 86 percent of the country's population, named after a French governor of Isle de France, is",
+    "target": " Mah\u00e9",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0032",
+    "type": "domain_knowledge",
+    "tokens_approx": 39,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The annual September festival of the Wolayta people of southern Ethiopia, whose name means 'the beginning' and marks the New Year as a bridge from old to new and dark to light, is called",
+    "target": " Gifaataa",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0033",
+    "type": "domain_knowledge",
+    "tokens_approx": 44,
+    "tier": "brief"
+  },
+  {
+    "prompt": "Poland's postwar political landscape under communist rule was defined by a series of power struggles within the Polish United Workers' Party (Polska Zjednoczona Partia Robotnicza, or PZPR), which governed the country as a one-party state from its formation in 1948 through the merger of the Polish Workers' Party and the Polish Socialist Party until the democratic transition of 1989. The PZPR's internal politics were shaped by factional rivalries between 'Muscovites' who had spent the war years in the Soviet Union, 'partisans' who had fought in the domestic resistance, and various reformist and hardline tendencies. Among the most important of these internal dynamics was the relationship between the party's First Secretary \u2014 the de facto leader of the Polish state \u2014 and his closest political allies. During the era of W\u0142adys\u0142aw Gomu\u0142ka's leadership, which lasted from the Polish October of 1956 to his fall in December 1970, one figure stood out as the leader's most trusted lieutenant and ideological enforcer. Born in the industrial city of \u0141\u00f3d\u017a in 1908, this politician had been involved in the communist movement since before the war and had fought in the underground resistance during the German occupation. After the war, he rose rapidly through the party hierarchy, and when Gomu\u0142ka returned to power during the political upheaval of October 1956 \u2014 riding a wave of popular anger over Stalinist repression \u2014 he became the First Secretary's indispensable right-hand man. He wielded enormous influence over the party's internal discipline, ideological line, personnel appointments, and cultural policy. He was widely considered the second most powerful person in Poland during the Gomu\u0142ka years. His role in the events of March 1968 \u2014 when student protests in Warsaw were met with a brutal crackdown and an antisemitic campaign that drove thousands of Polish Jews to emigrate \u2014 remains a subject of historical debate, with some scholars attributing the antisemitic dimension primarily to the rival 'Partisan' faction of Mieczys\u0142aw Moczar rather than to Gomu\u0142ka's inner circle. His influence waned abruptly with Gomu\u0142ka's fall from power in December 1970, following the violent suppression of Baltic coast workers' protests. He died in Warsaw in 1989. This Polish communist politician, considered the right-hand man of Gomu\u0142ka, was",
+    "target": " Zenon Kliszko",
+    "source": "gen-wikipedia-random-long",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random-long_0034",
+    "type": "domain_knowledge",
+    "tokens_approx": 473,
+    "tier": "long"
+  },
+  {
+    "prompt": "The Swedish diplomat nicknamed 'Svarta nejlikan' who rescued hundreds of Norwegian Jews during World War II and later helped over 1,200 Chileans escape Pinochet's dictatorship, earning the title 'the Raoul Wallenberg of the 1970s,' was",
+    "target": " Harald Edelstam",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0035",
+    "type": "domain_knowledge",
+    "tokens_approx": 45,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The history of American entomology in the 19th century is populated by remarkable figures who combined scientific rigor with the practical demands of other professions, conducting their research in the margins of lives devoted to teaching, medicine, or public service. One such figure was born in 1826 and spent most of his professional life in Waterbury, Connecticut, where he served as the librarian of the Silas Bronson Library \u2014 a position he held for decades and which gave him access to the scientific literature he needed to pursue his true passion: the study of gall wasps. The Silas Bronson Library, endowed by a local philanthropist and opened in 1869, was one of the finest public libraries in Connecticut, and its librarian was expected to be a man of broad learning. Gall wasps, members of the family Cynipidae within the order Hymenoptera, are tiny insects \u2014 often only a few millimeters long \u2014 that induce the formation of abnormal growths called galls on the tissues of host plants, particularly oaks. The mechanism by which the wasp hijacks the plant's own growth processes to create these elaborate structures remains a subject of active research even today. Each species of gall wasp produces a characteristic gall structure, and the diversity of gall forms \u2014 some spherical, some spiny, some resembling tiny apples or bullets \u2014 provided a rich field of study for 19th-century naturalists who could collect and classify them without specialized equipment. This Connecticut librarian-entomologist became one of the foremost authorities on North American cynipid wasps, describing numerous new species and publishing extensively in journals such as the Canadian Entomologist and the Proceedings of the Entomological Society of Washington. His meticulous descriptions and careful observations laid the groundwork for later systematic work on the group, including the monumental studies of Alfred Kinsey, who studied gall wasps before turning his attention to human sexual behavior. This American hymenopterist and librarian, who specialized in cynipid gall wasps while serving the Silas Bronson Library in Waterbury, was",
+    "target": " Homer Franklin Bassett",
+    "source": "gen-wikipedia-random-long",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random-long_0036",
+    "type": "domain_knowledge",
+    "tokens_approx": 431,
+    "tier": "long"
+  },
+  {
+    "prompt": "In computer science, the data structure that follows the Last-In-First-Out principle is called a",
+    "target": " stack",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0037",
+    "type": "domain_knowledge",
+    "tokens_approx": 18,
+    "tier": "short"
+  },
+  {
+    "prompt": "The American frontiersman Daniel Boone was born on November 2, 1734, in Oley Township in what is now Berks County,",
+    "target": " Pennsylvania",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0038",
+    "type": "domain_knowledge",
+    "tokens_approx": 26,
+    "tier": "short"
+  },
+  {
+    "prompt": "In the medieval military hierarchy, a knight who led a company of troops under his own banner, ranking above a Knight Bachelor but below an earl, was known as a knight",
+    "target": " banneret",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0039",
+    "type": "domain_knowledge",
+    "tokens_approx": 40,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The American analytic philosopher who held the Edgar Pierce Chair at Harvard and attacked the distinction between analytic and synthetic statements in his 1951 paper 'Two Dogmas of Empiricism' was Willard Van Orman",
+    "target": " Quine",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0040",
+    "type": "domain_knowledge",
+    "tokens_approx": 42,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The American author who wrote the 1969 novel The Godfather and co-adapted it into a film trilogy with Francis Ford Coppola, winning Academy Awards for Best Adapted Screenplay for the first two films, was",
+    "target": " Mario Puzo",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0041",
+    "type": "domain_knowledge",
+    "tokens_approx": 44,
+    "tier": "brief"
+  },
+  {
+    "prompt": "In semiconductor research, a solaristor is a compact two-terminal device that combines a transistor with a solar cell, achieving current modulation through a memresistive effect. It is classified as a self-powered",
+    "target": " phototransistor",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0042",
+    "type": "domain_knowledge",
+    "tokens_approx": 40,
+    "tier": "brief"
+  },
+  {
+    "prompt": "In the history of American land ownership and railroad development in Southern California, one figure stands out for his singular determination to maintain private control over a vast stretch of coastline. Frederick Hastings Rindge, born in 1857 in Cambridge, Massachusetts, made his fortune in the hardware business before moving to Southern California and acquiring a 13,000-acre ranch that encompassed nearly all of what is today the city of Malibu. The property stretched for miles along the Pacific coast, bounded by the Santa Monica Mountains to the north and the ocean to the south. For years, Rindge fought legal battles to keep trespassers, settlers, and most importantly the Southern Pacific Company off his land. The Southern Pacific sought to use the power of eminent domain to extend its coastal rail line through Rindge's property, which would have opened the isolated coastline to development. Rather than submit, Rindge conceived an audacious plan: he would build his own standard-gauge railroad along the coast, thereby preempting the Southern Pacific's claim by establishing an existing rail corridor. Construction began in 1905, the year of Rindge's death at age 48, and was continued by his widow May Knight Rindge, who became one of the wealthiest women in the state and proved equally determined to preserve the family's coastal empire. The railroad ultimately extended 15 miles along the coast, with tracks, bridges, and tunnels carved into the rugged Santa Monica Mountains. Engineers constructed concrete bridges over deep canyons and blasted tunnels through headlands that jutted into the sea. Despite its engineering ambition, the line never connected to any external rail network, never carried paying passengers, and was used primarily to haul supplies and livestock for the ranch. Storms, landslides, and the relentless corrosion of salt air gradually degraded the infrastructure, while the enormous legal costs of fighting condemnation proceedings gradually bankrupted the Rindge estate. By the 1920s, the State of California had won its own eminent domain case, and Roosevelt Highway \u2014 now Pacific Coast Highway \u2014 was built over and alongside much of the former rail bed, rendering the railroad obsolete. Today almost no trace of the railroad remains, though occasional concrete footings and tunnel portals can be spotted along the Malibu coast by hikers who know where to look. This short-lived, privately-built standard-gauge railroad, constructed entirely within the Rindge ranch to prevent Southern Pacific encroachment, was formally incorporated as the Hueneme, Malibu and Port Los Angeles",
+    "target": " Railway",
+    "source": "gen-wikipedia-random-long",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random-long_0043",
+    "type": "domain_knowledge",
+    "tokens_approx": 521,
+    "tier": "extended"
+  },
+  {
+    "prompt": "The public research university in Berlin founded in 1810 by the Prussian educational reformer and linguist who articulated the ideal of uniting teaching and research is named after Wilhelm von",
+    "target": " Humboldt",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0044",
+    "type": "domain_knowledge",
+    "tokens_approx": 39,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The American jazz tenor saxophonist who won 15 Grammy Awards, appeared on more than 900 albums as both leader and sideman, and was inducted into the DownBeat Hall of Fame in 2007, was",
+    "target": " Michael Brecker",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0045",
+    "type": "domain_knowledge",
+    "tokens_approx": 42,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The architectural style characterized by pointed arches, ribbed vaults, and flying buttresses that dominated medieval Europe is called",
+    "target": " Gothic",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0046",
+    "type": "domain_knowledge",
+    "tokens_approx": 23,
+    "tier": "short"
+  },
+  {
+    "prompt": "Eutrephoceras, an extinct genus of nautilus that lived from the Late Jurassic to the Miocene, is characterized by a highly rounded shell with slightly sinuous suture patterns, described in paleontology as an",
+    "target": " involute",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0047",
+    "type": "domain_knowledge",
+    "tokens_approx": 41,
+    "tier": "brief"
+  },
+  {
+    "prompt": "China's national college entrance examination, known as the gaokao, is one of the most consequential standardized tests in the world. Each year, approximately ten million students sit for the exam over two or three days in early June, and their scores largely determine which universities they may attend \u2014 a decision that in Chinese society carries enormous implications for career prospects, social mobility, and family honor. However, the system is not uniform across the country. Each province and municipality sets its own exam papers, its own scoring criteria, and \u2014 critically \u2014 its own admission quotas for elite universities. Because top institutions like Peking University and Tsinghua University allocate a disproportionate number of seats to students registered in Beijing and a few other favored regions, a student in a densely populated rural province like Henan or Shandong faces far stiffer competition for the same university slot than a student with Beijing household registration. The numbers are stark: acceptance rates at elite universities for Beijing-registered students can be several times higher than those for students from provinces with larger populations and fewer allocated seats. This structural inequality has given rise to a widespread and controversial practice in which families relocate \u2014 or fraudulently alter their household registration documents, known as hukou \u2014 to take advantage of regions with more favorable admission rates. Some families genuinely move to a target province, purchase property, re-register their household, and enroll their children in local schools, which is legal but expensive and disruptive. Others engage in outright document fraud, purchasing fake hukou transfers or bribing local officials to alter registration records without any actual change in residence. Still others exploit loopholes by registering children with relatives in favored provinces or establishing shell businesses that qualify them for local residency. The Chinese government has periodically cracked down on the practice, imposing minimum residency requirements, cross-referencing school enrollment records with household databases, and prosecuting officials who facilitate fraudulent transfers. Nevertheless, the incentive structure remains extraordinarily powerful, and investigative journalists continue to uncover large-scale schemes, particularly in provinces bordering Beijing and Shanghai. This phenomenon of families strategically relocating or altering their registered residency to exploit regional disparities in the college entrance examination system is referred to in Chinese education policy as gaokao",
+    "target": " migration",
+    "source": "gen-wikipedia-random-long",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random-long_0048",
+    "type": "domain_knowledge",
+    "tokens_approx": 486,
+    "tier": "long"
+  },
+  {
+    "prompt": "In military ordnance, the type of fuse consisting of a long probe affixed to a bomb's nose that detonates an aerial bomb at or above ground level to maximize surface blast damage is called a",
+    "target": " daisy cutter",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0049",
+    "type": "domain_knowledge",
+    "tokens_approx": 45,
+    "tier": "brief"
+  },
+  {
+    "prompt": "In machine learning, the technique of randomly dropping neurons during training to prevent overfitting is called",
+    "target": " dropout",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0050",
+    "type": "domain_knowledge",
+    "tokens_approx": 20,
+    "tier": "short"
+  },
+  {
+    "prompt": "In thermodynamics, the law stating that entropy of an isolated system always increases is the second law of",
+    "target": " thermodynamics",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0051",
+    "type": "domain_knowledge",
+    "tokens_approx": 23,
+    "tier": "short"
+  },
+  {
+    "prompt": "The form of political protest that uses humour, carnival, and whimsical antics as a strategy of peaceful non-compliance, gaining currency in the 1990s anti-globalization movement, is known as",
+    "target": " tactical frivolity",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0052",
+    "type": "domain_knowledge",
+    "tokens_approx": 36,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The largest family of bats, whose Latin name Vespertilionidae derives from the word for 'evening' and includes over 400 species worldwide, is commonly known as the",
+    "target": " vesper bats",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0053",
+    "type": "domain_knowledge",
+    "tokens_approx": 33,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The traditional Nordic mesophilic fermented milk product, particularly popular in Finland, that is similar to yoghurt but has a distinctive malleable or 'long' texture when left unmixed, is called",
+    "target": " viili",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0054",
+    "type": "domain_knowledge",
+    "tokens_approx": 37,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The brief 1827 conflict in what is now Wisconsin, triggered when Ho-Chunk people reacted to lead miners trespassing on their lands and to false rumors about the execution of tribal prisoners, is known as the",
+    "target": " Winnebago War",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0055",
+    "type": "domain_knowledge",
+    "tokens_approx": 45,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The white brimless felt skull cap traditionally worn by Albanians as part of their national costume, whose height and shape varies by region, is known as a",
+    "target": " qeleshe",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0056",
+    "type": "domain_knowledge",
+    "tokens_approx": 35,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The deepest known point in Earth's oceans, located in the western Pacific, is called the Mariana",
+    "target": " Trench",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0057",
+    "type": "domain_knowledge",
+    "tokens_approx": 20,
+    "tier": "short"
+  },
+  {
+    "prompt": "In genetics, the molecule that carries amino acids to the ribosome during protein synthesis is transfer",
+    "target": " RNA",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0058",
+    "type": "domain_knowledge",
+    "tokens_approx": 20,
+    "tier": "short"
+  },
+  {
+    "prompt": "In sleep science, brief sub-second interruptions of sleep characterized by partial cortical activation without full consciousness, detectable through EEG as short bursts of brain activity, are called",
+    "target": " microarousals",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0059",
+    "type": "domain_knowledge",
+    "tokens_approx": 35,
+    "tier": "brief"
+  }
+]

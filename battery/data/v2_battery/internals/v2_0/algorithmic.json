@@ -1,0 +1,392 @@
+[
+  {
+    "prompt": "82 + 15 =",
+    "target": " 97",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "+",
+      "a": 82,
+      "b": 15
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0000"
+  },
+  {
+    "prompt": "95 + 36 =",
+    "target": " 131",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "+",
+      "a": 95,
+      "b": 36
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0001"
+  },
+  {
+    "prompt": "4 * 18 =",
+    "target": " 72",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "*",
+      "a": 4,
+      "b": 18
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0002"
+  },
+  {
+    "prompt": "12 - 76 =",
+    "target": " -64",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "-",
+      "a": 12,
+      "b": 76
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0003"
+  },
+  {
+    "prompt": "5 + 4 =",
+    "target": " 9",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "+",
+      "a": 5,
+      "b": 4
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0004"
+  },
+  {
+    "prompt": "20 * 1 =",
+    "target": " 20",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "*",
+      "a": 20,
+      "b": 1
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0005"
+  },
+  {
+    "prompt": "18 * 14 =",
+    "target": " 252",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "*",
+      "a": 18,
+      "b": 14
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0006"
+  },
+  {
+    "prompt": "9 * 1 =",
+    "target": " 9",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "*",
+      "a": 9,
+      "b": 1
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0007"
+  },
+  {
+    "prompt": "14 * 11 =",
+    "target": " 154",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "*",
+      "a": 14,
+      "b": 11
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0008"
+  },
+  {
+    "prompt": "36 + 20 =",
+    "target": " 56",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "+",
+      "a": 36,
+      "b": 20
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0009"
+  },
+  {
+    "prompt": "How many times does \"to\" appear in: \"to to old fast old warm to lazy hard\"? Answer:",
+    "target": " 3",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "to",
+      "count": 3
+    },
+    "tokens_approx": 22,
+    "tier": "short",
+    "id": "alg_gen_counting_0010"
+  },
+  {
+    "prompt": "How many times does \"the\" appear in: \"dark the lazy the fast cold the warm slow fast old warm quick soft the small\"? Answer:",
+    "target": " 4",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "the",
+      "count": 4
+    },
+    "tokens_approx": 31,
+    "tier": "brief",
+    "id": "alg_gen_counting_0011"
+  },
+  {
+    "prompt": "How many times does \"the\" appear in: \"fast quick the fast small new lazy bright cold the fast old red old old quick cold lazy soft slow\"? Answer:",
+    "target": " 2",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "the",
+      "count": 2
+    },
+    "tokens_approx": 36,
+    "tier": "brief",
+    "id": "alg_gen_counting_0012"
+  },
+  {
+    "prompt": "How many times does \"and\" appear in: \"dark soft quick red bright and new lazy slow cold soft dark quick cold old fast hard\"? Answer:",
+    "target": " 1",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "and",
+      "count": 1
+    },
+    "tokens_approx": 32,
+    "tier": "brief",
+    "id": "alg_gen_counting_0013"
+  },
+  {
+    "prompt": "How many times does \"to\" appear in: \"to hard old new lazy small quick slow warm slow soft\"? Answer:",
+    "target": " 1",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "to",
+      "count": 1
+    },
+    "tokens_approx": 24,
+    "tier": "short",
+    "id": "alg_gen_counting_0014"
+  },
+  {
+    "prompt": "How many times does \"is\" appear in: \"slow slow cold bright red lazy red quick soft dark dark lazy is soft warm is new slow\"? Answer:",
+    "target": " 2",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "is",
+      "count": 2
+    },
+    "tokens_approx": 33,
+    "tier": "brief",
+    "id": "alg_gen_counting_0015"
+  },
+  {
+    "prompt": "How many times does \"dog\" appear in: \"small hard dog dog big fast small dog dog red cold red hard\"? Answer:",
+    "target": " 4",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "dog",
+      "count": 4
+    },
+    "tokens_approx": 27,
+    "tier": "short",
+    "id": "alg_gen_counting_0016"
+  },
+  {
+    "prompt": "How many times does \"and\" appear in: \"bright dark and lazy dark fast and big cold and soft small and cold slow dark hard\"? Answer:",
+    "target": " 4",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "and",
+      "count": 4
+    },
+    "tokens_approx": 32,
+    "tier": "brief",
+    "id": "alg_gen_counting_0017"
+  },
+  {
+    "prompt": "How many times does \"is\" appear in: \"bright is big soft is slow is soft lazy\"? Answer:",
+    "target": " 3",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "is",
+      "count": 3
+    },
+    "tokens_approx": 22,
+    "tier": "short",
+    "id": "alg_gen_counting_0018"
+  },
+  {
+    "prompt": "How many times does \"dog\" appear in: \"cold lazy fast dog cold dark warm quick red old hard red dark dog hard slow\"? Answer:",
+    "target": " 2",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "dog",
+      "count": 2
+    },
+    "tokens_approx": 31,
+    "tier": "brief",
+    "id": "alg_gen_counting_0019"
+  },
+  {
+    "prompt": "The last letter of \"elephant\" is",
+    "target": " t",
+    "type": "algorithmic",
+    "source": "gen_last_letter",
+    "metadata": {
+      "task": "last_letter"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "alg_gen_last_letter_0020"
+  },
+  {
+    "prompt": "The last letter of \"mountain\" is",
+    "target": " n",
+    "type": "algorithmic",
+    "source": "gen_last_letter",
+    "metadata": {
+      "task": "last_letter"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "alg_gen_last_letter_0021"
+  },
+  {
+    "prompt": "First letters of Banana, Fig, Mango:",
+    "target": " BFM",
+    "type": "algorithmic",
+    "source": "gen_first_letters",
+    "metadata": {
+      "task": "first_letters"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "alg_gen_first_letters_0022"
+  },
+  {
+    "prompt": "First letters of Apple, Date, Jackfruit, Banana:",
+    "target": " ADJB",
+    "type": "algorithmic",
+    "source": "gen_first_letters",
+    "metadata": {
+      "task": "first_letters"
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "alg_gen_first_letters_0023"
+  },
+  {
+    "prompt": "Reverse the word \"stone\": ",
+    "target": " enots",
+    "type": "algorithmic",
+    "source": "gen_reverse_word",
+    "metadata": {
+      "task": "reverse_word"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_reverse_word_0024"
+  },
+  {
+    "prompt": "Reverse the word \"river\": ",
+    "target": " revir",
+    "type": "algorithmic",
+    "source": "gen_reverse_word",
+    "metadata": {
+      "task": "reverse_word"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_reverse_word_0025"
+  },
+  {
+    "prompt": "Reverse the word \"python\": ",
+    "target": " nohtyp",
+    "type": "algorithmic",
+    "source": "gen_reverse_word",
+    "metadata": {
+      "task": "reverse_word"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_reverse_word_0026"
+  },
+  {
+    "prompt": "The last letter of \"thunder\" is",
+    "target": " r",
+    "type": "algorithmic",
+    "source": "gen_last_letter",
+    "metadata": {
+      "task": "last_letter"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "alg_gen_last_letter_0027"
+  },
+  {
+    "prompt": "The last letter of \"penguin\" is",
+    "target": " n",
+    "type": "algorithmic",
+    "source": "gen_last_letter",
+    "metadata": {
+      "task": "last_letter"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "alg_gen_last_letter_0028"
+  },
+  {
+    "prompt": "First letters of Date, Ice, Mango, Lemon, Orange, Elderberry:",
+    "target": " DIMLOE",
+    "type": "algorithmic",
+    "source": "gen_first_letters",
+    "metadata": {
+      "task": "first_letters"
+    },
+    "tokens_approx": 11,
+    "tier": "short",
+    "id": "alg_gen_first_letters_0029"
+  }
+]

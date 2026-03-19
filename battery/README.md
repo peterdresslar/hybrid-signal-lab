@@ -4,9 +4,9 @@ Generates a ~445-candidate prompt battery for g-profile sweep experiments.
 After generation, run a baseline calibration sweep and filter to ~200 items
 in the sweet spot (baseline p(tok) ∈ [0.05, 0.85]).
 
-Durable source pools live under `bench/battery/data/sources/`. Generated
+Durable source pools live under `battery/data/sources/`. Generated
 battery builds, calibration runs, and joined/sorted analysis artifacts belong
-under `bench/battery/data/v2_battery/internals/`.
+under `battery/data/v2_battery/internals/`.
 
 ## Target Distribution (oversampled for high-headroom types)
 
@@ -32,10 +32,10 @@ under `bench/battery/data/v2_battery/internals/`.
 uv add datasets
 
 # 2. Generate the full candidate battery
-uv run -m bench.battery.src.build_battery --outdir battery
+uv run -m battery.src.build_battery --outdir battery
 
 # 3. Run baseline calibration sweep (on Sol)
-uv run -m bench.battery.src.calibrate --battery battery/all_candidates.json --model Qwen/Qwen3.5-2B-Base
+uv run -m battery.src.calibrate --battery battery/all_candidates.json --model Qwen/Qwen3.5-2B-Base
 
 # 4. Filter to sweet spot
 python filter_battery.py --results calibration_results.jsonl --output battery_final.json
@@ -70,23 +70,23 @@ python filter_battery.py --results calibration_results.jsonl --output battery_fi
 For instance:
 
 ```sh
-uv run -m bench.battery.src.calibrate \
-  --battery bench/battery/data/v2_battery/internals/v2_0/all_candidates.json \
+uv run -m battery.src.calibrate \
+  --battery battery/data/v2_battery/internals/v2_0/all_candidates.json \
   --model Qwen/Qwen3.5-2B-Base \
-  --output bench/battery/data/v2_battery/internals/v2_0/calibration.jsonl
+  --output battery/data/v2_battery/internals/v2_0/calibration.jsonl
 
-uv run -m bench.battery.src.calibrate \
+uv run -m battery.src.calibrate \
   --battery /root/workspace/data/battery35/all_candidates.json \
   --model Qwen/Qwen3.5-2B-Base \
   --output /root/workspace/data/battery35/calibration.jsonl
 
-uv run -m bench.battery.src.calibrate \
+uv run -m battery.src.calibrate \
   --battery /root/workspace/data/battery35/all_candidates.json \
   --model Qwen/Qwen3.5-35B-A3B-Base \
   --output /root/workspace/data/battery35/calibration35.jsonl \
   --device cuda
 
-uv run -m bench.battery.src.calibrate \
+uv run -m battery.src.calibrate \
   --battery /root/workspace/data/all_candidates.json \
   --model Qwen/Qwen3.5-122B-A10B \
   --output /root/workspace/data/calibration122.jsonl \

@@ -1,0 +1,422 @@
+[
+  {
+    "id": "lr_gen_0000",
+    "prompt": "Children played in the streets, their laughter echoing between the stone buildings. The password is diamond. The river flowed quietly through the valley, its waters reflecting the afternoon sun. A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. In the distance, the mountains rose majestically against the clear blue sky. Several merchants had set up their stalls along the main road, selling various goods. An old scholar sat in the library, surrounded by countless volumes of ancient texts. The market was bustling with activity as traders from distant lands displayed their wares. The festival preparations were underway, with decorations being hung across every doorway. What is the password? The password is",
+    "target": " diamond",
+    "type": "long_range_retrieval",
+    "tokens_approx": 153,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 8,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.125
+    }
+  },
+  {
+    "id": "lr_gen_0001",
+    "prompt": "Several merchants had set up their stalls along the main road, selling various goods. Emma's favorite food is pasta. The river flowed quietly through the valley, its waters reflecting the afternoon sun. A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. What is Emma's favorite food?",
+    "target": " pasta",
+    "type": "long_range_retrieval",
+    "tokens_approx": 68,
+    "tier": "brief",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 3,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.333
+    }
+  },
+  {
+    "id": "lr_gen_0002",
+    "prompt": "The festival preparations were underway, with decorations being hung across every doorway. The password is cascade. A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. The garden was filled with flowers of every color, tended by a dedicated gardener. The market was bustling with activity as traders from distant lands displayed their wares. What is the password? The password is",
+    "target": " cascade",
+    "type": "long_range_retrieval",
+    "tokens_approx": 87,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 4,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.25
+    }
+  },
+  {
+    "id": "lr_gen_0003",
+    "prompt": "In the distance, the mountains rose majestically against the clear blue sky. The capital of the kingdom is Northwatch. The market was bustling with activity as traders from distant lands displayed their wares. An old scholar sat in the library, surrounded by countless volumes of ancient texts. What is the capital? The capital is",
+    "target": " Northwatch",
+    "type": "long_range_retrieval",
+    "tokens_approx": 70,
+    "tier": "brief",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 3,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.333
+    }
+  },
+  {
+    "id": "lr_gen_0004",
+    "prompt": "Several merchants had set up their stalls along the main road, selling various goods. The meeting is at midnight. The market was bustling with activity as traders from distant lands displayed their wares. The festival preparations were underway, with decorations being hung across every doorway. When is the meeting? It is at",
+    "target": " midnight",
+    "type": "long_range_retrieval",
+    "tokens_approx": 67,
+    "tier": "brief",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 3,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.333
+    }
+  },
+  {
+    "id": "lr_gen_0005",
+    "prompt": "The weather was pleasant that day, with a gentle breeze blowing through the trees. The color of the house is golden. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. The garden was filled with flowers of every color, tended by a dedicated gardener. Several merchants had set up their stalls along the main road, selling various goods. The market was bustling with activity as traders from distant lands displayed their wares. What color is the house? The house is",
+    "target": " golden",
+    "type": "long_range_retrieval",
+    "tokens_approx": 111,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 5,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.2
+    }
+  },
+  {
+    "id": "lr_gen_0006",
+    "prompt": "An old scholar sat in the library, surrounded by countless volumes of ancient texts. Night fell slowly over the town, and lanterns were lit one by one along the pathways. The river flowed quietly through the valley, its waters reflecting the afternoon sun. The color of the house is silver. Several merchants had set up their stalls along the main road, selling various goods. The weather was pleasant that day, with a gentle breeze blowing through the trees. The festival preparations were underway, with decorations being hung across every doorway. The garden was filled with flowers of every color, tended by a dedicated gardener. What color is the house? The house is",
+    "target": " silver",
+    "type": "long_range_retrieval",
+    "tokens_approx": 145,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 7,
+      "fact_insert_idx": 3,
+      "fact_insert_frac": 0.429
+    }
+  },
+  {
+    "id": "lr_gen_0007",
+    "prompt": "Several merchants had set up their stalls along the main road, selling various goods. The password is twilight. The market was bustling with activity as traders from distant lands displayed their wares. Children played in the streets, their laughter echoing between the stone buildings. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. What is the password? The password is",
+    "target": " twilight",
+    "type": "long_range_retrieval",
+    "tokens_approx": 85,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 4,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.25
+    }
+  },
+  {
+    "id": "lr_gen_0008",
+    "prompt": "An old scholar sat in the library, surrounded by countless volumes of ancient texts. The river flowed quietly through the valley, its waters reflecting the afternoon sun. The color of the house is red. Children played in the streets, their laughter echoing between the stone buildings. Several merchants had set up their stalls along the main road, selling various goods. In the distance, the mountains rose majestically against the clear blue sky. What color is the house? The house is",
+    "target": " red",
+    "type": "long_range_retrieval",
+    "tokens_approx": 104,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 5,
+      "fact_insert_idx": 2,
+      "fact_insert_frac": 0.4
+    }
+  },
+  {
+    "id": "lr_gen_0009",
+    "prompt": "The market was bustling with activity as traders from distant lands displayed their wares. Children played in the streets, their laughter echoing between the stone buildings. The meeting is at noon. The garden was filled with flowers of every color, tended by a dedicated gardener. The river flowed quietly through the valley, its waters reflecting the afternoon sun. An old scholar sat in the library, surrounded by countless volumes of ancient texts. The festival preparations were underway, with decorations being hung across every doorway. When is the meeting? It is at",
+    "target": " noon",
+    "type": "long_range_retrieval",
+    "tokens_approx": 118,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 6,
+      "fact_insert_idx": 2,
+      "fact_insert_frac": 0.333
+    }
+  },
+  {
+    "id": "lr_gen_0010",
+    "prompt": "The password is phoenix. An old scholar sat in the library, surrounded by countless volumes of ancient texts. The market was bustling with activity as traders from distant lands displayed their wares. Children played in the streets, their laughter echoing between the stone buildings. What is the password? The password is",
+    "target": " phoenix",
+    "type": "long_range_retrieval",
+    "tokens_approx": 66,
+    "tier": "brief",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 3,
+      "fact_insert_idx": 0,
+      "fact_insert_frac": 0.0
+    }
+  },
+  {
+    "id": "lr_gen_0011",
+    "prompt": "A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. The capital of the kingdom is Northwatch. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. The market was bustling with activity as traders from distant lands displayed their wares. The festival preparations were underway, with decorations being hung across every doorway. What is the capital? The capital is",
+    "target": " Northwatch",
+    "type": "long_range_retrieval",
+    "tokens_approx": 92,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 4,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.25
+    }
+  },
+  {
+    "id": "lr_gen_0012",
+    "prompt": "The garden was filled with flowers of every color, tended by a dedicated gardener. The festival preparations were underway, with decorations being hung across every doorway. The meeting is at noon. Children played in the streets, their laughter echoing between the stone buildings. The market was bustling with activity as traders from distant lands displayed their wares. A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. In the distance, the mountains rose majestically against the clear blue sky. Several merchants had set up their stalls along the main road, selling various goods. An old scholar sat in the library, surrounded by countless volumes of ancient texts. When is the meeting? It is at",
+    "target": " noon",
+    "type": "long_range_retrieval",
+    "tokens_approx": 156,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 8,
+      "fact_insert_idx": 2,
+      "fact_insert_frac": 0.25
+    }
+  },
+  {
+    "id": "lr_gen_0013",
+    "prompt": "Several merchants had set up their stalls along the main road, selling various goods. The password is twilight. In the distance, the mountains rose majestically against the clear blue sky. A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. What is the password? The password is",
+    "target": " twilight",
+    "type": "long_range_retrieval",
+    "tokens_approx": 68,
+    "tier": "brief",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 3,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.333
+    }
+  },
+  {
+    "id": "lr_gen_0014",
+    "prompt": "The market was bustling with activity as traders from distant lands displayed their wares. The festival preparations were underway, with decorations being hung across every doorway. Sophia's favorite food is tacos. Night fell slowly over the town, and lanterns were lit one by one along the pathways. What is Sophia's favorite food?",
+    "target": " tacos",
+    "type": "long_range_retrieval",
+    "tokens_approx": 67,
+    "tier": "brief",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 3,
+      "fact_insert_idx": 2,
+      "fact_insert_frac": 0.667
+    }
+  },
+  {
+    "id": "lr_gen_0015",
+    "prompt": "The weather was pleasant that day, with a gentle breeze blowing through the trees. A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. The capital of the kingdom is Northwatch. Several merchants had set up their stalls along the main road, selling various goods. The garden was filled with flowers of every color, tended by a dedicated gardener. Children played in the streets, their laughter echoing between the stone buildings. The market was bustling with activity as traders from distant lands displayed their wares. An old scholar sat in the library, surrounded by countless volumes of ancient texts. What is the capital? The capital is",
+    "target": " Northwatch",
+    "type": "long_range_retrieval",
+    "tokens_approx": 145,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 7,
+      "fact_insert_idx": 2,
+      "fact_insert_frac": 0.286
+    }
+  },
+  {
+    "id": "lr_gen_0016",
+    "prompt": "A group of travelers rested beneath a large oak tree, sharing stories of their journeys. The color of the house is white. The weather was pleasant that day, with a gentle breeze blowing through the trees. Children played in the streets, their laughter echoing between the stone buildings. The garden was filled with flowers of every color, tended by a dedicated gardener. What color is the house? The house is",
+    "target": " white",
+    "type": "long_range_retrieval",
+    "tokens_approx": 91,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 4,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.25
+    }
+  },
+  {
+    "id": "lr_gen_0017",
+    "prompt": "Children played in the streets, their laughter echoing between the stone buildings. A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. The garden was filled with flowers of every color, tended by a dedicated gardener. The capital of the kingdom is Avalon. The river flowed quietly through the valley, its waters reflecting the afternoon sun. In the distance, the mountains rose majestically against the clear blue sky. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. Several merchants had set up their stalls along the main road, selling various goods. The festival preparations were underway, with decorations being hung across every doorway. What is the capital? The capital is",
+    "target": " Avalon",
+    "type": "long_range_retrieval",
+    "tokens_approx": 158,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 8,
+      "fact_insert_idx": 3,
+      "fact_insert_frac": 0.375
+    }
+  },
+  {
+    "id": "lr_gen_0018",
+    "prompt": "An old scholar sat in the library, surrounded by countless volumes of ancient texts. The capital of the kingdom is Avalon. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. The weather was pleasant that day, with a gentle breeze blowing through the trees. Several merchants had set up their stalls along the main road, selling various goods. The festival preparations were underway, with decorations being hung across every doorway. The market was bustling with activity as traders from distant lands displayed their wares. In the distance, the mountains rose majestically against the clear blue sky. What is the capital? The capital is",
+    "target": " Avalon",
+    "type": "long_range_retrieval",
+    "tokens_approx": 141,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 7,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.143
+    }
+  },
+  {
+    "id": "lr_gen_0019",
+    "prompt": "Several merchants had set up their stalls along the main road, selling various goods. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. The meeting is at sunset. The festival preparations were underway, with decorations being hung across every doorway. When is the meeting? It is at",
+    "target": " sunset",
+    "type": "long_range_retrieval",
+    "tokens_approx": 68,
+    "tier": "brief",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 3,
+      "fact_insert_idx": 2,
+      "fact_insert_frac": 0.667
+    }
+  },
+  {
+    "id": "lr_gen_0020",
+    "prompt": "A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. The capital of the kingdom is Meridian. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. The garden was filled with flowers of every color, tended by a dedicated gardener. In the distance, the mountains rose majestically against the clear blue sky. What is the capital? The capital is",
+    "target": " Meridian",
+    "type": "long_range_retrieval",
+    "tokens_approx": 92,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 4,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.25
+    }
+  },
+  {
+    "id": "lr_gen_0021",
+    "prompt": "The garden was filled with flowers of every color, tended by a dedicated gardener. The river flowed quietly through the valley, its waters reflecting the afternoon sun. The capital of the kingdom is Silverport. Children played in the streets, their laughter echoing between the stone buildings. The market was bustling with activity as traders from distant lands displayed their wares. What is the capital? The capital is",
+    "target": " Silverport",
+    "type": "long_range_retrieval",
+    "tokens_approx": 87,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 4,
+      "fact_insert_idx": 2,
+      "fact_insert_frac": 0.5
+    }
+  },
+  {
+    "id": "lr_gen_0022",
+    "prompt": "A group of travelers rested beneath a large oak tree, sharing stories of their journeys. Several merchants had set up their stalls along the main road, selling various goods. The color of the house is white. The river flowed quietly through the valley, its waters reflecting the afternoon sun. Night fell slowly over the town, and lanterns were lit one by one along the pathways. A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. In the distance, the mountains rose majestically against the clear blue sky. The weather was pleasant that day, with a gentle breeze blowing through the trees. What color is the house? The house is",
+    "target": " white",
+    "type": "long_range_retrieval",
+    "tokens_approx": 149,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 7,
+      "fact_insert_idx": 2,
+      "fact_insert_frac": 0.286
+    }
+  },
+  {
+    "id": "lr_gen_0023",
+    "prompt": "The meeting is at sunset. The weather was pleasant that day, with a gentle breeze blowing through the trees. Several merchants had set up their stalls along the main road, selling various goods. The festival preparations were underway, with decorations being hung across every doorway. The river flowed quietly through the valley, its waters reflecting the afternoon sun. When is the meeting? It is at",
+    "target": " sunset",
+    "type": "long_range_retrieval",
+    "tokens_approx": 84,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 4,
+      "fact_insert_idx": 0,
+      "fact_insert_frac": 0.0
+    }
+  },
+  {
+    "id": "lr_gen_0024",
+    "prompt": "Several merchants had set up their stalls along the main road, selling various goods. The password is twilight. The garden was filled with flowers of every color, tended by a dedicated gardener. The river flowed quietly through the valley, its waters reflecting the afternoon sun. Children played in the streets, their laughter echoing between the stone buildings. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. What is the password? The password is",
+    "target": " twilight",
+    "type": "long_range_retrieval",
+    "tokens_approx": 102,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 5,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.2
+    }
+  },
+  {
+    "id": "lr_gen_0025",
+    "prompt": "Night fell slowly over the town, and lanterns were lit one by one along the pathways. The meeting is at 9am. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. The river flowed quietly through the valley, its waters reflecting the afternoon sun. A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. The market was bustling with activity as traders from distant lands displayed their wares. Several merchants had set up their stalls along the main road, selling various goods. The weather was pleasant that day, with a gentle breeze blowing through the trees. When is the meeting? It is at",
+    "target": " 9am",
+    "type": "long_range_retrieval",
+    "tokens_approx": 148,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 7,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.143
+    }
+  },
+  {
+    "id": "lr_gen_0026",
+    "prompt": "The market was bustling with activity as traders from distant lands displayed their wares. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. Ava's favorite food is chocolate. The weather was pleasant that day, with a gentle breeze blowing through the trees. Several merchants had set up their stalls along the main road, selling various goods. Night fell slowly over the town, and lanterns were lit one by one along the pathways. The river flowed quietly through the valley, its waters reflecting the afternoon sun. What is Ava's favorite food?",
+    "target": " chocolate",
+    "type": "long_range_retrieval",
+    "tokens_approx": 124,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 6,
+      "fact_insert_idx": 2,
+      "fact_insert_frac": 0.333
+    }
+  },
+  {
+    "id": "lr_gen_0027",
+    "prompt": "The river flowed quietly through the valley, its waters reflecting the afternoon sun. The password is phoenix. The garden was filled with flowers of every color, tended by a dedicated gardener. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. In the distance, the mountains rose majestically against the clear blue sky. What is the password? The password is",
+    "target": " phoenix",
+    "type": "long_range_retrieval",
+    "tokens_approx": 84,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 4,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.25
+    }
+  },
+  {
+    "id": "lr_gen_0028",
+    "prompt": "The color of the house is white. Several merchants had set up their stalls along the main road, selling various goods. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. The garden was filled with flowers of every color, tended by a dedicated gardener. The festival preparations were underway, with decorations being hung across every doorway. What color is the house? The house is",
+    "target": " white",
+    "type": "long_range_retrieval",
+    "tokens_approx": 91,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 4,
+      "fact_insert_idx": 0,
+      "fact_insert_frac": 0.0
+    }
+  },
+  {
+    "id": "lr_gen_0029",
+    "prompt": "The river flowed quietly through the valley, its waters reflecting the afternoon sun. The capital of the kingdom is Avalon. In the distance, the mountains rose majestically against the clear blue sky. The market was bustling with activity as traders from distant lands displayed their wares. What is the capital? The capital is",
+    "target": " Avalon",
+    "type": "long_range_retrieval",
+    "tokens_approx": 68,
+    "tier": "brief",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 3,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.333
+    }
+  }
+]

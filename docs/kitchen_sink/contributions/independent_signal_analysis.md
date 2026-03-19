@@ -1,6 +1,6 @@
 # Independent Signal Analysis of Kitchen-Sink Runs
 
-Generated from raw files in `results/kitchen_sink/` and prompt metadata in `bench/battery/data/`.
+Generated from raw files in `results/kitchen_sink/` and prompt metadata in `battery/data/`.
 
 This report is intentionally independent of the existing `docs/kitchen_sink_signal_report.md`. The goal here is to describe what signals are actually present in the kitchen-sink sweep results before comparing those findings against any prior writeup.
 

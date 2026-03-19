@@ -1,0 +1,635 @@
+[
+  {
+    "prompt": "U, V, W, ",
+    "target": " X",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 3,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0000"
+  },
+  {
+    "prompt": "I J K L ",
+    "target": " M",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0001"
+  },
+  {
+    "prompt": "E, F, G, H, I, J, K, L, ",
+    "target": " M",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0002"
+  },
+  {
+    "prompt": "R; S; T; ",
+    "target": " U",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 3,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0003"
+  },
+  {
+    "prompt": "B, C, D, ",
+    "target": " E",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 3,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0004"
+  },
+  {
+    "prompt": "G, H, I, J, ",
+    "target": " K",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0005"
+  },
+  {
+    "prompt": "R; S; T; U; ",
+    "target": " V",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0006"
+  },
+  {
+    "prompt": "H - I - J - K - L - M - ",
+    "target": " N",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 15,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0007"
+  },
+  {
+    "prompt": "A; B; C; D; ",
+    "target": " E",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0008"
+  },
+  {
+    "prompt": "K L M N O ",
+    "target": " P",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0009"
+  },
+  {
+    "prompt": "G, H, I, J, K, ",
+    "target": " L",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0010"
+  },
+  {
+    "prompt": "C, D, E, F, G, H, ",
+    "target": " I",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0011"
+  },
+  {
+    "prompt": "L - M - N - O - P - ",
+    "target": " Q",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 13,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0012"
+  },
+  {
+    "prompt": "B; C; D; E; F; G; H; I; ",
+    "target": " J",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0013"
+  },
+  {
+    "prompt": "6; 16; 26; 36; 46; ",
+    "target": " 56",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 6,
+      "step": 10
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0015"
+  },
+  {
+    "prompt": "40, 43, 46, 49, 52, 55, 58, ",
+    "target": " 61",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 40,
+      "step": 3
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0016"
+  },
+  {
+    "prompt": "46; 47; 48; ",
+    "target": " 49",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 46,
+      "step": 1
+    },
+    "tokens_approx": 3,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0017"
+  },
+  {
+    "prompt": "15, 18, 21, ",
+    "target": " 24",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 15,
+      "step": 3
+    },
+    "tokens_approx": 3,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0018"
+  },
+  {
+    "prompt": "7 12 17 22 27 ",
+    "target": " 32",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 7,
+      "step": 5
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0019"
+  },
+  {
+    "prompt": "41 44 47 50 ",
+    "target": " 53",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 41,
+      "step": 3
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0020"
+  },
+  {
+    "prompt": "23; 25; 27; 29; 31; ",
+    "target": " 33",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 23,
+      "step": 2
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0021"
+  },
+  {
+    "prompt": "44; 45; 46; 47; 48; 49; 50; ",
+    "target": " 51",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 44,
+      "step": 1
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0022"
+  },
+  {
+    "prompt": "11, 21, 31, 41, ",
+    "target": " 51",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 11,
+      "step": 10
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0023"
+  },
+  {
+    "prompt": "30; 35; 40; 45; 50; ",
+    "target": " 55",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 30,
+      "step": 5
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0024"
+  },
+  {
+    "prompt": "45; 55; 65; 75; ",
+    "target": " 85",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 45,
+      "step": 10
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0025"
+  },
+  {
+    "prompt": "21, 22, 23, 24, ",
+    "target": " 25",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 21,
+      "step": 1
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0026"
+  },
+  {
+    "prompt": "21, 26, 31, 36, 41, ",
+    "target": " 46",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 21,
+      "step": 5
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0027"
+  },
+  {
+    "prompt": "14, 24, 34, 44, 54, ",
+    "target": " 64",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 14,
+      "step": 10
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0028"
+  },
+  {
+    "prompt": "42; 47; 52; 57; 62; 67; ",
+    "target": " 72",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 42,
+      "step": 5
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0029"
+  },
+  {
+    "prompt": "Item: apple, Color: red\nItem: banana, Color: yellow\nItem: grass, Color:",
+    "target": " green",
+    "type": "structural_copying",
+    "source": "gen_struct",
+    "metadata": {
+      "pattern": "structure_copy"
+    },
+    "tokens_approx": 14,
+    "tier": "short",
+    "id": "sc_gen_struct_0030"
+  },
+  {
+    "prompt": "Name: Carol\nAge: 28\nCity: Paris\n\nName: Jack\nAge: 54\nCity:",
+    "target": " Tokyo",
+    "type": "structural_copying",
+    "source": "gen_struct",
+    "metadata": {
+      "pattern": "structure_copy"
+    },
+    "tokens_approx": 14,
+    "tier": "short",
+    "id": "sc_gen_struct_0031"
+  },
+  {
+    "prompt": "Q: What is 2+2? A: 4\nQ: What is 3+3? A: 6\nQ: What is 5+5? A:",
+    "target": " 10",
+    "type": "structural_copying",
+    "source": "gen_struct",
+    "metadata": {
+      "pattern": "structure_copy"
+    },
+    "tokens_approx": 22,
+    "tier": "short",
+    "id": "sc_gen_struct_0032"
+  },
+  {
+    "prompt": "Name: Bob\nAge: 52\nCity: Berlin\n\nName: Frank\nAge: 23\nCity:",
+    "target": " Delhi",
+    "type": "structural_copying",
+    "source": "gen_struct",
+    "metadata": {
+      "pattern": "structure_copy"
+    },
+    "tokens_approx": 14,
+    "tier": "short",
+    "id": "sc_gen_struct_0038"
+  },
+  {
+    "prompt": "Name: Bob\nAge: 60\nCity: Paris\n\nName: Iris\nAge: 58\nCity:",
+    "target": " London",
+    "type": "structural_copying",
+    "source": "gen_struct",
+    "metadata": {
+      "pattern": "structure_copy"
+    },
+    "tokens_approx": 14,
+    "tier": "short",
+    "id": "sc_gen_struct_0039"
+  },
+  {
+    "prompt": "List of fruits: lemon, apple, banana, fig, elderberry,",
+    "target": " grape",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "fruits"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0045"
+  },
+  {
+    "prompt": "List of fruits: banana, elderberry, grape, mango, date,",
+    "target": " apple",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "fruits"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0046"
+  },
+  {
+    "prompt": "List of fruits: lemon, cherry, banana, grape, fig,",
+    "target": " elderberry",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "fruits"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0047"
+  },
+  {
+    "prompt": "List of colors: green, orange, brown, purple, pink,",
+    "target": " red",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "colors"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0048"
+  },
+  {
+    "prompt": "List of fruits: kiwi, apple, banana, cherry, grape,",
+    "target": " elderberry",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "fruits"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0049"
+  },
+  {
+    "prompt": "List of animals: fish, dog, deer, lion, frog,",
+    "target": " cat",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "animals"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0050"
+  },
+  {
+    "prompt": "List of colors: green, black, brown, white, purple,",
+    "target": " pink",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "colors"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0051"
+  },
+  {
+    "prompt": "List of countries: Egypt, China, Kenya, Canada, Brazil,",
+    "target": " Italy",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "countries"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0052"
+  },
+  {
+    "prompt": "List of fruits: kiwi, lemon, mango, apple, banana,",
+    "target": " date",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "fruits"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0053"
+  },
+  {
+    "prompt": "List of animals: lion, cat, fish, horse, dog,",
+    "target": " bird",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "animals"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0054"
+  },
+  {
+    "prompt": "List of animals: cat, fish, dog, frog, bird,",
+    "target": " horse",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "animals"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0055"
+  },
+  {
+    "prompt": "List of colors: purple, black, yellow, brown, blue,",
+    "target": " white",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "colors"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0056"
+  },
+  {
+    "prompt": "List of countries: Egypt, Spain, Italy, Japan, France,",
+    "target": " Brazil",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "countries"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0057"
+  },
+  {
+    "prompt": "List of countries: Canada, Italy, China, Egypt, Kenya,",
+    "target": " France",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "countries"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0058"
+  },
+  {
+    "prompt": "List of animals: cat, bear, lion, deer, frog,",
+    "target": " bird",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "animals"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0059"
+  }
+]

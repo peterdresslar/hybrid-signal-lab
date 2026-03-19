@@ -1,0 +1,5226 @@
+[
+  {
+    "prompt": "U, V, W, ",
+    "target": " X",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 3,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0000"
+  },
+  {
+    "prompt": "I J K L ",
+    "target": " M",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0001"
+  },
+  {
+    "prompt": "E, F, G, H, I, J, K, L, ",
+    "target": " M",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0002"
+  },
+  {
+    "prompt": "R; S; T; ",
+    "target": " U",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 3,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0003"
+  },
+  {
+    "prompt": "B, C, D, ",
+    "target": " E",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 3,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0004"
+  },
+  {
+    "prompt": "G, H, I, J, ",
+    "target": " K",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0005"
+  },
+  {
+    "prompt": "R; S; T; U; ",
+    "target": " V",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0006"
+  },
+  {
+    "prompt": "H - I - J - K - L - M - ",
+    "target": " N",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 15,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0007"
+  },
+  {
+    "prompt": "A; B; C; D; ",
+    "target": " E",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0008"
+  },
+  {
+    "prompt": "K L M N O ",
+    "target": " P",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0009"
+  },
+  {
+    "prompt": "G, H, I, J, K, ",
+    "target": " L",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0010"
+  },
+  {
+    "prompt": "C, D, E, F, G, H, ",
+    "target": " I",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0011"
+  },
+  {
+    "prompt": "L - M - N - O - P - ",
+    "target": " Q",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 13,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0012"
+  },
+  {
+    "prompt": "B; C; D; E; F; G; H; I; ",
+    "target": " J",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0013"
+  },
+  {
+    "prompt": "6; 16; 26; 36; 46; ",
+    "target": " 56",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 6,
+      "step": 10
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0015"
+  },
+  {
+    "prompt": "40, 43, 46, 49, 52, 55, 58, ",
+    "target": " 61",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 40,
+      "step": 3
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0016"
+  },
+  {
+    "prompt": "46; 47; 48; ",
+    "target": " 49",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 46,
+      "step": 1
+    },
+    "tokens_approx": 3,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0017"
+  },
+  {
+    "prompt": "15, 18, 21, ",
+    "target": " 24",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 15,
+      "step": 3
+    },
+    "tokens_approx": 3,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0018"
+  },
+  {
+    "prompt": "7 12 17 22 27 ",
+    "target": " 32",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 7,
+      "step": 5
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0019"
+  },
+  {
+    "prompt": "41 44 47 50 ",
+    "target": " 53",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 41,
+      "step": 3
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0020"
+  },
+  {
+    "prompt": "23; 25; 27; 29; 31; ",
+    "target": " 33",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 23,
+      "step": 2
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0021"
+  },
+  {
+    "prompt": "44; 45; 46; 47; 48; 49; 50; ",
+    "target": " 51",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 44,
+      "step": 1
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0022"
+  },
+  {
+    "prompt": "11, 21, 31, 41, ",
+    "target": " 51",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 11,
+      "step": 10
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0023"
+  },
+  {
+    "prompt": "30; 35; 40; 45; 50; ",
+    "target": " 55",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 30,
+      "step": 5
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0024"
+  },
+  {
+    "prompt": "45; 55; 65; 75; ",
+    "target": " 85",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 45,
+      "step": 10
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0025"
+  },
+  {
+    "prompt": "21, 22, 23, 24, ",
+    "target": " 25",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 21,
+      "step": 1
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0026"
+  },
+  {
+    "prompt": "21, 26, 31, 36, 41, ",
+    "target": " 46",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 21,
+      "step": 5
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0027"
+  },
+  {
+    "prompt": "14, 24, 34, 44, 54, ",
+    "target": " 64",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 14,
+      "step": 10
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0028"
+  },
+  {
+    "prompt": "42; 47; 52; 57; 62; 67; ",
+    "target": " 72",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 42,
+      "step": 5
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0029"
+  },
+  {
+    "prompt": "Item: apple, Color: red\nItem: banana, Color: yellow\nItem: grass, Color:",
+    "target": " green",
+    "type": "structural_copying",
+    "source": "gen_struct",
+    "metadata": {
+      "pattern": "structure_copy"
+    },
+    "tokens_approx": 14,
+    "tier": "short",
+    "id": "sc_gen_struct_0030"
+  },
+  {
+    "prompt": "Name: Carol\nAge: 28\nCity: Paris\n\nName: Jack\nAge: 54\nCity:",
+    "target": " Tokyo",
+    "type": "structural_copying",
+    "source": "gen_struct",
+    "metadata": {
+      "pattern": "structure_copy"
+    },
+    "tokens_approx": 14,
+    "tier": "short",
+    "id": "sc_gen_struct_0031"
+  },
+  {
+    "prompt": "Q: What is 2+2? A: 4\nQ: What is 3+3? A: 6\nQ: What is 5+5? A:",
+    "target": " 10",
+    "type": "structural_copying",
+    "source": "gen_struct",
+    "metadata": {
+      "pattern": "structure_copy"
+    },
+    "tokens_approx": 22,
+    "tier": "short",
+    "id": "sc_gen_struct_0032"
+  },
+  {
+    "prompt": "Name: Bob\nAge: 52\nCity: Berlin\n\nName: Frank\nAge: 23\nCity:",
+    "target": " Delhi",
+    "type": "structural_copying",
+    "source": "gen_struct",
+    "metadata": {
+      "pattern": "structure_copy"
+    },
+    "tokens_approx": 14,
+    "tier": "short",
+    "id": "sc_gen_struct_0038"
+  },
+  {
+    "prompt": "Name: Bob\nAge: 60\nCity: Paris\n\nName: Iris\nAge: 58\nCity:",
+    "target": " London",
+    "type": "structural_copying",
+    "source": "gen_struct",
+    "metadata": {
+      "pattern": "structure_copy"
+    },
+    "tokens_approx": 14,
+    "tier": "short",
+    "id": "sc_gen_struct_0039"
+  },
+  {
+    "prompt": "List of fruits: lemon, apple, banana, fig, elderberry,",
+    "target": " grape",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "fruits"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0045"
+  },
+  {
+    "prompt": "List of fruits: banana, elderberry, grape, mango, date,",
+    "target": " apple",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "fruits"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0046"
+  },
+  {
+    "prompt": "List of fruits: lemon, cherry, banana, grape, fig,",
+    "target": " elderberry",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "fruits"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0047"
+  },
+  {
+    "prompt": "List of colors: green, orange, brown, purple, pink,",
+    "target": " red",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "colors"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0048"
+  },
+  {
+    "prompt": "List of fruits: kiwi, apple, banana, cherry, grape,",
+    "target": " elderberry",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "fruits"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0049"
+  },
+  {
+    "prompt": "List of animals: fish, dog, deer, lion, frog,",
+    "target": " cat",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "animals"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0050"
+  },
+  {
+    "prompt": "List of colors: green, black, brown, white, purple,",
+    "target": " pink",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "colors"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0051"
+  },
+  {
+    "prompt": "List of countries: Egypt, China, Kenya, Canada, Brazil,",
+    "target": " Italy",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "countries"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0052"
+  },
+  {
+    "prompt": "List of fruits: kiwi, lemon, mango, apple, banana,",
+    "target": " date",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "fruits"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0053"
+  },
+  {
+    "prompt": "List of animals: lion, cat, fish, horse, dog,",
+    "target": " bird",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "animals"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0054"
+  },
+  {
+    "prompt": "List of animals: cat, fish, dog, frog, bird,",
+    "target": " horse",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "animals"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0055"
+  },
+  {
+    "prompt": "List of colors: purple, black, yellow, brown, blue,",
+    "target": " white",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "colors"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0056"
+  },
+  {
+    "prompt": "List of countries: Egypt, Spain, Italy, Japan, France,",
+    "target": " Brazil",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "countries"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0057"
+  },
+  {
+    "prompt": "List of countries: Canada, Italy, China, Egypt, Kenya,",
+    "target": " France",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "countries"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0058"
+  },
+  {
+    "prompt": "List of animals: cat, bear, lion, deer, frog,",
+    "target": " bird",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "animals"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0059"
+  },
+  {
+    "id": "rn_gen_0000",
+    "prompt": "Ethan had 13 shells. Ethan gave 4 to Bob and then found 4 more. How many shells does Ethan have now? Answer:",
+    "target": " 13",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rn_gen_0001",
+    "prompt": "There are 6 boxes with 2 rocks in each box, plus 4 extra rocks. The total number of rocks is",
+    "target": " 16",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rn_gen_0002",
+    "prompt": "Owen is 20 years old. Caleb is 5 years older than Owen. Caleb is",
+    "target": " 25",
+    "type": "reasoning_numerical",
+    "tokens_approx": 18,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rn_gen_0003",
+    "prompt": "Theo has 15 papers and wants to split them equally among 5 friends. Each friend gets",
+    "target": " 3",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rn_gen_0004",
+    "prompt": "Jack has 13 pears. Quinn has 1 more than Jack. Leo has 3 fewer than Quinn. How many does Leo have? Answer:",
+    "target": " 11",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 4
+    }
+  },
+  {
+    "id": "rn_gen_0005",
+    "prompt": "Frank started with 14 shirts. On Monday Frank got 2 more, on Tuesday got 2 more, and on Wednesday got 7 more. How many shirts does Frank have in total? Answer:",
+    "target": " 25",
+    "type": "reasoning_numerical",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 5
+    }
+  },
+  {
+    "id": "rn_gen_0006",
+    "prompt": "A box had 29 tokens. Ella removed 5 of them. The remaining tokens were divided equally into 4 bags. How many tokens were placed in each bag? Answer:",
+    "target": " 6",
+    "type": "reasoning_numerical",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 6
+    }
+  },
+  {
+    "id": "rn_gen_0007",
+    "prompt": "Carol had 13 paintbrushes. Then Carol bought 8 more and gave 2 to Ruby. If 4 people each have that same final number of paintbrushes, how many paintbrushes do they have altogether? Answer:",
+    "target": " 76",
+    "type": "reasoning_numerical",
+    "tokens_approx": 42,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 7
+    }
+  },
+  {
+    "id": "rn_gen_0008",
+    "prompt": "Liam had 11 pencils. Liam gave 2 to Naomi and then found 1 more. How many pencils does Liam have now? Answer:",
+    "target": " 10",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rn_gen_0009",
+    "prompt": "There are 3 boxes with 8 blocks in each box, plus 0 extra blocks. The total number of blocks is",
+    "target": " 24",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rn_gen_0010",
+    "prompt": "Nathan is 38 years old. Kim is 4 years younger than Nathan. Kim is",
+    "target": " 34",
+    "type": "reasoning_numerical",
+    "tokens_approx": 18,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rn_gen_0011",
+    "prompt": "Milo has 18 puzzles and wants to split them equally among 6 friends. Each friend gets",
+    "target": " 3",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rn_gen_0012",
+    "prompt": "Dave has 28 paintbrushes. Grace has 4 more than Dave. Leo has 3 fewer than Grace. How many does Leo have? Answer:",
+    "target": " 29",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 4
+    }
+  },
+  {
+    "id": "rn_gen_0013",
+    "prompt": "Jack started with 5 tickets. On Monday Jack got 4 more, on Tuesday got 1 more, and on Wednesday got 6 more. How many tickets does Jack have in total? Answer:",
+    "target": " 16",
+    "type": "reasoning_numerical",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 5
+    }
+  },
+  {
+    "id": "rn_gen_0014",
+    "prompt": "A box had 24 beads. Nora removed 6 of them. The remaining beads were divided equally into 3 bags. How many beads were placed in each bag? Answer:",
+    "target": " 6",
+    "type": "reasoning_numerical",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 6
+    }
+  },
+  {
+    "id": "rn_gen_0015",
+    "prompt": "Ivy had 30 jars. Then Ivy bought 9 more and gave 3 to Stella. If 3 people each have that same final number of jars, how many jars do they have altogether? Answer:",
+    "target": " 108",
+    "type": "reasoning_numerical",
+    "tokens_approx": 42,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 7
+    }
+  },
+  {
+    "id": "rn_gen_0016",
+    "prompt": "Felix had 22 shells. Felix gave 18 to Jasper and then found 5 more. How many shells does Felix have now? Answer:",
+    "target": " 9",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rn_gen_0017",
+    "prompt": "There are 3 boxes with 3 glasses in each box, plus 4 extra glasses. The total number of glasses is",
+    "target": " 13",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rn_gen_0018",
+    "prompt": "Stella is 18 years old. Elena is 15 years older than Stella. Elena is",
+    "target": " 33",
+    "type": "reasoning_numerical",
+    "tokens_approx": 18,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rn_gen_0019",
+    "prompt": "Frank has 30 stars and wants to split them equally among 6 friends. Each friend gets",
+    "target": " 5",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rn_gen_0020",
+    "prompt": "Daniel has 24 hats. Nina has 8 more than Daniel. Ava has 9 fewer than Nina. How many does Ava have? Answer:",
+    "target": " 23",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 4
+    }
+  },
+  {
+    "id": "rn_gen_0021",
+    "prompt": "Ethan started with 12 shirts. On Monday Ethan got 6 more, on Tuesday got 2 more, and on Wednesday got 5 more. How many shirts does Ethan have in total? Answer:",
+    "target": " 25",
+    "type": "reasoning_numerical",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 5
+    }
+  },
+  {
+    "id": "rn_gen_0022",
+    "prompt": "A box had 19 marbles. Paige removed 5 of them. The remaining marbles were divided equally into 2 bags. How many marbles were placed in each bag? Answer:",
+    "target": " 7",
+    "type": "reasoning_numerical",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 6
+    }
+  },
+  {
+    "id": "rn_gen_0023",
+    "prompt": "Theo had 13 oranges. Then Theo bought 12 more and gave 5 to Hank. If 4 people each have that same final number of oranges, how many oranges do they have altogether? Answer:",
+    "target": " 80",
+    "type": "reasoning_numerical",
+    "tokens_approx": 42,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 7
+    }
+  },
+  {
+    "id": "rn_gen_0024",
+    "prompt": "Theo had 16 candies. Theo gave 13 to Iris and then found 3 more. How many candies does Theo have now? Answer:",
+    "target": " 6",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rn_gen_0025",
+    "prompt": "There are 2 boxes with 6 widgets in each box, plus 2 extra widgets. The total number of widgets is",
+    "target": " 14",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rn_gen_0026",
+    "prompt": "Sofia is 38 years old. Ben is 15 years younger than Sofia. Ben is",
+    "target": " 23",
+    "type": "reasoning_numerical",
+    "tokens_approx": 18,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rn_gen_0027",
+    "prompt": "James has 24 cookies and wants to split them equally among 2 friends. Each friend gets",
+    "target": " 12",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rn_gen_0028",
+    "prompt": "Eli has 7 stones. Sofia has 9 more than Eli. Hank has 3 fewer than Sofia. How many does Hank have? Answer:",
+    "target": " 13",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 4
+    }
+  },
+  {
+    "id": "rn_gen_0029",
+    "prompt": "Kai started with 17 toys. On Monday Kai got 4 more, on Tuesday got 4 more, and on Wednesday got 5 more. How many toys does Kai have in total? Answer:",
+    "target": " 30",
+    "type": "reasoning_numerical",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 5
+    }
+  },
+  {
+    "id": "rn_gen_0030",
+    "prompt": "A box had 32 markers. Nora removed 2 of them. The remaining markers were divided equally into 6 bags. How many markers were placed in each bag? Answer:",
+    "target": " 5",
+    "type": "reasoning_numerical",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 6
+    }
+  },
+  {
+    "id": "rn_gen_0031",
+    "prompt": "Jasper had 20 beads. Then Jasper bought 2 more and gave 4 to Jack. If 4 people each have that same final number of beads, how many beads do they have altogether? Answer:",
+    "target": " 72",
+    "type": "reasoning_numerical",
+    "tokens_approx": 42,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 7
+    }
+  },
+  {
+    "id": "rn_gen_0032",
+    "prompt": "Jack had 27 beads. Jack gave 21 to Alice and then found 1 more. How many beads does Jack have now? Answer:",
+    "target": " 7",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rn_gen_0033",
+    "prompt": "There are 2 boxes with 8 vouchers in each box, plus 2 extra vouchers. The total number of vouchers is",
+    "target": " 18",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rn_gen_0034",
+    "prompt": "Dave is 32 years old. Thomas is 12 years younger than Dave. Thomas is",
+    "target": " 20",
+    "type": "reasoning_numerical",
+    "tokens_approx": 18,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rn_gen_0035",
+    "prompt": "Ivy has 30 bracelets and wants to split them equally among 6 friends. Each friend gets",
+    "target": " 5",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rn_gen_0036",
+    "prompt": "Jasper has 18 stickers. Sadie has 4 more than Jasper. Naomi has 2 fewer than Sadie. How many does Naomi have? Answer:",
+    "target": " 20",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 4
+    }
+  },
+  {
+    "id": "rn_gen_0037",
+    "prompt": "Owen started with 5 marbles. On Monday Owen got 2 more, on Tuesday got 1 more, and on Wednesday got 7 more. How many marbles does Owen have in total? Answer:",
+    "target": " 15",
+    "type": "reasoning_numerical",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 5
+    }
+  },
+  {
+    "id": "rn_gen_0038",
+    "prompt": "A box had 17 cookies. Maya removed 8 of them. The remaining cookies were divided equally into 3 bags. How many cookies were placed in each bag? Answer:",
+    "target": " 3",
+    "type": "reasoning_numerical",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 6
+    }
+  },
+  {
+    "id": "rn_gen_0039",
+    "prompt": "Felix had 18 carrots. Then Felix bought 9 more and gave 4 to Owen. If 2 people each have that same final number of carrots, how many carrots do they have altogether? Answer:",
+    "target": " 46",
+    "type": "reasoning_numerical",
+    "tokens_approx": 42,
+    "tier": "brief",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 7
+    }
+  },
+  {
+    "id": "rt_gen_0000",
+    "prompt": "Bob put the phone in the garage. Bob went to the hallway. Alice moved the phone to the garden. Where is the phone now? The phone is in the",
+    "target": " garden",
+    "type": "reasoning_tracking",
+    "tokens_approx": 37,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0001",
+    "prompt": "The bag starts in the bedroom. Bob moves it to the attic. Frank moves it to the kitchen. Grace moves it to the basement. Where is the bag? Answer: the",
+    "target": " basement",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0002",
+    "prompt": "The key is in the drawer. The drawer is in the pocket. The pocket is in the office. Where is the key? The key is in the",
+    "target": " drawer",
+    "type": "reasoning_tracking",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0003",
+    "prompt": "Alice has the bag. Alice gives the bag to Bob. Bob gives the bag to Eve. Eve gives the bag to Alice. Who has the bag?",
+    "target": " Alice",
+    "type": "reasoning_tracking",
+    "tokens_approx": 33,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rt_gen_0004",
+    "prompt": "Carol put the pen in the bathroom. Carol went to the living room. Frank moved the pen to the garden. Where is the pen now? The pen is in the",
+    "target": " garden",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0005",
+    "prompt": "The key starts in the bedroom. Dave moves it to the attic. Grace moves it to the hallway. Carol moves it to the garden. Where is the key? Answer: the",
+    "target": " garden",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0006",
+    "prompt": "The cup is in the cabinet. The cabinet is in the shelf. The shelf is in the kitchen. Where is the cup? The cup is in the",
+    "target": " cabinet",
+    "type": "reasoning_tracking",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0007",
+    "prompt": "Alice has the pen. Alice gives the pen to Eve. Eve gives the pen to Alice. Who has the pen?",
+    "target": " Alice",
+    "type": "reasoning_tracking",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rt_gen_0008",
+    "prompt": "Dave put the key in the kitchen. Dave went to the garage. Frank moved the key to the living room. Where is the key now? The key is in the",
+    "target": " living room",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0009",
+    "prompt": "The key starts in the attic. Bob moves it to the living room. Grace moves it to the basement. Hank moves it to the bathroom. Where is the key? Answer: the",
+    "target": " bathroom",
+    "type": "reasoning_tracking",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0010",
+    "prompt": "The cup is in the drawer. The drawer is in the shelf. The shelf is in the bathroom. Where is the cup? The cup is in the",
+    "target": " drawer",
+    "type": "reasoning_tracking",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0011",
+    "prompt": "Carol has the key. Carol gives the key to Dave. Dave gives the key to Frank. Frank gives the key to Dave. Dave gives the key to Carol. Who has the key?",
+    "target": " Carol",
+    "type": "reasoning_tracking",
+    "tokens_approx": 41,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rt_gen_0012",
+    "prompt": "Grace put the bag in the garage. Grace went to the bathroom. Carol moved the bag to the kitchen. Where is the bag now? The bag is in the",
+    "target": " kitchen",
+    "type": "reasoning_tracking",
+    "tokens_approx": 37,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0013",
+    "prompt": "The cup starts in the attic. Dave moves it to the living room. Grace moves it to the bedroom. Alice moves it to the basement. Where is the cup? Answer: the",
+    "target": " basement",
+    "type": "reasoning_tracking",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0014",
+    "prompt": "The toy is in the bag. The bag is in the shelf. The shelf is in the garage. Where is the toy? The toy is in the",
+    "target": " bag",
+    "type": "reasoning_tracking",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0015",
+    "prompt": "Dave has the ring. Dave gives the ring to Hank. Hank gives the ring to Dave. Who has the ring?",
+    "target": " Dave",
+    "type": "reasoning_tracking",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rt_gen_0016",
+    "prompt": "Eve put the toy in the attic. Eve went to the hallway. Frank moved the toy to the bathroom. Where is the toy now? The toy is in the",
+    "target": " bathroom",
+    "type": "reasoning_tracking",
+    "tokens_approx": 37,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0017",
+    "prompt": "The ring starts in the bedroom. Dave moves it to the kitchen. Bob moves it to the hallway. Eve moves it to the basement. Where is the ring? Answer: the",
+    "target": " basement",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0018",
+    "prompt": "The ball is in the pocket. The pocket is in the bag. The bag is in the attic. Where is the ball? The ball is in the",
+    "target": " pocket",
+    "type": "reasoning_tracking",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0019",
+    "prompt": "Grace has the toy. Grace gives the toy to Dave. Dave gives the toy to Bob. Bob gives the toy to Dave. Who has the toy?",
+    "target": " Dave",
+    "type": "reasoning_tracking",
+    "tokens_approx": 33,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rt_gen_0020",
+    "prompt": "Eve put the cup in the bedroom. Eve went to the living room. Grace moved the cup to the attic. Where is the cup now? The cup is in the",
+    "target": " attic",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0021",
+    "prompt": "The phone starts in the office. Carol moves it to the garden. Dave moves it to the bedroom. Alice moves it to the attic. Where is the phone? Answer: the",
+    "target": " attic",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0022",
+    "prompt": "The phone is in the pocket. The pocket is in the bag. The bag is in the office. Where is the phone? The phone is in the",
+    "target": " pocket",
+    "type": "reasoning_tracking",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0023",
+    "prompt": "Carol has the ball. Carol gives the ball to Dave. Dave gives the ball to Carol. Carol gives the ball to Bob. Bob gives the ball to Dave. Who has the ball?",
+    "target": " Dave",
+    "type": "reasoning_tracking",
+    "tokens_approx": 41,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rt_gen_0024",
+    "prompt": "Bob put the phone in the garage. Bob went to the kitchen. Carol moved the phone to the hallway. Where is the phone now? The phone is in the",
+    "target": " hallway",
+    "type": "reasoning_tracking",
+    "tokens_approx": 37,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0025",
+    "prompt": "The ring starts in the bedroom. Bob moves it to the office. Alice moves it to the garden. Frank moves it to the hallway. Where is the ring? Answer: the",
+    "target": " hallway",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0026",
+    "prompt": "The ring is in the cabinet. The cabinet is in the drawer. The drawer is in the living room. Where is the ring? The ring is in the",
+    "target": " cabinet",
+    "type": "reasoning_tracking",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0027",
+    "prompt": "Bob has the hat. Bob gives the hat to Eve. Eve gives the hat to Bob. Bob gives the hat to Eve. Eve gives the hat to Bob. Who has the hat?",
+    "target": " Bob",
+    "type": "reasoning_tracking",
+    "tokens_approx": 41,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rt_gen_0028",
+    "prompt": "Bob put the hat in the bedroom. Bob went to the bathroom. Hank moved the hat to the kitchen. Where is the hat now? The hat is in the",
+    "target": " kitchen",
+    "type": "reasoning_tracking",
+    "tokens_approx": 37,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0029",
+    "prompt": "The book starts in the bedroom. Dave moves it to the kitchen. Eve moves it to the garage. Bob moves it to the office. Where is the book? Answer: the",
+    "target": " office",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0030",
+    "prompt": "The book is in the pocket. The pocket is in the shelf. The shelf is in the bedroom. Where is the book? The book is in the",
+    "target": " pocket",
+    "type": "reasoning_tracking",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0031",
+    "prompt": "Frank has the ring. Frank gives the ring to Dave. Dave gives the ring to Frank. Who has the ring?",
+    "target": " Frank",
+    "type": "reasoning_tracking",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rt_gen_0032",
+    "prompt": "Dave put the ring in the attic. Dave went to the garage. Grace moved the ring to the bedroom. Where is the ring now? The ring is in the",
+    "target": " bedroom",
+    "type": "reasoning_tracking",
+    "tokens_approx": 37,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0033",
+    "prompt": "The cup starts in the attic. Bob moves it to the hallway. Frank moves it to the basement. Dave moves it to the office. Where is the cup? Answer: the",
+    "target": " office",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0034",
+    "prompt": "The book is in the bag. The bag is in the pocket. The pocket is in the bedroom. Where is the book? The book is in the",
+    "target": " bag",
+    "type": "reasoning_tracking",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0035",
+    "prompt": "Alice has the cup. Alice gives the cup to Dave. Dave gives the cup to Alice. Who has the cup?",
+    "target": " Alice",
+    "type": "reasoning_tracking",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rt_gen_0036",
+    "prompt": "Hank put the pen in the garden. Hank went to the living room. Bob moved the pen to the basement. Where is the pen now? The pen is in the",
+    "target": " basement",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0037",
+    "prompt": "The ring starts in the office. Dave moves it to the bedroom. Grace moves it to the kitchen. Alice moves it to the bathroom. Where is the ring? Answer: the",
+    "target": " bathroom",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0038",
+    "prompt": "The bag is in the pocket. The pocket is in the box. The box is in the bedroom. Where is the bag? The bag is in the",
+    "target": " pocket",
+    "type": "reasoning_tracking",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0039",
+    "prompt": "Dave has the ring. Dave gives the ring to Hank. Hank gives the ring to Dave. Dave gives the ring to Bob. Who has the ring?",
+    "target": " Bob",
+    "type": "reasoning_tracking",
+    "tokens_approx": 33,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "prompt": "82 + 15 =",
+    "target": " 97",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "+",
+      "a": 82,
+      "b": 15
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0000"
+  },
+  {
+    "prompt": "95 + 36 =",
+    "target": " 131",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "+",
+      "a": 95,
+      "b": 36
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0001"
+  },
+  {
+    "prompt": "4 * 18 =",
+    "target": " 72",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "*",
+      "a": 4,
+      "b": 18
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0002"
+  },
+  {
+    "prompt": "12 - 76 =",
+    "target": " -64",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "-",
+      "a": 12,
+      "b": 76
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0003"
+  },
+  {
+    "prompt": "5 + 4 =",
+    "target": " 9",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "+",
+      "a": 5,
+      "b": 4
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0004"
+  },
+  {
+    "prompt": "20 * 1 =",
+    "target": " 20",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "*",
+      "a": 20,
+      "b": 1
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0005"
+  },
+  {
+    "prompt": "18 * 14 =",
+    "target": " 252",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "*",
+      "a": 18,
+      "b": 14
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0006"
+  },
+  {
+    "prompt": "9 * 1 =",
+    "target": " 9",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "*",
+      "a": 9,
+      "b": 1
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0007"
+  },
+  {
+    "prompt": "14 * 11 =",
+    "target": " 154",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "*",
+      "a": 14,
+      "b": 11
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0008"
+  },
+  {
+    "prompt": "36 + 20 =",
+    "target": " 56",
+    "type": "algorithmic",
+    "source": "gen_arithmetic",
+    "metadata": {
+      "operation": "+",
+      "a": 36,
+      "b": 20
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_arithmetic_0009"
+  },
+  {
+    "prompt": "How many times does \"to\" appear in: \"to to old fast old warm to lazy hard\"? Answer:",
+    "target": " 3",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "to",
+      "count": 3
+    },
+    "tokens_approx": 22,
+    "tier": "short",
+    "id": "alg_gen_counting_0010"
+  },
+  {
+    "prompt": "How many times does \"the\" appear in: \"dark the lazy the fast cold the warm slow fast old warm quick soft the small\"? Answer:",
+    "target": " 4",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "the",
+      "count": 4
+    },
+    "tokens_approx": 31,
+    "tier": "brief",
+    "id": "alg_gen_counting_0011"
+  },
+  {
+    "prompt": "How many times does \"the\" appear in: \"fast quick the fast small new lazy bright cold the fast old red old old quick cold lazy soft slow\"? Answer:",
+    "target": " 2",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "the",
+      "count": 2
+    },
+    "tokens_approx": 36,
+    "tier": "brief",
+    "id": "alg_gen_counting_0012"
+  },
+  {
+    "prompt": "How many times does \"and\" appear in: \"dark soft quick red bright and new lazy slow cold soft dark quick cold old fast hard\"? Answer:",
+    "target": " 1",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "and",
+      "count": 1
+    },
+    "tokens_approx": 32,
+    "tier": "brief",
+    "id": "alg_gen_counting_0013"
+  },
+  {
+    "prompt": "How many times does \"to\" appear in: \"to hard old new lazy small quick slow warm slow soft\"? Answer:",
+    "target": " 1",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "to",
+      "count": 1
+    },
+    "tokens_approx": 24,
+    "tier": "short",
+    "id": "alg_gen_counting_0014"
+  },
+  {
+    "prompt": "How many times does \"is\" appear in: \"slow slow cold bright red lazy red quick soft dark dark lazy is soft warm is new slow\"? Answer:",
+    "target": " 2",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "is",
+      "count": 2
+    },
+    "tokens_approx": 33,
+    "tier": "brief",
+    "id": "alg_gen_counting_0015"
+  },
+  {
+    "prompt": "How many times does \"dog\" appear in: \"small hard dog dog big fast small dog dog red cold red hard\"? Answer:",
+    "target": " 4",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "dog",
+      "count": 4
+    },
+    "tokens_approx": 27,
+    "tier": "short",
+    "id": "alg_gen_counting_0016"
+  },
+  {
+    "prompt": "How many times does \"and\" appear in: \"bright dark and lazy dark fast and big cold and soft small and cold slow dark hard\"? Answer:",
+    "target": " 4",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "and",
+      "count": 4
+    },
+    "tokens_approx": 32,
+    "tier": "brief",
+    "id": "alg_gen_counting_0017"
+  },
+  {
+    "prompt": "How many times does \"is\" appear in: \"bright is big soft is slow is soft lazy\"? Answer:",
+    "target": " 3",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "is",
+      "count": 3
+    },
+    "tokens_approx": 22,
+    "tier": "short",
+    "id": "alg_gen_counting_0018"
+  },
+  {
+    "prompt": "How many times does \"dog\" appear in: \"cold lazy fast dog cold dark warm quick red old hard red dark dog hard slow\"? Answer:",
+    "target": " 2",
+    "type": "algorithmic",
+    "source": "gen_counting",
+    "metadata": {
+      "word": "dog",
+      "count": 2
+    },
+    "tokens_approx": 31,
+    "tier": "brief",
+    "id": "alg_gen_counting_0019"
+  },
+  {
+    "prompt": "The last letter of \"elephant\" is",
+    "target": " t",
+    "type": "algorithmic",
+    "source": "gen_last_letter",
+    "metadata": {
+      "task": "last_letter"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "alg_gen_last_letter_0020"
+  },
+  {
+    "prompt": "The last letter of \"mountain\" is",
+    "target": " n",
+    "type": "algorithmic",
+    "source": "gen_last_letter",
+    "metadata": {
+      "task": "last_letter"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "alg_gen_last_letter_0021"
+  },
+  {
+    "prompt": "First letters of Banana, Fig, Mango:",
+    "target": " BFM",
+    "type": "algorithmic",
+    "source": "gen_first_letters",
+    "metadata": {
+      "task": "first_letters"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "alg_gen_first_letters_0022"
+  },
+  {
+    "prompt": "First letters of Apple, Date, Jackfruit, Banana:",
+    "target": " ADJB",
+    "type": "algorithmic",
+    "source": "gen_first_letters",
+    "metadata": {
+      "task": "first_letters"
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "alg_gen_first_letters_0023"
+  },
+  {
+    "prompt": "Reverse the word \"stone\": ",
+    "target": " enots",
+    "type": "algorithmic",
+    "source": "gen_reverse_word",
+    "metadata": {
+      "task": "reverse_word"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_reverse_word_0024"
+  },
+  {
+    "prompt": "Reverse the word \"river\": ",
+    "target": " revir",
+    "type": "algorithmic",
+    "source": "gen_reverse_word",
+    "metadata": {
+      "task": "reverse_word"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_reverse_word_0025"
+  },
+  {
+    "prompt": "Reverse the word \"python\": ",
+    "target": " nohtyp",
+    "type": "algorithmic",
+    "source": "gen_reverse_word",
+    "metadata": {
+      "task": "reverse_word"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "alg_gen_reverse_word_0026"
+  },
+  {
+    "prompt": "The last letter of \"thunder\" is",
+    "target": " r",
+    "type": "algorithmic",
+    "source": "gen_last_letter",
+    "metadata": {
+      "task": "last_letter"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "alg_gen_last_letter_0027"
+  },
+  {
+    "prompt": "The last letter of \"penguin\" is",
+    "target": " n",
+    "type": "algorithmic",
+    "source": "gen_last_letter",
+    "metadata": {
+      "task": "last_letter"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "alg_gen_last_letter_0028"
+  },
+  {
+    "prompt": "First letters of Date, Ice, Mango, Lemon, Orange, Elderberry:",
+    "target": " DIMLOE",
+    "type": "algorithmic",
+    "source": "gen_first_letters",
+    "metadata": {
+      "task": "first_letters"
+    },
+    "tokens_approx": 11,
+    "tier": "short",
+    "id": "alg_gen_first_letters_0029"
+  },
+  {
+    "prompt": "The cat next to the broken windows",
+    "target": " speaks",
+    "type": "syntactic_pattern",
+    "source": "gen_agreement",
+    "metadata": {
+      "singular": true,
+      "distance": 5
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sp_gen_agreement_0000"
+  },
+  {
+    "prompt": "The dogs next to the broken windows",
+    "target": " run",
+    "type": "syntactic_pattern",
+    "source": "gen_agreement",
+    "metadata": {
+      "singular": false,
+      "distance": 5
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sp_gen_agreement_0001"
+  },
+  {
+    "prompt": "The child that the students admired",
+    "target": " lives",
+    "type": "syntactic_pattern",
+    "source": "gen_agreement",
+    "metadata": {
+      "singular": true,
+      "distance": 4
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_gen_agreement_0002"
+  },
+  {
+    "prompt": "The cats that the students admired",
+    "target": " walk",
+    "type": "syntactic_pattern",
+    "source": "gen_agreement",
+    "metadata": {
+      "singular": false,
+      "distance": 4
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_gen_agreement_0003"
+  },
+  {
+    "prompt": "The children that the students admired",
+    "target": " live",
+    "type": "syntactic_pattern",
+    "source": "gen_agreement",
+    "metadata": {
+      "singular": false,
+      "distance": 4
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_gen_agreement_0004"
+  },
+  {
+    "prompt": "The children with the red markings",
+    "target": " walk",
+    "type": "syntactic_pattern",
+    "source": "gen_agreement",
+    "metadata": {
+      "singular": false,
+      "distance": 4
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_gen_agreement_0005"
+  },
+  {
+    "prompt": "The teachers in the large auditorium",
+    "target": " run",
+    "type": "syntactic_pattern",
+    "source": "gen_agreement",
+    "metadata": {
+      "singular": false,
+      "distance": 4
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_gen_agreement_0006"
+  },
+  {
+    "prompt": "The dog next to the broken windows",
+    "target": " writes",
+    "type": "syntactic_pattern",
+    "source": "gen_agreement",
+    "metadata": {
+      "singular": true,
+      "distance": 5
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sp_gen_agreement_0007"
+  },
+  {
+    "prompt": "If it rains, we stay inside; if it shines, we go",
+    "target": " outside",
+    "type": "syntactic_pattern",
+    "source": "gen_parallel",
+    "metadata": {
+      "pattern": "parallelism"
+    },
+    "tokens_approx": 14,
+    "tier": "short",
+    "id": "sp_gen_parallel_0008"
+  },
+  {
+    "prompt": "The more you practice, the better you",
+    "target": " get",
+    "type": "syntactic_pattern",
+    "source": "gen_parallel",
+    "metadata": {
+      "pattern": "parallelism"
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sp_gen_parallel_0009"
+  },
+  {
+    "prompt": "They came, they saw, they",
+    "target": " conquered",
+    "type": "syntactic_pattern",
+    "source": "gen_parallel",
+    "metadata": {
+      "pattern": "parallelism"
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sp_gen_parallel_0010"
+  },
+  {
+    "prompt": "Not only is she smart, but she is also very",
+    "target": " kind",
+    "type": "syntactic_pattern",
+    "source": "gen_parallel",
+    "metadata": {
+      "pattern": "parallelism"
+    },
+    "tokens_approx": 13,
+    "tier": "short",
+    "id": "sp_gen_parallel_0011"
+  },
+  {
+    "prompt": "The old man sat down, picked up his book, and began to",
+    "target": " read",
+    "type": "syntactic_pattern",
+    "source": "gen_parallel",
+    "metadata": {
+      "pattern": "parallelism"
+    },
+    "tokens_approx": 15,
+    "tier": "short",
+    "id": "sp_gen_parallel_0012"
+  },
+  {
+    "prompt": "He ran quickly, jumped high, and landed",
+    "target": " softly",
+    "type": "syntactic_pattern",
+    "source": "gen_parallel",
+    "metadata": {
+      "pattern": "parallelism"
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sp_gen_parallel_0013"
+  },
+  {
+    "prompt": "The teachers that the guard loves",
+    "target": " smile",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "obj_rel_across_anim",
+      "variant": "plur_MS_MV_sing_ES_EV",
+      "contrast": "smiles"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_lm_syneval_0014"
+  },
+  {
+    "prompt": "The pilots that hate the skater",
+    "target": " laugh",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "subj_rel",
+      "variant": "plur_MS_EV_MV_sing_ES",
+      "contrast": "laughs"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_lm_syneval_0015"
+  },
+  {
+    "prompt": "The consultants",
+    "target": " are short and swim",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "vp_coord",
+      "variant": "plur_MS_MV_MV",
+      "contrast": "swim and is tall"
+    },
+    "tokens_approx": 2,
+    "tier": "short",
+    "id": "sp_lm_syneval_0016"
+  },
+  {
+    "prompt": "The managers the parents like",
+    "target": " smile",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "obj_rel_no_comp_across_anim",
+      "variant": "plur_MS_MV_plur_ES_EV",
+      "contrast": "smiles"
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sp_lm_syneval_0017"
+  },
+  {
+    "prompt": "The authors the taxi drivers admire",
+    "target": " smile",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "obj_rel_no_comp_across_anim",
+      "variant": "plur_MS_MV_plur_ES_EV",
+      "contrast": "smiles"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_lm_syneval_0018"
+  },
+  {
+    "prompt": "The customers that love the architects",
+    "target": " swim",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "subj_rel",
+      "variant": "plur_MS_EV_MV_plur_ES",
+      "contrast": "swims"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_lm_syneval_0019"
+  },
+  {
+    "prompt": "The consultants that the executives love",
+    "target": " smile",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "obj_rel_across_anim",
+      "variant": "plur_MS_MV_plur_ES_EV",
+      "contrast": "smiles"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_lm_syneval_0020"
+  },
+  {
+    "prompt": "The pilots that the assistant likes",
+    "target": " laugh",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "obj_rel_across_anim",
+      "variant": "plur_MS_MV_sing_ES_EV",
+      "contrast": "laughs"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_lm_syneval_0021"
+  },
+  {
+    "prompt": "The pilots across from the taxi drivers",
+    "target": " smile",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "prep_anim",
+      "variant": "plur_MS_MV_plur_ES",
+      "contrast": "smiles"
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sp_lm_syneval_0022"
+  },
+  {
+    "prompt": "The mechanic knew the consultants",
+    "target": " smile",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "sent_comp",
+      "variant": "plur_MS_MV_sing_BS",
+      "contrast": "smiles"
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sp_lm_syneval_0023"
+  },
+  {
+    "prompt": "The pilots next to the ministers",
+    "target": " laugh",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "prep_anim",
+      "variant": "plur_MS_MV_plur_ES",
+      "contrast": "laughs"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_lm_syneval_0024"
+  },
+  {
+    "id": "lr_gen_0000",
+    "prompt": "Children played in the streets, their laughter echoing between the stone buildings. The password is diamond. The river flowed quietly through the valley, its waters reflecting the afternoon sun. A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. In the distance, the mountains rose majestically against the clear blue sky. Several merchants had set up their stalls along the main road, selling various goods. An old scholar sat in the library, surrounded by countless volumes of ancient texts. The market was bustling with activity as traders from distant lands displayed their wares. The festival preparations were underway, with decorations being hung across every doorway. What is the password? The password is",
+    "target": " diamond",
+    "type": "long_range_retrieval",
+    "tokens_approx": 153,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 8,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.125
+    }
+  },
+  {
+    "id": "lr_gen_0001",
+    "prompt": "Several merchants had set up their stalls along the main road, selling various goods. Emma's favorite food is pasta. The river flowed quietly through the valley, its waters reflecting the afternoon sun. A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. What is Emma's favorite food?",
+    "target": " pasta",
+    "type": "long_range_retrieval",
+    "tokens_approx": 68,
+    "tier": "brief",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 3,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.333
+    }
+  },
+  {
+    "id": "lr_gen_0002",
+    "prompt": "The festival preparations were underway, with decorations being hung across every doorway. The password is cascade. A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. The garden was filled with flowers of every color, tended by a dedicated gardener. The market was bustling with activity as traders from distant lands displayed their wares. What is the password? The password is",
+    "target": " cascade",
+    "type": "long_range_retrieval",
+    "tokens_approx": 87,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 4,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.25
+    }
+  },
+  {
+    "id": "lr_gen_0003",
+    "prompt": "In the distance, the mountains rose majestically against the clear blue sky. The capital of the kingdom is Northwatch. The market was bustling with activity as traders from distant lands displayed their wares. An old scholar sat in the library, surrounded by countless volumes of ancient texts. What is the capital? The capital is",
+    "target": " Northwatch",
+    "type": "long_range_retrieval",
+    "tokens_approx": 70,
+    "tier": "brief",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 3,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.333
+    }
+  },
+  {
+    "id": "lr_gen_0004",
+    "prompt": "Several merchants had set up their stalls along the main road, selling various goods. The meeting is at midnight. The market was bustling with activity as traders from distant lands displayed their wares. The festival preparations were underway, with decorations being hung across every doorway. When is the meeting? It is at",
+    "target": " midnight",
+    "type": "long_range_retrieval",
+    "tokens_approx": 67,
+    "tier": "brief",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 3,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.333
+    }
+  },
+  {
+    "id": "lr_gen_0005",
+    "prompt": "The weather was pleasant that day, with a gentle breeze blowing through the trees. The color of the house is golden. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. The garden was filled with flowers of every color, tended by a dedicated gardener. Several merchants had set up their stalls along the main road, selling various goods. The market was bustling with activity as traders from distant lands displayed their wares. What color is the house? The house is",
+    "target": " golden",
+    "type": "long_range_retrieval",
+    "tokens_approx": 111,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 5,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.2
+    }
+  },
+  {
+    "id": "lr_gen_0006",
+    "prompt": "An old scholar sat in the library, surrounded by countless volumes of ancient texts. Night fell slowly over the town, and lanterns were lit one by one along the pathways. The river flowed quietly through the valley, its waters reflecting the afternoon sun. The color of the house is silver. Several merchants had set up their stalls along the main road, selling various goods. The weather was pleasant that day, with a gentle breeze blowing through the trees. The festival preparations were underway, with decorations being hung across every doorway. The garden was filled with flowers of every color, tended by a dedicated gardener. What color is the house? The house is",
+    "target": " silver",
+    "type": "long_range_retrieval",
+    "tokens_approx": 145,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 7,
+      "fact_insert_idx": 3,
+      "fact_insert_frac": 0.429
+    }
+  },
+  {
+    "id": "lr_gen_0007",
+    "prompt": "Several merchants had set up their stalls along the main road, selling various goods. The password is twilight. The market was bustling with activity as traders from distant lands displayed their wares. Children played in the streets, their laughter echoing between the stone buildings. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. What is the password? The password is",
+    "target": " twilight",
+    "type": "long_range_retrieval",
+    "tokens_approx": 85,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 4,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.25
+    }
+  },
+  {
+    "id": "lr_gen_0008",
+    "prompt": "An old scholar sat in the library, surrounded by countless volumes of ancient texts. The river flowed quietly through the valley, its waters reflecting the afternoon sun. The color of the house is red. Children played in the streets, their laughter echoing between the stone buildings. Several merchants had set up their stalls along the main road, selling various goods. In the distance, the mountains rose majestically against the clear blue sky. What color is the house? The house is",
+    "target": " red",
+    "type": "long_range_retrieval",
+    "tokens_approx": 104,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 5,
+      "fact_insert_idx": 2,
+      "fact_insert_frac": 0.4
+    }
+  },
+  {
+    "id": "lr_gen_0009",
+    "prompt": "The market was bustling with activity as traders from distant lands displayed their wares. Children played in the streets, their laughter echoing between the stone buildings. The meeting is at noon. The garden was filled with flowers of every color, tended by a dedicated gardener. The river flowed quietly through the valley, its waters reflecting the afternoon sun. An old scholar sat in the library, surrounded by countless volumes of ancient texts. The festival preparations were underway, with decorations being hung across every doorway. When is the meeting? It is at",
+    "target": " noon",
+    "type": "long_range_retrieval",
+    "tokens_approx": 118,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 6,
+      "fact_insert_idx": 2,
+      "fact_insert_frac": 0.333
+    }
+  },
+  {
+    "id": "lr_gen_0010",
+    "prompt": "The password is phoenix. An old scholar sat in the library, surrounded by countless volumes of ancient texts. The market was bustling with activity as traders from distant lands displayed their wares. Children played in the streets, their laughter echoing between the stone buildings. What is the password? The password is",
+    "target": " phoenix",
+    "type": "long_range_retrieval",
+    "tokens_approx": 66,
+    "tier": "brief",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 3,
+      "fact_insert_idx": 0,
+      "fact_insert_frac": 0.0
+    }
+  },
+  {
+    "id": "lr_gen_0011",
+    "prompt": "A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. The capital of the kingdom is Northwatch. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. The market was bustling with activity as traders from distant lands displayed their wares. The festival preparations were underway, with decorations being hung across every doorway. What is the capital? The capital is",
+    "target": " Northwatch",
+    "type": "long_range_retrieval",
+    "tokens_approx": 92,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 4,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.25
+    }
+  },
+  {
+    "id": "lr_gen_0012",
+    "prompt": "The garden was filled with flowers of every color, tended by a dedicated gardener. The festival preparations were underway, with decorations being hung across every doorway. The meeting is at noon. Children played in the streets, their laughter echoing between the stone buildings. The market was bustling with activity as traders from distant lands displayed their wares. A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. In the distance, the mountains rose majestically against the clear blue sky. Several merchants had set up their stalls along the main road, selling various goods. An old scholar sat in the library, surrounded by countless volumes of ancient texts. When is the meeting? It is at",
+    "target": " noon",
+    "type": "long_range_retrieval",
+    "tokens_approx": 156,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 8,
+      "fact_insert_idx": 2,
+      "fact_insert_frac": 0.25
+    }
+  },
+  {
+    "id": "lr_gen_0013",
+    "prompt": "Several merchants had set up their stalls along the main road, selling various goods. The password is twilight. In the distance, the mountains rose majestically against the clear blue sky. A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. What is the password? The password is",
+    "target": " twilight",
+    "type": "long_range_retrieval",
+    "tokens_approx": 68,
+    "tier": "brief",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 3,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.333
+    }
+  },
+  {
+    "id": "lr_gen_0014",
+    "prompt": "The market was bustling with activity as traders from distant lands displayed their wares. The festival preparations were underway, with decorations being hung across every doorway. Sophia's favorite food is tacos. Night fell slowly over the town, and lanterns were lit one by one along the pathways. What is Sophia's favorite food?",
+    "target": " tacos",
+    "type": "long_range_retrieval",
+    "tokens_approx": 67,
+    "tier": "brief",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 3,
+      "fact_insert_idx": 2,
+      "fact_insert_frac": 0.667
+    }
+  },
+  {
+    "id": "lr_gen_0015",
+    "prompt": "The weather was pleasant that day, with a gentle breeze blowing through the trees. A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. The capital of the kingdom is Northwatch. Several merchants had set up their stalls along the main road, selling various goods. The garden was filled with flowers of every color, tended by a dedicated gardener. Children played in the streets, their laughter echoing between the stone buildings. The market was bustling with activity as traders from distant lands displayed their wares. An old scholar sat in the library, surrounded by countless volumes of ancient texts. What is the capital? The capital is",
+    "target": " Northwatch",
+    "type": "long_range_retrieval",
+    "tokens_approx": 145,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 7,
+      "fact_insert_idx": 2,
+      "fact_insert_frac": 0.286
+    }
+  },
+  {
+    "id": "lr_gen_0016",
+    "prompt": "A group of travelers rested beneath a large oak tree, sharing stories of their journeys. The color of the house is white. The weather was pleasant that day, with a gentle breeze blowing through the trees. Children played in the streets, their laughter echoing between the stone buildings. The garden was filled with flowers of every color, tended by a dedicated gardener. What color is the house? The house is",
+    "target": " white",
+    "type": "long_range_retrieval",
+    "tokens_approx": 91,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 4,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.25
+    }
+  },
+  {
+    "id": "lr_gen_0017",
+    "prompt": "Children played in the streets, their laughter echoing between the stone buildings. A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. The garden was filled with flowers of every color, tended by a dedicated gardener. The capital of the kingdom is Avalon. The river flowed quietly through the valley, its waters reflecting the afternoon sun. In the distance, the mountains rose majestically against the clear blue sky. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. Several merchants had set up their stalls along the main road, selling various goods. The festival preparations were underway, with decorations being hung across every doorway. What is the capital? The capital is",
+    "target": " Avalon",
+    "type": "long_range_retrieval",
+    "tokens_approx": 158,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 8,
+      "fact_insert_idx": 3,
+      "fact_insert_frac": 0.375
+    }
+  },
+  {
+    "id": "lr_gen_0018",
+    "prompt": "An old scholar sat in the library, surrounded by countless volumes of ancient texts. The capital of the kingdom is Avalon. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. The weather was pleasant that day, with a gentle breeze blowing through the trees. Several merchants had set up their stalls along the main road, selling various goods. The festival preparations were underway, with decorations being hung across every doorway. The market was bustling with activity as traders from distant lands displayed their wares. In the distance, the mountains rose majestically against the clear blue sky. What is the capital? The capital is",
+    "target": " Avalon",
+    "type": "long_range_retrieval",
+    "tokens_approx": 141,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 7,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.143
+    }
+  },
+  {
+    "id": "lr_gen_0019",
+    "prompt": "Several merchants had set up their stalls along the main road, selling various goods. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. The meeting is at sunset. The festival preparations were underway, with decorations being hung across every doorway. When is the meeting? It is at",
+    "target": " sunset",
+    "type": "long_range_retrieval",
+    "tokens_approx": 68,
+    "tier": "brief",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 3,
+      "fact_insert_idx": 2,
+      "fact_insert_frac": 0.667
+    }
+  },
+  {
+    "id": "lr_gen_0020",
+    "prompt": "A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. The capital of the kingdom is Meridian. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. The garden was filled with flowers of every color, tended by a dedicated gardener. In the distance, the mountains rose majestically against the clear blue sky. What is the capital? The capital is",
+    "target": " Meridian",
+    "type": "long_range_retrieval",
+    "tokens_approx": 92,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 4,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.25
+    }
+  },
+  {
+    "id": "lr_gen_0021",
+    "prompt": "The garden was filled with flowers of every color, tended by a dedicated gardener. The river flowed quietly through the valley, its waters reflecting the afternoon sun. The capital of the kingdom is Silverport. Children played in the streets, their laughter echoing between the stone buildings. The market was bustling with activity as traders from distant lands displayed their wares. What is the capital? The capital is",
+    "target": " Silverport",
+    "type": "long_range_retrieval",
+    "tokens_approx": 87,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 4,
+      "fact_insert_idx": 2,
+      "fact_insert_frac": 0.5
+    }
+  },
+  {
+    "id": "lr_gen_0022",
+    "prompt": "A group of travelers rested beneath a large oak tree, sharing stories of their journeys. Several merchants had set up their stalls along the main road, selling various goods. The color of the house is white. The river flowed quietly through the valley, its waters reflecting the afternoon sun. Night fell slowly over the town, and lanterns were lit one by one along the pathways. A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. In the distance, the mountains rose majestically against the clear blue sky. The weather was pleasant that day, with a gentle breeze blowing through the trees. What color is the house? The house is",
+    "target": " white",
+    "type": "long_range_retrieval",
+    "tokens_approx": 149,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 7,
+      "fact_insert_idx": 2,
+      "fact_insert_frac": 0.286
+    }
+  },
+  {
+    "id": "lr_gen_0023",
+    "prompt": "The meeting is at sunset. The weather was pleasant that day, with a gentle breeze blowing through the trees. Several merchants had set up their stalls along the main road, selling various goods. The festival preparations were underway, with decorations being hung across every doorway. The river flowed quietly through the valley, its waters reflecting the afternoon sun. When is the meeting? It is at",
+    "target": " sunset",
+    "type": "long_range_retrieval",
+    "tokens_approx": 84,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 4,
+      "fact_insert_idx": 0,
+      "fact_insert_frac": 0.0
+    }
+  },
+  {
+    "id": "lr_gen_0024",
+    "prompt": "Several merchants had set up their stalls along the main road, selling various goods. The password is twilight. The garden was filled with flowers of every color, tended by a dedicated gardener. The river flowed quietly through the valley, its waters reflecting the afternoon sun. Children played in the streets, their laughter echoing between the stone buildings. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. What is the password? The password is",
+    "target": " twilight",
+    "type": "long_range_retrieval",
+    "tokens_approx": 102,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 5,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.2
+    }
+  },
+  {
+    "id": "lr_gen_0025",
+    "prompt": "Night fell slowly over the town, and lanterns were lit one by one along the pathways. The meeting is at 9am. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. The river flowed quietly through the valley, its waters reflecting the afternoon sun. A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. The market was bustling with activity as traders from distant lands displayed their wares. Several merchants had set up their stalls along the main road, selling various goods. The weather was pleasant that day, with a gentle breeze blowing through the trees. When is the meeting? It is at",
+    "target": " 9am",
+    "type": "long_range_retrieval",
+    "tokens_approx": 148,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 7,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.143
+    }
+  },
+  {
+    "id": "lr_gen_0026",
+    "prompt": "The market was bustling with activity as traders from distant lands displayed their wares. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. Ava's favorite food is chocolate. The weather was pleasant that day, with a gentle breeze blowing through the trees. Several merchants had set up their stalls along the main road, selling various goods. Night fell slowly over the town, and lanterns were lit one by one along the pathways. The river flowed quietly through the valley, its waters reflecting the afternoon sun. What is Ava's favorite food?",
+    "target": " chocolate",
+    "type": "long_range_retrieval",
+    "tokens_approx": 124,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 6,
+      "fact_insert_idx": 2,
+      "fact_insert_frac": 0.333
+    }
+  },
+  {
+    "id": "lr_gen_0027",
+    "prompt": "The river flowed quietly through the valley, its waters reflecting the afternoon sun. The password is phoenix. The garden was filled with flowers of every color, tended by a dedicated gardener. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. In the distance, the mountains rose majestically against the clear blue sky. What is the password? The password is",
+    "target": " phoenix",
+    "type": "long_range_retrieval",
+    "tokens_approx": 84,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 4,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.25
+    }
+  },
+  {
+    "id": "lr_gen_0028",
+    "prompt": "The color of the house is white. Several merchants had set up their stalls along the main road, selling various goods. A group of travelers rested beneath a large oak tree, sharing stories of their journeys. The garden was filled with flowers of every color, tended by a dedicated gardener. The festival preparations were underway, with decorations being hung across every doorway. What color is the house? The house is",
+    "target": " white",
+    "type": "long_range_retrieval",
+    "tokens_approx": 91,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 4,
+      "fact_insert_idx": 0,
+      "fact_insert_frac": 0.0
+    }
+  },
+  {
+    "id": "lr_gen_0029",
+    "prompt": "The river flowed quietly through the valley, its waters reflecting the afternoon sun. The capital of the kingdom is Avalon. In the distance, the mountains rose majestically against the clear blue sky. The market was bustling with activity as traders from distant lands displayed their wares. What is the capital? The capital is",
+    "target": " Avalon",
+    "type": "long_range_retrieval",
+    "tokens_approx": 68,
+    "tier": "brief",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 3,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.333
+    }
+  },
+  {
+    "prompt": "In the context of mid-20th-century Australian political history, the transition from the long-serving government of Sir Robert Menzies to his successor's administration was a pivotal moment for the Liberal Party and for the nation. Menzies had served as Prime Minister for an unbroken stretch of over sixteen years, from December 1949 to January 1966, making his the longest continuous premiership in Australian history \u2014 a record that still stands. Under Menzies, Australia had committed troops to the Korean War and the Malayan Emergency, joined the SEATO and ANZUS alliances, and begun to move away from the White Australia policy, though that process would take decades to complete. When Menzies retired on 26 January 1966 at the age of 71, the leadership of the Liberal Party passed to a figure who had served loyally as Treasurer and Deputy Leader. This successor had been born in Sydney in 1908, educated at Melbourne Grammar School and the University of Melbourne, where he studied law, and had practiced as a solicitor before entering federal politics. He was widely regarded as a modernizer who would bring a more youthful and energetic style to the office, and he quickly proved popular with the electorate. His government's first ministry, designated the 41st ministry of the Government of Australia, retained many of the key figures from the Menzies era while making some notable changes in portfolio assignments. This initial ministry lasted until the 1966 federal election in November, which the government won in a landslide partly driven by public support for Australia's commitment of combat troops to Vietnam. A reshuffled second ministry was sworn in on 14 December 1966. Tragically, this Prime Minister would disappear while swimming at Cheviot Beach in Victoria on 17 December 1967, one of the most mysterious events in Australian political history. Despite an extensive search involving military and civilian resources, his body was never found, and he was presumed drowned. The 41st ministry of the Government of Australia, which succeeded the Tenth Menzies ministry in January 1966, was led by Prime Minister",
+    "target": " Harold Holt",
+    "source": "gen-wikipedia-random-long",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random-long_0000",
+    "type": "domain_knowledge",
+    "tokens_approx": 440,
+    "tier": "long"
+  },
+  {
+    "prompt": "The short-lived communist state established in Hungary in 1919, governed by the revolutionary B\u00e9la Kun before its collapse after 133 days, was known as the Hungarian",
+    "target": " Soviet Republic",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0001",
+    "type": "domain_knowledge",
+    "tokens_approx": 33,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The Colombian woman who became one of the most important figures in the country's independence movement, choosing death over submission to Spanish colonial rule, and who is the subject of a major 2010 telenovela, was Policarpa",
+    "target": " Salavarrieta",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0002",
+    "type": "domain_knowledge",
+    "tokens_approx": 46,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The mathematical constant approximately equal to 2.71828, which is the base of the natural logarithm, is known as Euler's",
+    "target": " number",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0003",
+    "type": "domain_knowledge",
+    "tokens_approx": 24,
+    "tier": "short"
+  },
+  {
+    "prompt": "The British mountaineer who disappeared near the summit of Mount Everest in 1924 alongside his climbing partner Andrew Irvine, whose body was not found until 1999, was",
+    "target": " George Mallory",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0004",
+    "type": "domain_knowledge",
+    "tokens_approx": 35,
+    "tier": "brief"
+  },
+  {
+    "prompt": "In the traditional Latin Requiem Mass, the antiphon sung by the choir as the body is being taken out of the church, later set to music by composers such as Faur\u00e9 and Durufl\u00e9, is called",
+    "target": " In paradisum",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0005",
+    "type": "domain_knowledge",
+    "tokens_approx": 45,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The phenomenon in quantum mechanics where measuring one particle instantaneously affects another particle regardless of distance is known as quantum",
+    "target": " entanglement",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0006",
+    "type": "domain_knowledge",
+    "tokens_approx": 26,
+    "tier": "short"
+  },
+  {
+    "prompt": "The ancient Greek philosophical concept that celestial bodies produce inaudible harmonious tones as they move through space, reflecting the mathematical order of the cosmos, is known as the music of the",
+    "target": " spheres",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0007",
+    "type": "domain_knowledge",
+    "tokens_approx": 40,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The ancient trade route connecting China to the Mediterranean, facilitating the exchange of silk, spices, and ideas, was known as the Silk",
+    "target": " Road",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0008",
+    "type": "domain_knowledge",
+    "tokens_approx": 28,
+    "tier": "short"
+  },
+  {
+    "prompt": "The obelisk structure built in the mid-18th century by the Conolly family on their Castletown Estate, located between Celbridge and Maynooth in County Kildare, Ireland, now a national monument, is known as",
+    "target": " Conolly's Folly",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0009",
+    "type": "domain_knowledge",
+    "tokens_approx": 41,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The Taoist temple located in Weaverville, California, still in active use, that holds the distinction of being the oldest Chinese temple in the state, is preserved as the Weaverville",
+    "target": " Joss House",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0010",
+    "type": "domain_knowledge",
+    "tokens_approx": 37,
+    "tier": "brief"
+  },
+  {
+    "prompt": "In neuroscience, the gap between two neurons where neurotransmitters are released to transmit signals is called the synaptic",
+    "target": " cleft",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0011",
+    "type": "domain_knowledge",
+    "tokens_approx": 23,
+    "tier": "short"
+  },
+  {
+    "prompt": "The United States Army warrant officer who intervened to stop the M\u1ef9 Lai massacre on March 16, 1968, alongside Glenn Andreotta and Lawrence Colburn, by landing his helicopter between American troops and Vietnamese civilians, was",
+    "target": " Hugh Thompson",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0012",
+    "type": "domain_knowledge",
+    "tokens_approx": 45,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The California railroad intended to connect San Francisco to Santa Cruz that never completed construction due to the 1906 San Francisco Earthquake, operating as two disconnected segments until 1920, was the",
+    "target": " Ocean Shore Railroad",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0013",
+    "type": "domain_knowledge",
+    "tokens_approx": 40,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The structural design used in many 19th-century American covered bridges, combining a multiple kingpost truss with a reinforcing arch, patented by Theodore Burr in 1817, is known as a",
+    "target": " Burr Truss",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0014",
+    "type": "domain_knowledge",
+    "tokens_approx": 37,
+    "tier": "brief"
+  },
+  {
+    "prompt": "Among the historic churches of the American South, those built of logs represent a vanishing architectural tradition that dates to the earliest years of European settlement in the region. Log construction was the default building technique on the frontier, where sawmills were scarce and milled lumber had to be transported over great distances at considerable expense. Settlers constructed their first churches \u2014 like their homes, barns, and schools \u2014 from logs hewn from the surrounding forests, notching the corners and daubing the gaps with clay or mortar. In Alabama, where the rapid expansion of cotton cultivation in the antebellum period brought waves of settlers who quickly built frame and brick churches as communities prospered, log construction was typically a temporary expedient that gave way to more permanent structures within a generation. As a result, very few log churches survive in the state \u2014 most were demolished, burned, or simply collapsed as their timbers rotted. One notable exception stands in McIntosh, a small community in Washington County in the southwestern part of the state, along the Tombigbee River. The church had its beginning in 1860, when a local resident named John C. Rush and his wife donated land for the construction of a place of worship for the Methodist community. The building was completed before the year ended, just months before the outbreak of the Civil War that would devastate the region. The building was constructed using the saddle-notch technique common to the region, with logs hewn flat on two sides and fitted together without the use of nails \u2014 a method that required considerable skill but produced structures of surprising durability. It was named in honor of James Osgood Andrew, a bishop in the Methodist Episcopal Church, South, who was himself a figure of considerable historical significance: it was the controversy over Andrew's ownership of enslaved people that precipitated the 1844 split of the Methodist Episcopal Church into its Northern and Southern branches, a denominational schism that foreshadowed the larger national division by seventeen years. This historic Methodist log church building in McIntosh, Alabama, named for Bishop James Osgood Andrew, is known as",
+    "target": " Andrews Chapel",
+    "source": "gen-wikipedia-random-long",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random-long_0015",
+    "type": "domain_knowledge",
+    "tokens_approx": 458,
+    "tier": "long"
+  },
+  {
+    "prompt": "In livestock husbandry, an animal that cannot stand on its own and is therefore to be killed is referred to by the industry term",
+    "target": " downer",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0016",
+    "type": "domain_knowledge",
+    "tokens_approx": 31,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The small, rustic horse breed native to the Pyrenees and Ari\u00e9geois mountains of southern France, always black in color and still occasionally referred to by the older name Ari\u00e9geois pony, is the",
+    "target": " M\u00e9rens",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0017",
+    "type": "domain_knowledge",
+    "tokens_approx": 41,
+    "tier": "brief"
+  },
+  {
+    "prompt": "Egypt's sole participant in its only appearance at the Winter Olympic Games, competing in alpine skiing at the 1984 Games in Sarajevo, was",
+    "target": " Jamil El Reedy",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0018",
+    "type": "domain_knowledge",
+    "tokens_approx": 29,
+    "tier": "short"
+  },
+  {
+    "prompt": "The second-largest metropolitan area in Iran, a transportation hub and industrial center extending along the Zayandeh Rud river that is home to steel industries and nuclear facilities, is centered on the city of",
+    "target": " Isfahan",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0019",
+    "type": "domain_knowledge",
+    "tokens_approx": 42,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The building constructed in Munich between 1933 and 1937 for Adolf Hitler's personal use, which unlike many Nazi-era structures still stands and now houses the University of Music and Performing Arts Munich, is known as the",
+    "target": " F\u00fchrerbau",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0020",
+    "type": "domain_knowledge",
+    "tokens_approx": 46,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The influential monthly German-language magazine that served as a major platform for Jewish intellectual discourse from 1916 to 1928, co-founded by the philosopher Martin Buber and publisher Salman Schocken, was titled",
+    "target": " Der Jude",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0021",
+    "type": "domain_knowledge",
+    "tokens_approx": 40,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The 1793 Gothic novel by Eliza Parsons that is listed among the seven 'horrid novels' recommended by Isabella Thorpe in Jane Austen's Northanger Abbey, predating both Radcliffe's Udolpho and Lewis's The Monk, is titled The Castle of",
+    "target": " Wolfenbach",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0022",
+    "type": "domain_knowledge",
+    "tokens_approx": 48,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The marine echinoderms of the order Ophiurida, characterized by their long flexible arms radiating from a central disc, are commonly known as",
+    "target": " brittle stars",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0023",
+    "type": "domain_knowledge",
+    "tokens_approx": 28,
+    "tier": "short"
+  },
+  {
+    "prompt": "The road network of the state of Iowa follows a grid-like pattern that reflects the rectangular survey system used to divide the Midwest into townships and sections in the 19th century, a system established by the Land Ordinance of 1785 and visible from the air as the patchwork of square-mile fields that characterizes the region's landscape. State highways in Iowa are numbered and maintained by the Iowa Department of Transportation, and they serve as critical arterial links between the small towns and farming communities that dot the landscape of one of America's most productive agricultural regions \u2014 a state that leads the nation in corn and hog production and ranks near the top in soybeans, eggs, and ethanol. In the southeastern corner of the state, where the terrain is hillier and more wooded than the flat prairies to the north and west, one particular state highway runs from west to east across a landscape of rolling hills, corn and soybean fields, and small river valleys carved by tributaries of the Des Moines and Mississippi Rivers. The highway has a total length of approximately 65 miles, connecting a series of small communities \u2014 none with a population exceeding a few thousand \u2014 between two major federal highways. Its western terminus is at an intersection with U.S. Highway 34, a transcontinental route, in the area between the communities of Agency and Batavia in Jefferson County. From there, the road winds eastward through the counties of southeastern Iowa, passing through or near several small towns whose economies are tied to agriculture and, in some cases, to the institutional presence of a state prison or community college. The region through which the highway passes was originally inhabited by the Meskwaki (Fox) and Sauk peoples, and the Meskwaki Settlement near Tama, Iowa \u2014 one of the few Native American communities in the country established by tribal purchase rather than federal reservation \u2014 lies to the north. Its eastern terminus is at the community of Wever, in Lee County, where it meets U.S. Highway 61, the major north-south route that runs along the Mississippi River from New Orleans to the Canadian border. This state highway running approximately 65 miles through southeastern Iowa, from US-34 to US-61 at Wever, is designated Iowa Highway",
+    "target": " 16",
+    "source": "gen-wikipedia-random-long",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random-long_0024",
+    "type": "domain_knowledge",
+    "tokens_approx": 488,
+    "tier": "long"
+  },
+  {
+    "prompt": "The prominent geological formation extending from New York through Ontario to Wisconsin, along whose western end the Wisconsin Ledge wine-growing region was established in 2012, is called the Niagara",
+    "target": " Escarpment",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0025",
+    "type": "domain_knowledge",
+    "tokens_approx": 37,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The Royal Air Force has produced a number of senior officers whose careers spanned the full arc of 20th-century British military history, from the interwar period through the Second World War and into the Cold War era of decolonization and limited conflicts. These officers often served in multiple theaters and held commands that reflected Britain's shrinking but still substantial global military commitments. One such officer, born in New Zealand in 1906, traveled to Britain as a young man and joined the Royal Air Force during the interwar period, when the RAF was still establishing itself as an independent service branch. He rose to the rank of squadron commander during the Second World War, gaining operational experience in both European and Mediterranean theaters that would inform his later command decisions. In the postwar years, he ascended to senior leadership positions within the RAF and the broader British military establishment, reflecting the continued prominence of Commonwealth-born officers in the British armed forces. His most consequential command came during the Suez Crisis of 1956, when he served as the British air commander for the Anglo-French military intervention in Egypt \u2014 Operation Musketeer, an operation that, while militarily successful in its immediate objectives of seizing the Canal Zone, became a political catastrophe that marked the definitive end of British and French imperial pretensions in the Middle East and led to the resignation of Prime Minister Anthony Eden. Following the Suez debacle, he went on to serve as Air Officer Commanding-in-Chief of Transport Command, responsible for the RAF's global airlift capability at a time when Britain was withdrawing from bases east of Suez, and subsequently as Commander of British Forces Cyprus during a period of significant intercommunal tension on the island. He eventually rose to the rank of Air Chief Marshal. This New Zealand-born RAF Air Chief Marshal, who commanded British air forces during the Suez War, was Sir Denis Hensley Fulton",
+    "target": " Barnett",
+    "source": "gen-wikipedia-random-long",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random-long_0026",
+    "type": "domain_knowledge",
+    "tokens_approx": 412,
+    "tier": "long"
+  },
+  {
+    "prompt": "In music theory, a chord consisting of a root, major third, and perfect fifth is called a major",
+    "target": " triad",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0027",
+    "type": "domain_knowledge",
+    "tokens_approx": 23,
+    "tier": "short"
+  },
+  {
+    "prompt": "In linguistics, the umlaut diacritic indicates a historical sound shift in which former back vowels came to be pronounced as",
+    "target": " front vowels",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0028",
+    "type": "domain_knowledge",
+    "tokens_approx": 26,
+    "tier": "short"
+  },
+  {
+    "prompt": "The French composer who served as cantor in Geneva under John Calvin and is best known for creating the melody now universally associated with the Doxology hymn 'Praise God, from Whom All Blessings Flow' was",
+    "target": " Louis Bourgeois",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0029",
+    "type": "domain_knowledge",
+    "tokens_approx": 45,
+    "tier": "brief"
+  },
+  {
+    "prompt": "In the annals of 20th-century American publishing, few books have had as immediate and lasting an impact on the public understanding of war as the memoir published in 1977 by a young Marine lieutenant who had been among the first American combat troops to land in Vietnam in March 1965. The author, a Chicago-born journalist who had studied English literature at Loyola University before enlisting in the Marine Corps, served as an infantry officer in the 9th Marine Expeditionary Brigade \u2014 one of the first major American ground combat units deployed to Southeast Asia \u2014 and later as a staff officer tasked with tracking enemy casualties \u2014 a role that exposed him to the bureaucratic machinery of body counts that defined American strategy in the conflict. His memoir broke sharply from the sanitized accounts that had dominated earlier war literature; it described with unflinching honesty the boredom, terror, moral confusion, and occasional exhilaration of combat in the jungles and rice paddies of Quang Tri province. The book's central tension lies in the author's realization that the idealism with which he enlisted \u2014 shaped by the rhetoric of Kennedy's inauguration and the muscular confidence of postwar America \u2014 was systematically destroyed by the realities of a war fought without clear objectives, territorial gains, or meaningful benchmarks of progress. He wrote with particular power about the way that combat transformed young men, stripping away their moral certainties and replacing them with a primal focus on survival that could, under pressure, shade into atrocity. After returning from Vietnam, the author joined the Chicago Tribune and later won a Pulitzer Prize as part of a team investigating voter fraud in Chicago, before returning to Vietnam to cover the fall of Saigon in 1975. He went on to write numerous novels, nonfiction works, and additional memoirs over a career spanning five decades, but his reputation rests primarily on that first searing account of his sixteen months in country. The author of this landmark Vietnam War memoir, titled A Rumor of War, is",
+    "target": " Philip Caputo",
+    "source": "gen-wikipedia-random-long",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random-long_0030",
+    "type": "domain_knowledge",
+    "tokens_approx": 438,
+    "tier": "long"
+  },
+  {
+    "prompt": "The endangered variety of the Spanish language descended from 18th-century colonists who established Los Adaes and Nacogdoches, still spoken by a few communities along the border between Texas and Louisiana, is known as",
+    "target": " Sabine River Spanish",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0031",
+    "type": "domain_knowledge",
+    "tokens_approx": 42,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The largest island of the Seychelles, containing the capital city of Victoria and accommodating 86 percent of the country's population, named after a French governor of Isle de France, is",
+    "target": " Mah\u00e9",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0032",
+    "type": "domain_knowledge",
+    "tokens_approx": 39,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The annual September festival of the Wolayta people of southern Ethiopia, whose name means 'the beginning' and marks the New Year as a bridge from old to new and dark to light, is called",
+    "target": " Gifaataa",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0033",
+    "type": "domain_knowledge",
+    "tokens_approx": 44,
+    "tier": "brief"
+  },
+  {
+    "prompt": "Poland's postwar political landscape under communist rule was defined by a series of power struggles within the Polish United Workers' Party (Polska Zjednoczona Partia Robotnicza, or PZPR), which governed the country as a one-party state from its formation in 1948 through the merger of the Polish Workers' Party and the Polish Socialist Party until the democratic transition of 1989. The PZPR's internal politics were shaped by factional rivalries between 'Muscovites' who had spent the war years in the Soviet Union, 'partisans' who had fought in the domestic resistance, and various reformist and hardline tendencies. Among the most important of these internal dynamics was the relationship between the party's First Secretary \u2014 the de facto leader of the Polish state \u2014 and his closest political allies. During the era of W\u0142adys\u0142aw Gomu\u0142ka's leadership, which lasted from the Polish October of 1956 to his fall in December 1970, one figure stood out as the leader's most trusted lieutenant and ideological enforcer. Born in the industrial city of \u0141\u00f3d\u017a in 1908, this politician had been involved in the communist movement since before the war and had fought in the underground resistance during the German occupation. After the war, he rose rapidly through the party hierarchy, and when Gomu\u0142ka returned to power during the political upheaval of October 1956 \u2014 riding a wave of popular anger over Stalinist repression \u2014 he became the First Secretary's indispensable right-hand man. He wielded enormous influence over the party's internal discipline, ideological line, personnel appointments, and cultural policy. He was widely considered the second most powerful person in Poland during the Gomu\u0142ka years. His role in the events of March 1968 \u2014 when student protests in Warsaw were met with a brutal crackdown and an antisemitic campaign that drove thousands of Polish Jews to emigrate \u2014 remains a subject of historical debate, with some scholars attributing the antisemitic dimension primarily to the rival 'Partisan' faction of Mieczys\u0142aw Moczar rather than to Gomu\u0142ka's inner circle. His influence waned abruptly with Gomu\u0142ka's fall from power in December 1970, following the violent suppression of Baltic coast workers' protests. He died in Warsaw in 1989. This Polish communist politician, considered the right-hand man of Gomu\u0142ka, was",
+    "target": " Zenon Kliszko",
+    "source": "gen-wikipedia-random-long",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random-long_0034",
+    "type": "domain_knowledge",
+    "tokens_approx": 473,
+    "tier": "long"
+  },
+  {
+    "prompt": "The Swedish diplomat nicknamed 'Svarta nejlikan' who rescued hundreds of Norwegian Jews during World War II and later helped over 1,200 Chileans escape Pinochet's dictatorship, earning the title 'the Raoul Wallenberg of the 1970s,' was",
+    "target": " Harald Edelstam",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0035",
+    "type": "domain_knowledge",
+    "tokens_approx": 45,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The history of American entomology in the 19th century is populated by remarkable figures who combined scientific rigor with the practical demands of other professions, conducting their research in the margins of lives devoted to teaching, medicine, or public service. One such figure was born in 1826 and spent most of his professional life in Waterbury, Connecticut, where he served as the librarian of the Silas Bronson Library \u2014 a position he held for decades and which gave him access to the scientific literature he needed to pursue his true passion: the study of gall wasps. The Silas Bronson Library, endowed by a local philanthropist and opened in 1869, was one of the finest public libraries in Connecticut, and its librarian was expected to be a man of broad learning. Gall wasps, members of the family Cynipidae within the order Hymenoptera, are tiny insects \u2014 often only a few millimeters long \u2014 that induce the formation of abnormal growths called galls on the tissues of host plants, particularly oaks. The mechanism by which the wasp hijacks the plant's own growth processes to create these elaborate structures remains a subject of active research even today. Each species of gall wasp produces a characteristic gall structure, and the diversity of gall forms \u2014 some spherical, some spiny, some resembling tiny apples or bullets \u2014 provided a rich field of study for 19th-century naturalists who could collect and classify them without specialized equipment. This Connecticut librarian-entomologist became one of the foremost authorities on North American cynipid wasps, describing numerous new species and publishing extensively in journals such as the Canadian Entomologist and the Proceedings of the Entomological Society of Washington. His meticulous descriptions and careful observations laid the groundwork for later systematic work on the group, including the monumental studies of Alfred Kinsey, who studied gall wasps before turning his attention to human sexual behavior. This American hymenopterist and librarian, who specialized in cynipid gall wasps while serving the Silas Bronson Library in Waterbury, was",
+    "target": " Homer Franklin Bassett",
+    "source": "gen-wikipedia-random-long",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random-long_0036",
+    "type": "domain_knowledge",
+    "tokens_approx": 431,
+    "tier": "long"
+  },
+  {
+    "prompt": "In computer science, the data structure that follows the Last-In-First-Out principle is called a",
+    "target": " stack",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0037",
+    "type": "domain_knowledge",
+    "tokens_approx": 18,
+    "tier": "short"
+  },
+  {
+    "prompt": "The American frontiersman Daniel Boone was born on November 2, 1734, in Oley Township in what is now Berks County,",
+    "target": " Pennsylvania",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0038",
+    "type": "domain_knowledge",
+    "tokens_approx": 26,
+    "tier": "short"
+  },
+  {
+    "prompt": "In the medieval military hierarchy, a knight who led a company of troops under his own banner, ranking above a Knight Bachelor but below an earl, was known as a knight",
+    "target": " banneret",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0039",
+    "type": "domain_knowledge",
+    "tokens_approx": 40,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The American analytic philosopher who held the Edgar Pierce Chair at Harvard and attacked the distinction between analytic and synthetic statements in his 1951 paper 'Two Dogmas of Empiricism' was Willard Van Orman",
+    "target": " Quine",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0040",
+    "type": "domain_knowledge",
+    "tokens_approx": 42,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The American author who wrote the 1969 novel The Godfather and co-adapted it into a film trilogy with Francis Ford Coppola, winning Academy Awards for Best Adapted Screenplay for the first two films, was",
+    "target": " Mario Puzo",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0041",
+    "type": "domain_knowledge",
+    "tokens_approx": 44,
+    "tier": "brief"
+  },
+  {
+    "prompt": "In semiconductor research, a solaristor is a compact two-terminal device that combines a transistor with a solar cell, achieving current modulation through a memresistive effect. It is classified as a self-powered",
+    "target": " phototransistor",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0042",
+    "type": "domain_knowledge",
+    "tokens_approx": 40,
+    "tier": "brief"
+  },
+  {
+    "prompt": "In the history of American land ownership and railroad development in Southern California, one figure stands out for his singular determination to maintain private control over a vast stretch of coastline. Frederick Hastings Rindge, born in 1857 in Cambridge, Massachusetts, made his fortune in the hardware business before moving to Southern California and acquiring a 13,000-acre ranch that encompassed nearly all of what is today the city of Malibu. The property stretched for miles along the Pacific coast, bounded by the Santa Monica Mountains to the north and the ocean to the south. For years, Rindge fought legal battles to keep trespassers, settlers, and most importantly the Southern Pacific Company off his land. The Southern Pacific sought to use the power of eminent domain to extend its coastal rail line through Rindge's property, which would have opened the isolated coastline to development. Rather than submit, Rindge conceived an audacious plan: he would build his own standard-gauge railroad along the coast, thereby preempting the Southern Pacific's claim by establishing an existing rail corridor. Construction began in 1905, the year of Rindge's death at age 48, and was continued by his widow May Knight Rindge, who became one of the wealthiest women in the state and proved equally determined to preserve the family's coastal empire. The railroad ultimately extended 15 miles along the coast, with tracks, bridges, and tunnels carved into the rugged Santa Monica Mountains. Engineers constructed concrete bridges over deep canyons and blasted tunnels through headlands that jutted into the sea. Despite its engineering ambition, the line never connected to any external rail network, never carried paying passengers, and was used primarily to haul supplies and livestock for the ranch. Storms, landslides, and the relentless corrosion of salt air gradually degraded the infrastructure, while the enormous legal costs of fighting condemnation proceedings gradually bankrupted the Rindge estate. By the 1920s, the State of California had won its own eminent domain case, and Roosevelt Highway \u2014 now Pacific Coast Highway \u2014 was built over and alongside much of the former rail bed, rendering the railroad obsolete. Today almost no trace of the railroad remains, though occasional concrete footings and tunnel portals can be spotted along the Malibu coast by hikers who know where to look. This short-lived, privately-built standard-gauge railroad, constructed entirely within the Rindge ranch to prevent Southern Pacific encroachment, was formally incorporated as the Hueneme, Malibu and Port Los Angeles",
+    "target": " Railway",
+    "source": "gen-wikipedia-random-long",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random-long_0043",
+    "type": "domain_knowledge",
+    "tokens_approx": 521,
+    "tier": "extended"
+  },
+  {
+    "prompt": "The public research university in Berlin founded in 1810 by the Prussian educational reformer and linguist who articulated the ideal of uniting teaching and research is named after Wilhelm von",
+    "target": " Humboldt",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0044",
+    "type": "domain_knowledge",
+    "tokens_approx": 39,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The American jazz tenor saxophonist who won 15 Grammy Awards, appeared on more than 900 albums as both leader and sideman, and was inducted into the DownBeat Hall of Fame in 2007, was",
+    "target": " Michael Brecker",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0045",
+    "type": "domain_knowledge",
+    "tokens_approx": 42,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The architectural style characterized by pointed arches, ribbed vaults, and flying buttresses that dominated medieval Europe is called",
+    "target": " Gothic",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0046",
+    "type": "domain_knowledge",
+    "tokens_approx": 23,
+    "tier": "short"
+  },
+  {
+    "prompt": "Eutrephoceras, an extinct genus of nautilus that lived from the Late Jurassic to the Miocene, is characterized by a highly rounded shell with slightly sinuous suture patterns, described in paleontology as an",
+    "target": " involute",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0047",
+    "type": "domain_knowledge",
+    "tokens_approx": 41,
+    "tier": "brief"
+  },
+  {
+    "prompt": "China's national college entrance examination, known as the gaokao, is one of the most consequential standardized tests in the world. Each year, approximately ten million students sit for the exam over two or three days in early June, and their scores largely determine which universities they may attend \u2014 a decision that in Chinese society carries enormous implications for career prospects, social mobility, and family honor. However, the system is not uniform across the country. Each province and municipality sets its own exam papers, its own scoring criteria, and \u2014 critically \u2014 its own admission quotas for elite universities. Because top institutions like Peking University and Tsinghua University allocate a disproportionate number of seats to students registered in Beijing and a few other favored regions, a student in a densely populated rural province like Henan or Shandong faces far stiffer competition for the same university slot than a student with Beijing household registration. The numbers are stark: acceptance rates at elite universities for Beijing-registered students can be several times higher than those for students from provinces with larger populations and fewer allocated seats. This structural inequality has given rise to a widespread and controversial practice in which families relocate \u2014 or fraudulently alter their household registration documents, known as hukou \u2014 to take advantage of regions with more favorable admission rates. Some families genuinely move to a target province, purchase property, re-register their household, and enroll their children in local schools, which is legal but expensive and disruptive. Others engage in outright document fraud, purchasing fake hukou transfers or bribing local officials to alter registration records without any actual change in residence. Still others exploit loopholes by registering children with relatives in favored provinces or establishing shell businesses that qualify them for local residency. The Chinese government has periodically cracked down on the practice, imposing minimum residency requirements, cross-referencing school enrollment records with household databases, and prosecuting officials who facilitate fraudulent transfers. Nevertheless, the incentive structure remains extraordinarily powerful, and investigative journalists continue to uncover large-scale schemes, particularly in provinces bordering Beijing and Shanghai. This phenomenon of families strategically relocating or altering their registered residency to exploit regional disparities in the college entrance examination system is referred to in Chinese education policy as gaokao",
+    "target": " migration",
+    "source": "gen-wikipedia-random-long",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random-long_0048",
+    "type": "domain_knowledge",
+    "tokens_approx": 486,
+    "tier": "long"
+  },
+  {
+    "prompt": "In military ordnance, the type of fuse consisting of a long probe affixed to a bomb's nose that detonates an aerial bomb at or above ground level to maximize surface blast damage is called a",
+    "target": " daisy cutter",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0049",
+    "type": "domain_knowledge",
+    "tokens_approx": 45,
+    "tier": "brief"
+  },
+  {
+    "prompt": "In machine learning, the technique of randomly dropping neurons during training to prevent overfitting is called",
+    "target": " dropout",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0050",
+    "type": "domain_knowledge",
+    "tokens_approx": 20,
+    "tier": "short"
+  },
+  {
+    "prompt": "In thermodynamics, the law stating that entropy of an isolated system always increases is the second law of",
+    "target": " thermodynamics",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0051",
+    "type": "domain_knowledge",
+    "tokens_approx": 23,
+    "tier": "short"
+  },
+  {
+    "prompt": "The form of political protest that uses humour, carnival, and whimsical antics as a strategy of peaceful non-compliance, gaining currency in the 1990s anti-globalization movement, is known as",
+    "target": " tactical frivolity",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0052",
+    "type": "domain_knowledge",
+    "tokens_approx": 36,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The largest family of bats, whose Latin name Vespertilionidae derives from the word for 'evening' and includes over 400 species worldwide, is commonly known as the",
+    "target": " vesper bats",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0053",
+    "type": "domain_knowledge",
+    "tokens_approx": 33,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The traditional Nordic mesophilic fermented milk product, particularly popular in Finland, that is similar to yoghurt but has a distinctive malleable or 'long' texture when left unmixed, is called",
+    "target": " viili",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0054",
+    "type": "domain_knowledge",
+    "tokens_approx": 37,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The brief 1827 conflict in what is now Wisconsin, triggered when Ho-Chunk people reacted to lead miners trespassing on their lands and to false rumors about the execution of tribal prisoners, is known as the",
+    "target": " Winnebago War",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0055",
+    "type": "domain_knowledge",
+    "tokens_approx": 45,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The white brimless felt skull cap traditionally worn by Albanians as part of their national costume, whose height and shape varies by region, is known as a",
+    "target": " qeleshe",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0056",
+    "type": "domain_knowledge",
+    "tokens_approx": 35,
+    "tier": "brief"
+  },
+  {
+    "prompt": "The deepest known point in Earth's oceans, located in the western Pacific, is called the Mariana",
+    "target": " Trench",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0057",
+    "type": "domain_knowledge",
+    "tokens_approx": 20,
+    "tier": "short"
+  },
+  {
+    "prompt": "In genetics, the molecule that carries amino acids to the ribosome during protein synthesis is transfer",
+    "target": " RNA",
+    "source": "curated_domain",
+    "metadata": {},
+    "id": "dk_curated_domain_0058",
+    "type": "domain_knowledge",
+    "tokens_approx": 20,
+    "tier": "short"
+  },
+  {
+    "prompt": "In sleep science, brief sub-second interruptions of sleep characterized by partial cortical activation without full consciousness, detectable through EEG as short bursts of brain activity, are called",
+    "target": " microarousals",
+    "source": "gen-wikipedia-random",
+    "metadata": {},
+    "id": "dk_gen-wikipedia-random_0059",
+    "type": "domain_knowledge",
+    "tokens_approx": 35,
+    "tier": "brief"
+  },
+  {
+    "prompt": "```python\nx = 10\nif x > 5:\n    x = x - 3\nprint(x)\n```\nOutput:",
+    "target": " 7",
+    "id": "cc_gen_0000",
+    "type": "code_comprehension",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "gen_code",
+    "metadata": {}
+  },
+  {
+    "prompt": "```python\nx = [1, 2, 3]\nx.append(4)\nprint(len(x))\n```\nOutput:",
+    "target": " 4",
+    "id": "cc_gen_0001",
+    "type": "code_comprehension",
+    "tokens_approx": 13,
+    "tier": "short",
+    "source": "gen_code",
+    "metadata": {}
+  },
+  {
+    "prompt": "```python\nfor i in range(3):\n    pass\nprint(i)\n```\nOutput:",
+    "target": " 2",
+    "id": "cc_gen_0002",
+    "type": "code_comprehension",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "gen_code",
+    "metadata": {}
+  },
+  {
+    "prompt": "```python\nd = {\"a\": 1, \"b\": 2}\nprint(d[\"b\"])\n```\nOutput:",
+    "target": " 2",
+    "id": "cc_gen_0003",
+    "type": "code_comprehension",
+    "tokens_approx": 13,
+    "tier": "short",
+    "source": "gen_code",
+    "metadata": {}
+  },
+  {
+    "prompt": "```python\ns = \"hello world\"\nprint(s.count(\"l\"))\n```\nOutput:",
+    "target": " 3",
+    "id": "cc_gen_0004",
+    "type": "code_comprehension",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "gen_code",
+    "metadata": {}
+  },
+  {
+    "prompt": "```python\ndef add(a, b=10):\n    return a + b\nprint(add(5))\n```\nOutput:",
+    "target": " 15",
+    "id": "cc_gen_0005",
+    "type": "code_comprehension",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "gen_code",
+    "metadata": {}
+  },
+  {
+    "prompt": "```python\nx = True\ny = False\nprint(x and y)\n```\nOutput:",
+    "target": " False",
+    "id": "cc_gen_0006",
+    "type": "code_comprehension",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "gen_code",
+    "metadata": {}
+  },
+  {
+    "prompt": "```python\ns = \"abcdef\"\nprint(s[:3])\n```\nOutput:",
+    "target": " abc",
+    "id": "cc_gen_0007",
+    "type": "code_comprehension",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "gen_code",
+    "metadata": {}
+  },
+  {
+    "prompt": "```python\ndef f(n):\n    return n * 2\nprint(f(7))\n```\nOutput:",
+    "target": " 14",
+    "id": "cc_gen_0008",
+    "type": "code_comprehension",
+    "tokens_approx": 13,
+    "tier": "short",
+    "source": "gen_code",
+    "metadata": {}
+  },
+  {
+    "prompt": "```python\nwords = [\"hello\", \"world\"]\nprint(len(words))\n```\nOutput:",
+    "target": " 2",
+    "id": "cc_gen_0009",
+    "type": "code_comprehension",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "gen_code",
+    "metadata": {}
+  },
+  {
+    "prompt": "```python\nprint(max(3, 7, 1, 9, 4))\n```\nOutput:",
+    "target": " 9",
+    "id": "cc_gen_0010",
+    "type": "code_comprehension",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "gen_code",
+    "metadata": {}
+  },
+  {
+    "prompt": "```python\nx = [3, 1, 4, 1, 5]\nx.sort()\nprint(x[0])\n```\nOutput:",
+    "target": " 1",
+    "id": "cc_gen_0011",
+    "type": "code_comprehension",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "gen_code",
+    "metadata": {}
+  },
+  {
+    "prompt": "```python\nx = \"hello\"\nprint(x.upper())\n```\nOutput:",
+    "target": " HELLO",
+    "id": "cc_gen_0012",
+    "type": "code_comprehension",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "gen_code",
+    "metadata": {}
+  },
+  {
+    "prompt": "```python\nx = 17\nprint(x % 5)\n```\nOutput:",
+    "target": " 2",
+    "id": "cc_gen_0013",
+    "type": "code_comprehension",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "gen_code",
+    "metadata": {}
+  },
+  {
+    "prompt": "```python\nx = 5\ny = 3\nprint(x + y)\n```\nOutput:",
+    "target": " 8",
+    "id": "cc_gen_0014",
+    "type": "code_comprehension",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "gen_code",
+    "metadata": {}
+  },
+  {
+    "prompt": "Fan Death was started in",
+    "target": " Brooklyn",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Fan Death"
+    },
+    "id": "fr_counterfact_0000"
+  },
+  {
+    "prompt": "Eric Maschwitz, who is employed by",
+    "target": " BBC",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Eric Maschwitz"
+    },
+    "id": "fr_counterfact_0001"
+  },
+  {
+    "prompt": "Cadbury was formed in",
+    "target": " Birmingham",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Cadbury"
+    },
+    "id": "fr_counterfact_0002"
+  },
+  {
+    "prompt": "Nikolai Myaskovsky speaks the language",
+    "target": " Russian",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Nikolai Myaskovsky"
+    },
+    "id": "fr_counterfact_0003"
+  },
+  {
+    "prompt": "Adad-apla-iddina, a citizen of",
+    "target": " Babylon",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Adad-apla-iddina"
+    },
+    "id": "fr_counterfact_0004"
+  },
+  {
+    "prompt": "Segundo romance is written in",
+    "target": " Spanish",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Segundo romance"
+    },
+    "id": "fr_counterfact_0005"
+  },
+  {
+    "prompt": "Munich Airport was named for",
+    "target": " Munich",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Munich Airport"
+    },
+    "id": "fr_counterfact_0006"
+  },
+  {
+    "prompt": "Abraham Mateo speaks",
+    "target": " Spanish",
+    "type": "factual_recall",
+    "tokens_approx": 3,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Abraham Mateo"
+    },
+    "id": "fr_counterfact_0007"
+  },
+  {
+    "prompt": "Morris Carnovsky, who works as",
+    "target": " actor",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Morris Carnovsky"
+    },
+    "id": "fr_counterfact_0008"
+  },
+  {
+    "prompt": "Latvia is affiliated with",
+    "target": " NATO",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Latvia"
+    },
+    "id": "fr_counterfact_0009"
+  },
+  {
+    "prompt": "Magnus Felix Ennodius, whose position is that of",
+    "target": " bishop",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Magnus Felix Ennodius"
+    },
+    "id": "fr_counterfact_0010"
+  },
+  {
+    "prompt": "Juan Carlos Garrido writes in",
+    "target": " Spanish",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Juan Carlos Garrido"
+    },
+    "id": "fr_counterfact_0011"
+  },
+  {
+    "prompt": "iWork is developed by",
+    "target": " Apple",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "iWork"
+    },
+    "id": "fr_counterfact_0012"
+  },
+  {
+    "prompt": "Lucien Bonaparte, a native",
+    "target": " French",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Lucien Bonaparte"
+    },
+    "id": "fr_counterfact_0013"
+  },
+  {
+    "prompt": "The occupation of Justin I is",
+    "target": " politician",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Justin I"
+    },
+    "id": "fr_counterfact_0014"
+  },
+  {
+    "prompt": "In New Hampshire, an official language is",
+    "target": " English",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " New Hampshire"
+    },
+    "id": "fr_counterfact_0015"
+  },
+  {
+    "prompt": "Ture Nerman worked in the city of",
+    "target": " Stockholm",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Ture Nerman"
+    },
+    "id": "fr_counterfact_0016"
+  },
+  {
+    "prompt": "IBM Parallel Sysplex is developed by",
+    "target": " IBM",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "IBM Parallel Sysplex"
+    },
+    "id": "fr_counterfact_0017"
+  },
+  {
+    "prompt": "John and Edith Kilbuck took up work in",
+    "target": " Alaska",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "John and Edith Kilbuck"
+    },
+    "id": "fr_counterfact_0018"
+  },
+  {
+    "prompt": "Great Sheffield Flood can be found in",
+    "target": " Sheffield",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Great Sheffield Flood"
+    },
+    "id": "fr_counterfact_0019"
+  },
+  {
+    "prompt": "The domain of activity of Johannes Eugenius B\u00fclow Warming is",
+    "target": " biology",
+    "type": "factual_recall",
+    "tokens_approx": 13,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Johannes Eugenius B\u00fclow Warming"
+    },
+    "id": "fr_counterfact_0020"
+  },
+  {
+    "prompt": "Which position does Anthony Obodai play? They play as",
+    "target": " midfielder",
+    "type": "factual_recall",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Anthony Obodai"
+    },
+    "id": "fr_counterfact_0021"
+  },
+  {
+    "prompt": "Jean-Marcel Jeanneney originates from",
+    "target": " Paris",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Jean-Marcel Jeanneney"
+    },
+    "id": "fr_counterfact_0022"
+  },
+  {
+    "prompt": "asado was created in",
+    "target": " Argentina",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "asado"
+    },
+    "id": "fr_counterfact_0023"
+  },
+  {
+    "prompt": "Autobianchi Y10 is a product of",
+    "target": " Fiat",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Autobianchi Y10"
+    },
+    "id": "fr_counterfact_0024"
+  },
+  {
+    "prompt": "Wizzard, that originated in",
+    "target": " Birmingham",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Wizzard"
+    },
+    "id": "fr_counterfact_0025"
+  },
+  {
+    "prompt": "Porsche 904 is created by",
+    "target": " Porsche",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Porsche 904"
+    },
+    "id": "fr_counterfact_0026"
+  },
+  {
+    "prompt": "Limbdi is located in",
+    "target": " Gujarat",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Limbdi"
+    },
+    "id": "fr_counterfact_0027"
+  },
+  {
+    "prompt": "Yukon Flats National Wildlife Refuge can be found in",
+    "target": " Alaska",
+    "type": "factual_recall",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Yukon Flats National Wildlife Refuge"
+    },
+    "id": "fr_counterfact_0028"
+  },
+  {
+    "prompt": "America's Best Dance Crew was released on",
+    "target": " MTV",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "America's Best Dance Crew"
+    },
+    "id": "fr_counterfact_0029"
+  },
+  {
+    "prompt": "Charlie Banacos is known for performing",
+    "target": " jazz",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Charlie Banacos"
+    },
+    "id": "fr_counterfact_0030"
+  },
+  {
+    "prompt": "Mokhtar Belmokhtar died at",
+    "target": " Libya",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Mokhtar Belmokhtar"
+    },
+    "id": "fr_counterfact_0031"
+  },
+  {
+    "prompt": "Venantius Fortunatus, whose position is that of",
+    "target": " bishop",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Venantius Fortunatus"
+    },
+    "id": "fr_counterfact_0032"
+  },
+  {
+    "prompt": "Konrad Adenauer is a",
+    "target": " mayor",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Konrad Adenauer"
+    },
+    "id": "fr_counterfact_0033"
+  },
+  {
+    "prompt": "James Joyce took up work in",
+    "target": " Paris",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "James Joyce"
+    },
+    "id": "fr_counterfact_0034"
+  },
+  {
+    "prompt": "Fermilab is located in",
+    "target": " Illinois",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Fermilab"
+    },
+    "id": "fr_counterfact_0035"
+  },
+  {
+    "prompt": "The official language of Pomarkku is",
+    "target": " Finnish",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Pomarkku"
+    },
+    "id": "fr_counterfact_0036"
+  },
+  {
+    "prompt": "The genre played by Svensson, Svensson is",
+    "target": " sitcom",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Svensson, Svensson"
+    },
+    "id": "fr_counterfact_0037"
+  },
+  {
+    "prompt": "The Domino Principle, who plays",
+    "target": " thriller",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "The Domino Principle"
+    },
+    "id": "fr_counterfact_0038"
+  },
+  {
+    "prompt": "Manila is a twin city of",
+    "target": " Nice",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Manila"
+    },
+    "id": "fr_counterfact_0039"
+  },
+  {
+    "prompt": "The headquarter of Army of the Guardians of the Islamic Revolution is located in",
+    "target": " Tehran",
+    "type": "factual_recall",
+    "tokens_approx": 18,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Army of the Guardians of the Islamic Revolution"
+    },
+    "id": "fr_counterfact_0040"
+  },
+  {
+    "prompt": "Terenci Moix was originally from",
+    "target": " Barcelona",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Terenci Moix"
+    },
+    "id": "fr_counterfact_0041"
+  },
+  {
+    "prompt": "The law in Kyustendil Province declares the language",
+    "target": " Bulgarian",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Kyustendil Province"
+    },
+    "id": "fr_counterfact_0042"
+  },
+  {
+    "prompt": "What is the twin city of Dubai? It is",
+    "target": " Istanbul",
+    "type": "factual_recall",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Dubai"
+    },
+    "id": "fr_counterfact_0043"
+  },
+  {
+    "prompt": "Bernard Tapie is a native speaker of",
+    "target": " French",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Bernard Tapie"
+    },
+    "id": "fr_counterfact_0044"
+  },
+  {
+    "prompt": "Giovanni Battista Guarini works as",
+    "target": " poet",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Giovanni Battista Guarini"
+    },
+    "id": "fr_counterfact_0045"
+  },
+  {
+    "prompt": "Muhammad Ahmad ibn \u02bfAbdallah follows the religion of",
+    "target": " Islam",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Muhammad Ahmad ibn \u02bfAbdallah"
+    },
+    "id": "fr_counterfact_0046"
+  },
+  {
+    "prompt": "Epiphanius of Salamis is a",
+    "target": " bishop",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Epiphanius of Salamis"
+    },
+    "id": "fr_counterfact_0047"
+  },
+  {
+    "prompt": "Stielers Handatlas, from",
+    "target": " Germany",
+    "type": "factual_recall",
+    "tokens_approx": 3,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Stielers Handatlas"
+    },
+    "id": "fr_counterfact_0048"
+  },
+  {
+    "prompt": "The domain of activity of Leonhard Euler is",
+    "target": " astronomy",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Leonhard Euler"
+    },
+    "id": "fr_counterfact_0049"
+  },
+  {
+    "prompt": "Carlos Zingaro is native to",
+    "target": " Lisbon",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Carlos Zingaro"
+    },
+    "id": "fr_counterfact_0050"
+  },
+  {
+    "prompt": "Jason Puncheon, who plays the position",
+    "target": " midfielder",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Jason Puncheon"
+    },
+    "id": "fr_counterfact_0051"
+  },
+  {
+    "prompt": "Horizon Records plays",
+    "target": " jazz",
+    "type": "factual_recall",
+    "tokens_approx": 3,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Horizon Records"
+    },
+    "id": "fr_counterfact_0052"
+  },
+  {
+    "prompt": "Apocalypse Meow was created in the country of",
+    "target": " Japan",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Apocalypse Meow"
+    },
+    "id": "fr_counterfact_0053"
+  },
+  {
+    "prompt": "The law in Donetsk Oblast declares the language",
+    "target": " Ukrainian",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Donetsk Oblast"
+    },
+    "id": "fr_counterfact_0054"
+  },
+  {
+    "prompt": "Nyhetsmorgon, that was formulated in",
+    "target": " Sweden",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Nyhetsmorgon"
+    },
+    "id": "fr_counterfact_0055"
+  },
+  {
+    "prompt": "Mac OS X Snow Leopard, a product developed by",
+    "target": " Apple",
+    "type": "factual_recall",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Mac OS X Snow Leopard"
+    },
+    "id": "fr_counterfact_0056"
+  },
+  {
+    "prompt": "The domain of activity of August Kundt is",
+    "target": " physics",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " August Kundt"
+    },
+    "id": "fr_counterfact_0057"
+  },
+  {
+    "prompt": "Bill Bergey plays as",
+    "target": " linebacker",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Bill Bergey"
+    },
+    "id": "fr_counterfact_0058"
+  },
+  {
+    "prompt": "Martin Koolhoven speaks",
+    "target": " Dutch",
+    "type": "factual_recall",
+    "tokens_approx": 3,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Martin Koolhoven"
+    },
+    "id": "fr_counterfact_0059"
+  },
+  {
+    "prompt": "Roch Voisine is a citizen of",
+    "target": " Canada",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Roch Voisine"
+    },
+    "id": "fr_counterfact_0060"
+  },
+  {
+    "prompt": "Xcode, a product created by",
+    "target": " Apple",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Xcode"
+    },
+    "id": "fr_counterfact_0061"
+  },
+  {
+    "prompt": "Mahavira, who holds a citizenship from",
+    "target": " India",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Mahavira"
+    },
+    "id": "fr_counterfact_0062"
+  },
+  {
+    "prompt": "Henry Louis Gates writes in",
+    "target": " English",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Henry Louis Gates"
+    },
+    "id": "fr_counterfact_0063"
+  },
+  {
+    "prompt": "University of Paris III: Sorbonne Nouvelle can be found in",
+    "target": " Paris",
+    "type": "factual_recall",
+    "tokens_approx": 13,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "University of Paris III: Sorbonne Nouvelle"
+    },
+    "id": "fr_counterfact_0064"
+  },
+  {
+    "prompt": "European Project for Ice Coring in Antarctica is located in the continent",
+    "target": " Antarctica",
+    "type": "factual_recall",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "European Project for Ice Coring in Antarctica"
+    },
+    "id": "fr_counterfact_0065"
+  },
+  {
+    "prompt": "Mars Glacier is located in",
+    "target": " Antarctica",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Mars Glacier"
+    },
+    "id": "fr_counterfact_0066"
+  },
+  {
+    "prompt": "The original language of District 13 is",
+    "target": " French",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " District 13"
+    },
+    "id": "fr_counterfact_0067"
+  },
+  {
+    "prompt": "Rob Ford's position is",
+    "target": " councillor",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Rob Ford"
+    },
+    "id": "fr_counterfact_0068"
+  },
+  {
+    "prompt": "prefectural road is located in",
+    "target": " Japan",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "prefectural road"
+    },
+    "id": "fr_counterfact_0069"
+  },
+  {
+    "prompt": "The language used by Antoine Laurent de Jussieu is",
+    "target": " French",
+    "type": "factual_recall",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Antoine Laurent de Jussieu"
+    },
+    "id": "fr_counterfact_0070"
+  },
+  {
+    "prompt": "Brazilian Football Confederation is affiliated with the",
+    "target": " FIFA",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Brazilian Football Confederation"
+    },
+    "id": "fr_counterfact_0071"
+  },
+  {
+    "prompt": "Lambunao, which is located in",
+    "target": " Philippines",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Lambunao"
+    },
+    "id": "fr_counterfact_0072"
+  },
+  {
+    "prompt": "Hilde Marie Kjersem, who is a citizen of",
+    "target": " Norway",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Hilde Marie Kjersem"
+    },
+    "id": "fr_counterfact_0073"
+  },
+  {
+    "prompt": "Panathenaic Stadium is from",
+    "target": " Greece",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Panathenaic Stadium"
+    },
+    "id": "fr_counterfact_0074"
+  },
+  {
+    "prompt": "KMVP-FM is located in",
+    "target": " Arizona",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "KMVP-FM"
+    },
+    "id": "fr_counterfact_0075"
+  },
+  {
+    "prompt": "John Pym died in the city of",
+    "target": " London",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "John Pym"
+    },
+    "id": "fr_counterfact_0076"
+  },
+  {
+    "prompt": "Toyota Sports 800, developed by",
+    "target": " Toyota",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Toyota Sports 800"
+    },
+    "id": "fr_counterfact_0077"
+  },
+  {
+    "prompt": "Guilt Machine, that was formed in",
+    "target": " Netherlands",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Guilt Machine"
+    },
+    "id": "fr_counterfact_0078"
+  },
+  {
+    "prompt": "Hershey Country Club is within",
+    "target": " Pennsylvania",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Hershey Country Club"
+    },
+    "id": "fr_counterfact_0079"
+  },
+  {
+    "prompt": "When examining the topic of Christoph Kramer in depth, one important detail stands out: Christoph Kramer plays as",
+    "target": " midfielder",
+    "type": "factual_retrieval",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Christoph Kramer",
+      "base_prompt": "Christoph Kramer plays as"
+    },
+    "id": "fret_counterfact_0000"
+  },
+  {
+    "prompt": "Scholars studying Peter-Jan Wagemans have documented that Peter-Jan Wagemans, who plays",
+    "target": " opera",
+    "type": "factual_retrieval",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Peter-Jan Wagemans",
+      "base_prompt": "Peter-Jan Wagemans, who plays"
+    },
+    "id": "fret_counterfact_0001"
+  },
+  {
+    "prompt": "The following information pertains to Tokugawa shogunate. After careful examination of the available evidence, we can state that Tokugawa shogunate follows the religion of",
+    "target": " Buddhism",
+    "type": "factual_retrieval",
+    "tokens_approx": 31,
+    "tier": "brief",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Tokugawa shogunate",
+      "base_prompt": "Tokugawa shogunate follows the religion of"
+    },
+    "id": "fret_counterfact_0002"
+  },
+  {
+    "prompt": "A detailed analysis of Grande Arche shows that across various references, Grande Arche can be found in",
+    "target": " Paris",
+    "type": "factual_retrieval",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Grande Arche",
+      "base_prompt": "Grande Arche can be found in"
+    },
+    "id": "fret_counterfact_0003"
+  },
+  {
+    "prompt": "In a comprehensive review of Google Books, researchers noted several key facts. Among them, Google Books is owned by",
+    "target": " Google",
+    "type": "factual_retrieval",
+    "tokens_approx": 24,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Google Books",
+      "base_prompt": "Google Books is owned by"
+    },
+    "id": "fret_counterfact_0004"
+  },
+  {
+    "prompt": "According to multiple authoritative sources discussing Sony Alpha 99, it is widely accepted that Sony Alpha 99, created by",
+    "target": " Sony",
+    "type": "factual_retrieval",
+    "tokens_approx": 24,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Sony Alpha 99",
+      "base_prompt": "Sony Alpha 99, created by"
+    },
+    "id": "fret_counterfact_0005"
+  },
+  {
+    "prompt": "In the context of understanding  Arthur Goring Thomas and its significance, we note that What does Arthur Goring Thomas play? They play",
+    "target": " opera",
+    "type": "factual_retrieval",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": " Arthur Goring Thomas",
+      "base_prompt": "What does Arthur Goring Thomas play? They play"
+    },
+    "id": "fret_counterfact_0006"
+  },
+  {
+    "prompt": "According to multiple authoritative sources discussing Kaalapani, it is widely accepted that Kaalapani was created in",
+    "target": " India",
+    "type": "factual_retrieval",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Kaalapani",
+      "base_prompt": "Kaalapani was created in"
+    },
+    "id": "fret_counterfact_0007"
+  },
+  {
+    "prompt": "The following information pertains to Girl Code. After careful examination of the available evidence, we can state that Girl Code is to debut on",
+    "target": " MTV",
+    "type": "factual_retrieval",
+    "tokens_approx": 31,
+    "tier": "brief",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Girl Code",
+      "base_prompt": "Girl Code is to debut on"
+    },
+    "id": "fret_counterfact_0008"
+  },
+  {
+    "prompt": "According to multiple authoritative sources discussing  Auckland, it is widely accepted that What is the twin city of Auckland? It is",
+    "target": " Brisbane",
+    "type": "factual_retrieval",
+    "tokens_approx": 27,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": " Auckland",
+      "base_prompt": "What is the twin city of Auckland? It is"
+    },
+    "id": "fret_counterfact_0009"
+  },
+  {
+    "prompt": "Historical records about Toyota Camry Solara reveal many interesting details. One well-established fact is that Toyota Camry Solara, developed by",
+    "target": " Toyota",
+    "type": "factual_retrieval",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Toyota Camry Solara",
+      "base_prompt": "Toyota Camry Solara, developed by"
+    },
+    "id": "fret_counterfact_0010"
+  },
+  {
+    "prompt": "In a comprehensive review of Zehra Sheerazi, researchers noted several key facts. Among them, Zehra Sheerazi is originally from",
+    "target": " Karachi",
+    "type": "factual_retrieval",
+    "tokens_approx": 24,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Zehra Sheerazi",
+      "base_prompt": "Zehra Sheerazi is originally from"
+    },
+    "id": "fret_counterfact_0011"
+  },
+  {
+    "prompt": "The following information pertains to Assyrian Church of the East. After careful examination of the available evidence, we can state that Assyrian Church of the East is headquartered in",
+    "target": " Chicago",
+    "type": "factual_retrieval",
+    "tokens_approx": 37,
+    "tier": "brief",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Assyrian Church of the East",
+      "base_prompt": "Assyrian Church of the East is headquartered in"
+    },
+    "id": "fret_counterfact_0012"
+  },
+  {
+    "prompt": "When examining the topic of  Log Cabin Republicans in depth, one important detail stands out: The domain of work of Log Cabin Republicans is",
+    "target": " LGBT",
+    "type": "factual_retrieval",
+    "tokens_approx": 31,
+    "tier": "brief",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": " Log Cabin Republicans",
+      "base_prompt": "The domain of work of Log Cabin Republicans is"
+    },
+    "id": "fret_counterfact_0013"
+  },
+  {
+    "prompt": "A detailed analysis of Henri Salvador shows that across various references, Henri Salvador speaks the language",
+    "target": " French",
+    "type": "factual_retrieval",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Henri Salvador",
+      "base_prompt": "Henri Salvador speaks the language"
+    },
+    "id": "fret_counterfact_0014"
+  },
+  {
+    "prompt": "In a comprehensive review of Alex Stalock, researchers noted several key facts. Among them, Alex Stalock, the",
+    "target": " goaltender",
+    "type": "factual_retrieval",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Alex Stalock",
+      "base_prompt": "Alex Stalock, the"
+    },
+    "id": "fret_counterfact_0015"
+  },
+  {
+    "prompt": "In a comprehensive review of Mechado, researchers noted several key facts. Among them, Mechado, created in",
+    "target": " Philippines",
+    "type": "factual_retrieval",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Mechado",
+      "base_prompt": "Mechado, created in"
+    },
+    "id": "fret_counterfact_0016"
+  },
+  {
+    "prompt": "In a comprehensive review of Kurze Mountains, researchers noted several key facts. Among them, Kurze Mountains is located in",
+    "target": " Antarctica",
+    "type": "factual_retrieval",
+    "tokens_approx": 24,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Kurze Mountains",
+      "base_prompt": "Kurze Mountains is located in"
+    },
+    "id": "fret_counterfact_0017"
+  },
+  {
+    "prompt": "According to multiple authoritative sources discussing Roland Pertwee, it is widely accepted that Roland Pertwee works as",
+    "target": " actor",
+    "type": "factual_retrieval",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Roland Pertwee",
+      "base_prompt": "Roland Pertwee works as"
+    },
+    "id": "fret_counterfact_0018"
+  },
+  {
+    "prompt": "In the context of understanding Kochaj tylko mnie and its significance, we note that Kochaj tylko mnie, that was from",
+    "target": " Poland",
+    "type": "factual_retrieval",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Kochaj tylko mnie",
+      "base_prompt": "Kochaj tylko mnie, that was from"
+    },
+    "id": "fret_counterfact_0019"
+  },
+  {
+    "prompt": "The following information pertains to PAX. After careful examination of the available evidence, we can state that PAX is located in",
+    "target": " Melbourne",
+    "type": "factual_retrieval",
+    "tokens_approx": 27,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "PAX",
+      "base_prompt": "PAX is located in"
+    },
+    "id": "fret_counterfact_0020"
+  },
+  {
+    "prompt": "In the context of understanding Greece and its significance, we note that Greece is located in the continent",
+    "target": " Europe",
+    "type": "factual_retrieval",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Greece",
+      "base_prompt": "Greece is located in the continent"
+    },
+    "id": "fret_counterfact_0021"
+  },
+  {
+    "prompt": "According to multiple authoritative sources discussing Nicholas Liverpool, it is widely accepted that Nicholas Liverpool passed away at",
+    "target": " Miami",
+    "type": "factual_retrieval",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Nicholas Liverpool",
+      "base_prompt": "Nicholas Liverpool passed away at"
+    },
+    "id": "fret_counterfact_0022"
+  },
+  {
+    "prompt": "When examining the topic of Vaughan Inlet in depth, one important detail stands out: Vaughan Inlet is a part of the continent of",
+    "target": " Antarctica",
+    "type": "factual_retrieval",
+    "tokens_approx": 29,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Vaughan Inlet",
+      "base_prompt": "Vaughan Inlet is a part of the continent of"
+    },
+    "id": "fret_counterfact_0023"
+  },
+  {
+    "prompt": "A detailed analysis of The Squadronaires shows that across various references, The Squadronaires performs",
+    "target": " jazz",
+    "type": "factual_retrieval",
+    "tokens_approx": 18,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "The Squadronaires",
+      "base_prompt": "The Squadronaires performs"
+    },
+    "id": "fret_counterfact_0024"
+  },
+  {
+    "prompt": "When examining the topic of Aisha in depth, one important detail stands out: Aisha is follower of",
+    "target": " Islam",
+    "type": "factual_retrieval",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Aisha",
+      "base_prompt": "Aisha is follower of"
+    },
+    "id": "fret_counterfact_0025"
+  },
+  {
+    "prompt": "In the context of understanding  Iitti and its significance, we note that The official language of Iitti is",
+    "target": " Finnish",
+    "type": "factual_retrieval",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": " Iitti",
+      "base_prompt": "The official language of Iitti is"
+    },
+    "id": "fret_counterfact_0026"
+  },
+  {
+    "prompt": "In a comprehensive review of Byron Dafoe, researchers noted several key facts. Among them, Byron Dafoe, who plays the position",
+    "target": " goaltender",
+    "type": "factual_retrieval",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Byron Dafoe",
+      "base_prompt": "Byron Dafoe, who plays the position"
+    },
+    "id": "fret_counterfact_0027"
+  },
+  {
+    "prompt": "Historical records about  Ulf von Euler reveal many interesting details. One well-established fact is that The expertise of Ulf von Euler is",
+    "target": " physiology",
+    "type": "factual_retrieval",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": " Ulf von Euler",
+      "base_prompt": "The expertise of Ulf von Euler is"
+    },
+    "id": "fret_counterfact_0028"
+  },
+  {
+    "prompt": "In a comprehensive review of Gotthard Road Tunnel, researchers noted several key facts. Among them, Gotthard Road Tunnel is from",
+    "target": " Switzerland",
+    "type": "factual_retrieval",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Gotthard Road Tunnel",
+      "base_prompt": "Gotthard Road Tunnel is from"
+    },
+    "id": "fret_counterfact_0029"
+  },
+  {
+    "prompt": "The following information pertains to Claude Cerval. After careful examination of the available evidence, we can state that Claude Cerval spoke the language",
+    "target": " French",
+    "type": "factual_retrieval",
+    "tokens_approx": 29,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Claude Cerval",
+      "base_prompt": "Claude Cerval spoke the language"
+    },
+    "id": "fret_counterfact_0030"
+  },
+  {
+    "prompt": "According to multiple authoritative sources discussing Louis Racine, it is widely accepted that Louis Racine's occupation is",
+    "target": " poet",
+    "type": "factual_retrieval",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Louis Racine",
+      "base_prompt": "Louis Racine's occupation is"
+    },
+    "id": "fret_counterfact_0031"
+  },
+  {
+    "prompt": "Scholars studying Henry Pottinger Stephens have documented that Henry Pottinger Stephens's profession is a",
+    "target": " journalist",
+    "type": "factual_retrieval",
+    "tokens_approx": 18,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Henry Pottinger Stephens",
+      "base_prompt": "Henry Pottinger Stephens's profession is a"
+    },
+    "id": "fret_counterfact_0032"
+  },
+  {
+    "prompt": "When examining the topic of Simon McCoy in depth, one important detail stands out: Simon McCoy is employed by",
+    "target": " BBC",
+    "type": "factual_retrieval",
+    "tokens_approx": 24,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Simon McCoy",
+      "base_prompt": "Simon McCoy is employed by"
+    },
+    "id": "fret_counterfact_0033"
+  },
+  {
+    "prompt": "A detailed analysis of Istanbul shows that across various references, Istanbul is a twin city of",
+    "target": " Toronto",
+    "type": "factual_retrieval",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Istanbul",
+      "base_prompt": "Istanbul is a twin city of"
+    },
+    "id": "fret_counterfact_0034"
+  },
+  {
+    "prompt": "Historical records about BayernLB reveal many interesting details. One well-established fact is that BayernLB, whose headquarters are in",
+    "target": " Munich",
+    "type": "factual_retrieval",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "BayernLB",
+      "base_prompt": "BayernLB, whose headquarters are in"
+    },
+    "id": "fret_counterfact_0035"
+  },
+  {
+    "prompt": "In a comprehensive review of  Chelyabinsk meteor, researchers noted several key facts. Among them, The location of Chelyabinsk meteor is",
+    "target": " Russia",
+    "type": "factual_retrieval",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": " Chelyabinsk meteor",
+      "base_prompt": "The location of Chelyabinsk meteor is"
+    },
+    "id": "fret_counterfact_0036"
+  },
+  {
+    "prompt": "When examining the topic of Norman Lamont in depth, one important detail stands out: Norman Lamont was employed in",
+    "target": " London",
+    "type": "factual_retrieval",
+    "tokens_approx": 24,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Norman Lamont",
+      "base_prompt": "Norman Lamont was employed in"
+    },
+    "id": "fret_counterfact_0037"
+  },
+  {
+    "prompt": "The following information pertains to Bryan Robson. After careful examination of the available evidence, we can state that Bryan Robson, who plays the position",
+    "target": " midfielder",
+    "type": "factual_retrieval",
+    "tokens_approx": 31,
+    "tier": "brief",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Bryan Robson",
+      "base_prompt": "Bryan Robson, who plays the position"
+    },
+    "id": "fret_counterfact_0038"
+  },
+  {
+    "prompt": "A detailed analysis of Bromheads Jacket shows that across various references, Bromheads Jacket was founded in",
+    "target": " Sheffield",
+    "type": "factual_retrieval",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Bromheads Jacket",
+      "base_prompt": "Bromheads Jacket was founded in"
+    },
+    "id": "fret_counterfact_0039"
+  },
+  {
+    "prompt": "Slowly, the twinkle that normally lit Clay's eyes returned and Hardy grinned, offering his fist for a bump. \"Nice!\" Clay playfully tapped his knuckles against Hardy's. \"I can't help it if they want me.\" \"Oh-ho-ho! He's a play-ah!\" Clay's cheeks pinked up and he smiled back at",
+    "target": " Hardy",
+    "type": "cultural_memorized",
+    "tokens_approx": 61,
+    "tier": "brief",
+    "source": "lambada",
+    "metadata": {},
+    "id": "cm_lambada_0000"
+  },
+  {
+    "prompt": "\u2018Was it good?\u2019 \u2018Yes, it was great,\u2019 with very little emotion in his voice. Laura could see Josh was struggling and the last thing he wanted to do was to talk to her, but she had come this far and she really needed to carry on. \u2018So, how are you doing,",
+    "target": " Josh",
+    "type": "cultural_memorized",
+    "tokens_approx": 66,
+    "tier": "brief",
+    "source": "lambada",
+    "metadata": {},
+    "id": "cm_lambada_0001"
+  },
+  {
+    "prompt": "As I took a seat beside Wolfe on the bed I realised how much older Kir looked than Wolfe, despite them being of the same age. It was almost as if Kir had seen too much; whatever he had gone through had made a physical impression on him. \"Who do you think set the rookery up,",
+    "target": " Wolfe",
+    "type": "cultural_memorized",
+    "tokens_approx": 72,
+    "tier": "brief",
+    "source": "lambada",
+    "metadata": {},
+    "id": "cm_lambada_0002"
+  },
+  {
+    "prompt": "I think, therefore I",
+    "target": " am",
+    "type": "cultural_memorized",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "curated",
+    "metadata": {},
+    "id": "cm_curated_0003"
+  },
+  {
+    "prompt": "Not after what Ripred had said. Then it occurred to him that he was not alone; he was only half of a team, and it might be important for Ares to know Ripred's thoughts as well. \"Hey, Ares, can you keep a secret?\" said Gregor. \"I would say it is one of my few talents,\" said",
+    "target": " Ares",
+    "type": "cultural_memorized",
+    "tokens_approx": 72,
+    "tier": "brief",
+    "source": "lambada",
+    "metadata": {},
+    "id": "cm_lambada_0004"
+  },
+  {
+    "prompt": "BEN HATED SLEEPING ON a friend's couch. He hated feeling like a loser who couldn't hold a job or make a go at any career he started. And he absolutely hated having to ask his brother for money. \"I just know I can make this gym thing work,\" he muttered. But Roper didn't want to talk about",
+    "target": " money",
+    "type": "cultural_memorized",
+    "tokens_approx": 74,
+    "tier": "brief",
+    "source": "lambada",
+    "metadata": {},
+    "id": "cm_lambada_0005"
+  },
+  {
+    "prompt": "After today, when the bus delivered Carter to his home, it was unlikely he'd ever see Rusty again. Carter couldn't bear to have that happen, but he had to prepare himself for disappointment. Because it was the last day before winter break, school was dismissed an hour early. While Carter lined up with his friends for bus number seven, he scanned the area for",
+    "target": " Rusty",
+    "type": "cultural_memorized",
+    "tokens_approx": 83,
+    "tier": "med",
+    "source": "lambada",
+    "metadata": {},
+    "id": "cm_lambada_0006"
+  },
+  {
+    "prompt": "Mari slipped the SQuare back into the satchel then gestured at the menacing door. \"This is the HOC - Hystorian Operations Center. Are you two ready?\" Sera glanced over at Dak, who was actually smiling. Smiling. Maybe he'd survive his parents' disappearance after all. They both nodded at each other with knowing looks. \"We're ready,\" Sera said, right before Dak added his own confirmation: \"The Time Nerds are a",
+    "target": " go",
+    "type": "cultural_memorized",
+    "tokens_approx": 89,
+    "tier": "med",
+    "source": "lambada",
+    "metadata": {},
+    "id": "cm_lambada_0007"
+  },
+  {
+    "prompt": "The only thing we have to fear is fear",
+    "target": " itself",
+    "type": "cultural_memorized",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "curated",
+    "metadata": {},
+    "id": "cm_curated_0008"
+  },
+  {
+    "prompt": "I can only see his school bag dumped next to the table. There are no pictures or anything that suggests a family lives here. Is he alone? My heart breaks for him. Surely there is no way someone would allow their 17 year old to fend for themselves? \u201cHey\u201d his voice fills the room. \u201cI have a few things which are all going to be too big, but at least you'll be",
+    "target": " warm",
+    "type": "cultural_memorized",
+    "tokens_approx": 93,
+    "tier": "med",
+    "source": "lambada",
+    "metadata": {},
+    "id": "cm_lambada_0009"
+  },
+  {
+    "prompt": "It was the best of times, it was the worst of",
+    "target": " times",
+    "type": "cultural_memorized",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "curated",
+    "metadata": {},
+    "id": "cm_curated_0010"
+  },
+  {
+    "prompt": "We hold these truths to be self-evident, that all men are created",
+    "target": " equal",
+    "type": "cultural_memorized",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "curated",
+    "metadata": {},
+    "id": "cm_curated_0011"
+  },
+  {
+    "prompt": "Four score and seven years ago our fathers brought forth on this continent, a new",
+    "target": " nation",
+    "type": "cultural_memorized",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "curated",
+    "metadata": {},
+    "id": "cm_curated_0012"
+  },
+  {
+    "prompt": "One small step for man, one giant leap for",
+    "target": " mankind",
+    "type": "cultural_memorized",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "curated",
+    "metadata": {},
+    "id": "cm_curated_0013"
+  },
+  {
+    "prompt": "To be, or not to be, that is the",
+    "target": " question",
+    "type": "cultural_memorized",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "curated",
+    "metadata": {},
+    "id": "cm_curated_0014"
+  },
+  {
+    "prompt": "Right now they were still far from civilization. He needed to save his concerns for more important things, like those things below them in the maze. He stopped suddenly and listened. \u201cWhat\u2019s wrong?\u201d He didn\u2019t want to say what was wrong. He hoped he was mistaken. He hurried to the side of the bridge and shined his flashlight down onto the",
+    "target": " maze",
+    "type": "cultural_memorized",
+    "tokens_approx": 79,
+    "tier": "brief",
+    "source": "lambada",
+    "metadata": {},
+    "id": "cm_lambada_0015"
+  },
+  {
+    "prompt": "Charlie usually hated school with a passion, but for some reason he had a good feeling about the year ahead of him. Will stepped out of the car. \u201cYeah, this year is going to be great,\u201d he said as he closed the door and looked up at the building in front of them. Unlike Charlie, Will didn\u2019t ever seem to have a problem with",
+    "target": " school",
+    "type": "cultural_memorized",
+    "tokens_approx": 83,
+    "tier": "med",
+    "source": "lambada",
+    "metadata": {},
+    "id": "cm_lambada_0016"
+  },
+  {
+    "prompt": "Then it struck them. \u201cExcept for Tayanna!\u201d they exclaimed in unison. \u201cShe complained of a headache and went to the apothecary,\u201d said Matilda. \u201cWe can easily check that out,\u201d offered Zinzabad. \u201cLet's go there and ask.\u201d So, holding Zinzabad's hand, Matilda went out to the entrance hall and asked a guard for directions to the",
+    "target": " apothecary",
+    "type": "cultural_memorized",
+    "tokens_approx": 71,
+    "tier": "brief",
+    "source": "lambada",
+    "metadata": {},
+    "id": "cm_lambada_0017"
+  },
+  {
+    "prompt": "What do you want him for?\u201d \u201cGet him,\u201d I told her. \u201cHe and I have a talk coming, and right now is as good a time as any.\u201d Elsie glared at me and drew herself up straight. \u201cNow you listen here, Hill William.\u201d \u201cNo,\u201d I interrupted, \u201cyou",
+    "target": " listen",
+    "type": "cultural_memorized",
+    "tokens_approx": 61,
+    "tier": "brief",
+    "source": "lambada",
+    "metadata": {},
+    "id": "cm_lambada_0018"
+  },
+  {
+    "prompt": "Skye imagined running, hiding, maybe relocating closer to her stepfather. But if Burke was truly bent on finding her, he'd be able to do so sooner or later because she refused to cut all ties with the people and places she loved, refused to let him cost her any more than he already had. Besides, she didn't feel that close to her",
+    "target": " stepfather",
+    "type": "cultural_memorized",
+    "tokens_approx": 80,
+    "tier": "brief",
+    "source": "lambada",
+    "metadata": {},
+    "id": "cm_lambada_0019"
+  },
+  {
+    "prompt": "\u201cAh, it\u2019s called reading. Ever try it?\u201d Amber snickered. On Thursday afternoon, Amber got a call from Peggy. \u201cHey Amber. I\u2019m about ten minutes away. Do you guys want to meet me in the parking lot?\u201d Darren and Amber didn\u2019t have a car so they had made plans to ride with",
+    "target": " Peggy",
+    "type": "cultural_memorized",
+    "tokens_approx": 66,
+    "tier": "brief",
+    "source": "lambada",
+    "metadata": {},
+    "id": "cm_lambada_0020"
+  },
+  {
+    "prompt": "In the beginning God created the heavens and the",
+    "target": " earth",
+    "type": "cultural_memorized",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "curated",
+    "metadata": {},
+    "id": "cm_curated_0021"
+  },
+  {
+    "prompt": "But even through the dimness of the place, they could spot it \u2026 sitting directly in the middle of the room, large and elegant. The tablet they had come here for. Ion\u2019s tension died out in an instant, as he released a great sigh of relief. \u201cWe\u2019ve made it.\u201d whispered Qyro by his right, his eyes on the",
+    "target": " tablet",
+    "type": "cultural_memorized",
+    "tokens_approx": 75,
+    "tier": "brief",
+    "source": "lambada",
+    "metadata": {},
+    "id": "cm_lambada_0022"
+  },
+  {
+    "prompt": "Ask not what your country can do for you, ask what you can do for your",
+    "target": " country",
+    "type": "cultural_memorized",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "curated",
+    "metadata": {},
+    "id": "cm_curated_0023"
+  },
+  {
+    "prompt": "E = mc",
+    "target": " squared",
+    "type": "cultural_memorized",
+    "tokens_approx": 3,
+    "tier": "short",
+    "source": "curated",
+    "metadata": {},
+    "id": "cm_curated_0024"
+  }
+]
