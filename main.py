@@ -1,6 +1,6 @@
-"""Entry point for running the colony CLI directly."""
+"""Entry point for running the Signal Lab CLI directly."""
 
-from colony.cli import main
+from signal_lab.signal_lab import main
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,61 @@
+Run directory: data/sweep_sample
+Model: Qwen/Qwen3.5-2B-Base
+Cartridge: uniform_check_lite
+
+Completion
+unique_prompts  unique_reps  g_profiles  expected_runs  completed_runs  missing_runs  error_rows
+--------------  -----------  ----------  -------------  --------------  ------------  ----------
+24              1            5           120            120             0             0         
+
+Top Type x Gain Profiles By Mean Delta P
+type         g_profile      mean_delta_p  %delta_p_pos  p_value  mean_delta_rank  n 
+-----------  -------------  ------------  ------------  -------  ---------------  --
+algorithmic  constant_1.5   0.08          54.17         0.05     1299.29          24
+algorithmic  constant_1.25  0.04          41.67         0.18     178.21           24
+algorithmic  constant_0.75  0.01          25.00         0.79     767.42           24
+algorithmic  constant_0.5   -0.12         20.83         0.14     9282.50          24
+
+Worst Type x Gain Profiles By Mean Delta P
+type         g_profile      mean_delta_p  %delta_p_pos  p_value  mean_delta_rank  n 
+-----------  -------------  ------------  ------------  -------  ---------------  --
+algorithmic  constant_0.5   -0.12         20.83         0.14     9282.50          24
+algorithmic  constant_0.75  0.01          25.00         0.79     767.42           24
+algorithmic  constant_1.25  0.04          41.67         0.18     178.21           24
+algorithmic  constant_1.5   0.08          54.17         0.05     1299.29          24
+
+Best Profile By Type
+type         best_g_profile  best_g_family  mean_delta_p  %delta_p_pos  p_value
+-----------  --------------  -------------  ------------  ------------  -------
+algorithmic  constant_1.5    constant       0.08          54.17         0.05   
+
+Top Prompt Winners
+prompt_id                type         best_g_profile  best_delta_p  worst_g_profile  worst_delta_p
+-----------------------  -----------  --------------  ------------  ---------------  -------------
+alg_gen_arithmetic_0002  algorithmic  constant_1.5    0.39          constant_0.5     -0.16        
+alg_gen_arithmetic_0000  algorithmic  constant_0.75   0.38          constant_1.25    0.10         
+alg_gen_arithmetic_0001  algorithmic  constant_0.75   0.35          constant_0.5     -0.20        
+alg_gen_arithmetic_0004  algorithmic  constant_1.5    0.33          constant_0.5     -0.30        
+alg_gen_arithmetic_0008  algorithmic  constant_1.5    0.30          constant_0.5     -0.38        
+alg_gen_arithmetic_0009  algorithmic  constant_0.75   0.30          constant_0.5     -0.33        
+alg_gen_arithmetic_0006  algorithmic  constant_1.5    0.24          constant_0.5     -0.45        
+alg_gen_arithmetic_0003  algorithmic  constant_0.5    0.10          constant_0.75    -0.13        
+alg_gen_arithmetic_0005  algorithmic  constant_1.5    0.10          constant_0.5     -0.80        
+alg_gen_arithmetic_0007  algorithmic  constant_1.5    0.10          constant_0.5     -0.70        
+alg_gen_counting_0014    algorithmic  constant_0.5    0.10          constant_0.75    0.00         
+alg_gen_counting_0018    algorithmic  constant_0.5    0.07          constant_1.25    0.00         
+
+Worst Prompt Losers
+prompt_id                   type         worst_g_profile  worst_delta_p  best_g_profile  best_delta_p
+--------------------------  -----------  ---------------  -------------  --------------  ------------
+alg_gen_arithmetic_0005     algorithmic  constant_0.5     -0.80          constant_1.5    0.10        
+alg_gen_arithmetic_0007     algorithmic  constant_0.5     -0.70          constant_1.5    0.10        
+alg_gen_arithmetic_0006     algorithmic  constant_0.5     -0.45          constant_1.5    0.24        
+alg_gen_arithmetic_0008     algorithmic  constant_0.5     -0.38          constant_1.5    0.30        
+alg_gen_arithmetic_0009     algorithmic  constant_0.5     -0.33          constant_0.75   0.30        
+alg_gen_arithmetic_0004     algorithmic  constant_0.5     -0.30          constant_1.5    0.33        
+alg_gen_arithmetic_0001     algorithmic  constant_0.5     -0.20          constant_0.75   0.35        
+alg_gen_arithmetic_0002     algorithmic  constant_0.5     -0.16          constant_1.5    0.39        
+alg_gen_arithmetic_0003     algorithmic  constant_0.75    -0.13          constant_0.5    0.10        
+alg_gen_first_letters_0022  algorithmic  constant_0.5     -0.13          constant_1.25   -0.04       
+alg_gen_last_letter_0021    algorithmic  constant_0.5     -0.03          constant_0.75   -0.02       
+alg_gen_last_letter_0028    algorithmic  constant_0.5     -0.02          constant_0.75   -0.01       

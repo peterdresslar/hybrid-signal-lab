@@ -1,0 +1,135 @@
+[
+  {
+    "prompt": "List of animals: cat, horse, fish, dog, bear,",
+    "target": " bird",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "animals"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0000"
+  },
+  {
+    "id": "rn_gen_0000",
+    "prompt": "Ethan had 13 shells. Ethan gave 4 to Bob and then found 4 more. How many shells does Ethan have now? Answer:",
+    "target": " 13",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "gen_reasoning_num",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0000",
+    "prompt": "Bob put the phone in the garage. Bob went to the hallway. Alice moved the phone to the garden. Where is the phone now? The phone is in the",
+    "target": " garden",
+    "type": "reasoning_tracking",
+    "tokens_approx": 37,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "prompt": "The last letter of \"giraffe\" is",
+    "target": " e",
+    "type": "algorithmic",
+    "source": "gen_last_letter",
+    "metadata": {
+      "task": "last_letter"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "alg_gen_last_letter_0000"
+  },
+  {
+    "prompt": "The teachers that the guard loves",
+    "target": " smile",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "obj_rel_across_anim",
+      "variant": "plur_MS_MV_sing_ES_EV",
+      "contrast": "smiles"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_lm_syneval_0000"
+  },
+  {
+    "id": "lr_gen_0000",
+    "prompt": "Children played in the streets, their laughter echoing between the stone buildings. The password is diamond. The river flowed quietly through the valley, its waters reflecting the afternoon sun. A blacksmith worked at his forge, the rhythmic sound of his hammer ringing through the air. In the distance, the mountains rose majestically against the clear blue sky. Several merchants had set up their stalls along the main road, selling various goods. An old scholar sat in the library, surrounded by countless volumes of ancient texts. The market was bustling with activity as traders from distant lands displayed their wares. The festival preparations were underway, with decorations being hung across every doorway. What is the password? The password is",
+    "target": " diamond",
+    "type": "long_range_retrieval",
+    "tokens_approx": 153,
+    "tier": "med",
+    "source": "gen_long_range",
+    "metadata": {
+      "n_fillers": 8,
+      "fact_insert_idx": 1,
+      "fact_insert_frac": 0.125
+    }
+  },
+  {
+    "prompt": "The philosophical thought experiment involving a cat that is simultaneously alive and dead until observed was proposed by",
+    "target": " Schr\u00f6dinger",
+    "id": "dk_curated_0000",
+    "type": "domain_knowledge",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "curated_domain",
+    "metadata": {}
+  },
+  {
+    "prompt": "```python\nx = 10\nif x > 5:\n    x = x - 3\nprint(x)\n```\nOutput:",
+    "target": " 7",
+    "id": "cc_gen_0000",
+    "type": "code_comprehension",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "gen_code",
+    "metadata": {}
+  },
+  {
+    "prompt": "Fan Death was started in",
+    "target": " Brooklyn",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Fan Death"
+    },
+    "id": "fr_counterfact_0000"
+  },
+  {
+    "prompt": "When examining the topic of Christoph Kramer in depth, one important detail stands out: Christoph Kramer plays as",
+    "target": " midfielder",
+    "type": "factual_retrieval",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "counterfact_extended",
+    "metadata": {
+      "subject": "Christoph Kramer",
+      "base_prompt": "Christoph Kramer plays as"
+    },
+    "id": "fret_counterfact_0000"
+  },
+  {
+    "prompt": "Four score and seven years ago our fathers brought forth on this continent, a new",
+    "target": " nation",
+    "type": "cultural_memorized",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "curated",
+    "metadata": {},
+    "id": "cm_curated_0000"
+  }
+]

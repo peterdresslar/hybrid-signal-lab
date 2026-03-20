@@ -16,7 +16,7 @@ mkdir -p "$HF_HOME" "$UV_CACHE_DIR"
 
 # ── install uv ──
 curl -LsSf https://astral.sh/uv/install.sh | sh
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin/:$PATH"
 
 # ── install gh ──
 mkdir -p /etc/apt/keyrings
@@ -26,7 +26,7 @@ chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
   > /etc/apt/sources.list.d/github-cli.list
 apt-get update -qq && apt-get install -y -qq gh
-apt-get install nano
+# apt-get install nano
 
 # ── clone repo ──
 printf '%s' "$GH_TOKEN" | gh auth login --with-token
@@ -40,4 +40,4 @@ uv sync
 
 echo "Ready. Run:"
 echo "  cd /workspace/cas-capstone-dresslar && source .venv/bin/activate"
-echo "  uv run python -m colony.sweep --cartridge test_cartridge --model-key OLMO --verbose"
+echo "  uv run python -m signal_lab.sweep --cartridge test_cartridge --model-key OLMO --verbose"

@@ -1,0 +1,482 @@
+[
+  {
+    "id": "rt_gen_0000",
+    "prompt": "Bob put the phone in the garage. Bob went to the hallway. Alice moved the phone to the garden. Where is the phone now? The phone is in the",
+    "target": " garden",
+    "type": "reasoning_tracking",
+    "tokens_approx": 37,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0001",
+    "prompt": "The bag starts in the bedroom. Bob moves it to the attic. Frank moves it to the kitchen. Grace moves it to the basement. Where is the bag? Answer: the",
+    "target": " basement",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0002",
+    "prompt": "The key is in the drawer. The drawer is in the pocket. The pocket is in the office. Where is the key? The key is in the",
+    "target": " drawer",
+    "type": "reasoning_tracking",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0003",
+    "prompt": "Alice has the bag. Alice gives the bag to Bob. Bob gives the bag to Eve. Eve gives the bag to Alice. Who has the bag?",
+    "target": " Alice",
+    "type": "reasoning_tracking",
+    "tokens_approx": 33,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rt_gen_0004",
+    "prompt": "Carol put the pen in the bathroom. Carol went to the living room. Frank moved the pen to the garden. Where is the pen now? The pen is in the",
+    "target": " garden",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0005",
+    "prompt": "The key starts in the bedroom. Dave moves it to the attic. Grace moves it to the hallway. Carol moves it to the garden. Where is the key? Answer: the",
+    "target": " garden",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0006",
+    "prompt": "The cup is in the cabinet. The cabinet is in the shelf. The shelf is in the kitchen. Where is the cup? The cup is in the",
+    "target": " cabinet",
+    "type": "reasoning_tracking",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0007",
+    "prompt": "Alice has the pen. Alice gives the pen to Eve. Eve gives the pen to Alice. Who has the pen?",
+    "target": " Alice",
+    "type": "reasoning_tracking",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rt_gen_0008",
+    "prompt": "Dave put the key in the kitchen. Dave went to the garage. Frank moved the key to the living room. Where is the key now? The key is in the",
+    "target": " living room",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0009",
+    "prompt": "The key starts in the attic. Bob moves it to the living room. Grace moves it to the basement. Hank moves it to the bathroom. Where is the key? Answer: the",
+    "target": " bathroom",
+    "type": "reasoning_tracking",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0010",
+    "prompt": "The cup is in the drawer. The drawer is in the shelf. The shelf is in the bathroom. Where is the cup? The cup is in the",
+    "target": " drawer",
+    "type": "reasoning_tracking",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0011",
+    "prompt": "Carol has the key. Carol gives the key to Dave. Dave gives the key to Frank. Frank gives the key to Dave. Dave gives the key to Carol. Who has the key?",
+    "target": " Carol",
+    "type": "reasoning_tracking",
+    "tokens_approx": 41,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rt_gen_0012",
+    "prompt": "Grace put the bag in the garage. Grace went to the bathroom. Carol moved the bag to the kitchen. Where is the bag now? The bag is in the",
+    "target": " kitchen",
+    "type": "reasoning_tracking",
+    "tokens_approx": 37,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0013",
+    "prompt": "The cup starts in the attic. Dave moves it to the living room. Grace moves it to the bedroom. Alice moves it to the basement. Where is the cup? Answer: the",
+    "target": " basement",
+    "type": "reasoning_tracking",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0014",
+    "prompt": "The toy is in the bag. The bag is in the shelf. The shelf is in the garage. Where is the toy? The toy is in the",
+    "target": " bag",
+    "type": "reasoning_tracking",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0015",
+    "prompt": "Dave has the ring. Dave gives the ring to Hank. Hank gives the ring to Dave. Who has the ring?",
+    "target": " Dave",
+    "type": "reasoning_tracking",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rt_gen_0016",
+    "prompt": "Eve put the toy in the attic. Eve went to the hallway. Frank moved the toy to the bathroom. Where is the toy now? The toy is in the",
+    "target": " bathroom",
+    "type": "reasoning_tracking",
+    "tokens_approx": 37,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0017",
+    "prompt": "The ring starts in the bedroom. Dave moves it to the kitchen. Bob moves it to the hallway. Eve moves it to the basement. Where is the ring? Answer: the",
+    "target": " basement",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0018",
+    "prompt": "The ball is in the pocket. The pocket is in the bag. The bag is in the attic. Where is the ball? The ball is in the",
+    "target": " pocket",
+    "type": "reasoning_tracking",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0019",
+    "prompt": "Grace has the toy. Grace gives the toy to Dave. Dave gives the toy to Bob. Bob gives the toy to Dave. Who has the toy?",
+    "target": " Dave",
+    "type": "reasoning_tracking",
+    "tokens_approx": 33,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rt_gen_0020",
+    "prompt": "Eve put the cup in the bedroom. Eve went to the living room. Grace moved the cup to the attic. Where is the cup now? The cup is in the",
+    "target": " attic",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0021",
+    "prompt": "The phone starts in the office. Carol moves it to the garden. Dave moves it to the bedroom. Alice moves it to the attic. Where is the phone? Answer: the",
+    "target": " attic",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0022",
+    "prompt": "The phone is in the pocket. The pocket is in the bag. The bag is in the office. Where is the phone? The phone is in the",
+    "target": " pocket",
+    "type": "reasoning_tracking",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0023",
+    "prompt": "Carol has the ball. Carol gives the ball to Dave. Dave gives the ball to Carol. Carol gives the ball to Bob. Bob gives the ball to Dave. Who has the ball?",
+    "target": " Dave",
+    "type": "reasoning_tracking",
+    "tokens_approx": 41,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rt_gen_0024",
+    "prompt": "Bob put the phone in the garage. Bob went to the kitchen. Carol moved the phone to the hallway. Where is the phone now? The phone is in the",
+    "target": " hallway",
+    "type": "reasoning_tracking",
+    "tokens_approx": 37,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0025",
+    "prompt": "The ring starts in the bedroom. Bob moves it to the office. Alice moves it to the garden. Frank moves it to the hallway. Where is the ring? Answer: the",
+    "target": " hallway",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0026",
+    "prompt": "The ring is in the cabinet. The cabinet is in the drawer. The drawer is in the living room. Where is the ring? The ring is in the",
+    "target": " cabinet",
+    "type": "reasoning_tracking",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0027",
+    "prompt": "Bob has the hat. Bob gives the hat to Eve. Eve gives the hat to Bob. Bob gives the hat to Eve. Eve gives the hat to Bob. Who has the hat?",
+    "target": " Bob",
+    "type": "reasoning_tracking",
+    "tokens_approx": 41,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rt_gen_0028",
+    "prompt": "Bob put the hat in the bedroom. Bob went to the bathroom. Hank moved the hat to the kitchen. Where is the hat now? The hat is in the",
+    "target": " kitchen",
+    "type": "reasoning_tracking",
+    "tokens_approx": 37,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0029",
+    "prompt": "The book starts in the bedroom. Dave moves it to the kitchen. Eve moves it to the garage. Bob moves it to the office. Where is the book? Answer: the",
+    "target": " office",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0030",
+    "prompt": "The book is in the pocket. The pocket is in the shelf. The shelf is in the bedroom. Where is the book? The book is in the",
+    "target": " pocket",
+    "type": "reasoning_tracking",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0031",
+    "prompt": "Frank has the ring. Frank gives the ring to Dave. Dave gives the ring to Frank. Who has the ring?",
+    "target": " Frank",
+    "type": "reasoning_tracking",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rt_gen_0032",
+    "prompt": "Dave put the ring in the attic. Dave went to the garage. Grace moved the ring to the bedroom. Where is the ring now? The ring is in the",
+    "target": " bedroom",
+    "type": "reasoning_tracking",
+    "tokens_approx": 37,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0033",
+    "prompt": "The cup starts in the attic. Bob moves it to the hallway. Frank moves it to the basement. Dave moves it to the office. Where is the cup? Answer: the",
+    "target": " office",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0034",
+    "prompt": "The book is in the bag. The bag is in the pocket. The pocket is in the bedroom. Where is the book? The book is in the",
+    "target": " bag",
+    "type": "reasoning_tracking",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0035",
+    "prompt": "Alice has the cup. Alice gives the cup to Dave. Dave gives the cup to Alice. Who has the cup?",
+    "target": " Alice",
+    "type": "reasoning_tracking",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  },
+  {
+    "id": "rt_gen_0036",
+    "prompt": "Hank put the pen in the garden. Hank went to the living room. Bob moved the pen to the basement. Where is the pen now? The pen is in the",
+    "target": " basement",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 0
+    }
+  },
+  {
+    "id": "rt_gen_0037",
+    "prompt": "The ring starts in the office. Dave moves it to the bedroom. Grace moves it to the kitchen. Alice moves it to the bathroom. Where is the ring? Answer: the",
+    "target": " bathroom",
+    "type": "reasoning_tracking",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 1
+    }
+  },
+  {
+    "id": "rt_gen_0038",
+    "prompt": "The bag is in the pocket. The pocket is in the box. The box is in the bedroom. Where is the bag? The bag is in the",
+    "target": " pocket",
+    "type": "reasoning_tracking",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 2
+    }
+  },
+  {
+    "id": "rt_gen_0039",
+    "prompt": "Dave has the ring. Dave gives the ring to Hank. Hank gives the ring to Dave. Dave gives the ring to Bob. Who has the ring?",
+    "target": " Bob",
+    "type": "reasoning_tracking",
+    "tokens_approx": 33,
+    "tier": "brief",
+    "source": "gen_reasoning_track",
+    "metadata": {
+      "variant": 3
+    }
+  }
+]

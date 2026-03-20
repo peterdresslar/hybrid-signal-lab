@@ -19,3 +19,20 @@ results/
 .environments
 .env
 .env.*
+
+# Battery data outputs
+bench/battery/data/v2_battery/*
+!bench/battery/data/v2_battery/.gitkeep
+!bench/battery/data/v2_battery/internals/
+bench/battery/data/v2_battery/internals/*
+!bench/battery/data/v2_battery/internals/.gitkeep
+
+
+# more data
+data/exemplar/*
+!data/exemplar/.gitkeep
+!data/exemplar/35B.txt
+!data/exemplar/olmo.txt
+
+# Signal Lab generated outputs
+data/outputs/

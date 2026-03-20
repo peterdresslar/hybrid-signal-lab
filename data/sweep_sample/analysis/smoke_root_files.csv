@@ -1,0 +1,6 @@
+kind,path
+run_dir,data/sweep_sample
+meta,data/sweep_sample/_meta.json
+main,data/sweep_sample/main.jsonl
+errors,data/sweep_sample/errors.jsonl
+verbose,data/sweep_sample/verbose.jsonl

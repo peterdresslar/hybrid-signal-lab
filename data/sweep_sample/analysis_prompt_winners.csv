@@ -1,0 +1,25 @@
+prompt_id,rep,type,tier,source,target,best_g_profile,best_g_family,best_delta_target_prob,best_delta_target_rank,worst_g_profile,worst_g_family,worst_delta_target_prob,worst_delta_target_rank
+alg_gen_arithmetic_0000,1,algorithmic,short,gen_arithmetic, 97,constant_0.75,constant,0.38,-1.0,constant_1.25,constant,0.1,0.0
+alg_gen_arithmetic_0001,1,algorithmic,short,gen_arithmetic, 131,constant_0.75,constant,0.35,-1.0,constant_0.5,constant,-0.2,1.0
+alg_gen_arithmetic_0002,1,algorithmic,short,gen_arithmetic, 72,constant_1.5,constant,0.39,0.0,constant_0.5,constant,-0.16,0.0
+alg_gen_arithmetic_0003,1,algorithmic,short,gen_arithmetic, -64,constant_0.5,constant,0.1,0.0,constant_0.75,constant,-0.13,7.0
+alg_gen_arithmetic_0004,1,algorithmic,short,gen_arithmetic, 9,constant_1.5,constant,0.33,-1.0,constant_0.5,constant,-0.3,18.0
+alg_gen_arithmetic_0005,1,algorithmic,short,gen_arithmetic, 20,constant_1.5,constant,0.1,0.0,constant_0.5,constant,-0.8,3.0
+alg_gen_arithmetic_0006,1,algorithmic,short,gen_arithmetic, 252,constant_1.5,constant,0.24,0.0,constant_0.5,constant,-0.45,17.0
+alg_gen_arithmetic_0007,1,algorithmic,short,gen_arithmetic, 9,constant_1.5,constant,0.1,0.0,constant_0.5,constant,-0.7,0.0
+alg_gen_arithmetic_0008,1,algorithmic,short,gen_arithmetic, 154,constant_1.5,constant,0.3,0.0,constant_0.5,constant,-0.38,9.0
+alg_gen_arithmetic_0009,1,algorithmic,short,gen_arithmetic, 56,constant_0.75,constant,0.3,-1.0,constant_0.5,constant,-0.33,5.0
+alg_gen_counting_0010,1,algorithmic,short,gen_counting, 3,constant_1.5,constant,0.01,-1.0,constant_0.5,constant,-0.0,70.0
+alg_gen_counting_0014,1,algorithmic,short,gen_counting, 1,constant_0.5,constant,0.1,-11.0,constant_0.75,constant,0.0,6.0
+alg_gen_counting_0016,1,algorithmic,short,gen_counting, 4,constant_1.5,constant,0.04,-8.0,constant_0.75,constant,0.0,5.0
+alg_gen_counting_0018,1,algorithmic,short,gen_counting, 3,constant_0.5,constant,0.07,-8.0,constant_1.25,constant,0.0,-1.0
+alg_gen_first_letters_0022,1,algorithmic,short,gen_first_letters, BFM,constant_1.25,constant,-0.04,2.0,constant_0.5,constant,-0.13,72.0
+alg_gen_first_letters_0023,1,algorithmic,short,gen_first_letters, ADJB,constant_0.5,constant,-0.0,21558.0,constant_0.5,constant,-0.0,21558.0
+alg_gen_first_letters_0029,1,algorithmic,short,gen_first_letters, DIMLOE,constant_0.5,constant,-0.0,26566.0,constant_0.5,constant,-0.0,26566.0
+alg_gen_last_letter_0020,1,algorithmic,short,gen_last_letter, t,constant_0.5,constant,-0.0,433.0,constant_0.5,constant,-0.0,433.0
+alg_gen_last_letter_0021,1,algorithmic,short,gen_last_letter, n,constant_0.75,constant,-0.02,12.0,constant_0.5,constant,-0.03,583.0
+alg_gen_last_letter_0027,1,algorithmic,short,gen_last_letter, r,constant_0.75,constant,-0.0,39.0,constant_0.5,constant,-0.01,607.0
+alg_gen_last_letter_0028,1,algorithmic,short,gen_last_letter, n,constant_0.75,constant,-0.01,13.0,constant_0.5,constant,-0.02,1529.0
+alg_gen_reverse_word_0024,1,algorithmic,short,gen_reverse_word, enots,constant_0.5,constant,-0.0,3480.0,constant_0.5,constant,-0.0,3480.0
+alg_gen_reverse_word_0025,1,algorithmic,short,gen_reverse_word, revir,constant_0.5,constant,-0.0,165254.0,constant_0.5,constant,-0.0,165254.0
+alg_gen_reverse_word_0026,1,algorithmic,short,gen_reverse_word, nohtyp,constant_0.5,constant,-0.0,2603.0,constant_0.5,constant,-0.0,2603.0

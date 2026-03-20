@@ -1,0 +1,15 @@
+{
+  "analysis_dir": "data/sweep_sample/analysis",
+  "prefix": "smoke_root",
+  "model": "Qwen/Qwen3.5-2B-Base",
+  "x_metric": "tokens_approx",
+  "x_metrics": [
+    "tokens_approx"
+  ],
+  "plots": [
+    "data/sweep_sample/analysis/plots/smoke_root_scatter_delta_target_prob_all__x-tokens_approx.png",
+    "data/sweep_sample/analysis/plots/smoke_root_scatter_delta_target_prob_by_type__x-tokens_approx.png",
+    "data/sweep_sample/analysis/plots/smoke_root_scatter_delta_target_prob_by_family__x-tokens_approx.png",
+    "data/sweep_sample/analysis/plots/smoke_root_scatter_baseline_target_prob_vs_delta_target_prob_by_type.png"
+  ]
+}

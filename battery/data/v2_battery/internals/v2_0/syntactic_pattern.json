@@ -1,0 +1,343 @@
+[
+  {
+    "prompt": "The cat next to the broken windows",
+    "target": " speaks",
+    "type": "syntactic_pattern",
+    "source": "gen_agreement",
+    "metadata": {
+      "singular": true,
+      "distance": 5
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sp_gen_agreement_0000"
+  },
+  {
+    "prompt": "The dogs next to the broken windows",
+    "target": " run",
+    "type": "syntactic_pattern",
+    "source": "gen_agreement",
+    "metadata": {
+      "singular": false,
+      "distance": 5
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sp_gen_agreement_0001"
+  },
+  {
+    "prompt": "The child that the students admired",
+    "target": " lives",
+    "type": "syntactic_pattern",
+    "source": "gen_agreement",
+    "metadata": {
+      "singular": true,
+      "distance": 4
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_gen_agreement_0002"
+  },
+  {
+    "prompt": "The cats that the students admired",
+    "target": " walk",
+    "type": "syntactic_pattern",
+    "source": "gen_agreement",
+    "metadata": {
+      "singular": false,
+      "distance": 4
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_gen_agreement_0003"
+  },
+  {
+    "prompt": "The children that the students admired",
+    "target": " live",
+    "type": "syntactic_pattern",
+    "source": "gen_agreement",
+    "metadata": {
+      "singular": false,
+      "distance": 4
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_gen_agreement_0004"
+  },
+  {
+    "prompt": "The children with the red markings",
+    "target": " walk",
+    "type": "syntactic_pattern",
+    "source": "gen_agreement",
+    "metadata": {
+      "singular": false,
+      "distance": 4
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_gen_agreement_0005"
+  },
+  {
+    "prompt": "The teachers in the large auditorium",
+    "target": " run",
+    "type": "syntactic_pattern",
+    "source": "gen_agreement",
+    "metadata": {
+      "singular": false,
+      "distance": 4
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_gen_agreement_0006"
+  },
+  {
+    "prompt": "The dog next to the broken windows",
+    "target": " writes",
+    "type": "syntactic_pattern",
+    "source": "gen_agreement",
+    "metadata": {
+      "singular": true,
+      "distance": 5
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sp_gen_agreement_0007"
+  },
+  {
+    "prompt": "If it rains, we stay inside; if it shines, we go",
+    "target": " outside",
+    "type": "syntactic_pattern",
+    "source": "gen_parallel",
+    "metadata": {
+      "pattern": "parallelism"
+    },
+    "tokens_approx": 14,
+    "tier": "short",
+    "id": "sp_gen_parallel_0008"
+  },
+  {
+    "prompt": "The more you practice, the better you",
+    "target": " get",
+    "type": "syntactic_pattern",
+    "source": "gen_parallel",
+    "metadata": {
+      "pattern": "parallelism"
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sp_gen_parallel_0009"
+  },
+  {
+    "prompt": "They came, they saw, they",
+    "target": " conquered",
+    "type": "syntactic_pattern",
+    "source": "gen_parallel",
+    "metadata": {
+      "pattern": "parallelism"
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sp_gen_parallel_0010"
+  },
+  {
+    "prompt": "Not only is she smart, but she is also very",
+    "target": " kind",
+    "type": "syntactic_pattern",
+    "source": "gen_parallel",
+    "metadata": {
+      "pattern": "parallelism"
+    },
+    "tokens_approx": 13,
+    "tier": "short",
+    "id": "sp_gen_parallel_0011"
+  },
+  {
+    "prompt": "The old man sat down, picked up his book, and began to",
+    "target": " read",
+    "type": "syntactic_pattern",
+    "source": "gen_parallel",
+    "metadata": {
+      "pattern": "parallelism"
+    },
+    "tokens_approx": 15,
+    "tier": "short",
+    "id": "sp_gen_parallel_0012"
+  },
+  {
+    "prompt": "He ran quickly, jumped high, and landed",
+    "target": " softly",
+    "type": "syntactic_pattern",
+    "source": "gen_parallel",
+    "metadata": {
+      "pattern": "parallelism"
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sp_gen_parallel_0013"
+  },
+  {
+    "prompt": "The teachers that the guard loves",
+    "target": " smile",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "obj_rel_across_anim",
+      "variant": "plur_MS_MV_sing_ES_EV",
+      "contrast": "smiles"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_lm_syneval_0014"
+  },
+  {
+    "prompt": "The pilots that hate the skater",
+    "target": " laugh",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "subj_rel",
+      "variant": "plur_MS_EV_MV_sing_ES",
+      "contrast": "laughs"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_lm_syneval_0015"
+  },
+  {
+    "prompt": "The consultants",
+    "target": " are short and swim",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "vp_coord",
+      "variant": "plur_MS_MV_MV",
+      "contrast": "swim and is tall"
+    },
+    "tokens_approx": 2,
+    "tier": "short",
+    "id": "sp_lm_syneval_0016"
+  },
+  {
+    "prompt": "The managers the parents like",
+    "target": " smile",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "obj_rel_no_comp_across_anim",
+      "variant": "plur_MS_MV_plur_ES_EV",
+      "contrast": "smiles"
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sp_lm_syneval_0017"
+  },
+  {
+    "prompt": "The authors the taxi drivers admire",
+    "target": " smile",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "obj_rel_no_comp_across_anim",
+      "variant": "plur_MS_MV_plur_ES_EV",
+      "contrast": "smiles"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_lm_syneval_0018"
+  },
+  {
+    "prompt": "The customers that love the architects",
+    "target": " swim",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "subj_rel",
+      "variant": "plur_MS_EV_MV_plur_ES",
+      "contrast": "swims"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_lm_syneval_0019"
+  },
+  {
+    "prompt": "The consultants that the executives love",
+    "target": " smile",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "obj_rel_across_anim",
+      "variant": "plur_MS_MV_plur_ES_EV",
+      "contrast": "smiles"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_lm_syneval_0020"
+  },
+  {
+    "prompt": "The pilots that the assistant likes",
+    "target": " laugh",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "obj_rel_across_anim",
+      "variant": "plur_MS_MV_sing_ES_EV",
+      "contrast": "laughs"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_lm_syneval_0021"
+  },
+  {
+    "prompt": "The pilots across from the taxi drivers",
+    "target": " smile",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "prep_anim",
+      "variant": "plur_MS_MV_plur_ES",
+      "contrast": "smiles"
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sp_lm_syneval_0022"
+  },
+  {
+    "prompt": "The mechanic knew the consultants",
+    "target": " smile",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "sent_comp",
+      "variant": "plur_MS_MV_sing_BS",
+      "contrast": "smiles"
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sp_lm_syneval_0023"
+  },
+  {
+    "prompt": "The pilots next to the ministers",
+    "target": " laugh",
+    "type": "syntactic_pattern",
+    "source": "lm_syneval",
+    "metadata": {
+      "pattern": "agreement_minimal_pair",
+      "case": "prep_anim",
+      "variant": "plur_MS_MV_plur_ES",
+      "contrast": "laughs"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sp_lm_syneval_0024"
+  }
+]

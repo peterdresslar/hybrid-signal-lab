@@ -1,0 +1,12 @@
+[
+  {
+    "prompt": "Four score and seven years ago our fathers brought forth on this continent, a new",
+    "target": " nation",
+    "type": "cultural_memorized",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "curated",
+    "metadata": {},
+    "id": "cm_curated_0000"
+  }
+]
