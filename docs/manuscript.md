@@ -20,6 +20,8 @@
 
 #### MY NOTES BELOW
 
+Is this an AI paper? It seems like it has the most impact as one, but this is worth discussing.
+
 ### Paper Scope / Outcome Spectrum (most to least ambitious)
 
 1. Full loop: colony generates signal → signal modulates gain vector → measurable change in model output (This is Battery + Signal Lab + Colony)
@@ -35,6 +37,9 @@
 - This is explicitly a starting point / simple demonstration
 - We would expect colony design to be just as complex as human societies rather than animal societies—LLM agents are linguistic, have something like context, and the design space for collective signal is correspondingly richer (though still not necessarily so rich to be a language model? Or just differently rich? Perhaps just different.)
 - The biological colony analogy is useful for the theoretical framework, but we're borrowing the information-theoretic toolkit while recognizing the substrate is fundamentally different
+- It's easy to imagine somebody coming from an engineering background asking: we train these Language Models exquisitely, and they are perfectly-tuned machines. Here are two responses:
+ - 1. Apparently there is room to tune further, based on the evidence we have gathered
+ - 2. This is how nature works: organisms like fish, birds, and insects are all perfectly-engineered machines by virtue of evolution: and yet, as collectives, they find additional avenues for control and fitness.
 
 ### Battery
 
