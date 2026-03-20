@@ -33,3 +33,6 @@ data/exemplar/*
 !data/exemplar/.gitkeep
 !data/exemplar/35B.txt
 !data/exemplar/olmo.txt
+
+# Signal Lab generated outputs
+data/outputs/

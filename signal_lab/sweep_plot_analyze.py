@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 import matplotlib
+from signal_lab.paths import DATA_DIR_ENV_VAR, configure_data_dir, resolve_input_path
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -42,6 +43,11 @@ FAMILY_ORDER = [
 X_AXIS_CHOICES = [
     "tokens_approx",
     "baseline_target_prob",
+    "baseline_target_geo_mean_prob",
+    "baseline_final_entropy_bits",
+    "baseline_mean_entropy_bits",
+    "baseline_top1_top2_logit_margin",
+    "baseline_attn_entropy_mean",
     "target_prob",
     "baseline_target_rank",
     "target_rank",
@@ -55,6 +61,12 @@ def parse_args() -> argparse.Namespace:
         type=str,
         required=True,
         help="Directory containing analysis outputs from signal_lab.sweep_analyze.",
+    )
+    parser.add_argument(
+        "--data-dir",
+        type=str,
+        default=None,
+        help=f"Optional base directory to use in place of data/. Also supports {DATA_DIR_ENV_VAR}.",
     )
     parser.add_argument(
         "--prefix",
@@ -74,6 +86,13 @@ def parse_args() -> argparse.Namespace:
         default="tokens_approx",
         choices=X_AXIS_CHOICES,
         help="Primary x-axis metric for by-type scatter plots.",
+    )
+    parser.add_argument(
+        "--x-metrics",
+        nargs="+",
+        choices=X_AXIS_CHOICES,
+        default=None,
+        help="Optional list of x-axis metrics to render as a batch.",
     )
     parser.add_argument(
         "--min-family-points",
@@ -113,7 +132,7 @@ def read_csv(path: Path) -> list[dict[str, str]]:
 
 
 def resolve_directory(path_str: str) -> Path:
-    path = Path(path_str).expanduser()
+    path = resolve_input_path(path_str)
     if not path.exists():
         raise FileNotFoundError(f"Directory does not exist: {path}")
     if not path.is_dir():
@@ -193,6 +212,11 @@ def load_rows(analysis_dir: Path, prefix: str) -> tuple[list[dict[str, Any]], st
             "tokens_approx": to_float(row.get("tokens_approx")),
             "target_prob": to_float(row.get("target_prob")),
             "baseline_target_prob": to_float(row.get("baseline_target_prob")),
+            "baseline_target_geo_mean_prob": to_float(row.get("baseline_target_geo_mean_prob")),
+            "baseline_final_entropy_bits": to_float(row.get("baseline_final_entropy_bits")),
+            "baseline_mean_entropy_bits": to_float(row.get("baseline_mean_entropy_bits")),
+            "baseline_top1_top2_logit_margin": to_float(row.get("baseline_top1_top2_logit_margin")),
+            "baseline_attn_entropy_mean": to_float(row.get("baseline_attn_entropy_mean")),
             "delta_target_prob": to_float(row.get("delta_target_prob")),
             "target_rank": to_float(row.get("target_rank")),
             "baseline_target_rank": to_float(row.get("baseline_target_rank")),
@@ -347,11 +371,42 @@ def x_axis_label(metric: str) -> str:
     labels = {
         "tokens_approx": "Prompt tokens (approx)",
         "baseline_target_prob": "Baseline target prob",
+        "baseline_target_geo_mean_prob": "Baseline target geo-mean prob",
+        "baseline_final_entropy_bits": "Baseline final entropy (bits)",
+        "baseline_mean_entropy_bits": "Baseline mean entropy (bits)",
+        "baseline_top1_top2_logit_margin": "Baseline top-1 vs top-2 logit margin",
+        "baseline_attn_entropy_mean": "Baseline attention entropy mean",
         "target_prob": "Observed target prob",
         "baseline_target_rank": "Baseline target rank",
         "target_rank": "Observed target rank",
     }
     return labels.get(metric, metric)
+
+
+def unique_in_order(values: list[str]) -> list[str]:
+    return list(dict.fromkeys(values))
+
+
+def metric_has_finite_values(rows: list[dict[str, Any]], metric: str) -> bool:
+    return any(math.isfinite(float(row.get(metric, math.nan))) for row in rows)
+
+
+def recommended_x_metrics(rows: list[dict[str, Any]], primary_metric: str) -> list[str]:
+    preferred = [
+        primary_metric,
+        "tokens_approx",
+        "baseline_target_prob",
+        "baseline_final_entropy_bits",
+        "baseline_top1_top2_logit_margin",
+        "baseline_target_geo_mean_prob",
+        "baseline_attn_entropy_mean",
+        "baseline_mean_entropy_bits",
+    ]
+    return [
+        metric
+        for metric in unique_in_order(preferred)
+        if metric in X_AXIS_CHOICES and metric_has_finite_values(rows, metric)
+    ]
 
 
 def add_zero_line(ax: Any) -> None:
@@ -807,6 +862,7 @@ def write_manifest(path: Path, payload: dict[str, Any]) -> None:
 
 def main() -> None:
     args = parse_args()
+    configure_data_dir(args.data_dir)
     analysis_dir = resolve_directory(args.analysis_dir)
     prefix = args.prefix or discover_prefix(analysis_dir)
     output_dir = Path(args.output_dir).expanduser() if args.output_dir else analysis_dir / "plots"
@@ -819,30 +875,37 @@ def main() -> None:
     family_colors = build_color_map(ordered_families, "tab20")
     type_colors = build_color_map(ordered_types, "tab10")
     intervention_summaries = summarize_interventions(rows)
+    selected_x_metrics = args.x_metrics or [args.x_metric]
+    selected_x_metrics = [
+        metric for metric in unique_in_order(selected_x_metrics) if metric_has_finite_values(rows, metric)
+    ]
+    if not selected_x_metrics:
+        raise ValueError("No selected x metrics have finite values in the analysis rows.")
 
     written_paths: list[str] = []
 
-    all_path = output_dir / f"{clean_filename(prefix)}_scatter_delta_target_prob_all__x-{clean_filename(args.x_metric)}.png"
-    plot_delta_all(rows, model_label, args.x_metric, all_path, family_colors, args.label_top_n, args.dpi)
-    written_paths.append(str(all_path))
+    for x_metric in selected_x_metrics:
+        all_path = output_dir / f"{clean_filename(prefix)}_scatter_delta_target_prob_all__x-{clean_filename(x_metric)}.png"
+        plot_delta_all(rows, model_label, x_metric, all_path, family_colors, args.label_top_n, args.dpi)
+        written_paths.append(str(all_path))
 
-    by_type_path = output_dir / f"{clean_filename(prefix)}_scatter_delta_target_prob_by_type__x-{clean_filename(args.x_metric)}.png"
-    plot_delta_by_type(rows, model_label, args.x_metric, by_type_path, family_colors, args.label_top_n, args.dpi)
-    written_paths.append(str(by_type_path))
+        by_type_path = output_dir / f"{clean_filename(prefix)}_scatter_delta_target_prob_by_type__x-{clean_filename(x_metric)}.png"
+        plot_delta_by_type(rows, model_label, x_metric, by_type_path, family_colors, args.label_top_n, args.dpi)
+        written_paths.append(str(by_type_path))
 
-    by_family_path = output_dir / f"{clean_filename(prefix)}_scatter_delta_target_prob_by_family__x-{clean_filename(args.x_metric)}.png"
-    plot_delta_by_family(
-        rows,
-        model_label,
-        args.x_metric,
-        by_family_path,
-        type_colors,
-        args.min_family_points,
-        args.label_top_n,
-        args.dpi,
-    )
-    if by_family_path.exists():
-        written_paths.append(str(by_family_path))
+        by_family_path = output_dir / f"{clean_filename(prefix)}_scatter_delta_target_prob_by_family__x-{clean_filename(x_metric)}.png"
+        plot_delta_by_family(
+            rows,
+            model_label,
+            x_metric,
+            by_family_path,
+            type_colors,
+            args.min_family_points,
+            args.label_top_n,
+            args.dpi,
+        )
+        if by_family_path.exists():
+            written_paths.append(str(by_family_path))
 
     baseline_path = output_dir / f"{clean_filename(prefix)}_scatter_baseline_target_prob_vs_delta_target_prob_by_type.png"
     plot_baseline_vs_delta_by_type(rows, model_label, baseline_path, family_colors, args.label_top_n, args.dpi)
@@ -853,14 +916,15 @@ def main() -> None:
     if args.intervention_folders:
         interventions_dir = output_dir / "interventions"
         best_dir = output_dir / "best_interventions"
-        x_metrics = [args.x_metric]
-        if "baseline_target_prob" not in x_metrics:
-            x_metrics.append("baseline_target_prob")
-        baseline_x_metrics = [metric for metric in x_metrics if metric != "baseline_target_prob"]
+        raw_x_metrics = args.x_metrics or recommended_x_metrics(rows, args.x_metric)
+        x_metrics = [metric for metric in raw_x_metrics if metric_has_finite_values(rows, metric)]
+        baseline_x_metrics = [
+            metric
+            for metric in x_metrics
+            if metric != "baseline_target_prob" and metric_has_finite_values(rows, metric)
+        ]
         if not baseline_x_metrics:
             baseline_x_metrics = ["tokens_approx"]
-        if "baseline_target_rank" not in baseline_x_metrics:
-            baseline_x_metrics.append("baseline_target_rank")
 
         intervention_rows: list[dict[str, Any]] = []
         for summary in intervention_summaries:
@@ -942,6 +1006,7 @@ def main() -> None:
             "prefix": prefix,
             "model": model_label,
             "x_metric": args.x_metric,
+            "x_metrics": selected_x_metrics,
             "plots": written_paths,
         },
     )
@@ -951,6 +1016,7 @@ def main() -> None:
     print(f"Prefix: {prefix}")
     print(f"Model: {model_label}")
     print(f"Primary x metric: {args.x_metric}")
+    print(f"Rendered x metrics: {', '.join(selected_x_metrics)}")
     print("Wrote plots:")
     for path_str in written_paths:
         print(f"- {path_str}")

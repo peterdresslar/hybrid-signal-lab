@@ -1,13 +1,11 @@
 """Sweep harness — run g-profile configurations across prompt batteries."""
 
 import argparse
-import os
 import json
 import time
 import traceback
 import numpy as np
 from pathlib import Path
-from datetime import datetime
 from typing import Any
 
 from signal_lab.signal_lab import resolve_prompt, resolve_device, resolve_prompt_collection
@@ -15,6 +13,14 @@ from model.g_profile import build_attention_scales_from_spec, printable_scales
 from model.prompt import Prompt
 from model import VALID_MODEL_KEYS
 from signal_lab.agent import Agent
+from signal_lab.paths import (
+    DATA_DIR_ENV_VAR,
+    configure_data_dir,
+    default_sweep_out_dir,
+    ensure_new_output_dir,
+    get_data_dir,
+    render_output_path,
+)
 from signal_lab.sweep_cartridges import get_cartridge, list_cartridges
 
 TIER_TO_CATALOG = {
@@ -27,13 +33,7 @@ TIER_TO_CATALOG = {
 
 
 def resolve_out_dir(out_dir_pattern: str) -> Path:
-    rendered = out_dir_pattern.replace("{timestamp}", datetime.now().strftime("%Y%m%d_%H%M%S"))
-    out_path = Path(rendered)
-    if out_path.is_absolute():
-        return out_path
-    if out_path.parts and out_path.parts[0] == "results":
-        return out_path
-    return Path("results") / out_path
+    return render_output_path(out_dir_pattern)
 
 
 def _parse_csv_strings(raw_value: str | None) -> list[str] | None:
@@ -51,7 +51,7 @@ def _prompts_from_tiers(prompt_tiers: list[str]) -> list[Prompt]:
             raise ValueError(f"Unknown prompt tier '{tier}'. Available tiers: {available}")
 
         catalog_name = TIER_TO_CATALOG[tier]
-        catalog_path = Path("data") / catalog_name
+        catalog_path = get_data_dir() / catalog_name
         with open(catalog_path, "r", encoding="utf-8") as file_handle:
             entries = json.load(file_handle)
         if not isinstance(entries, list):
@@ -157,9 +157,29 @@ def main():
     parser.add_argument("--cartridge", type=str, required=True, choices=list_cartridges(), help="Named cartridge of g profile configurations to sweep.")
     parser.add_argument("--model-key", type=str, default="0_8B", choices=VALID_MODEL_KEYS, help="Model to use. Defaults to 0_8B.")
     parser.add_argument("--device", type=str, default=None, help="Device override: auto (default), cuda, mps, or cpu. Also supports COLONY_DEVICE env var.")
+    parser.add_argument(
+        "--data-dir",
+        type=str,
+        default=None,
+        help=f"Optional base directory to use in place of data/. Also supports {DATA_DIR_ENV_VAR}.",
+    )
     parser.add_argument("--repetitions", type=int, default=1, help="Number of repetitions per prompt/g pair.")
     parser.add_argument("--verbose", action="store_true", help="Log heavier metrics (full top-k, attn. entropy) to a separate file.")
-    parser.add_argument("--out-dir", type=str, default="results/sweep_{timestamp}", help="Output directory pattern. Use {timestamp} to inject current time.")
+    parser.add_argument(
+        "--run-name",
+        type=str,
+        default=None,
+        help="Checkpoint-like run name used for the default output layout under [DATA_DIR]/outputs/signal_lab/runs/.",
+    )
+    parser.add_argument(
+        "--out-dir",
+        type=str,
+        default=None,
+        help=(
+            "Optional explicit output directory. "
+            "If omitted, --run-name is required and outputs go to [DATA_DIR]/outputs/signal_lab/runs/<run_name>/<model-key>/."
+        ),
+    )
     parser.add_argument("--prompt-battery", type=str, default=None, help="Battery directory or JSON file to use instead of the cartridge's built-in prompt selection.")
     parser.add_argument("--prompt-id", type=str, default=None, help="Single prompt id within --prompt-battery.")
     parser.add_argument("--prompt-ids", type=str, default=None, help="Comma-separated prompt ids within --prompt-battery.")
@@ -167,6 +187,7 @@ def main():
     parser.add_argument("--prompt-types", type=str, default=None, help="Comma-separated types to select from --prompt-battery.")
     
     args = parser.parse_args()
+    configure_data_dir(args.data_dir)
     runtime_device = resolve_device(args.device)
 
     if args.prompt_id and args.prompt_ids:
@@ -185,8 +206,14 @@ def main():
         print("No prompts found to run.")
         return
         
-    out_dir = resolve_out_dir(args.out_dir)
-    os.makedirs(out_dir, exist_ok=True)
+    if args.out_dir:
+        out_dir = resolve_out_dir(args.out_dir)
+    else:
+        if not args.run_name:
+            raise ValueError("Provide either --out-dir or --run-name.")
+        out_dir = default_sweep_out_dir(args.run_name, args.model_key)
+    ensure_new_output_dir(out_dir, "sweep output directory")
+    out_dir.mkdir(parents=True, exist_ok=True)
     
     out_file = out_dir / "main.jsonl"
     verbose_file = (out_dir / "verbose.jsonl") if args.verbose else None
@@ -226,6 +253,7 @@ def main():
     metadata["cartridge"] = cartridge["name"]
     metadata["cartridge_description"] = cartridge["description"]
     metadata["model_key"] = model_key
+    metadata["run_name"] = args.run_name
     metadata["attention_layer_indices"] = attn_layers
     metadata["attention_slot_count"] = len(attn_layers)
     metadata["g_specs"] = g_specs

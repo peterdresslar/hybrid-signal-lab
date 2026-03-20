@@ -14,6 +14,15 @@ import math
 from pathlib import Path
 from typing import Any
 
+from signal_lab.paths import (
+    DATA_DIR_ENV_VAR,
+    DEFAULT_ANALYSIS_DIRNAME,
+    configure_data_dir,
+    default_compare_output_dir,
+    ensure_new_output_dir,
+    resolve_input_path,
+)
+
 
 REPORT_FLOAT_DIGITS = 2
 DEFAULT_PREFIX = "compare"
@@ -21,11 +30,35 @@ DEFAULT_PREFIX = "compare"
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Compare two analyzed sweep run directories.")
-    parser.add_argument("--run-a", type=str, required=True, help="First analyzed sweep run directory.")
-    parser.add_argument("--run-b", type=str, required=True, help="Second analyzed sweep run directory.")
+    parser.add_argument(
+        "--run-a",
+        type=str,
+        required=True,
+        help="First analyzed sweep run directory, or a raw run directory containing analysis/.",
+    )
+    parser.add_argument(
+        "--run-b",
+        type=str,
+        required=True,
+        help="Second analyzed sweep run directory, or a raw run directory containing analysis/.",
+    )
+    parser.add_argument(
+        "--data-dir",
+        type=str,
+        default=None,
+        help=f"Optional base directory to use in place of data/. Also supports {DATA_DIR_ENV_VAR}.",
+    )
     parser.add_argument("--label-a", type=str, default=None, help="Optional label override for run A.")
     parser.add_argument("--label-b", type=str, default=None, help="Optional label override for run B.")
-    parser.add_argument("--output-dir", type=str, default=None, help="Directory for generated artifacts (default: run A directory).")
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        default=None,
+        help=(
+            "Directory for generated artifacts "
+            "(default: [DATA_DIR]/outputs/signal_lab/runs/<run_name>/_comparisons/<model-a>_vs_<model-b>)."
+        ),
+    )
     parser.add_argument("--prefix", type=str, default=DEFAULT_PREFIX, help=f"Filename prefix (default: {DEFAULT_PREFIX}).")
     parser.add_argument("--json-out", type=str, default=None, help="Optional machine-readable JSON output path.")
     parser.add_argument("--no-write-files", action="store_true", help="Print report without writing artifacts.")
@@ -43,12 +76,25 @@ def read_json(path: Path) -> Any:
 
 
 def resolve_run_dir(path_str: str) -> Path:
-    path = Path(path_str).expanduser()
+    path = resolve_input_path(path_str)
     if not path.exists():
         raise FileNotFoundError(f"Run directory does not exist: {path}")
     if not path.is_dir():
         raise NotADirectoryError(f"Run directory must be a directory: {path}")
     return path
+
+
+def resolve_analysis_dir(path_str: str) -> Path:
+    run_dir = resolve_run_dir(path_str)
+    joined_path = run_dir / "analysis_joined_long.csv"
+    if joined_path.is_file():
+        return run_dir
+
+    analysis_dir = run_dir / DEFAULT_ANALYSIS_DIRNAME
+    if (analysis_dir / "analysis_joined_long.csv").is_file():
+        return analysis_dir
+
+    return run_dir
 
 
 def round_report_value(value: Any) -> Any:
@@ -387,8 +433,9 @@ def write_artifacts(
 
 def main() -> None:
     args = parse_args()
-    run_a_dir = resolve_run_dir(args.run_a)
-    run_b_dir = resolve_run_dir(args.run_b)
+    configure_data_dir(args.data_dir)
+    run_a_dir = resolve_analysis_dir(args.run_a)
+    run_b_dir = resolve_analysis_dir(args.run_b)
     run_a = load_run_analysis(run_a_dir, args.label_a)
     run_b = load_run_analysis(run_b_dir, args.label_b)
 
@@ -414,7 +461,12 @@ def main() -> None:
     print(report_text)
 
     if not args.no_write_files:
-        output_dir = Path(args.output_dir).expanduser() if args.output_dir else run_a_dir
+        output_dir = (
+            Path(args.output_dir).expanduser()
+            if args.output_dir
+            else default_compare_output_dir(run_a_dir, run_b_dir)
+        )
+        ensure_new_output_dir(output_dir, "comparison output directory")
         output_dir.mkdir(parents=True, exist_ok=True)
         written = write_artifacts(
             output_dir=output_dir,

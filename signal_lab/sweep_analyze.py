@@ -21,6 +21,8 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
+from signal_lab.paths import DATA_DIR_ENV_VAR, configure_data_dir, default_analysis_output_dir, resolve_input_path
+
 
 REPORT_FLOAT_DIGITS = 2
 DEFAULT_PREFIX = "analysis"
@@ -36,10 +38,16 @@ def parse_args() -> argparse.Namespace:
         help="Sweep run directory containing main.jsonl and _meta.json.",
     )
     parser.add_argument(
+        "--data-dir",
+        type=str,
+        default=None,
+        help=f"Optional base directory to use in place of data/. Also supports {DATA_DIR_ENV_VAR}.",
+    )
+    parser.add_argument(
         "--output-dir",
         type=str,
         default=None,
-        help="Directory for generated artifacts (default: --run-dir).",
+        help="Directory for generated artifacts (default: <run-dir>/analysis).",
     )
     parser.add_argument(
         "--prefix",
@@ -83,8 +91,77 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def to_float(value: Any) -> float:
+    if value in {None, ""}:
+        return math.nan
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return math.nan
+
+
+def flatten_numeric_values(value: Any) -> list[float]:
+    if isinstance(value, list):
+        out: list[float] = []
+        for item in value:
+            out.extend(flatten_numeric_values(item))
+        return out
+    numeric = to_float(value)
+    return [numeric] if math.isfinite(numeric) else []
+
+
+def build_verbose_baseline_lookup(
+    verbose_records: list[dict[str, Any]],
+) -> tuple[dict[tuple[str, int], dict[str, Any]], list[str]]:
+    lookup: dict[tuple[str, int], dict[str, Any]] = {}
+    warnings: list[str] = []
+    for record in verbose_records:
+        prompt_id = record.get("prompt_id")
+        if not isinstance(prompt_id, str):
+            continue
+        rep = int(record.get("rep", 1))
+        g_scales = record.get("g_attention_scales")
+        is_baseline = (
+            isinstance(g_scales, list)
+            and g_scales
+            and all(abs(to_float(scale) - 1.0) < 1e-6 for scale in g_scales)
+        )
+        if not is_baseline:
+            continue
+        key = (prompt_id, rep)
+        if key in lookup:
+            warnings.append(f"Duplicate verbose baseline row for prompt_id={prompt_id} rep={rep}")
+            continue
+        lookup[key] = record
+    return lookup, warnings
+
+
+def compute_verbose_baseline_metrics(verbose_row: dict[str, Any] | None) -> dict[str, float]:
+    if verbose_row is None:
+        return {
+            "baseline_mean_entropy_bits": math.nan,
+            "baseline_top1_top2_logit_margin": math.nan,
+            "baseline_attn_entropy_mean": math.nan,
+        }
+
+    top_k_logits = verbose_row.get("top_k_logits")
+    top1_top2_margin = math.nan
+    if isinstance(top_k_logits, list) and len(top_k_logits) >= 2:
+        top1 = to_float(top_k_logits[0])
+        top2 = to_float(top_k_logits[1])
+        if math.isfinite(top1) and math.isfinite(top2):
+            top1_top2_margin = top1 - top2
+
+    attn_values = flatten_numeric_values(verbose_row.get("attn_entropy_per_head_final"))
+    return {
+        "baseline_mean_entropy_bits": to_float(verbose_row.get("mean_entropy_bits")),
+        "baseline_top1_top2_logit_margin": top1_top2_margin,
+        "baseline_attn_entropy_mean": mean(attn_values),
+    }
+
+
 def resolve_run_dir(path_str: str) -> Path:
-    run_dir = Path(path_str).expanduser()
+    run_dir = resolve_input_path(path_str)
     if not run_dir.exists():
         raise FileNotFoundError(f"Run directory does not exist: {run_dir}")
     if not run_dir.is_dir():
@@ -269,6 +346,7 @@ def build_joined_rows(
     records: list[dict[str, Any]],
     battery_lookup: dict[str, dict[str, Any]],
     meta: dict[str, Any],
+    verbose_baseline_lookup: dict[tuple[str, int], dict[str, Any]] | None = None,
 ) -> tuple[list[dict[str, Any]], list[str]]:
     warnings: list[str] = []
     baseline_by_key: dict[tuple[str, int], dict[str, Any]] = {}
@@ -325,6 +403,9 @@ def build_joined_rows(
         baseline_avg_logprob = float(baseline.get("target_avg_logprob", math.nan))
         baseline_geo_mean_prob = float(baseline.get("target_geo_mean_prob", math.nan))
         baseline_entropy = float(baseline.get("final_entropy_bits", math.nan))
+        verbose_metrics = compute_verbose_baseline_metrics(
+            (verbose_baseline_lookup or {}).get((prompt_id, rep))
+        )
 
         target_prob = float(record.get("target_prob", math.nan))
         target_rank = float(record.get("target_rank", math.nan))
@@ -337,6 +418,7 @@ def build_joined_rows(
         row["baseline_target_avg_logprob"] = baseline_avg_logprob
         row["baseline_target_geo_mean_prob"] = baseline_geo_mean_prob
         row["baseline_final_entropy_bits"] = baseline_entropy
+        row.update(verbose_metrics)
 
         row["delta_target_prob"] = target_prob - baseline_prob
         row["delta_target_rank"] = target_rank - baseline_rank
@@ -539,13 +621,22 @@ def write_text(path: Path, content: str) -> None:
         f.write(content)
 
 
-def build_file_rows(run_dir: Path, meta_path: Path, main_path: Path, errors_path: Path) -> list[dict[str, Any]]:
-    return [
+def build_file_rows(
+    run_dir: Path,
+    meta_path: Path,
+    main_path: Path,
+    errors_path: Path,
+    verbose_path: Path,
+) -> list[dict[str, Any]]:
+    rows = [
         {"kind": "run_dir", "path": str(run_dir)},
         {"kind": "meta", "path": str(meta_path)},
         {"kind": "main", "path": str(main_path)},
         {"kind": "errors", "path": str(errors_path)},
     ]
+    if verbose_path.is_file():
+        rows.append({"kind": "verbose", "path": str(verbose_path)})
+    return rows
 
 
 def build_report_text(
@@ -768,10 +859,12 @@ def write_analysis_files(
 
 def main() -> None:
     args = parse_args()
+    configure_data_dir(args.data_dir)
     run_dir = resolve_run_dir(args.run_dir)
     main_path = run_dir / "main.jsonl"
     meta_path = run_dir / "_meta.json"
     errors_path = run_dir / "errors.jsonl"
+    verbose_path = run_dir / "verbose.jsonl"
 
     if not main_path.is_file():
         raise FileNotFoundError(f"Missing main.jsonl in {run_dir}")
@@ -784,11 +877,16 @@ def main() -> None:
 
     records = read_jsonl(main_path)
     errors = read_jsonl(errors_path) if errors_path.is_file() else []
+    verbose_records = read_jsonl(verbose_path) if verbose_path.is_file() else []
 
     battery_path = resolve_battery_path(run_dir, meta)
     battery_lookup, battery_warnings = load_battery_lookup(battery_path)
-    joined_rows, join_warnings = build_joined_rows(records, battery_lookup, meta)
+    verbose_baseline_lookup, verbose_warnings = build_verbose_baseline_lookup(verbose_records)
+    joined_rows, join_warnings = build_joined_rows(records, battery_lookup, meta, verbose_baseline_lookup)
     warnings = build_warnings(joined_rows, battery_lookup, battery_path, battery_warnings + join_warnings)
+    warnings.extend(verbose_warnings)
+    if not verbose_path.is_file():
+        warnings.append("No verbose.jsonl found; verbose-derived baseline metrics will be blank.")
 
     type_gain_summary = summarize_delta_rows(joined_rows, ["type", "g_profile", "g_family"])
     tier_gain_summary = summarize_delta_rows(joined_rows, ["tier", "g_profile", "g_family"])
@@ -812,10 +910,10 @@ def main() -> None:
     )
     print(report_text)
 
-    file_rows = build_file_rows(run_dir, meta_path, main_path, errors_path)
+    file_rows = build_file_rows(run_dir, meta_path, main_path, errors_path, verbose_path)
 
     if not args.no_write_files:
-        output_dir = Path(args.output_dir).expanduser() if args.output_dir else run_dir
+        output_dir = Path(args.output_dir).expanduser() if args.output_dir else default_analysis_output_dir(run_dir)
         written = write_analysis_files(
             output_dir=output_dir,
             prefix=args.prefix,

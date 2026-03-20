@@ -16,12 +16,17 @@ from model.g_profile import (
 )
 from model import VALID_MODEL_KEYS
 from signal_lab.agent import Agent
+from signal_lab.paths import (
+    DATA_DIR_ENV_VAR,
+    configure_data_dir,
+    default_probe_output_path,
+    ensure_output_file_available,
+    get_data_dir,
+    resolve_input_path,
+)
 
 dotenv.load_dotenv(".env.development")
 dotenv.load_dotenv(".env")
-
-DATA_DIR = Path("data")
-
 
 # ---------------------------------------------------------------------------
 # Device resolution
@@ -59,13 +64,7 @@ def resolve_device(requested_device: str | None = None) -> str:
 # ---------------------------------------------------------------------------
 
 def _resolve_path(path_or_name: str) -> Path:
-    path = Path(path_or_name)
-    if path.is_file():
-        return path
-    data_path = DATA_DIR / path_or_name
-    if data_path.is_file():
-        return data_path
-    return path
+    return resolve_input_path(path_or_name)
 
 
 def _load_prompt_entries(json_path: Path) -> list[dict]:
@@ -148,9 +147,10 @@ def _prompt_from_collection(path_or_name: str | Path, prompt_id: str) -> Prompt:
 
 
 def _all_prompt_catalogs() -> list[Path]:
-    if not DATA_DIR.is_dir():
+    data_dir = get_data_dir()
+    if not data_dir.is_dir():
         return []
-    return sorted(DATA_DIR.glob("prompts*.json"))
+    return sorted(data_dir.glob("prompts*.json"))
 
 
 def resolve_prompt_collection(
@@ -293,7 +293,8 @@ def run_model(
     model_key: str = "0_8B",
     device: str | None = None,
     g_spec: dict[str, Any] | None = None,
-):
+    output_path: str | None = None,
+) -> Path:
     """One-shot convenience runner used by the CLI."""
     runtime_device = resolve_device(device)
     agent = Agent.from_model_key(model_key, runtime_device)
@@ -316,11 +317,13 @@ def run_model(
     summary["config"] = agent.backend.config_summary
     summary["g_spec"] = resolved_g_spec
 
-    out_path = "signal_lab_output.json"
-    with open(out_path, "w") as f:
+    resolved_output_path = Path(output_path).expanduser() if output_path else default_probe_output_path()
+    resolved_output_path.parent.mkdir(parents=True, exist_ok=True)
+    ensure_output_file_available(resolved_output_path, "summary output")
+    with open(resolved_output_path, "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2)
 
-    print(f"\nSummary written to {out_path}")
+    print(f"\nSummary written to {resolved_output_path}")
     print(f"Elapsed time: {summary['elapsed_time']:.3f}s")
     print(
         "Top prediction "
@@ -328,6 +331,7 @@ def run_model(
         f"scales={summary['g_attention_scales']}): "
         f"index {summary['top_k_indices'][0]} logit {summary['top_k_logits'][0]:.3f}"
     )
+    return resolved_output_path
 
 
 # ---------------------------------------------------------------------------
@@ -341,7 +345,11 @@ def main() -> None:
     parser.add_argument(
         "--prompt", type=str,
         default="The color with the shortest wavelength is",
-        help="Path or filename to a prompt file in data/, or a direct string prompt.",
+        help="Path or filename to a prompt file in [DATA_DIR], or a direct string prompt.",
+    )
+    parser.add_argument(
+        "--data-dir", type=str, default=None,
+        help=f"Optional base directory to use in place of data/. Also supports {DATA_DIR_ENV_VAR}.",
     )
     parser.add_argument(
         "--prompt-battery", type=str, default=None,
@@ -388,7 +396,12 @@ def main() -> None:
         "--device", type=str, default=None,
         help="Device to use: auto (default), cuda, mps, or cpu. Also supports COLONY_DEVICE env var.",
     )
+    parser.add_argument(
+        "--output-path", type=str, default=None,
+        help="Optional path for the JSON summary output. Defaults under data/outputs/signal_lab/probes/.",
+    )
     args = parser.parse_args()
+    configure_data_dir(args.data_dir)
 
     g_params: dict[str, Any] = json.loads(args.g_params_json) if args.g_params_json else {}
     if not isinstance(g_params, dict):
@@ -431,7 +444,13 @@ def main() -> None:
             )
         prompt_source = f"{args.prompt_battery}:{prompts[0].id}"
 
-    run_model(prompt_source, args.model_key, device=args.device, g_spec=g_spec)
+    run_model(
+        prompt_source,
+        args.model_key,
+        device=args.device,
+        g_spec=g_spec,
+        output_path=args.output_path,
+    )
 
 
 if __name__ == "__main__":

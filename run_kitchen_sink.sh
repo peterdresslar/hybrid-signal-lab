@@ -4,6 +4,7 @@ set -euo pipefail
 LOG_FILE="early-late-run.txt"
 CARTRIDGE="kitchen_sink"
 MODELS=("0_8B" "2B" "9B" "OLMO")
+RUN_NAME="${RUN_NAME:-kitchen_sink_$(date +%Y%m%d_%H%M%S)}"
 
 # Start fresh each time.
 : > "$LOG_FILE"
@@ -15,9 +16,9 @@ for model in "${MODELS[@]}"; do
 
   uv run python -m signal_lab.sweep \
     --cartridge "$CARTRIDGE" \
+    --run-name "$RUN_NAME" \
     --model-key "$model" \
     --verbose \
-    --out-dir "docs/runs_data/early_late/kitchen_sink/${model}{timestamp}" \
     2>&1 | tee -a "$LOG_FILE"
 
   echo "" | tee -a "$LOG_FILE"

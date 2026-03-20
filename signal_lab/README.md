@@ -17,6 +17,16 @@ main implemented loop is:
 Shared model backends and prompt structures live in the top-level `model`
 package.
 
+Generated Signal Lab artifacts now default under `[DATA_DIR]/outputs/signal_lab/`.
+You can point `[DATA_DIR]` somewhere else with `--data-dir` or the `DATA_DIR`
+environment variable.
+The main subtrees are:
+
+- `[DATA_DIR]/outputs/signal_lab/probes/`
+- `[DATA_DIR]/outputs/signal_lab/runs/<run_name>/<model_name_short>/`
+- `[DATA_DIR]/outputs/signal_lab/runs/<run_name>/<model_name_short>/analysis/`
+- `[DATA_DIR]/outputs/signal_lab/runs/<run_name>/_comparisons/<compare_name>/`
+
 ## Package Contents
 
 - `signal_lab.signal_lab`: one-off probing CLI for a single prompt
@@ -77,7 +87,7 @@ uv run -m signal_lab.signal_lab \
   --g 1.0
 ```
 
-This writes a full JSON summary to `signal_lab_output.json`.
+This writes a full JSON summary under `[DATA_DIR]/outputs/signal_lab/probes/`.
 
 ### Prompt From A Battery
 
@@ -116,6 +126,8 @@ uv run -m signal_lab.signal_lab \
 - `--g-vector`: comma-separated control points for `control_points`
 - `--g-params-json`: extra parameters for non-constant functions
 - `--device`: `auto`, `cuda`, `mps`, or `cpu`
+- `--output-path`: optional override for the summary JSON location
+- `--data-dir`: optional override for `[DATA_DIR]`
 
 ## Running Sweeps
 
@@ -126,6 +138,7 @@ Use `signal_lab.sweep` when you want many prompts and/or many gain profiles.
 ```bash
 uv run -m signal_lab.sweep \
   --cartridge uniform_check_lite \
+  --run-name uniform_check_lite_demo \
   --model-key 0_8B
 ```
 
@@ -134,12 +147,12 @@ uv run -m signal_lab.sweep \
 ```bash
 uv run -m signal_lab.sweep \
   --cartridge kitchen_sink \
+  --run-name battery3 \
   --prompt-battery bench/battery/data/battery_3 \
   --prompt-types algorithmic \
   --prompt-tiers short \
   --model-key 35B \
-  --device cuda \
-  --out-dir results/battery3_qwen35b_alg_short_{timestamp}
+  --device cuda
 ```
 
 ### Specific Prompt IDs From A Battery
@@ -147,6 +160,7 @@ uv run -m signal_lab.sweep \
 ```bash
 uv run -m signal_lab.sweep \
   --cartridge kitchen_sink \
+  --run-name kitchen_sink_demo \
   --prompt-battery bench/battery/data/battery_3 \
   --prompt-ids alg_gen_arithmetic_0000,alg_gen_arithmetic_0001 \
   --model-key OLMO \
@@ -158,6 +172,7 @@ uv run -m signal_lab.sweep \
 ```bash
 uv run -m signal_lab.sweep \
   --cartridge kitchen_sink \
+  --run-name long_range_debug \
   --prompt-battery bench/battery/data/battery_3 \
   --prompt-types long_range_retrieval \
   --model-key 9B \
@@ -168,7 +183,14 @@ Verbose mode adds `verbose.jsonl` with heavier per-run detail.
 
 ### Sweep Outputs
 
-Each sweep run directory contains:
+When you use `--run-name`, the default model run directory is:
+
+- `[DATA_DIR]/outputs/signal_lab/runs/<run_name>/<model_name_short>/`
+
+The sweep command rejects an already-populated output directory so that a
+checkpoint-like `run_name` does not silently overwrite prior results.
+
+Each model run directory contains:
 
 - `main.jsonl`: core per-run metrics
 - `_meta.json`: model/config/prompt-selection metadata
@@ -183,7 +205,7 @@ Use `signal_lab.sweep_analyze` on one sweep output directory.
 
 ```bash
 uv run -m signal_lab.sweep_analyze \
-  --run-dir data/sweep_sample
+  --run-dir [DATA_DIR]/outputs/signal_lab/runs/battery3/35B
 ```
 
 ### Example With Separate Output Directory
@@ -194,11 +216,13 @@ uv run -m signal_lab.sweep_analyze \
   --output-dir /path/to/analysis_run
 ```
 
+Without `--output-dir`, analysis files are written to `<run-dir>/analysis/`.
+
 ### Example Without Writing Files
 
 ```bash
 uv run -m signal_lab.sweep_analyze \
-  --run-dir data/sweep_sample \
+  --run-dir [DATA_DIR]/outputs/signal_lab/runs/battery3/35B \
   --no-write-files
 ```
 
@@ -221,19 +245,19 @@ Use `signal_lab.sweep_compare` after each run has already been analyzed.
 
 ```bash
 uv run -m signal_lab.sweep_compare \
-  --run-a /path/to/analysis_run_a \
-  --run-b /path/to/analysis_run_b
+  --run-a [DATA_DIR]/outputs/signal_lab/runs/checkpoint_name/35B/analysis \
+  --run-b [DATA_DIR]/outputs/signal_lab/runs/checkpoint_name/OLMO/analysis
 ```
 
 ### Labeled Cross-Model Example
 
 ```bash
 uv run -m signal_lab.sweep_compare \
-  --run-a /path/to/analysis35B \
-  --run-b /path/to/analysisO \
+  --run-a [DATA_DIR]/outputs/signal_lab/runs/checkpoint_name/35B/analysis \
+  --run-b [DATA_DIR]/outputs/signal_lab/runs/checkpoint_name/OLMO/analysis \
   --label-a qwen35b \
   --label-b olmo \
-  --output-dir /path/to/qwen35b_vs_olmo \
+  --output-dir [DATA_DIR]/outputs/signal_lab/runs/checkpoint_name/_comparisons/qwen35b_vs_olmo \
   --prefix qwen35b_vs_olmo
 ```
 
@@ -254,7 +278,7 @@ Use `signal_lab.sweep_plot_analyze` for single-model scatter plots.
 
 ```bash
 uv run -m signal_lab.sweep_plot_analyze \
-  --analysis-dir data/exemplar/analysis35B \
+  --analysis-dir [DATA_DIR]/outputs/signal_lab/runs/battery3/35B/analysis \
   --x-metric tokens_approx
 ```
 
@@ -262,7 +286,7 @@ uv run -m signal_lab.sweep_plot_analyze \
 
 ```bash
 uv run -m signal_lab.sweep_plot_analyze \
-  --analysis-dir data/exemplar/analysis35B \
+  --analysis-dir [DATA_DIR]/outputs/signal_lab/runs/battery3/35B/analysis \
   --x-metric baseline_target_prob
 ```
 
@@ -270,10 +294,25 @@ uv run -m signal_lab.sweep_plot_analyze \
 
 ```bash
 uv run -m signal_lab.sweep_plot_analyze \
-  --analysis-dir data/exemplar/analysis35B \
+  --analysis-dir [DATA_DIR]/outputs/signal_lab/runs/battery3/35B/analysis \
   --x-metric tokens_approx \
   --intervention-folders \
   --best-interventions-top-n 12
+```
+
+If `analysis_joined_long.csv` contains the enriched baseline columns from
+`signal_lab.sweep_analyze`, intervention folders will also emit additional
+scatter variants for richer prompt discriminators such as baseline entropy,
+baseline target geo-mean probability, baseline top-1 vs top-2 logit margin,
+and mean attention entropy.
+
+### Multi-Metric Batch Example
+
+```bash
+uv run -m signal_lab.sweep_plot_analyze \
+  --analysis-dir [DATA_DIR]/outputs/signal_lab/runs/battery3/35B/analysis \
+  --x-metrics tokens_approx baseline_target_prob baseline_final_entropy_bits \
+  --intervention-folders
 ```
 
 This produces:
@@ -284,7 +323,9 @@ This produces:
 
 ### Useful Plot Flags
 
-- `--x-metric`: `tokens_approx`, `baseline_target_prob`, `target_prob`, `baseline_target_rank`, `target_rank`
+- `--x-metric`: single primary x-axis for the main plots
+- `--x-metrics`: batch-render multiple x-axes in one run
+- `--x-metric` / `--x-metrics` choices: `tokens_approx`, `baseline_target_prob`, `baseline_target_geo_mean_prob`, `baseline_final_entropy_bits`, `baseline_mean_entropy_bits`, `baseline_top1_top2_logit_margin`, `baseline_attn_entropy_mean`, `target_prob`, `baseline_target_rank`, `target_rank`
 - `--intervention-folders`: generate per-intervention subfolders
 - `--best-interventions-top-n`: size of the ranked best-intervention index
 - `--label-top-n`: annotate strongest outliers in each panel
@@ -297,14 +338,14 @@ Use `signal_lab.sweep_plot_compare` on a pairwise comparison bundle.
 
 ```bash
 uv run -m signal_lab.sweep_plot_compare \
-  --compare-dir data/exemplar/35B-v-OLMo
+  --compare-dir [DATA_DIR]/outputs/signal_lab/runs/checkpoint_name/_comparisons/qwen35b_vs_olmo
 ```
 
 ### Intervention Folder View
 
 ```bash
 uv run -m signal_lab.sweep_plot_compare \
-  --compare-dir data/exemplar/35B-v-OLMo \
+  --compare-dir [DATA_DIR]/outputs/signal_lab/runs/checkpoint_name/_comparisons/qwen35b_vs_olmo \
   --intervention-folders \
   --best-interventions-top-n 12 \
   --disagreement-top-n 12
@@ -331,18 +372,18 @@ directional inspection:
 ```bash
 uv run -m signal_lab.sweep \
   --cartridge kitchen_sink \
+  --run-name battery3 \
   --prompt-battery bench/battery/data/battery_3 \
   --prompt-types algorithmic \
   --prompt-tiers short \
   --model-key 35B \
-  --device cuda \
-  --out-dir results/qwen35b_alg_short_{timestamp}
+  --device cuda
 
 uv run -m signal_lab.sweep_analyze \
-  --run-dir results/qwen35b_alg_short_YYYYMMDD_HHMMSS
+  --run-dir [DATA_DIR]/outputs/signal_lab/runs/battery3/35B
 
 uv run -m signal_lab.sweep_plot_analyze \
-  --analysis-dir results/qwen35b_alg_short_YYYYMMDD_HHMMSS \
+  --analysis-dir [DATA_DIR]/outputs/signal_lab/runs/battery3/35B/analysis \
   --x-metric baseline_target_prob \
   --intervention-folders
 ```
@@ -351,15 +392,15 @@ uv run -m signal_lab.sweep_plot_analyze \
 
 ```bash
 uv run -m signal_lab.sweep_compare \
-  --run-a /path/to/analysis35B \
-  --run-b /path/to/analysisO \
+  --run-a [DATA_DIR]/outputs/signal_lab/runs/battery3/35B/analysis \
+  --run-b [DATA_DIR]/outputs/signal_lab/runs/battery3/OLMO/analysis \
   --label-a qwen35b \
   --label-b olmo \
-  --output-dir /path/to/qwen35b_vs_olmo \
+  --output-dir [DATA_DIR]/outputs/signal_lab/runs/battery3/_comparisons/qwen35b_vs_olmo \
   --prefix qwen35b_vs_olmo
 
 uv run -m signal_lab.sweep_plot_compare \
-  --compare-dir /path/to/qwen35b_vs_olmo \
+  --compare-dir [DATA_DIR]/outputs/signal_lab/runs/battery3/_comparisons/qwen35b_vs_olmo \
   --intervention-folders
 ```
 

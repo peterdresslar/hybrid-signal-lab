@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 import matplotlib
+from signal_lab.paths import DATA_DIR_ENV_VAR, configure_data_dir, resolve_input_path
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -48,6 +49,12 @@ def parse_args() -> argparse.Namespace:
         type=str,
         required=True,
         help="Directory containing pairwise comparison CSV outputs.",
+    )
+    parser.add_argument(
+        "--data-dir",
+        type=str,
+        default=None,
+        help=f"Optional base directory to use in place of data/. Also supports {DATA_DIR_ENV_VAR}.",
     )
     parser.add_argument(
         "--prefix",
@@ -105,7 +112,7 @@ def read_csv(path: Path) -> list[dict[str, str]]:
 
 
 def resolve_directory(path_str: str) -> Path:
-    path = Path(path_str).expanduser()
+    path = resolve_input_path(path_str)
     if not path.exists():
         raise FileNotFoundError(f"Directory does not exist: {path}")
     if not path.is_dir():
@@ -777,6 +784,7 @@ def write_manifest(path: Path, payload: dict[str, Any]) -> None:
 
 def main() -> None:
     args = parse_args()
+    configure_data_dir(args.data_dir)
     compare_dir = resolve_directory(args.compare_dir)
     prefix = args.prefix or discover_prefix(compare_dir)
     output_dir = Path(args.output_dir).expanduser() if args.output_dir else compare_dir / "plots"
