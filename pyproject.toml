@@ -12,6 +12,7 @@ dependencies = [
     "accelerate>=1.13.0",
     "dotenv>=0.9.9",
     "datasets>=4.8.2",
+    "matplotlib>=3.10.8",
 ]
 
 [build-system]
