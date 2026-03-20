@@ -854,6 +854,62 @@ def write_intervention_folder(
     }
 
 
+def plot_baseline_attn_pca(
+    pca_data: dict[str, Any],
+    model_label: str,
+    output_path: Path,
+    dpi: int,
+) -> None:
+    """Render a 2D PCA scatter of baseline per-head attention entropy, colored by type."""
+    points = pca_data.get("points", [])
+    if not points:
+        return
+
+    explained = pca_data.get("explained_variance_ratio", [0.0, 0.0])
+    n_layers = pca_data.get("n_layers", "?")
+    n_heads = pca_data.get("n_heads", "?")
+    n_features = pca_data.get("n_features", "?")
+
+    types_in_order = list(dict.fromkeys(pt["type"] for pt in points))
+    type_colors = build_color_map(types_in_order, "tab10")
+
+    fig, ax = plt.subplots(figsize=(9.0, 7.0))
+
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for pt in points:
+        grouped.setdefault(pt["type"], []).append(pt)
+
+    for type_name in types_in_order:
+        group = grouped[type_name]
+        ax.scatter(
+            [pt["pc1"] for pt in group],
+            [pt["pc2"] for pt in group],
+            s=22,
+            alpha=0.6,
+            color=type_colors[type_name],
+            edgecolors="none",
+            label=type_name,
+        )
+
+    ax.set_xlabel(f"PC1 ({explained[0]*100:.1f}% var)")
+    ax.set_ylabel(f"PC2 ({explained[1]*100:.1f}% var)")
+    ax.set_title(
+        f"{model_label}: baseline attention entropy PCA\n"
+        f"({n_layers} layers × {n_heads} heads = {n_features} features)"
+    )
+    ax.grid(True, alpha=0.15)
+    ax.legend(
+        loc="center left",
+        bbox_to_anchor=(1.01, 0.5),
+        frameon=False,
+        title="type",
+        fontsize=8,
+    )
+    fig.tight_layout(rect=(0.0, 0.0, 0.82, 1.0))
+    fig.savefig(output_path, dpi=dpi)
+    plt.close(fig)
+
+
 def write_manifest(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
@@ -910,6 +966,17 @@ def main() -> None:
     baseline_path = output_dir / f"{clean_filename(prefix)}_scatter_baseline_target_prob_vs_delta_target_prob_by_type.png"
     plot_baseline_vs_delta_by_type(rows, model_label, baseline_path, family_colors, args.label_top_n, args.dpi)
     written_paths.append(str(baseline_path))
+
+    # Second-order plot: baseline attention entropy PCA.
+    pca_json_path = analysis_dir / f"{prefix}_baseline_attn_pca.json"
+    if pca_json_path.is_file():
+        with open(pca_json_path, "r", encoding="utf-8") as f:
+            pca_data = json.load(f)
+        pca_plot_path = output_dir / f"{clean_filename(prefix)}_baseline_attn_pca.png"
+        plot_baseline_attn_pca(pca_data, model_label, pca_plot_path, args.dpi)
+        written_paths.append(str(pca_plot_path))
+    else:
+        print(f"(No PCA data found at {pca_json_path}; skipping baseline attention PCA plot.)")
 
     manifest_path = output_dir / f"{clean_filename(prefix)}_plot_manifest.json"
 

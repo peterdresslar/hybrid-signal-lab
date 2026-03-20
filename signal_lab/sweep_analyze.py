@@ -21,6 +21,8 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
+import numpy as np
+
 from signal_lab.paths import DATA_DIR_ENV_VAR, configure_data_dir, default_analysis_output_dir, resolve_input_path
 
 
@@ -857,6 +859,99 @@ def write_analysis_files(
     return written
 
 
+def build_baseline_attn_pca(
+    verbose_baseline_lookup: dict[tuple[str, int], dict[str, Any]],
+    battery_lookup: dict[str, dict[str, Any]],
+) -> dict[str, Any] | None:
+    """Run PCA on baseline per-head attention entropy vectors.
+
+    Returns a JSON-serialisable dict with PCA coordinates, metadata, and
+    explained variance, or ``None`` if insufficient data is available.
+    """
+    if not verbose_baseline_lookup:
+        return None
+
+    # Collect flat entropy vectors and associated metadata.
+    prompt_ids: list[str] = []
+    reps: list[int] = []
+    types: list[str] = []
+    vectors: list[list[float]] = []
+    n_layers: int | None = None
+    n_heads: int | None = None
+    layer_indices: list[int] | None = None
+
+    for (prompt_id, rep), record in sorted(verbose_baseline_lookup.items()):
+        raw = record.get("attn_entropy_per_head_final")
+        if not isinstance(raw, list) or not raw:
+            continue
+        flat = flatten_numeric_values(raw)
+        if not flat:
+            continue
+
+        # Capture shape info from first valid record.
+        if n_layers is None:
+            n_layers = len(raw)
+            n_heads = len(raw[0]) if isinstance(raw[0], list) else None
+            raw_indices = record.get("attn_entropy_layer_indices")
+            if isinstance(raw_indices, list):
+                layer_indices = [int(i) for i in raw_indices]
+
+        prompt_meta = battery_lookup.get(prompt_id, {})
+        prompt_ids.append(prompt_id)
+        reps.append(rep)
+        types.append(prompt_meta.get("type", "unknown"))
+        vectors.append(flat)
+
+    if len(vectors) < 3:
+        return None
+
+    # Ensure uniform dimensionality — skip any outlier-length rows.
+    expected_dim = len(vectors[0])
+    keep = [i for i, v in enumerate(vectors) if len(v) == expected_dim]
+    if len(keep) < 3:
+        return None
+
+    prompt_ids = [prompt_ids[i] for i in keep]
+    reps = [reps[i] for i in keep]
+    types = [types[i] for i in keep]
+    vectors = [vectors[i] for i in keep]
+
+    # PCA via SVD (mean-centred).
+    X = np.array(vectors, dtype=np.float64)
+    X_mean = X.mean(axis=0)
+    X_centred = X - X_mean
+    _U, S, Vt = np.linalg.svd(X_centred, full_matrices=False)
+    total_var = float((S**2).sum())
+    pc1 = Vt[0]
+    pc2 = Vt[1]
+    coords = X_centred @ np.vstack([pc1, pc2]).T  # (n, 2)
+
+    explained_variance = [float(s**2 / total_var) for s in S[:2]] if total_var > 0 else [0.0, 0.0]
+
+    points: list[dict[str, Any]] = []
+    for i in range(len(prompt_ids)):
+        points.append(
+            {
+                "prompt_id": prompt_ids[i],
+                "rep": reps[i],
+                "type": types[i],
+                "pc1": round(float(coords[i, 0]), 6),
+                "pc2": round(float(coords[i, 1]), 6),
+            }
+        )
+
+    return {
+        "description": "PCA of baseline per-head attention entropy vectors",
+        "n_prompts": len(points),
+        "n_features": expected_dim,
+        "n_layers": n_layers,
+        "n_heads": n_heads,
+        "layer_indices": layer_indices,
+        "explained_variance_ratio": [round(v, 6) for v in explained_variance],
+        "points": points,
+    }
+
+
 def main() -> None:
     args = parse_args()
     configure_data_dir(args.data_dir)
@@ -935,6 +1030,16 @@ def main() -> None:
         print("Wrote analysis files:")
         for path in written:
             print(f"- {path}")
+
+        # Second-order analysis: PCA on baseline attention entropy.
+        pca_result = build_baseline_attn_pca(verbose_baseline_lookup, battery_lookup)
+        if pca_result is not None:
+            pca_path = output_dir / f"{args.prefix}_baseline_attn_pca.json"
+            with open(pca_path, "w", encoding="utf-8") as f:
+                json.dump(pca_result, f, indent=2)
+            print(f"- {pca_path}")
+        else:
+            print("(Skipped baseline attention PCA — insufficient verbose baseline data.)")
 
     if args.json_out:
         json_report = {
