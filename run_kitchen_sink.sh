@@ -13,7 +13,7 @@ for model in "${MODELS[@]}"; do
   echo "Starting cartridge=$CARTRIDGE model=$model at $(date)" | tee -a "$LOG_FILE"
   echo "============================================================" | tee -a "$LOG_FILE"
 
-  uv run python -m colony.sweep \
+  uv run python -m signal_lab.sweep \
     --cartridge "$CARTRIDGE" \
     --model-key "$model" \
     --verbose \

@@ -10,12 +10,12 @@ from pathlib import Path
 from datetime import datetime
 from typing import Any
 
-from colony.signal_lab import resolve_prompt, resolve_device, resolve_prompt_collection
-from colony.model.g_profile import build_attention_scales_from_spec, printable_scales
-from colony.model.prompt import Prompt
-from colony.model import VALID_MODEL_KEYS
-from colony.agent import Agent
-from colony.sweep_cartridges import get_cartridge, list_cartridges
+from signal_lab.signal_lab import resolve_prompt, resolve_device, resolve_prompt_collection
+from model.g_profile import build_attention_scales_from_spec, printable_scales
+from model.prompt import Prompt
+from model import VALID_MODEL_KEYS
+from signal_lab.agent import Agent
+from signal_lab.sweep_cartridges import get_cartridge, list_cartridges
 
 TIER_TO_CATALOG = {
     "short": "prompts_short.json",

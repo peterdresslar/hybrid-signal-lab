@@ -25,6 +25,7 @@ def attention_scaler_hook(scale: float):
     Works regardless of whether the module returns a tensor, a tuple
     (common for attention layers), or a mutable sequence.
     """
+
     def hook_fn(module, input, output):
         if isinstance(output, tuple):
             scaled = output[0] * scale
@@ -34,6 +35,7 @@ def attention_scaler_hook(scale: float):
         else:
             output[0] = output[0] * scale
             return output
+
     return hook_fn
 
 
@@ -41,7 +43,7 @@ class ModelBackend(ABC):
     """Abstract base for model-specific hook and output logic.
 
     Subclasses implement layer detection, hook-target selection, and
-    attention-entropy extraction.  Everything else (tokenization,
+    attention-entropy extraction. Everything else (tokenization,
     forward pass, logit processing) is handled by :class:`Agent`.
     """
 
@@ -92,7 +94,8 @@ class ModelBackend(ABC):
         print(f"Loading {self._model_name}...")
         try:
             self._tokenizer = AutoTokenizer.from_pretrained(
-                self._model_name, token=hf_token,
+                self._model_name,
+                token=hf_token,
             )
             self._model = AutoModelForCausalLM.from_pretrained(
                 self._model_name,
@@ -143,8 +146,12 @@ class ModelBackend(ABC):
         return {
             key: getattr(cfg, key, None)
             for key in [
-                "model_type", "num_hidden_layers", "hidden_size",
-                "intermediate_size", "num_attention_heads",
-                "num_key_value_heads", "vocab_size",
+                "model_type",
+                "num_hidden_layers",
+                "hidden_size",
+                "intermediate_size",
+                "num_attention_heads",
+                "num_key_value_heads",
+                "vocab_size",
             ]
         }

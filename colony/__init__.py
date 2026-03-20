@@ -1,1 +1,1 @@
-"""Colony: collective control testbed for multi-agent LLM systems."""
+"""Reserved namespace for future colony / collective-signal work."""

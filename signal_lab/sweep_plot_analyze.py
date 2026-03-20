@@ -54,7 +54,7 @@ def parse_args() -> argparse.Namespace:
         "--analysis-dir",
         type=str,
         required=True,
-        help="Directory containing analysis outputs from colony.sweep_analyze.",
+        help="Directory containing analysis outputs from signal_lab.sweep_analyze.",
     )
     parser.add_argument(
         "--prefix",

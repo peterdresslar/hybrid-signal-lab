@@ -6,7 +6,7 @@ from typing import Any
 
 import torch
 
-from colony.model.backend import ModelBackend
+from model.backend import ModelBackend
 
 QWEN_MODELS: dict[str, str] = {
     "0_8B": "Qwen/Qwen3.5-0.8B-Base",

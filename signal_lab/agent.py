@@ -9,9 +9,9 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-from colony.model.backend import ModelBackend, attention_scaler_hook
-from colony.model.g_profile import printable_scales
-from colony.model import create_backend
+from model.backend import ModelBackend, attention_scaler_hook
+from model.g_profile import printable_scales
+from model import create_backend
 
 
 class Agent:

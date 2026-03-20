@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Pairwise comparison of two analyzed sweep run directories.
 
-This script compares the standardized outputs produced by `colony.sweep_analyze`
+This script compares the standardized outputs produced by `signal_lab.sweep_analyze`
 for two runs and writes side-by-side prompt, type, and family comparison tables.
 """
 

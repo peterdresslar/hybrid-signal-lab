@@ -1,8 +1,8 @@
 ## Peter Dresslar CAS Capstone Spring 2026
 
-A testbed for measuring collective behavior in multi-agent LLM systems, developed as a CAS capstone at Arizona State University (advisor: Prof. Bryan Daniels).
+A testbed for hybrid-model probing and collective-signal research, developed as a CAS capstone at Arizona State University (advisor: Prof. Bryan Daniels).
 
-The project investigates whether a colony of hybrid-architecture LLM agents can collectively modulate the balance between recurrent (GDN) and attention layer types at inference time, and whether the resulting collective exhibits the amplification and decomposition predicted by formal theories of collectivity (Daniels et al., 2016). Each agent processes a different window of shared context and broadcasts compressed activation signals to a shared buffer — analogous to pheromone signaling in eusocial insect colonies. The aggregate signal drives a global "g knob" that scales attention-layer contributions across the colony.
+The current implemented stack is centered on `signal_lab`, which probes hybrid-architecture LLMs by modulating the balance between recurrent (GDN) and attention layer types at inference time. The broader `colony` concept remains the future collective-signal layer that will eventually generate or adapt those interventions.
 
 The current implementation targets **Qwen3.5-2B**, a hybrid transformer that interleaves Gated DeltaNet (GDN) layers with gated attention layers in a 3:1 ratio. Forward hooks scale the attention-layer residual contributions by a factor *g* (g→0: GDN-dominated, g→1: attention-dominated), letting the system explore the full response surface without retraining.
 
@@ -35,15 +35,15 @@ export COLONY_DEVICE=cuda
 or per command:
 
 ```bash
-uv run python -m colony.signal_lab --device cuda ...
+uv run python -m signal_lab.signal_lab --device cuda ...
 ```
 
 ### Running Signal Lab standalone
 
-`signal_lab.py` is a diagnostic tool for running a single forward pass through the model with a configurable attention scaling profile. It reports top-k logits, entropy, and attention statistics, and writes a full summary to `signal_lab_output.json`.
+`signal_lab.signal_lab` is a diagnostic tool for running a single forward pass through the model with a configurable attention scaling profile. It reports top-k logits, entropy, and attention statistics, and writes a full summary to `signal_lab_output.json`.
 
 ```bash
-uv run python -m colony.signal_lab --prompt "The color with the shortest wavelength is" --g-function constant --g 1.0
+uv run python -m signal_lab.signal_lab --prompt "The color with the shortest wavelength is" --g-function constant --g 1.0
 ```
 
 - `--prompt` accepts a literal string, a path to a file, or a filename in the `data/` directory.
@@ -55,15 +55,15 @@ uv run python -m colony.signal_lab --prompt "The color with the shortest wavelen
 
 ### Running sweeps
 
-`sweep.py` automates running prompts across a cartridge-defined set of *g* profile specifications (`g_specs`), collecting per-run metrics (target rank, target probability, final entropy, KL divergence from baseline) into a structured output directory.
+`signal_lab.sweep` automates running prompts across a cartridge-defined set of *g* profile specifications (`g_specs`), collecting per-run metrics (target rank, target probability, final entropy, KL divergence from baseline) into a structured output directory.
 
 ```bash
-uv run python -m colony.sweep --cartridge uniform_check_lite
+uv run python -m signal_lab.sweep --cartridge uniform_check_lite
 ```
 
 Options:
 
-- `--cartridge` — required named sweep configuration from `colony/sweep_cartridges.py`.
+- `--cartridge` — required named sweep configuration from `signal_lab/sweep_cartridges.py`.
 - `--model-key` — optional model selector (`0_8B`, `2B`, `4B`, `9B`), default `0_8B`.
 - `--device` — optional hardware override (`auto`, `cuda`, `mps`, `cpu`).
 - `--repetitions` — number of repetitions per prompt/g pair (default `1`).

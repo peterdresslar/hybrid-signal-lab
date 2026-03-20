@@ -7,7 +7,7 @@ relative to the baseline gain profile for each prompt/rep pair, and writes a
 bundle of analysis artifacts.
 
 Example:
-    uv run -m colony.sweep_analyze --run-dir data/sweep_sample
+    uv run -m signal_lab.sweep_analyze --run-dir data/sweep_sample
 """
 
 from __future__ import annotations

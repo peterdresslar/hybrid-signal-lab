@@ -9,13 +9,13 @@ from typing import Any
 import torch
 import dotenv
 
-from colony.model.prompt import Prompt
-from colony.model.g_profile import (
+from model.prompt import Prompt
+from model.g_profile import (
     VALID_G_FUNCTIONS,
     build_attention_scales_from_spec,
 )
-from colony.model import VALID_MODEL_KEYS
-from colony.agent import Agent
+from model import VALID_MODEL_KEYS
+from signal_lab.agent import Agent
 
 dotenv.load_dotenv(".env.development")
 dotenv.load_dotenv(".env")
@@ -334,7 +334,7 @@ def run_model(
 # CLI
 # ---------------------------------------------------------------------------
 
-if __name__ == "__main__":
+def main() -> None:
     parser = argparse.ArgumentParser(
         description="Signal Lab: exploring model internals via transformers.",
     )
@@ -432,3 +432,7 @@ if __name__ == "__main__":
         prompt_source = f"{args.prompt_battery}:{prompts[0].id}"
 
     run_model(prompt_source, args.model_key, device=args.device, g_spec=g_spec)
+
+
+if __name__ == "__main__":
+    main()

@@ -50,7 +50,11 @@ def build_attention_scales(
         valid = ", ".join(sorted(VALID_G_FUNCTIONS))
         raise ValueError(f"Unknown g_function '{g_function}'. Expected one of: {valid}.")
 
-    x = attention_slot_positions(attention_slots, depth_min=depth_range[0], depth_max=depth_range[1])
+    x = attention_slot_positions(
+        attention_slots,
+        depth_min=depth_range[0],
+        depth_max=depth_range[1],
+    )
 
     if g_function == "constant":
         value = float(params.get("value", 1.0))
@@ -72,7 +76,7 @@ def build_attention_scales(
         right = float(params.get("right", 1.0))
         threshold = float(params.get("threshold", (depth_range[0] + depth_range[1]) / 2.0))
         scales = np.where(x < threshold, left, right).astype(float)
-    else:  # control_points
+    else:
         if g_vector is None:
             raise ValueError("g_vector is required for g_function='control_points'.")
         y = np.asarray(g_vector, dtype=float)
@@ -93,7 +97,11 @@ def build_attention_scales(
     return _apply_clipping(scales, params)
 
 
-def build_attention_scales_from_spec(spec: dict[str, Any], *, attention_slots: int) -> np.ndarray:
+def build_attention_scales_from_spec(
+    spec: dict[str, Any],
+    *,
+    attention_slots: int,
+) -> np.ndarray:
     g_function = str(spec.get("g_function", "constant"))
     g_vector = spec.get("g_vector")
     g_params = spec.get("g_params") or {}

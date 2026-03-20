@@ -40,4 +40,4 @@ uv sync
 
 echo "Ready. Run:"
 echo "  cd /workspace/cas-capstone-dresslar && source .venv/bin/activate"
-echo "  uv run python -m colony.sweep --cartridge test_cartridge --model-key OLMO --verbose"
+echo "  uv run python -m signal_lab.sweep --cartridge test_cartridge --model-key OLMO --verbose"

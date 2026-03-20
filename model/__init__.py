@@ -1,8 +1,8 @@
-"""colony.model — model backends and shared data structures."""
+"""model — model backends and shared data structures."""
 
-from colony.model.backend import ModelBackend
-from colony.model.qwen import QwenBackend, QWEN_MODELS
-from colony.model.olmo import OlmoBackend, OLMO_MODELS
+from model.backend import ModelBackend
+from model.qwen import QwenBackend, QWEN_MODELS
+from model.olmo import OlmoBackend, OLMO_MODELS
 
 ALL_MODELS: dict[str, str] = {**QWEN_MODELS, **OLMO_MODELS}
 
