@@ -1,0 +1,75 @@
+Run directory: ../aiita-results/results/sl-runs/ks/35B_20260319_103756
+Model: Qwen/Qwen3.5-35B-A3B-Base
+Cartridge: kitchen_sink
+
+Completion
+unique_prompts  unique_reps  g_profiles  expected_runs  completed_runs  missing_runs  error_rows
+--------------  -----------  ----------  -------------  --------------  ------------  ----------
+434             1            31          13454          13454           0             0         
+
+Top Type x Gain Profiles By Mean Delta P
+type                 g_profile                  mean_delta_p  %delta_p_pos  p_value  mean_delta_rank  n 
+-------------------  -------------------------  ------------  ------------  -------  ---------------  --
+algorithmic          early_high_late_low        0.21          63.33         0.05     4.60             30
+algorithmic          constant_0.75              0.19          60.00         0.26     480.13           30
+algorithmic          early_boost_1.5            0.18          46.67         0.86     101.70           30
+algorithmic          early_suppress_0.7         0.18          60.00         0.08     109.93           30
+algorithmic          ramp_down                  0.17          53.33         0.71     1.13             30
+reasoning_numerical  middle_suppress_0.5        0.15          90.00         0.00     -3.42            40
+reasoning_numerical  late_high_early_low        0.14          70.00         0.02     -4.97            40
+reasoning_numerical  late_suppress_0.5          0.14          100.00        0.00     -4.33            40
+algorithmic          edges_low                  0.13          63.33         0.01     -0.63            30
+code_comprehension   middle_bump_1.5_edges_0.8  0.13          80.00         0.01     0.40             15
+code_comprehension   late_boost_1.5             0.11          80.00         0.01     0.07             15
+reasoning_numerical  early_suppress_0.5         0.10          70.00         0.01     -2.67            40
+
+Type x Gain Family Summary
+type                g_family             mean_delta_p  %delta_p_pos  mean_delta_rank  n  
+------------------  -------------------  ------------  ------------  ---------------  ---
+algorithmic         early_high_late_low  0.21          63.33         4.60             30 
+algorithmic         early_boost          0.13          46.67         54.33            60 
+algorithmic         edges_low            0.13          63.33         -0.63            30 
+algorithmic         ramp_down            0.09          48.33         1.20             60 
+algorithmic         early_suppress       0.07          41.67         832.68           60 
+algorithmic         middle_bump          0.07          41.67         217.65           60 
+algorithmic         ramp_up              0.04          43.33         2.95             60 
+algorithmic         late_suppress        0.03          41.67         712.40           60 
+algorithmic         edges_high           0.00          46.67         4.30             30 
+algorithmic         late_boost           -0.02         36.67         68.08            60 
+algorithmic         late_high_early_low  -0.04         26.67         2084.37          30 
+algorithmic         other                -0.18         6.67          127.97           180
+code_comprehension  middle_bump          0.11          80.00         0.23             30 
+code_comprehension  late_boost           0.08          83.33         -0.10            30 
+code_comprehension  ramp_up              0.08          80.00         -0.73            30 
+code_comprehension  edges_low            0.01          60.00         -0.67            15 
+
+Best Profile By Type
+type                  best_g_profile             best_g_family        mean_delta_p  %delta_p_pos  p_value
+--------------------  -------------------------  -------------------  ------------  ------------  -------
+algorithmic           early_high_late_low        early_high_late_low  0.21          63.33         0.05   
+code_comprehension    middle_bump_1.5_edges_0.8  middle_bump          0.13          80.00         0.01   
+cultural_memorized    edges_low                  edges_low            -0.01         44.00         1.00   
+domain_knowledge      ramp_down_gentle           ramp_down            0.03          48.33         0.00   
+factual_recall        late_boost_1.3             late_boost           0.02          26.25         0.66   
+factual_retrieval     constant_1.25              constant             0.02          20.00         0.38   
+long_range_retrieval  early_high_late_low        early_high_late_low  0.06          70.00         0.01   
+reasoning_numerical   middle_suppress_0.5        other                0.15          90.00         0.00   
+reasoning_tracking    edges_high                 edges_high           0.10          52.50         0.51   
+structural_copying    ramp_down                  ramp_down            0.02          42.86         0.01   
+syntactic_pattern     ramp_down                  ramp_down            0.02          16.00         0.69   
+
+Top Prompt Winners
+prompt_id                     type                 best_g_profile       best_delta_p  worst_g_profile  worst_delta_p
+----------------------------  -------------------  -------------------  ------------  ---------------  -------------
+sc_gen_num_seq_0023           structural_copying   constant_0.25        0.88          alternating      -0.00        
+alg_gen_arithmetic_0000       algorithmic          late_suppress_0.5    0.82          alternating      -0.11        
+rn_gen_0029                   reasoning_numerical  constant_0.25        0.81          alternating      -0.00        
+alg_gen_arithmetic_0009       algorithmic          early_suppress_0.5   0.80          alternating      -0.07        
+dk_gen-wikipedia-random_0004  domain_knowledge     edges_low            0.77          alternating      -0.08        
+rn_gen_0013                   reasoning_numerical  late_high_early_low  0.77          alternating      -0.00        
+dk_gen-wikipedia-random_0041  domain_knowledge     constant_0.75        0.75          alternating      -0.04        
+rn_gen_0028                   reasoning_numerical  middle_suppress_0.5  0.75          alternating      -0.00        
+alg_gen_arithmetic_0001       algorithmic          middle_suppress_0.5  0.74          alternating      -0.09        
+alg_gen_arithmetic_0004       algorithmic          late_suppress_0.5    0.71          alternating      -0.19        
+alg_gen_arithmetic_0008       algorithmic          late_suppress_0.5    0.71          alternating      -0.22        
+alg_gen_arithmetic_0006       algorithmic          early_boost_1.5      0.68          alternating      -0.18        

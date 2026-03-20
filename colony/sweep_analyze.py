@@ -612,6 +612,28 @@ def build_report_text(
         )
         parts.append("")
 
+    worst_type_rows = sorted(
+        [row for row in type_gain_summary if row.get("g_profile") != BASELINE_PROFILE_NAME],
+        key=lambda row: float(row.get("mean_delta_target_prob", math.inf)),
+    )[:12]
+    if worst_type_rows:
+        parts.append("Worst Type x Gain Profiles By Mean Delta P")
+        parts.append(
+            render_table(
+                ["type", "g_profile", "mean_delta_p", "%delta_p_pos", "p_value", "mean_delta_rank", "n"],
+                [[
+                    str(row.get("type", "")),
+                    str(row.get("g_profile", "")),
+                    format_float(float(row.get("mean_delta_target_prob", math.nan))),
+                    format_float(float(row.get("pct_delta_target_prob_positive", math.nan))),
+                    format_float(float(row.get("sign_test_p_delta_target_prob", math.nan))),
+                    format_float(float(row.get("mean_delta_target_rank", math.nan))),
+                    str(row.get("n", "")),
+                ] for row in worst_type_rows],
+            )
+        )
+        parts.append("")
+
     family_rows = sorted(
         [row for row in type_family_summary if row.get("g_family") not in {"baseline", "constant"}],
         key=lambda row: (str(row.get("type", "")), -float(row.get("mean_delta_target_prob", -math.inf))),
@@ -668,6 +690,26 @@ def build_report_text(
                     str(row.get("worst_g_profile", "")),
                     format_float(float(row.get("worst_delta_target_prob", math.nan))),
                 ] for row in top_prompt_winners],
+            )
+        )
+        parts.append("")
+
+        worst_prompt_losers = sorted(
+            prompt_winners,
+            key=lambda row: float(row.get("worst_delta_target_prob", math.inf)),
+        )[:12]
+        parts.append("Worst Prompt Losers")
+        parts.append(
+            render_table(
+                ["prompt_id", "type", "worst_g_profile", "worst_delta_p", "best_g_profile", "best_delta_p"],
+                [[
+                    str(row.get("prompt_id", "")),
+                    str(row.get("type", "")),
+                    str(row.get("worst_g_profile", "")),
+                    format_float(float(row.get("worst_delta_target_prob", math.nan))),
+                    str(row.get("best_g_profile", "")),
+                    format_float(float(row.get("best_delta_target_prob", math.nan))),
+                ] for row in worst_prompt_losers],
             )
         )
 
