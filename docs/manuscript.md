@@ -18,11 +18,11 @@
 
 ## Appendix
 
-#### MY NOTES BELOW
+# ### MY NOTES BELOW
 
-Is this an AI paper? It seems like it has the most impact as one, but this is worth discussing.
+This project is likely to generate at least two papers to start.
 
-### Paper Scope / Outcome Spectrum (most to least ambitious)
+### Project Scope / Outcome Spectrum (most to least ambitious)
 
 1. Full loop: colony generates signal → signal modulates gain vector → measurable change in model output (This is Battery + Signal Lab + Colony)
 2. Partial loop: demonstrate gain vector intervention works + calibration framework that would evaluate colony-generated signals, colony itself is future work (This is Battery + Signal Lab)
@@ -56,15 +56,14 @@ While the battery could be used in order to benchmark model outputs, it is not p
 
 ### Signal Lab
 
-Signal Lab provides tools to probe the behavior of the models by running some or all of the battery prompts under baseline and intervention conditions. To faciliate this, Signal Lab is built on the HuggingFace transformers library running on a pytorch backend. Calls to `transformers.generate` are wrapped in a custom class that allows for the collection of per-token output probabilities for each token in the output sequence. Critically, this set up returns not only the predicted token but also the top-k tokens and their associated probabilities for each position in the output sequence. Associated measures such as entropy and conditional entropy are computed for each position in the output sequence.
+Signal Lab provides tools to probe and characterize the behavior of the models by running some or all of the battery prompts under baseline and intervention conditions. To faciliate this, Signal Lab is built on the HuggingFace transformers library running on a pytorch backend. Calls to `transformers.generate` are wrapped in a custom class that allows for the collection of per-token output probabilities for each token in the output sequence. Critically, this set up returns not only the predicted token but also the top-k tokens and their associated probabilities for each position in the output sequence. Associated measures such as entropy and conditional entropy are computed for each position in the output sequence.
 
 The intervention that we are applying in Signal Lab is a gain vector applied only to the attention layers of the hybrid models. This selective application effectively emphasizes or de-emphasizes the relative strength of the attention layers with respect to the linear (Gated Delta-Net) layers. Since attention and GDN have different strengths and weaknesses particularly focused on long-term recall, we expect to see consistent patterns in how the gain vector affects model performance across the battery prompts. As the exact sequence of residual token flow matters to the output, the application of vectors with various shapes for gain adjustment can make a major diffence in inference quality and general characteristics. As a result of early testing we generally are interested in gain adjustments of $0.5 < g < 2.0$.
 
-Signal Lab uses a cartridge design to facilitate the running of multiple experiments, which mostly consist of parameter sweeps and cross-model comparisons. A cartridge describes the model, the battery prompts, and a list of gain vector parameters. Since different models have different numbers of attention/GDN stacked layers, our gain vectors use a function to apply consistent relative gain across the layers for any number of stacks.
+Signal Lab uses a cartridge design to facilitate the running of multiple experiments, which mostly consist of parameter sweeps and cross-model comparisons. A cartridge describes the model, the battery prompts, and a list of gain vector parameters. Since different models have different numbers of attention/GDN stacked layers, our gain vectors use a function to apply consistent relative gain across the layers for any number of stacks. A single cartridge sweep is run against a single LLM instance. An accompanying analysis suite is designed to take the outputs of the experiments and generate first and second order analyses and visualizations.
 
 - The gain vector is applied as a scalar multiplier to the output of each attention layer before it enters the residual stream. GDN layers are left unmodified. This is [seemingly] the simplest possible selective intervention.
 - The choice to intervene only on attention layers (not GDN) is motivated by the architectural hypothesis: in hybrid models, attention and GDN handle different aspects of sequence processing (long-range retrieval vs. local state tracking). Selectively modulating one relative to the other should produce interpretable, type-dependent effects across the battery.
-- Connection to AttnRes (see `commentaries.md`) worth noting here: the gain vector modulates what enters the residual stream from attention layers. AttnRes modulates what gets *retrieved* from the residual stream by subsequent layers. Same target (depth-wise information flow), opposite direction of intervention. AttnRes is of course not externally-collective in nature as published by the Kimi team.
 
 ### Colony
 
@@ -91,3 +90,4 @@ Note that an intervention, at this time, appears most likely to be (in the simpl
 - Tang et al. State Delta Encoding—fast-slow hysteresis connection. Does this belong in this paper?
 - Where does the AIITA architecture (pheromone buffer as residual stream, collective g as layer norm) get introduced? Background? Methods? Or is it future work in this paper?
 - Specific venue/audience beyond arXiv?
+- Connection to AttnRes (see `commentaries.md`) worth noting here: the gain vector modulates what enters the residual stream from attention layers. AttnRes modulates what gets *retrieved* from the residual stream by subsequent layers. Same target (depth-wise information flow), opposite direction of intervention. AttnRes is of course not externally-collective in nature as published by the Kimi team.
