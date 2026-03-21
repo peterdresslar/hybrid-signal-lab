@@ -73,6 +73,13 @@ It is our attention to pursue intervention signal generation through the use of 
 
 Note that an intervention, at this time, appears most likely to be (in the simplest available realization) the selective application of a gain vector appropriate to a condition or perturbation the colony is undergoing.
 
+- Attention Heads + swarm mechanics
+- In fact we could possibly dump all the attention heads into the swarm and mix and match them
+- Why attention heads? They are our heterogenous actors. They have evolved into a mixture of roles.
+- Why take the attention heads out of the model rather than leave them in the model?
+  - 1. Leaving the attention heads in might indeed be better, in some weird hybrid scout layer. However,
+  - 2. we are asking them to solve a lower-dimensional problem, which I note if we call it a top 8 profiles makes it 2^3; and
+  - 3. pulling them out of the model keeps their training and allows them to speak embedeese, but also gives us a seperate design and or evolution surface
 
 ### Technical Notes
 - Qwen3.5-35B runs clean on single A100 on Sol
@@ -91,3 +98,5 @@ Note that an intervention, at this time, appears most likely to be (in the simpl
 - Where does the AIITA architecture (pheromone buffer as residual stream, collective g as layer norm) get introduced? Background? Methods? Or is it future work in this paper?
 - Specific venue/audience beyond arXiv?
 - Connection to AttnRes (see `commentaries.md`) worth noting here: the gain vector modulates what enters the residual stream from attention layers. AttnRes modulates what gets *retrieved* from the residual stream by subsequent layers. Same target (depth-wise information flow), opposite direction of intervention. AttnRes is of course not externally-collective in nature as published by the Kimi team.
+- The Olmo paper and Wolpert
+- Note that we should be able to address the specific theory of the olmo paper by prompt type---we note that, surprisingly, no class of prompts appears to benefit from a linear shift in attention ratio, which is almost what we would expect from the Olmo paper at first blush. But perhaps our ratios are predicted if we dig more into the paper.
