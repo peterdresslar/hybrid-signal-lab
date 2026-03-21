@@ -19,6 +19,7 @@ from signal_lab.paths import DATA_DIR_ENV_VAR, configure_data_dir, resolve_input
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
+import numpy as np
 
 
 DEFAULT_MIN_FAMILY_POINTS = 50
@@ -776,6 +777,139 @@ def write_intervention_folder(
     }
 
 
+def plot_scout_entropy_alignment(
+    scout_data: dict[str, Any],
+    output_path: Path,
+    dpi: int,
+) -> None:
+    """Scatter plot of mean scout entropy: model A vs model B, colored by type."""
+    points = scout_data.get("prompt_scout_summary", [])
+    if not points:
+        return
+    label_a = scout_data.get("label_a", "A")
+    label_b = scout_data.get("label_b", "B")
+    r_val = scout_data["scout_entropy_alignment"]["r"]
+
+    x = [pt["mean_scout_entropy_a"] for pt in points]
+    y = [pt["mean_scout_entropy_b"] for pt in points]
+
+    fig, ax = plt.subplots(figsize=(8.0, 7.0))
+    ax.scatter(x, y, s=16, alpha=0.5, color="steelblue", edgecolors="none")
+    ax.set_xlabel(f"{label_a} mean scout entropy")
+    ax.set_ylabel(f"{label_b} mean scout entropy")
+    ax.set_title(
+        f"Cross-model scout entropy alignment\n"
+        f"r = {r_val:.4f} (top-{scout_data.get('top_k', '?')} scouts, {len(points)} prompts)"
+    )
+    ax.grid(True, alpha=0.15)
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=dpi)
+    plt.close(fig)
+
+
+def plot_cross_model_prediction_summary(
+    scout_data: dict[str, Any],
+    output_path: Path,
+    dpi: int,
+) -> None:
+    """Bar chart showing cross-model scout prediction strength per gain profile."""
+    profiles = scout_data.get("profile_results", [])
+    if not profiles:
+        return
+    label_a = scout_data.get("label_a", "A")
+    label_b = scout_data.get("label_b", "B")
+
+    # Sort by delta agreement.
+    profiles = sorted(profiles, key=lambda p: p["r_delta_agreement"], reverse=True)
+    names = [p["g_profile"] for p in profiles]
+    agree = [p["r_delta_agreement"] for p in profiles]
+    a_to_b = [p["r_a_scouts_predict_b_delta"] for p in profiles]
+    b_to_a = [p["r_b_scouts_predict_a_delta"] for p in profiles]
+
+    x = np.arange(len(names))
+    width = 0.25
+
+    fig, ax = plt.subplots(figsize=(14.0, 6.0))
+    ax.bar(x - width, agree, width, label="Δp agreement (A vs B)", color="steelblue", alpha=0.8)
+    ax.bar(x, a_to_b, width, label=f"{label_a} scouts → {label_b} Δp", color="coral", alpha=0.8)
+    ax.bar(x + width, b_to_a, width, label=f"{label_b} scouts → {label_a} Δp", color="seagreen", alpha=0.8)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(names, rotation=70, ha="right", fontsize=7)
+    ax.set_ylabel("Pearson r")
+    ax.set_title("Cross-model scout prediction by gain profile")
+    ax.axhline(0, color="0.5", linewidth=0.8, linestyle="--")
+    ax.legend(fontsize=8, loc="upper right")
+    ax.grid(True, alpha=0.12, axis="y")
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=dpi)
+    plt.close(fig)
+
+
+def plot_scout_entropy_vs_delta(
+    scout_data: dict[str, Any],
+    output_path: Path,
+    dpi: int,
+) -> None:
+    """Scatter: mean scout entropy (A) vs mean delta_p (A and B), showing cross-model alignment."""
+    points = scout_data.get("prompt_scout_summary", [])
+    if not points:
+        return
+    label_a = scout_data.get("label_a", "A")
+    label_b = scout_data.get("label_b", "B")
+
+    se_a = [pt["mean_scout_entropy_a"] for pt in points]
+    dp_a = [pt["mean_delta_p_a"] for pt in points]
+    dp_b = [pt["mean_delta_p_b"] for pt in points]
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14.0, 6.0), sharey=True)
+
+    ax1.scatter(se_a, dp_a, s=16, alpha=0.5, color="coral", edgecolors="none")
+    ax1.set_xlabel(f"{label_a} mean scout entropy")
+    ax1.set_ylabel("Mean Δp (across profiles)")
+    ax1.set_title(f"{label_a} scout entropy → {label_a} Δp")
+    ax1.axhline(0, color="0.5", linewidth=0.8, linestyle="--")
+    ax1.grid(True, alpha=0.15)
+
+    ax2.scatter(se_a, dp_b, s=16, alpha=0.5, color="seagreen", edgecolors="none")
+    ax2.set_xlabel(f"{label_a} mean scout entropy")
+    ax2.set_title(f"{label_a} scout entropy → {label_b} Δp")
+    ax2.axhline(0, color="0.5", linewidth=0.8, linestyle="--")
+    ax2.grid(True, alpha=0.15)
+
+    fig.suptitle("Cross-model scout entropy predicting intervention response", fontsize=12)
+    fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.95))
+    fig.savefig(output_path, dpi=dpi)
+    plt.close(fig)
+
+
+def write_cross_model_scout_plots(
+    scout_data: dict[str, Any],
+    output_dir: Path,
+    prefix: str,
+    dpi: int,
+) -> list[str]:
+    """Generate all cross-model scout alignment plots."""
+    written: list[str] = []
+
+    alignment_path = output_dir / f"{clean_filename(prefix)}_scout_entropy_alignment.png"
+    plot_scout_entropy_alignment(scout_data, alignment_path, dpi)
+    if alignment_path.exists():
+        written.append(str(alignment_path))
+
+    prediction_path = output_dir / f"{clean_filename(prefix)}_cross_model_prediction_summary.png"
+    plot_cross_model_prediction_summary(scout_data, prediction_path, dpi)
+    if prediction_path.exists():
+        written.append(str(prediction_path))
+
+    entropy_delta_path = output_dir / f"{clean_filename(prefix)}_scout_entropy_vs_delta.png"
+    plot_scout_entropy_vs_delta(scout_data, entropy_delta_path, dpi)
+    if entropy_delta_path.exists():
+        written.append(str(entropy_delta_path))
+
+    return written
+
+
 def write_manifest(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
@@ -952,6 +1086,21 @@ def main() -> None:
             },
         )
         written_paths.append(str(interventions_manifest))
+
+    # Cross-model scout alignment plots.
+    scout_json_path = compare_dir / f"{prefix}_cross_model_scouts.json"
+    if scout_json_path.is_file():
+        with open(scout_json_path, "r", encoding="utf-8") as f:
+            scout_data = json.load(f)
+        scout_plots = write_cross_model_scout_plots(
+            scout_data=scout_data,
+            output_dir=output_dir,
+            prefix=prefix,
+            dpi=args.dpi,
+        )
+        written_paths.extend(scout_plots)
+    else:
+        print(f"(No cross-model scout data found at {scout_json_path}; skipping scout plots.)")
 
     write_manifest(
         manifest_path,
