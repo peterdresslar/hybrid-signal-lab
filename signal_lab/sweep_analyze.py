@@ -21,6 +21,8 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
+import numpy as np
+
 from signal_lab.paths import DATA_DIR_ENV_VAR, configure_data_dir, default_analysis_output_dir, resolve_input_path
 
 
@@ -857,6 +859,311 @@ def write_analysis_files(
     return written
 
 
+def build_baseline_attn_pca(
+    verbose_baseline_lookup: dict[tuple[str, int], dict[str, Any]],
+    battery_lookup: dict[str, dict[str, Any]],
+) -> dict[str, Any] | None:
+    """Run PCA on baseline per-head attention entropy vectors.
+
+    Returns a JSON-serialisable dict with PCA coordinates, metadata, and
+    explained variance, or ``None`` if insufficient data is available.
+    """
+    if not verbose_baseline_lookup:
+        return None
+
+    # Collect flat entropy vectors and associated metadata.
+    prompt_ids: list[str] = []
+    reps: list[int] = []
+    types: list[str] = []
+    vectors: list[list[float]] = []
+    n_layers: int | None = None
+    n_heads: int | None = None
+    layer_indices: list[int] | None = None
+
+    for (prompt_id, rep), record in sorted(verbose_baseline_lookup.items()):
+        raw = record.get("attn_entropy_per_head_final")
+        if not isinstance(raw, list) or not raw:
+            continue
+        flat = flatten_numeric_values(raw)
+        if not flat:
+            continue
+
+        # Capture shape info from first valid record.
+        if n_layers is None:
+            n_layers = len(raw)
+            n_heads = len(raw[0]) if isinstance(raw[0], list) else None
+            raw_indices = record.get("attn_entropy_layer_indices")
+            if isinstance(raw_indices, list):
+                layer_indices = [int(i) for i in raw_indices]
+
+        prompt_meta = battery_lookup.get(prompt_id, {})
+        prompt_ids.append(prompt_id)
+        reps.append(rep)
+        types.append(prompt_meta.get("type", "unknown"))
+        vectors.append(flat)
+
+    if len(vectors) < 3:
+        return None
+
+    # Ensure uniform dimensionality — skip any outlier-length rows.
+    expected_dim = len(vectors[0])
+    keep = [i for i, v in enumerate(vectors) if len(v) == expected_dim]
+    if len(keep) < 3:
+        return None
+
+    prompt_ids = [prompt_ids[i] for i in keep]
+    reps = [reps[i] for i in keep]
+    types = [types[i] for i in keep]
+    vectors = [vectors[i] for i in keep]
+
+    # PCA via SVD (mean-centred).
+    X = np.array(vectors, dtype=np.float64)
+    X_mean = X.mean(axis=0)
+    X_centred = X - X_mean
+    _U, S, Vt = np.linalg.svd(X_centred, full_matrices=False)
+    total_var = float((S**2).sum())
+    pc1 = Vt[0]
+    pc2 = Vt[1]
+    coords = X_centred @ np.vstack([pc1, pc2]).T  # (n, 2)
+
+    explained_variance = [float(s**2 / total_var) for s in S[:2]] if total_var > 0 else [0.0, 0.0]
+
+    points: list[dict[str, Any]] = []
+    for i in range(len(prompt_ids)):
+        points.append(
+            {
+                "prompt_id": prompt_ids[i],
+                "rep": reps[i],
+                "type": types[i],
+                "pc1": round(float(coords[i, 0]), 6),
+                "pc2": round(float(coords[i, 1]), 6),
+            }
+        )
+
+    return {
+        "description": "PCA of baseline per-head attention entropy vectors",
+        "n_prompts": len(points),
+        "n_features": expected_dim,
+        "n_layers": n_layers,
+        "n_heads": n_heads,
+        "layer_indices": layer_indices,
+        "explained_variance_ratio": [round(v, 6) for v in explained_variance],
+        "points": points,
+    }
+
+
+def _pearsonr(x: np.ndarray, y: np.ndarray) -> tuple[float, float]:
+    """Pearson correlation coefficient and two-tailed p-value (no scipy)."""
+    n = len(x)
+    if n < 3:
+        return (math.nan, math.nan)
+    xm = x - x.mean()
+    ym = y - y.mean()
+    r_num = float(np.dot(xm, ym))
+    r_den = float(np.sqrt(np.dot(xm, xm) * np.dot(ym, ym)))
+    if r_den < 1e-15:
+        return (0.0, 1.0)
+    r = r_num / r_den
+    r = max(-1.0, min(1.0, r))
+    # t-test for significance
+    if abs(r) >= 1.0:
+        return (r, 0.0)
+    t_stat = r * math.sqrt((n - 2) / (1.0 - r * r))
+    # Two-tailed p-value via regularised incomplete beta function approximation.
+    # Use the survival-function identity: p = 2 * P(T > |t|) with df = n-2.
+    df = n - 2
+    x_beta = df / (df + t_stat * t_stat)
+    p = _betai(0.5 * df, 0.5, x_beta)
+    return (r, p)
+
+
+def _betai(a: float, b: float, x: float) -> float:
+    """Regularised incomplete beta function I_x(a, b) via continued fraction."""
+    if x < 0.0 or x > 1.0:
+        return math.nan
+    if x == 0.0 or x == 1.0:
+        return x
+    ln_beta = math.lgamma(a) + math.lgamma(b) - math.lgamma(a + b)
+    front = math.exp(a * math.log(x) + b * math.log(1.0 - x) - ln_beta)
+    if x < (a + 1.0) / (a + b + 2.0):
+        return front * _betacf(a, b, x) / a
+    else:
+        return 1.0 - front * _betacf(b, a, 1.0 - x) / b
+
+
+def _betacf(a: float, b: float, x: float) -> float:
+    """Continued fraction for incomplete beta (Lentz's method)."""
+    max_iter = 200
+    eps = 3e-12
+    fpmin = 1e-30
+    qab = a + b
+    qap = a + 1.0
+    qam = a - 1.0
+    c = 1.0
+    d = max(abs(1.0 - qab * x / qap), fpmin)
+    d = 1.0 / d
+    h = d
+    for m in range(1, max_iter + 1):
+        m2 = 2 * m
+        aa = m * (b - m) * x / ((qam + m2) * (a + m2))
+        d = max(abs(1.0 + aa * d), fpmin)
+        d = 1.0 / d
+        c = max(abs(1.0 + aa / c), fpmin)
+        h *= d * c
+        aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2))
+        d = max(abs(1.0 + aa * d), fpmin)
+        d = 1.0 / d
+        c = max(abs(1.0 + aa / c), fpmin)
+        delta = d * c
+        h *= delta
+        if abs(delta - 1.0) < eps:
+            break
+    return h
+
+
+def build_head_correlation_analysis(
+    verbose_baseline_lookup: dict[tuple[str, int], dict[str, Any]],
+    joined_rows: list[dict[str, Any]],
+) -> dict[str, Any] | None:
+    """Correlate each head's baseline attention entropy with delta_p per gain profile.
+
+    Returns a JSON-serialisable dict with per-profile correlation matrices,
+    top-10 tables, and scout-head frequency counts, or ``None`` if insufficient data.
+    """
+    if not verbose_baseline_lookup:
+        return None
+
+    # ---- 1. Build baseline entropy matrix: prompt → flat vector ----
+    prompt_ids_ordered: list[str] = []
+    reps_ordered: list[int] = []
+    vectors: list[list[float]] = []
+    n_layers: int | None = None
+    n_heads: int | None = None
+    layer_indices: list[int] | None = None
+
+    for (prompt_id, rep), record in sorted(verbose_baseline_lookup.items()):
+        raw = record.get("attn_entropy_per_head_final")
+        if not isinstance(raw, list) or not raw:
+            continue
+        flat = flatten_numeric_values(raw)
+        if not flat:
+            continue
+        if n_layers is None:
+            n_layers = len(raw)
+            n_heads = len(raw[0]) if isinstance(raw[0], list) else None
+            raw_indices = record.get("attn_entropy_layer_indices")
+            if isinstance(raw_indices, list):
+                layer_indices = [int(i) for i in raw_indices]
+        prompt_ids_ordered.append(prompt_id)
+        reps_ordered.append(rep)
+        vectors.append(flat)
+
+    if len(vectors) < 10 or n_layers is None or n_heads is None:
+        return None
+
+    expected_dim = len(vectors[0])
+    keep = [i for i, v in enumerate(vectors) if len(v) == expected_dim]
+    if len(keep) < 10:
+        return None
+    prompt_ids_ordered = [prompt_ids_ordered[i] for i in keep]
+    reps_ordered = [reps_ordered[i] for i in keep]
+    vectors = [vectors[i] for i in keep]
+
+    X = np.array(vectors, dtype=np.float64)  # (n_prompts, n_features)
+    n_prompts, n_features = X.shape
+
+    # Build lookup for fast delta_p access: (prompt_id, rep, g_profile) -> delta_p.
+    delta_lookup: dict[tuple[str, int, str], float] = {}
+    for row in joined_rows:
+        pid = str(row.get("prompt_id", ""))
+        rep = int(row.get("rep", 1))
+        profile = str(row.get("g_profile", ""))
+        dp = row.get("delta_target_prob")
+        if dp is not None:
+            try:
+                dpf = float(dp)
+                if math.isfinite(dpf):
+                    delta_lookup[(pid, rep, profile)] = dpf
+            except (ValueError, TypeError):
+                pass
+
+    # Discover non-baseline gain profiles.
+    all_profiles = sorted({p for (_, _, p) in delta_lookup if p != "baseline"})
+    if not all_profiles:
+        return None
+
+    # ---- 2. Compute correlations: for each profile × each head ----
+    scout_counts = np.zeros(n_features, dtype=np.int64)
+    profile_results: list[dict[str, Any]] = []
+
+    for profile in all_profiles:
+        # Gather delta_p vector aligned with prompt order.
+        delta_vec = np.full(n_prompts, np.nan, dtype=np.float64)
+        for i, (pid, rep) in enumerate(zip(prompt_ids_ordered, reps_ordered)):
+            dp = delta_lookup.get((pid, rep, profile))
+            if dp is not None:
+                delta_vec[i] = dp
+
+        valid_mask = np.isfinite(delta_vec)
+        n_valid = int(valid_mask.sum())
+        if n_valid < 10:
+            continue
+
+        delta_valid = delta_vec[valid_mask]
+        X_valid = X[valid_mask]
+
+        correlations = np.zeros(n_features, dtype=np.float64)
+        p_values = np.ones(n_features, dtype=np.float64)
+        for j in range(n_features):
+            r, p = _pearsonr(X_valid[:, j], delta_valid)
+            correlations[j] = r
+            p_values[j] = p
+
+        # Reshape to (n_layers, n_heads) for the heatmap.
+        corr_matrix = correlations.reshape(n_layers, n_heads).tolist()
+        pval_matrix = p_values.reshape(n_layers, n_heads).tolist()
+
+        # Top 10 heads by |r|.
+        top_indices = np.argsort(-np.abs(correlations))[:10]
+        top_heads: list[dict[str, Any]] = []
+        for idx in top_indices:
+            layer_idx = int(idx // n_heads)
+            head_idx = int(idx % n_heads)
+            top_heads.append({
+                "layer_slot": layer_idx,
+                "layer_index": layer_indices[layer_idx] if layer_indices else layer_idx,
+                "head": head_idx,
+                "correlation": round(float(correlations[idx]), 6),
+                "p_value": round(float(p_values[idx]), 6),
+            })
+
+        # Accumulate scout counts.
+        scout_counts[top_indices] += 1
+
+        profile_results.append({
+            "g_profile": profile,
+            "n_valid_prompts": n_valid,
+            "correlation_matrix": [[round(v, 6) for v in row] for row in corr_matrix],
+            "p_value_matrix": [[round(v, 6) for v in row] for row in pval_matrix],
+            "top_10_heads": top_heads,
+        })
+
+    # Scout-heads aggregate.
+    scout_matrix = scout_counts.reshape(n_layers, n_heads).tolist()
+
+    return {
+        "description": "Per-head correlation between baseline attention entropy and intervention delta_p",
+        "n_prompts": n_prompts,
+        "n_features": n_features,
+        "n_layers": n_layers,
+        "n_heads": n_heads,
+        "layer_indices": layer_indices,
+        "n_profiles": len(profile_results),
+        "profiles": profile_results,
+        "scout_heads_matrix": [[int(v) for v in row] for row in scout_matrix],
+    }
+
+
 def main() -> None:
     args = parse_args()
     configure_data_dir(args.data_dir)
@@ -935,6 +1242,26 @@ def main() -> None:
         print("Wrote analysis files:")
         for path in written:
             print(f"- {path}")
+
+        # Second-order analysis: PCA on baseline attention entropy.
+        pca_result = build_baseline_attn_pca(verbose_baseline_lookup, battery_lookup)
+        if pca_result is not None:
+            pca_path = output_dir / f"{args.prefix}_baseline_attn_pca.json"
+            with open(pca_path, "w", encoding="utf-8") as f:
+                json.dump(pca_result, f, indent=2)
+            print(f"- {pca_path}")
+        else:
+            print("(Skipped baseline attention PCA — insufficient verbose baseline data.)")
+
+        # Second-order analysis: head-level correlation with intervention delta_p.
+        head_corr_result = build_head_correlation_analysis(verbose_baseline_lookup, joined_rows)
+        if head_corr_result is not None:
+            head_corr_path = output_dir / f"{args.prefix}_head_correlations.json"
+            with open(head_corr_path, "w", encoding="utf-8") as f:
+                json.dump(head_corr_result, f, indent=2)
+            print(f"- {head_corr_path}")
+        else:
+            print("(Skipped head correlation analysis — insufficient data.)")
 
     if args.json_out:
         json_report = {

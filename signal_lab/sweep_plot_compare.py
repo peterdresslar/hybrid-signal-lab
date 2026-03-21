@@ -19,6 +19,7 @@ from signal_lab.paths import DATA_DIR_ENV_VAR, configure_data_dir, resolve_input
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
+import numpy as np
 
 
 DEFAULT_MIN_FAMILY_POINTS = 50
@@ -372,197 +373,6 @@ def scatter_single_color(
     )
 
 
-def plot_delta_scatter_all(
-    rows: list[dict[str, Any]],
-    label_a: str,
-    label_b: str,
-    output_path: Path,
-    family_colors: dict[str, Any],
-    top_n: int,
-    dpi: int,
-) -> None:
-    clean = [row for row in rows if row["g_profile"] != "baseline"]
-    xlim, ylim = axis_limits(clean, "a_delta_prob", "b_delta_prob", equal=True)
-    fig, ax = plt.subplots(figsize=(8.5, 7.5))
-    scatter_groups(ax, clean, "a_delta_prob", "b_delta_prob", "g_family", family_colors, size=18.0, alpha=0.5)
-    add_reference_lines(ax, xlim, ylim, diagonal=True)
-    annotate_outliers(ax, clean, "a_delta_prob", "b_delta_prob", top_n)
-    ax.set_xlim(*xlim)
-    ax.set_ylim(*ylim)
-    ax.set_aspect("equal", adjustable="box")
-    ax.set_xlabel(f"{label_a} delta target prob")
-    ax.set_ylabel(f"{label_b} delta target prob")
-    ax.set_title("Cross-model intervention response by gain family")
-    ax.grid(True, alpha=0.15)
-    handles = make_legend_handles(family_colors)
-    fig.legend(handles=handles, loc="center left", bbox_to_anchor=(0.98, 0.5), frameon=False, title="g_family")
-    fig.tight_layout(rect=(0.0, 0.0, 0.86, 1.0))
-    fig.savefig(output_path, dpi=dpi)
-    plt.close(fig)
-
-
-def plot_delta_scatter_by_type(
-    rows: list[dict[str, Any]],
-    label_a: str,
-    label_b: str,
-    output_path: Path,
-    family_colors: dict[str, Any],
-    top_n: int,
-    dpi: int,
-) -> None:
-    clean = [row for row in rows if row["g_profile"] != "baseline"]
-    ordered_types = type_order(clean)
-    xlim, ylim = axis_limits(clean, "a_delta_prob", "b_delta_prob", equal=True)
-    n_rows, n_cols = layout_grid(len(ordered_types))
-    fig, axes = plt.subplots(n_rows, n_cols, figsize=(5.0 * n_cols, 4.7 * n_rows), squeeze=False)
-    for ax in axes.flat:
-        ax.set_visible(False)
-
-    for idx, type_name in enumerate(ordered_types):
-        ax = axes.flat[idx]
-        ax.set_visible(True)
-        type_rows = [row for row in clean if row["type"] == type_name]
-        scatter_groups(ax, type_rows, "a_delta_prob", "b_delta_prob", "g_family", family_colors, size=14.0, alpha=0.45)
-        add_reference_lines(ax, xlim, ylim, diagonal=True)
-        annotate_outliers(ax, type_rows, "a_delta_prob", "b_delta_prob", top_n)
-        ax.set_xlim(*xlim)
-        ax.set_ylim(*ylim)
-        ax.set_aspect("equal", adjustable="box")
-        ax.set_title(f"{type_name} (n={len(type_rows)})")
-        ax.grid(True, alpha=0.12)
-        if idx // n_cols == n_rows - 1:
-            ax.set_xlabel(label_a)
-        if idx % n_cols == 0:
-            ax.set_ylabel(label_b)
-
-    handles = make_legend_handles(family_colors)
-    fig.legend(handles=handles, loc="center left", bbox_to_anchor=(0.98, 0.5), frameon=False, title="g_family")
-    fig.suptitle("Cross-model delta target prob by prompt type", fontsize=14, y=0.995)
-    fig.tight_layout(rect=(0.0, 0.0, 0.86, 0.97))
-    fig.savefig(output_path, dpi=dpi)
-    plt.close(fig)
-
-
-def plot_delta_scatter_by_family(
-    rows: list[dict[str, Any]],
-    label_a: str,
-    label_b: str,
-    output_path: Path,
-    type_colors: dict[str, Any],
-    min_points: int,
-    top_n: int,
-    dpi: int,
-) -> None:
-    clean = [row for row in rows if row["g_profile"] != "baseline"]
-    ordered_families = family_order(clean, min_points)
-    if not ordered_families:
-        return
-    xlim, ylim = axis_limits(clean, "a_delta_prob", "b_delta_prob", equal=True)
-    n_rows, n_cols = layout_grid(len(ordered_families), max_cols=4)
-    fig, axes = plt.subplots(n_rows, n_cols, figsize=(4.6 * n_cols, 4.4 * n_rows), squeeze=False)
-    for ax in axes.flat:
-        ax.set_visible(False)
-
-    for idx, family_name in enumerate(ordered_families):
-        ax = axes.flat[idx]
-        ax.set_visible(True)
-        family_rows = [row for row in clean if row["g_family"] == family_name]
-        scatter_groups(ax, family_rows, "a_delta_prob", "b_delta_prob", "type", type_colors, size=14.0, alpha=0.45)
-        add_reference_lines(ax, xlim, ylim, diagonal=True)
-        annotate_outliers(ax, family_rows, "a_delta_prob", "b_delta_prob", top_n)
-        ax.set_xlim(*xlim)
-        ax.set_ylim(*ylim)
-        ax.set_aspect("equal", adjustable="box")
-        ax.set_title(f"{family_name} (n={len(family_rows)})")
-        ax.grid(True, alpha=0.12)
-        if idx // n_cols == n_rows - 1:
-            ax.set_xlabel(label_a)
-        if idx % n_cols == 0:
-            ax.set_ylabel(label_b)
-
-    handles = make_legend_handles(type_colors)
-    fig.legend(handles=handles, loc="center left", bbox_to_anchor=(0.98, 0.5), frameon=False, title="type")
-    fig.suptitle("Cross-model delta target prob by gain family", fontsize=14, y=0.995)
-    fig.tight_layout(rect=(0.0, 0.0, 0.86, 0.97))
-    fig.savefig(output_path, dpi=dpi)
-    plt.close(fig)
-
-
-def plot_baseline_vs_delta(
-    rows: list[dict[str, Any]],
-    label_a: str,
-    label_b: str,
-    output_path: Path,
-    family_colors: dict[str, Any],
-    top_n: int,
-    dpi: int,
-) -> None:
-    clean = [row for row in rows if row["g_profile"] != "baseline"]
-    y_limits = axis_limits(clean, "a_delta_prob", "b_delta_prob", equal=True)[1]
-    fig, axes = plt.subplots(1, 2, figsize=(13.5, 6.0), squeeze=False)
-    specs = [
-        (axes[0, 0], "a_baseline_prob", "a_delta_prob", label_a),
-        (axes[0, 1], "b_baseline_prob", "b_delta_prob", label_b),
-    ]
-    for ax, x_key, y_key, label in specs:
-        scatter_groups(ax, clean, x_key, y_key, "g_family", family_colors, size=16.0, alpha=0.45)
-        ax.axhline(0.0, color="0.65", linewidth=0.9, linestyle="--", zorder=0)
-        ax.set_xlim(-0.02, 1.02)
-        ax.set_ylim(*y_limits)
-        ax.set_xlabel("Baseline target prob")
-        ax.set_ylabel("Delta target prob")
-        ax.set_title(label)
-        annotate_outliers(ax, clean, x_key, y_key, top_n)
-        ax.grid(True, alpha=0.15)
-
-    handles = make_legend_handles(family_colors)
-    fig.legend(handles=handles, loc="center left", bbox_to_anchor=(0.98, 0.5), frameon=False, title="g_family")
-    fig.suptitle("Baseline difficulty vs intervention gain", fontsize=14, y=0.995)
-    fig.tight_layout(rect=(0.0, 0.0, 0.86, 0.97))
-    fig.savefig(output_path, dpi=dpi)
-    plt.close(fig)
-
-
-def plot_gap_by_type(
-    rows: list[dict[str, Any]],
-    output_path: Path,
-    family_colors: dict[str, Any],
-    top_n: int,
-    dpi: int,
-) -> None:
-    clean = [row for row in rows if row["g_profile"] != "baseline"]
-    ordered_types = type_order(clean)
-    xlim, ylim = axis_limits(clean, "baseline_gap", "delta_gap", equal=False)
-    n_rows, n_cols = layout_grid(len(ordered_types))
-    fig, axes = plt.subplots(n_rows, n_cols, figsize=(5.0 * n_cols, 4.5 * n_rows), squeeze=False)
-    for ax in axes.flat:
-        ax.set_visible(False)
-
-    for idx, type_name in enumerate(ordered_types):
-        ax = axes.flat[idx]
-        ax.set_visible(True)
-        type_rows = [row for row in clean if row["type"] == type_name]
-        scatter_groups(ax, type_rows, "baseline_gap", "delta_gap", "g_family", family_colors, size=14.0, alpha=0.45)
-        ax.axhline(0.0, color="0.65", linewidth=0.9, linestyle="--", zorder=0)
-        ax.axvline(0.0, color="0.65", linewidth=0.9, linestyle="--", zorder=0)
-        annotate_outliers(ax, type_rows, "baseline_gap", "delta_gap", top_n)
-        ax.set_xlim(*xlim)
-        ax.set_ylim(*ylim)
-        ax.set_title(f"{type_name} (n={len(type_rows)})")
-        ax.grid(True, alpha=0.12)
-        if idx // n_cols == n_rows - 1:
-            ax.set_xlabel("Baseline prob gap (A - B)")
-        if idx % n_cols == 0:
-            ax.set_ylabel("Delta prob gap (A - B)")
-
-    handles = make_legend_handles(family_colors)
-    fig.legend(handles=handles, loc="center left", bbox_to_anchor=(0.98, 0.5), frameon=False, title="g_family")
-    fig.suptitle("Capability gap vs intervention-response gap by prompt type", fontsize=14, y=0.995)
-    fig.tight_layout(rect=(0.0, 0.0, 0.86, 0.97))
-    fig.savefig(output_path, dpi=dpi)
-    plt.close(fig)
-
-
 def summarize_interventions(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
@@ -776,6 +586,139 @@ def write_intervention_folder(
     }
 
 
+def plot_scout_entropy_alignment(
+    scout_data: dict[str, Any],
+    output_path: Path,
+    dpi: int,
+) -> None:
+    """Scatter plot of mean scout entropy: model A vs model B, colored by type."""
+    points = scout_data.get("prompt_scout_summary", [])
+    if not points:
+        return
+    label_a = scout_data.get("label_a", "A")
+    label_b = scout_data.get("label_b", "B")
+    r_val = scout_data["scout_entropy_alignment"]["r"]
+
+    x = [pt["mean_scout_entropy_a"] for pt in points]
+    y = [pt["mean_scout_entropy_b"] for pt in points]
+
+    fig, ax = plt.subplots(figsize=(8.0, 7.0))
+    ax.scatter(x, y, s=16, alpha=0.5, color="steelblue", edgecolors="none")
+    ax.set_xlabel(f"{label_a} mean scout entropy")
+    ax.set_ylabel(f"{label_b} mean scout entropy")
+    ax.set_title(
+        f"Cross-model scout entropy alignment\n"
+        f"r = {r_val:.4f} (top-{scout_data.get('top_k', '?')} scouts, {len(points)} prompts)"
+    )
+    ax.grid(True, alpha=0.15)
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=dpi)
+    plt.close(fig)
+
+
+def plot_cross_model_prediction_summary(
+    scout_data: dict[str, Any],
+    output_path: Path,
+    dpi: int,
+) -> None:
+    """Bar chart showing cross-model scout prediction strength per gain profile."""
+    profiles = scout_data.get("profile_results", [])
+    if not profiles:
+        return
+    label_a = scout_data.get("label_a", "A")
+    label_b = scout_data.get("label_b", "B")
+
+    # Sort by delta agreement.
+    profiles = sorted(profiles, key=lambda p: p["r_delta_agreement"], reverse=True)
+    names = [p["g_profile"] for p in profiles]
+    agree = [p["r_delta_agreement"] for p in profiles]
+    a_to_b = [p["r_a_scouts_predict_b_delta"] for p in profiles]
+    b_to_a = [p["r_b_scouts_predict_a_delta"] for p in profiles]
+
+    x = np.arange(len(names))
+    width = 0.25
+
+    fig, ax = plt.subplots(figsize=(14.0, 6.0))
+    ax.bar(x - width, agree, width, label="Δp agreement (A vs B)", color="steelblue", alpha=0.8)
+    ax.bar(x, a_to_b, width, label=f"{label_a} scouts → {label_b} Δp", color="coral", alpha=0.8)
+    ax.bar(x + width, b_to_a, width, label=f"{label_b} scouts → {label_a} Δp", color="seagreen", alpha=0.8)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(names, rotation=70, ha="right", fontsize=7)
+    ax.set_ylabel("Pearson r")
+    ax.set_title("Cross-model scout prediction by gain profile")
+    ax.axhline(0, color="0.5", linewidth=0.8, linestyle="--")
+    ax.legend(fontsize=8, loc="upper right")
+    ax.grid(True, alpha=0.12, axis="y")
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=dpi)
+    plt.close(fig)
+
+
+def plot_scout_entropy_vs_delta(
+    scout_data: dict[str, Any],
+    output_path: Path,
+    dpi: int,
+) -> None:
+    """Scatter: mean scout entropy (A) vs mean delta_p (A and B), showing cross-model alignment."""
+    points = scout_data.get("prompt_scout_summary", [])
+    if not points:
+        return
+    label_a = scout_data.get("label_a", "A")
+    label_b = scout_data.get("label_b", "B")
+
+    se_a = [pt["mean_scout_entropy_a"] for pt in points]
+    dp_a = [pt["mean_delta_p_a"] for pt in points]
+    dp_b = [pt["mean_delta_p_b"] for pt in points]
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14.0, 6.0), sharey=True)
+
+    ax1.scatter(se_a, dp_a, s=16, alpha=0.5, color="coral", edgecolors="none")
+    ax1.set_xlabel(f"{label_a} mean scout entropy")
+    ax1.set_ylabel("Mean Δp (across profiles)")
+    ax1.set_title(f"{label_a} scout entropy → {label_a} Δp")
+    ax1.axhline(0, color="0.5", linewidth=0.8, linestyle="--")
+    ax1.grid(True, alpha=0.15)
+
+    ax2.scatter(se_a, dp_b, s=16, alpha=0.5, color="seagreen", edgecolors="none")
+    ax2.set_xlabel(f"{label_a} mean scout entropy")
+    ax2.set_title(f"{label_a} scout entropy → {label_b} Δp")
+    ax2.axhline(0, color="0.5", linewidth=0.8, linestyle="--")
+    ax2.grid(True, alpha=0.15)
+
+    fig.suptitle("Cross-model scout entropy predicting intervention response", fontsize=12)
+    fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.95))
+    fig.savefig(output_path, dpi=dpi)
+    plt.close(fig)
+
+
+def write_cross_model_scout_plots(
+    scout_data: dict[str, Any],
+    output_dir: Path,
+    prefix: str,
+    dpi: int,
+) -> list[str]:
+    """Generate all cross-model scout alignment plots."""
+    written: list[str] = []
+
+    alignment_path = output_dir / f"{clean_filename(prefix)}_scout_entropy_alignment.png"
+    plot_scout_entropy_alignment(scout_data, alignment_path, dpi)
+    if alignment_path.exists():
+        written.append(str(alignment_path))
+
+    prediction_path = output_dir / f"{clean_filename(prefix)}_cross_model_prediction_summary.png"
+    plot_cross_model_prediction_summary(scout_data, prediction_path, dpi)
+    if prediction_path.exists():
+        written.append(str(prediction_path))
+
+    entropy_delta_path = output_dir / f"{clean_filename(prefix)}_scout_entropy_vs_delta.png"
+    plot_scout_entropy_vs_delta(scout_data, entropy_delta_path, dpi)
+    if entropy_delta_path.exists():
+        written.append(str(entropy_delta_path))
+
+    return written
+
+
 def write_manifest(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
@@ -806,36 +749,6 @@ def main() -> None:
     type_colors = build_color_map(type_order(nonbaseline_rows), "tab10")
 
     written_paths: list[str] = []
-
-    all_path = output_dir / f"{clean_filename(prefix)}_scatter_delta_prob_all.png"
-    plot_delta_scatter_all(prompt_rows, label_a, label_b, all_path, family_colors, args.label_top_n, args.dpi)
-    written_paths.append(str(all_path))
-
-    by_type_path = output_dir / f"{clean_filename(prefix)}_scatter_delta_prob_by_type.png"
-    plot_delta_scatter_by_type(prompt_rows, label_a, label_b, by_type_path, family_colors, args.label_top_n, args.dpi)
-    written_paths.append(str(by_type_path))
-
-    by_family_path = output_dir / f"{clean_filename(prefix)}_scatter_delta_prob_by_family.png"
-    plot_delta_scatter_by_family(
-        prompt_rows,
-        label_a,
-        label_b,
-        by_family_path,
-        type_colors,
-        args.min_family_points,
-        args.label_top_n,
-        args.dpi,
-    )
-    if by_family_path.exists():
-        written_paths.append(str(by_family_path))
-
-    baseline_path = output_dir / f"{clean_filename(prefix)}_scatter_baseline_vs_delta_prob.png"
-    plot_baseline_vs_delta(prompt_rows, label_a, label_b, baseline_path, family_colors, args.label_top_n, args.dpi)
-    written_paths.append(str(baseline_path))
-
-    gap_path = output_dir / f"{clean_filename(prefix)}_scatter_baseline_gap_vs_delta_gap_by_type.png"
-    plot_gap_by_type(prompt_rows, gap_path, family_colors, args.label_top_n, args.dpi)
-    written_paths.append(str(gap_path))
 
     manifest_path = output_dir / f"{clean_filename(prefix)}_plot_manifest.json"
 
@@ -952,6 +865,21 @@ def main() -> None:
             },
         )
         written_paths.append(str(interventions_manifest))
+
+    # Cross-model scout alignment plots.
+    scout_json_path = compare_dir / f"{prefix}_cross_model_scouts.json"
+    if scout_json_path.is_file():
+        with open(scout_json_path, "r", encoding="utf-8") as f:
+            scout_data = json.load(f)
+        scout_plots = write_cross_model_scout_plots(
+            scout_data=scout_data,
+            output_dir=output_dir,
+            prefix=prefix,
+            dpi=args.dpi,
+        )
+        written_paths.extend(scout_plots)
+    else:
+        print(f"(No cross-model scout data found at {scout_json_path}; skipping scout plots.)")
 
     write_manifest(
         manifest_path,

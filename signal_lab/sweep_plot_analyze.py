@@ -18,7 +18,9 @@ from signal_lab.paths import DATA_DIR_ENV_VAR, configure_data_dir, resolve_input
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.colors import Normalize
 from matplotlib.lines import Line2D
+import numpy as np
 
 
 DEFAULT_PREFIX = "analysis"
@@ -854,6 +856,369 @@ def write_intervention_folder(
     }
 
 
+def plot_baseline_attn_pca(
+    pca_data: dict[str, Any],
+    model_label: str,
+    output_path: Path,
+    dpi: int,
+) -> None:
+    """Render a 2D PCA scatter of baseline per-head attention entropy, colored by type."""
+    points = pca_data.get("points", [])
+    if not points:
+        return
+
+    explained = pca_data.get("explained_variance_ratio", [0.0, 0.0])
+    n_layers = pca_data.get("n_layers", "?")
+    n_heads = pca_data.get("n_heads", "?")
+    n_features = pca_data.get("n_features", "?")
+
+    types_in_order = list(dict.fromkeys(pt["type"] for pt in points))
+    type_colors = build_color_map(types_in_order, "tab10")
+
+    fig, ax = plt.subplots(figsize=(9.0, 7.0))
+
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for pt in points:
+        grouped.setdefault(pt["type"], []).append(pt)
+
+    for type_name in types_in_order:
+        group = grouped[type_name]
+        ax.scatter(
+            [pt["pc1"] for pt in group],
+            [pt["pc2"] for pt in group],
+            s=22,
+            alpha=0.6,
+            color=type_colors[type_name],
+            edgecolors="none",
+            label=type_name,
+        )
+
+    ax.set_xlabel(f"PC1 ({explained[0]*100:.1f}% var)")
+    ax.set_ylabel(f"PC2 ({explained[1]*100:.1f}% var)")
+    ax.set_title(
+        f"{model_label}: baseline attention entropy PCA\n"
+        f"({n_layers} layers × {n_heads} heads = {n_features} features)"
+    )
+    ax.grid(True, alpha=0.15)
+    ax.legend(
+        loc="center left",
+        bbox_to_anchor=(1.01, 0.5),
+        frameon=False,
+        title="type",
+        fontsize=8,
+    )
+    fig.tight_layout(rect=(0.0, 0.0, 0.82, 1.0))
+    fig.savefig(output_path, dpi=dpi)
+    plt.close(fig)
+
+
+def plot_pca_intervention(
+    pca_data: dict[str, Any],
+    rows: list[dict[str, Any]],
+    g_profile: str,
+    model_label: str,
+    output_path: Path,
+    dpi: int,
+    vmax: float | None = None,
+) -> None:
+    """Render a PCA scatter with points colored by delta_target_prob for one gain profile."""
+    points = pca_data.get("points", [])
+    if not points:
+        return
+
+    explained = pca_data.get("explained_variance_ratio", [0.0, 0.0])
+
+    # Build lookup: (prompt_id, rep) -> delta_target_prob for this profile.
+    delta_lookup: dict[tuple[str, str], float] = {}
+    for row in rows:
+        if str(row.get("g_profile", "")) != g_profile:
+            continue
+        pid = str(row.get("prompt_id", ""))
+        rep = str(row.get("rep", "1"))
+        dp = to_float(row.get("delta_target_prob"))
+        if math.isfinite(dp):
+            delta_lookup[(pid, rep)] = dp
+
+    # Join PCA coordinates with deltas.
+    pc1_vals: list[float] = []
+    pc2_vals: list[float] = []
+    delta_vals: list[float] = []
+    for pt in points:
+        key = (pt["prompt_id"], str(pt["rep"]))
+        if key not in delta_lookup:
+            continue
+        pc1_vals.append(pt["pc1"])
+        pc2_vals.append(pt["pc2"])
+        delta_vals.append(delta_lookup[key])
+
+    if not delta_vals:
+        return
+
+    # Symmetric colour limits centred on zero.
+    if vmax is None:
+        vmax = max(abs(v) for v in delta_vals)
+    if vmax < 1e-9:
+        vmax = 0.01
+
+    # Signed power transform: sign(d) * |d|^gamma.  gamma < 1 stretches
+    # near-zero values away from white so subtle deltas are visible.
+    gamma = 0.4
+    transformed = [math.copysign(abs(d) ** gamma, d) for d in delta_vals]
+    t_vmax = vmax ** gamma
+
+    fig, ax = plt.subplots(figsize=(9.0, 7.0))
+    sc = ax.scatter(
+        pc1_vals,
+        pc2_vals,
+        c=transformed,
+        cmap="RdBu_r",
+        vmin=-t_vmax,
+        vmax=t_vmax,
+        s=24,
+        alpha=0.7,
+        edgecolors="none",
+    )
+    cbar = fig.colorbar(sc, ax=ax, pad=0.02)
+    # Relabel colorbar ticks with original (un-transformed) delta values.
+    raw_ticks = np.linspace(-t_vmax, t_vmax, 9)
+    cbar.set_ticks(raw_ticks)
+    cbar.set_ticklabels(
+        [f"{math.copysign(abs(t) ** (1.0 / gamma), t):.3f}" for t in raw_ticks]
+    )
+    cbar.set_label("Δ target prob")
+
+    ax.set_xlabel(f"PC1 ({explained[0]*100:.1f}% var)")
+    ax.set_ylabel(f"PC2 ({explained[1]*100:.1f}% var)")
+    ax.set_title(f"{model_label}: {g_profile}\nattention entropy PCA colored by Δ target prob")
+    ax.grid(True, alpha=0.15)
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=dpi)
+    plt.close(fig)
+
+
+def write_pca_intervention_folder(
+    pca_data: dict[str, Any],
+    rows: list[dict[str, Any]],
+    model_label: str,
+    output_dir: Path,
+    prefix: str,
+    dpi: int,
+) -> list[str]:
+    """Write one PCA-delta plot per gain profile into a subdirectory."""
+    points = pca_data.get("points", [])
+    if not points:
+        return []
+
+    profiles = sorted(
+        {str(row["g_profile"]) for row in rows if str(row.get("g_profile", "")) != "baseline"}
+    )
+    if not profiles:
+        return []
+
+    pca_dir = output_dir / "pca_interventions"
+    pca_dir.mkdir(parents=True, exist_ok=True)
+
+    # Compute a shared vmax so all plots use the same colour scale.
+    all_deltas: list[float] = []
+    for row in rows:
+        if str(row.get("g_profile", "")) == "baseline":
+            continue
+        dp = to_float(row.get("delta_target_prob"))
+        if math.isfinite(dp):
+            all_deltas.append(abs(dp))
+    shared_vmax = sorted(all_deltas)[int(len(all_deltas) * 0.98)] if all_deltas else 0.1
+
+    written: list[str] = []
+    for g_profile in profiles:
+        plot_path = pca_dir / f"{clean_filename(prefix)}_pca_delta__{clean_filename(g_profile)}.png"
+        plot_pca_intervention(
+            pca_data=pca_data,
+            rows=rows,
+            g_profile=g_profile,
+            model_label=model_label,
+            output_path=plot_path,
+            dpi=dpi,
+            vmax=shared_vmax,
+        )
+        if plot_path.exists():
+            written.append(str(plot_path))
+
+    manifest_path = pca_dir / "manifest.json"
+    write_manifest(
+        manifest_path,
+        {
+            "model": model_label,
+            "description": "PCA of baseline attention entropy colored by delta_target_prob per gain profile",
+            "shared_vmax": round(shared_vmax, 6),
+            "profiles": profiles,
+            "plots": written,
+        },
+    )
+    written.append(str(manifest_path))
+    return written
+
+
+def plot_head_correlation_heatmap(
+    corr_matrix: list[list[float]],
+    layer_indices: list[int] | None,
+    model_label: str,
+    g_profile: str,
+    output_path: Path,
+    dpi: int,
+    vmax: float = 0.4,
+) -> None:
+    """Render a layer×head heatmap of Pearson r between baseline entropy and delta_p."""
+    arr = np.array(corr_matrix, dtype=np.float64)
+    n_layers, n_heads = arr.shape
+
+    fig_width = max(6.0, n_heads * 0.28 + 2.0)
+    fig_height = max(3.0, n_layers * 0.55 + 2.0)
+    fig, ax = plt.subplots(figsize=(fig_width, fig_height))
+
+    im = ax.imshow(
+        arr,
+        aspect="auto",
+        cmap="RdBu_r",
+        vmin=-vmax,
+        vmax=vmax,
+        interpolation="nearest",
+    )
+    cbar = fig.colorbar(im, ax=ax, pad=0.02, shrink=0.85)
+    cbar.set_label("Pearson r")
+
+    ax.set_xticks(range(n_heads))
+    ax.set_xticklabels(range(n_heads), fontsize=6)
+    ax.set_xlabel("Head")
+    y_labels = [str(layer_indices[i]) if layer_indices else str(i) for i in range(n_layers)]
+    ax.set_yticks(range(n_layers))
+    ax.set_yticklabels(y_labels, fontsize=8)
+    ax.set_ylabel("Layer")
+    ax.set_title(
+        f"{model_label}: {g_profile}\n"
+        f"head entropy vs Δ target prob correlation",
+        fontsize=10,
+    )
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=dpi)
+    plt.close(fig)
+
+
+def plot_scout_heads_heatmap(
+    scout_matrix: list[list[int]],
+    layer_indices: list[int] | None,
+    model_label: str,
+    n_profiles: int,
+    output_path: Path,
+    dpi: int,
+) -> None:
+    """Render a layer×head heatmap showing how often each head is in the top-10 across profiles."""
+    arr = np.array(scout_matrix, dtype=np.float64)
+    n_layers, n_heads = arr.shape
+
+    fig_width = max(6.0, n_heads * 0.28 + 2.0)
+    fig_height = max(3.0, n_layers * 0.55 + 2.0)
+    fig, ax = plt.subplots(figsize=(fig_width, fig_height))
+
+    im = ax.imshow(
+        arr,
+        aspect="auto",
+        cmap="YlOrRd",
+        vmin=0,
+        vmax=max(float(arr.max()), 1.0),
+        interpolation="nearest",
+    )
+    cbar = fig.colorbar(im, ax=ax, pad=0.02, shrink=0.85)
+    cbar.set_label(f"Top-10 appearances (of {n_profiles} profiles)")
+
+    ax.set_xticks(range(n_heads))
+    ax.set_xticklabels(range(n_heads), fontsize=6)
+    ax.set_xlabel("Head")
+    y_labels = [str(layer_indices[i]) if layer_indices else str(i) for i in range(n_layers)]
+    ax.set_yticks(range(n_layers))
+    ax.set_yticklabels(y_labels, fontsize=8)
+    ax.set_ylabel("Layer")
+    ax.set_title(
+        f"{model_label}: scout heads\n"
+        f"frequency in top-10 correlated heads across {n_profiles} gain profiles",
+        fontsize=10,
+    )
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=dpi)
+    plt.close(fig)
+
+
+def write_head_correlation_plots(
+    head_corr_data: dict[str, Any],
+    model_label: str,
+    output_dir: Path,
+    prefix: str,
+    dpi: int,
+) -> list[str]:
+    """Write per-profile heatmaps and scout-heads aggregate from head correlation JSON."""
+    profiles = head_corr_data.get("profiles", [])
+    layer_indices = head_corr_data.get("layer_indices")
+    n_profiles = head_corr_data.get("n_profiles", len(profiles))
+
+    if not profiles:
+        return []
+
+    heatmap_dir = output_dir / "head_correlations"
+    heatmap_dir.mkdir(parents=True, exist_ok=True)
+
+    # Shared vmax: use the max |r| across all profiles, capped at 0.5 for readability.
+    all_r = []
+    for p in profiles:
+        for row in p["correlation_matrix"]:
+            all_r.extend(abs(v) for v in row)
+    shared_vmax = min(max(sorted(all_r)[int(len(all_r) * 0.98)] * 1.2, 0.1) if all_r else 0.3, 0.5)
+
+    written: list[str] = []
+
+    for p in profiles:
+        g_profile = p["g_profile"]
+        plot_path = heatmap_dir / f"{clean_filename(prefix)}_head_corr__{clean_filename(g_profile)}.png"
+        plot_head_correlation_heatmap(
+            corr_matrix=p["correlation_matrix"],
+            layer_indices=layer_indices,
+            model_label=model_label,
+            g_profile=g_profile,
+            output_path=plot_path,
+            dpi=dpi,
+            vmax=shared_vmax,
+        )
+        if plot_path.exists():
+            written.append(str(plot_path))
+
+    # Scout heads aggregate.
+    scout_matrix = head_corr_data.get("scout_heads_matrix")
+    if scout_matrix:
+        scout_path = output_dir / f"{clean_filename(prefix)}_scout_heads.png"
+        plot_scout_heads_heatmap(
+            scout_matrix=scout_matrix,
+            layer_indices=layer_indices,
+            model_label=model_label,
+            n_profiles=n_profiles,
+            output_path=scout_path,
+            dpi=dpi,
+        )
+        if scout_path.exists():
+            written.append(str(scout_path))
+
+    manifest_path = heatmap_dir / "manifest.json"
+    write_manifest(
+        manifest_path,
+        {
+            "model": model_label,
+            "description": "Per-head correlation heatmaps: baseline attention entropy vs delta_target_prob",
+            "shared_vmax": round(shared_vmax, 6),
+            "n_profiles": n_profiles,
+            "plots": written,
+        },
+    )
+    written.append(str(manifest_path))
+    return written
+
+
 def write_manifest(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
@@ -910,6 +1275,44 @@ def main() -> None:
     baseline_path = output_dir / f"{clean_filename(prefix)}_scatter_baseline_target_prob_vs_delta_target_prob_by_type.png"
     plot_baseline_vs_delta_by_type(rows, model_label, baseline_path, family_colors, args.label_top_n, args.dpi)
     written_paths.append(str(baseline_path))
+
+    # Second-order plots: baseline attention entropy PCA.
+    pca_json_path = analysis_dir / f"{prefix}_baseline_attn_pca.json"
+    if pca_json_path.is_file():
+        with open(pca_json_path, "r", encoding="utf-8") as f:
+            pca_data = json.load(f)
+        pca_plot_path = output_dir / f"{clean_filename(prefix)}_baseline_attn_pca.png"
+        plot_baseline_attn_pca(pca_data, model_label, pca_plot_path, args.dpi)
+        written_paths.append(str(pca_plot_path))
+
+        # PCA intervention atlas: one plot per gain profile.
+        pca_intervention_paths = write_pca_intervention_folder(
+            pca_data=pca_data,
+            rows=rows,
+            model_label=model_label,
+            output_dir=output_dir,
+            prefix=prefix,
+            dpi=args.dpi,
+        )
+        written_paths.extend(pca_intervention_paths)
+    else:
+        print(f"(No PCA data found at {pca_json_path}; skipping baseline attention PCA plots.)")
+
+    # Head-level correlation heatmaps.
+    head_corr_path = analysis_dir / f"{prefix}_head_correlations.json"
+    if head_corr_path.is_file():
+        with open(head_corr_path, "r", encoding="utf-8") as f:
+            head_corr_data = json.load(f)
+        head_corr_plots = write_head_correlation_plots(
+            head_corr_data=head_corr_data,
+            model_label=model_label,
+            output_dir=output_dir,
+            prefix=prefix,
+            dpi=args.dpi,
+        )
+        written_paths.extend(head_corr_plots)
+    else:
+        print(f"(No head correlation data found at {head_corr_path}; skipping head heatmaps.)")
 
     manifest_path = output_dir / f"{clean_filename(prefix)}_plot_manifest.json"
 
