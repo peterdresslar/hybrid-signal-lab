@@ -1,3 +1,0 @@
-type,g_family,n,mean_target_prob,mean_baseline_target_prob,mean_delta_target_prob,median_delta_target_prob,stdev_delta_target_prob,pct_delta_target_prob_positive,sign_test_p_delta_target_prob,mean_delta_target_rank,median_delta_target_rank,pct_rank_improved,mean_delta_final_entropy_bits,mean_delta_target_avg_logprob,mean_delta_target_geo_mean_prob
-algorithmic,baseline,24,0.18,0.18,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0
-algorithmic,constant,96,0.18,0.18,0.0,0.0,0.19,35.42,0.53,2881.85,1.0,25.0,0.47,-1.87,-0.13

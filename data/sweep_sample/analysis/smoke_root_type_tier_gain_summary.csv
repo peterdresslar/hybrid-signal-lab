@@ -1,6 +1,0 @@
-type,tier,g_profile,g_family,n,mean_target_prob,mean_baseline_target_prob,mean_delta_target_prob,median_delta_target_prob,stdev_delta_target_prob,pct_delta_target_prob_positive,sign_test_p_delta_target_prob,mean_delta_target_rank,median_delta_target_rank,pct_rank_improved,mean_delta_final_entropy_bits,mean_delta_target_avg_logprob,mean_delta_target_geo_mean_prob
-algorithmic,short,baseline,baseline,24,0.18,0.18,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,0.0,0.0
-algorithmic,short,constant_0.5,constant,24,0.06,0.18,-0.12,-0.01,0.26,20.83,0.14,9282.5,17.5,16.67,1.76,-4.99,-0.29
-algorithmic,short,constant_0.75,constant,24,0.19,0.18,0.01,-0.0,0.17,25.0,0.79,767.42,0.0,33.33,0.62,-0.53,-0.08
-algorithmic,short,constant_1.25,constant,24,0.22,0.18,0.04,-0.0,0.08,41.67,0.18,178.21,0.0,20.83,-0.3,-0.4,0.0
-algorithmic,short,constant_1.5,constant,24,0.26,0.18,0.08,0.01,0.14,54.17,0.05,1299.29,0.5,29.17,-0.23,-1.56,-0.14
