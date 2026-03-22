@@ -180,6 +180,49 @@ CARTRIDGES = {
         "prompt_tiers": ["short", "brief", "med", "long", "extended"],
         "model_key": "0_8B",
     },
+    "fine_grain_kitchen_sink": {
+        "description": "Fine-grained sweep at 0.1 steps in the 0.8–1.2 gain range. "
+        "Uniform scalars plus shaped profiles within the narrow band where gentle interventions showed signal.",
+        "g_specs": [
+            # baseline
+            _constant(1.0, name="baseline"),
+            # uniform scalars: 0.8 to 1.2 in 0.1 steps (excluding 1.0)
+            _constant(0.8),
+            _constant(0.9),
+            _constant(1.1),
+            _constant(1.2),
+            # early boost / suppress (subtle)
+            _control_points([1.1, 1.1, 1.1, 1.0, 1.0, 1.0], name="early_boost_1.1"),
+            _control_points([1.2, 1.2, 1.2, 1.0, 1.0, 1.0], name="early_boost_1.2"),
+            _control_points([0.9, 0.9, 0.9, 1.0, 1.0, 1.0], name="early_suppress_0.9"),
+            _control_points([0.8, 0.8, 0.8, 1.0, 1.0, 1.0], name="early_suppress_0.8"),
+            # late boost / suppress (subtle)
+            _control_points([1.0, 1.0, 1.0, 1.1, 1.1, 1.1], name="late_boost_1.1"),
+            _control_points([1.0, 1.0, 1.0, 1.2, 1.2, 1.2], name="late_boost_1.2"),
+            _control_points([1.0, 1.0, 1.0, 0.9, 0.9, 0.9], name="late_suppress_0.9"),
+            _control_points([1.0, 1.0, 1.0, 0.8, 0.8, 0.8], name="late_suppress_0.8"),
+            # middle bump / suppress (subtle)
+            _control_points([1.0, 1.0, 1.1, 1.1, 1.0, 1.0], name="middle_bump_1.1"),
+            _control_points([1.0, 1.0, 1.2, 1.2, 1.0, 1.0], name="middle_bump_1.2"),
+            _control_points([1.0, 1.0, 0.9, 0.9, 1.0, 1.0], name="middle_suppress_0.9"),
+            _control_points([1.0, 1.0, 0.8, 0.8, 1.0, 1.0], name="middle_suppress_0.8"),
+            # crossover (subtle)
+            _control_points([1.2, 1.2, 1.2, 0.8, 0.8, 0.8], name="early_high_late_low_0.2"),
+            _control_points([0.8, 0.8, 0.8, 1.2, 1.2, 1.2], name="late_high_early_low_0.2"),
+            _control_points([1.1, 1.1, 1.1, 0.9, 0.9, 0.9], name="early_high_late_low_0.1"),
+            _control_points([0.9, 0.9, 0.9, 1.1, 1.1, 1.1], name="late_high_early_low_0.1"),
+            # ramps (fine)
+            _control_points([0.8, 0.88, 0.96, 1.04, 1.12, 1.2], name="ramp_up_fine"),
+            _control_points([1.2, 1.12, 1.04, 0.96, 0.88, 0.8], name="ramp_down_fine"),
+            _control_points([0.9, 0.94, 0.98, 1.02, 1.06, 1.1], name="ramp_up_very_gentle"),
+            _control_points([1.1, 1.06, 1.02, 0.98, 0.94, 0.9], name="ramp_down_very_gentle"),
+            # edges (subtle)
+            _control_points([1.2, 1.1, 1.0, 1.0, 1.1, 1.2], name="edges_high_subtle"),
+            _control_points([0.8, 0.9, 1.0, 1.0, 0.9, 0.8], name="edges_low_subtle"),
+        ],
+        "prompt_tiers": ["short", "brief", "med", "long", "extended"],
+        "model_key": "0_8B",
+    },
 }
 
 
