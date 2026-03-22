@@ -30,6 +30,10 @@ bench/battery/data/v2_battery/internals/*
 
 
 # more data
+data/*
+!data/.gitkeep
+!data/exemplar/
+
 data/exemplar/*
 !data/exemplar/.gitkeep
 !data/exemplar/35B.txt
