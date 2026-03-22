@@ -6,6 +6,16 @@
 
 ## 2 Background
 
+### Hybrid transformer architectures
+
+### Inference-time interventions on model internals
+
+### Input-dependent operating regimes
+
+### Sub-symbolic reasoning and control
+
+### Collective information and heterogeneity
+
 ## 3 Qwen 3.5/Olmo Hybrid, Hybrid Layer Interventions, and Collective Signaling
 
 ## 4 Results
