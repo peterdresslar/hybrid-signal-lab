@@ -1,12 +1,14 @@
-## Peter Dresslar CAS Capstone Spring 2026
+# Hybrid Signal Lab
 
 A testbed for hybrid-model probing and collective-signal research, developed as a CAS capstone at Arizona State University (advisor: Prof. Bryan Daniels).
+
+This is a work in progress.
 
 The current implemented stack is centered on `signal_lab`, which probes hybrid-architecture LLMs by modulating the balance between recurrent (GDN) and attention layer types at inference time. The broader `colony` concept remains the future collective-signal layer that will eventually generate or adapt those interventions.
 
 The current implementation targets Qwen/Qwen3.5 and allenai/olmo-hybrid, both built on hybrid architectures that interleave Gated DeltaNet (GDN) layers with gated attention layers in a 3:1 ratio. Forward hooks scale the attention-layer residual contributions by a factor *g* (g→0: GDN-dominated, g→1: attention-dominated), letting the system explore the full response surface without retraining.
 
-See `docs/proposal.md` for the full project proposal.
+See `docs/project_notes.md` for the latest information on the projectʻs direction.
 
 ## Usage
 
