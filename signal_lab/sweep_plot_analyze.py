@@ -18,7 +18,6 @@ from signal_lab.paths import DATA_DIR_ENV_VAR, configure_data_dir, resolve_input
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from matplotlib.colors import Normalize
 from matplotlib.lines import Line2D
 import numpy as np
 
@@ -230,6 +229,47 @@ def load_rows(analysis_dir: Path, prefix: str) -> tuple[list[dict[str, Any]], st
         rows.append(parsed)
     model_label = infer_model_label(files_rows, rows)
     return rows, model_label
+
+
+def load_overall_profile_summary(analysis_dir: Path, prefix: str) -> list[dict[str, Any]]:
+    summary_path = analysis_dir / f"{prefix}_overall_profile_summary.csv"
+    if not summary_path.is_file():
+        return []
+
+    raw_rows = read_csv(summary_path)
+    parsed_rows: list[dict[str, Any]] = []
+    for row in raw_rows:
+        parsed_rows.append(
+            {
+                "g_profile": row.get("g_profile", ""),
+                "top_8_mean_delta_target_prob": to_float(row.get("top_8_mean_delta_target_prob")),
+                "positive_prompt_count": to_float(row.get("positive_prompt_count")),
+                "positive_mass_delta_target_prob": to_float(row.get("positive_mass_delta_target_prob")),
+                "rank_top_8_mean_delta_target_prob": to_float(row.get("rank_top_8_mean_delta_target_prob")),
+            }
+        )
+    return parsed_rows
+
+
+def top_positive_cluster_profiles(
+    overall_profile_summary: list[dict[str, Any]],
+    top_n: int = 1,
+) -> list[dict[str, Any]]:
+    ranked = [
+        row
+        for row in overall_profile_summary
+        if row.get("g_profile")
+        and math.isfinite(float(row.get("rank_top_8_mean_delta_target_prob", math.nan)))
+        and math.isfinite(float(row.get("top_8_mean_delta_target_prob", math.nan)))
+        and float(row.get("top_8_mean_delta_target_prob", math.nan)) > 0.0
+    ]
+    ranked.sort(
+        key=lambda row: (
+            float(row.get("rank_top_8_mean_delta_target_prob", math.inf)),
+            str(row.get("g_profile", "")),
+        )
+    )
+    return ranked[: max(top_n, 0)]
 
 
 def finite_rows(rows: list[dict[str, Any]], x_key: str, y_key: str) -> list[dict[str, Any]]:
@@ -1066,6 +1106,8 @@ def plot_head_correlation_heatmap(
     output_path: Path,
     dpi: int,
     vmax: float = 0.4,
+    top_heads: list[dict[str, Any]] | None = None,
+    title_suffix: str = "",
 ) -> None:
     """Render a layer×head heatmap of Pearson r between baseline entropy and delta_p."""
     arr = np.array(corr_matrix, dtype=np.float64)
@@ -1093,9 +1135,37 @@ def plot_head_correlation_heatmap(
     ax.set_yticks(range(n_layers))
     ax.set_yticklabels(y_labels, fontsize=8)
     ax.set_ylabel("Layer")
+    if top_heads:
+        for rank, head in enumerate(top_heads, start=1):
+            layer_slot = head.get("layer_slot")
+            head_idx = head.get("head")
+            if not isinstance(layer_slot, int) or not isinstance(head_idx, int):
+                continue
+            if not (0 <= layer_slot < n_layers and 0 <= head_idx < n_heads):
+                continue
+            rect = plt.Rectangle(
+                (head_idx - 0.5, layer_slot - 0.5),
+                1.0,
+                1.0,
+                fill=False,
+                edgecolor="black",
+                linewidth=1.6,
+            )
+            ax.add_patch(rect)
+            ax.text(
+                head_idx,
+                layer_slot,
+                str(rank),
+                ha="center",
+                va="center",
+                fontsize=6,
+                color="black",
+                fontweight="bold",
+                bbox={"boxstyle": "round,pad=0.12", "facecolor": "white", "edgecolor": "none", "alpha": 0.85},
+            )
     ax.set_title(
         f"{model_label}: {g_profile}\n"
-        f"head entropy vs Δ target prob correlation",
+        f"head entropy vs Δ target prob correlation{title_suffix}",
         fontsize=10,
     )
     fig.tight_layout()
@@ -1110,6 +1180,8 @@ def plot_scout_heads_heatmap(
     n_profiles: int,
     output_path: Path,
     dpi: int,
+    title_suffix: str = "",
+    colorbar_label: str | None = None,
 ) -> None:
     """Render a layer×head heatmap showing how often each head is in the top-10 across profiles."""
     arr = np.array(scout_matrix, dtype=np.float64)
@@ -1128,7 +1200,7 @@ def plot_scout_heads_heatmap(
         interpolation="nearest",
     )
     cbar = fig.colorbar(im, ax=ax, pad=0.02, shrink=0.85)
-    cbar.set_label(f"Top-10 appearances (of {n_profiles} profiles)")
+    cbar.set_label(colorbar_label or f"Top-10 appearances (of {n_profiles} profiles)")
 
     ax.set_xticks(range(n_heads))
     ax.set_xticklabels(range(n_heads), fontsize=6)
@@ -1139,7 +1211,7 @@ def plot_scout_heads_heatmap(
     ax.set_ylabel("Layer")
     ax.set_title(
         f"{model_label}: scout heads\n"
-        f"frequency in top-10 correlated heads across {n_profiles} gain profiles",
+        f"frequency in top-10 correlated heads across {n_profiles} gain profiles{title_suffix}",
         fontsize=10,
     )
     fig.tight_layout()
@@ -1149,6 +1221,7 @@ def plot_scout_heads_heatmap(
 
 def write_head_correlation_plots(
     head_corr_data: dict[str, Any],
+    overall_profile_summary: list[dict[str, Any]],
     model_label: str,
     output_dir: Path,
     prefix: str,
@@ -1158,6 +1231,8 @@ def write_head_correlation_plots(
     profiles = head_corr_data.get("profiles", [])
     layer_indices = head_corr_data.get("layer_indices")
     n_profiles = head_corr_data.get("n_profiles", len(profiles))
+    n_layers = int(head_corr_data.get("n_layers", 0))
+    n_heads = int(head_corr_data.get("n_heads", 0))
 
     if not profiles:
         return []
@@ -1204,6 +1279,34 @@ def write_head_correlation_plots(
         if scout_path.exists():
             written.append(str(scout_path))
 
+    top_cluster_rows = top_positive_cluster_profiles(overall_profile_summary, top_n=1)
+    if top_cluster_rows and n_layers > 0 and n_heads > 0:
+        selected_names = {str(row["g_profile"]) for row in top_cluster_rows}
+        selected_profiles = [p for p in profiles if str(p.get("g_profile", "")) in selected_names]
+        if selected_profiles:
+            selected_summary = top_cluster_rows[0]
+            selected_profile = selected_profiles[0]
+            selected_name = str(selected_summary["g_profile"])
+            selected_rank = int(float(selected_summary["rank_top_8_mean_delta_target_prob"]))
+            selected_top8 = float(selected_summary["top_8_mean_delta_target_prob"])
+            selected_path = (
+                output_dir
+                / f"{clean_filename(prefix)}_head_corr__top_positive_cluster__{clean_filename(selected_name)}.png"
+            )
+            plot_head_correlation_heatmap(
+                corr_matrix=selected_profile["correlation_matrix"],
+                layer_indices=layer_indices,
+                model_label=model_label,
+                g_profile=selected_name,
+                output_path=selected_path,
+                dpi=dpi,
+                vmax=shared_vmax,
+                top_heads=selected_profile.get("top_10_heads", []),
+                title_suffix=f"\nTop positive-cluster profile #{selected_rank}; boxed cells are top-10 scout candidates (top8={selected_top8:.2f})",
+            )
+            if selected_path.exists():
+                written.append(str(selected_path))
+
     manifest_path = heatmap_dir / "manifest.json"
     write_manifest(
         manifest_path,
@@ -1212,6 +1315,7 @@ def write_head_correlation_plots(
             "description": "Per-head correlation heatmaps: baseline attention entropy vs delta_target_prob",
             "shared_vmax": round(shared_vmax, 6),
             "n_profiles": n_profiles,
+            "top_positive_cluster_profiles": top_cluster_rows,
             "plots": written,
         },
     )
@@ -1303,8 +1407,10 @@ def main() -> None:
     if head_corr_path.is_file():
         with open(head_corr_path, "r", encoding="utf-8") as f:
             head_corr_data = json.load(f)
+        overall_profile_summary = load_overall_profile_summary(analysis_dir, prefix)
         head_corr_plots = write_head_correlation_plots(
             head_corr_data=head_corr_data,
+            overall_profile_summary=overall_profile_summary,
             model_label=model_label,
             output_dir=output_dir,
             prefix=prefix,

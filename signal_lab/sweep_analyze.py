@@ -183,6 +183,27 @@ def stdev(values: list[float]) -> float:
     return statistics.stdev(values) if len(values) >= 2 else math.nan
 
 
+def percentile(values: list[float], q: float) -> float:
+    clean = [value for value in values if math.isfinite(value)]
+    if not clean:
+        return math.nan
+    return float(np.percentile(np.array(clean, dtype=np.float64), q))
+
+
+def mean_top_k(values: list[float], k: int) -> float:
+    clean = sorted((value for value in values if math.isfinite(value)), reverse=True)
+    if not clean:
+        return math.nan
+    return mean(clean[: min(k, len(clean))])
+
+
+def kth_largest(values: list[float], k: int) -> float:
+    clean = sorted((value for value in values if math.isfinite(value)), reverse=True)
+    if not clean or k <= 0:
+        return math.nan
+    return clean[min(k, len(clean)) - 1]
+
+
 def pct(numerator: int, denominator: int) -> float:
     if denominator == 0:
         return math.nan
@@ -509,6 +530,167 @@ def build_best_profile_by_type(rows: list[dict[str, Any]]) -> list[dict[str, Any
     return result
 
 
+def build_overall_profile_summary(
+    rows: list[dict[str, Any]],
+    type_gain_summary: list[dict[str, Any]],
+    prompt_winners: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    non_baseline = [row for row in rows if row.get("g_profile") != BASELINE_PROFILE_NAME]
+    grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in non_baseline:
+        grouped[str(row["g_profile"])].append(row)
+
+    type_rows_by_profile: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in type_gain_summary:
+        g_profile = str(row.get("g_profile", ""))
+        if g_profile == BASELINE_PROFILE_NAME:
+            continue
+        type_rows_by_profile[g_profile].append(row)
+
+    prompt_best_counts = Counter(
+        str(row.get("best_g_profile", ""))
+        for row in prompt_winners
+        if row.get("best_g_profile")
+    )
+    prompt_worst_counts = Counter(
+        str(row.get("worst_g_profile", ""))
+        for row in prompt_winners
+        if row.get("worst_g_profile")
+    )
+    total_prompt_cases = len(prompt_winners)
+
+    summary_rows: list[dict[str, Any]] = []
+    for g_profile, profile_rows in sorted(grouped.items()):
+        delta_p = [float(row["delta_target_prob"]) for row in profile_rows]
+        delta_rank = [float(row["delta_target_rank"]) for row in profile_rows]
+        delta_entropy = [float(row["delta_final_entropy_bits"]) for row in profile_rows]
+        delta_avg_logprob = [float(row["delta_target_avg_logprob"]) for row in profile_rows]
+        delta_geo_mean_prob = [float(row["delta_target_geo_mean_prob"]) for row in profile_rows]
+        positive_delta_p = [value for value in delta_p if value > 0]
+        negative_delta_p = [value for value in delta_p if value < 0]
+        positive_count = len(positive_delta_p)
+        positive_mass = sum(positive_delta_p) if positive_delta_p else 0.0
+        sorted_delta_p = sorted((value for value in delta_p if math.isfinite(value)), reverse=True)
+
+        type_rows = type_rows_by_profile.get(g_profile, [])
+        best_type_row = max(
+            type_rows,
+            key=lambda row: float(row.get("mean_delta_target_prob", -math.inf)),
+            default=None,
+        )
+        worst_type_row = min(
+            type_rows,
+            key=lambda row: float(row.get("mean_delta_target_prob", math.inf)),
+            default=None,
+        )
+
+        best_type_mean = (
+            float(best_type_row["mean_delta_target_prob"])
+            if best_type_row is not None
+            else math.nan
+        )
+        worst_type_mean = (
+            float(worst_type_row["mean_delta_target_prob"])
+            if worst_type_row is not None
+            else math.nan
+        )
+        mean_delta_p = mean(delta_p)
+        balanced_score = mean_delta_p
+        if math.isfinite(worst_type_mean):
+            balanced_score -= max(0.0, -worst_type_mean)
+
+        type_delta_spread = math.nan
+        if math.isfinite(best_type_mean) and math.isfinite(worst_type_mean):
+            type_delta_spread = best_type_mean - worst_type_mean
+
+        prompt_best_wins = int(prompt_best_counts.get(g_profile, 0))
+        prompt_worst_losses = int(prompt_worst_counts.get(g_profile, 0))
+        summary_rows.append(
+            {
+                "g_profile": g_profile,
+                "g_family": profile_rows[0].get("g_family", ""),
+                "n": len(profile_rows),
+                "n_types_covered": len(type_rows),
+                "mean_delta_target_prob": mean_delta_p,
+                "median_delta_target_prob": median(delta_p),
+                "stdev_delta_target_prob": stdev(delta_p),
+                "mean_positive_delta_target_prob": mean(positive_delta_p),
+                "mean_negative_delta_target_prob": mean(negative_delta_p),
+                "pct_delta_target_prob_positive": pct(sum(value > 0 for value in delta_p), len(delta_p)),
+                "pct_delta_target_prob_negative": pct(sum(value < 0 for value in delta_p), len(delta_p)),
+                "sign_test_p_delta_target_prob": sign_test_pvalue(delta_p),
+                "positive_prompt_count": positive_count,
+                "positive_prompt_rate": pct(positive_count, len(delta_p)),
+                "positive_mass_delta_target_prob": positive_mass,
+                "min_delta_target_prob": min(delta_p) if delta_p else math.nan,
+                "p10_delta_target_prob": percentile(delta_p, 10),
+                "p90_delta_target_prob": percentile(delta_p, 90),
+                "max_delta_target_prob": max(delta_p) if delta_p else math.nan,
+                "top_1_mean_delta_target_prob": mean_top_k(sorted_delta_p, 1),
+                "top_2_mean_delta_target_prob": mean_top_k(sorted_delta_p, 2),
+                "top_4_mean_delta_target_prob": mean_top_k(sorted_delta_p, 4),
+                "top_8_mean_delta_target_prob": mean_top_k(sorted_delta_p, 8),
+                "top_16_mean_delta_target_prob": mean_top_k(sorted_delta_p, 16),
+                "top_1_cutoff_delta_target_prob": kth_largest(sorted_delta_p, 1),
+                "top_2_cutoff_delta_target_prob": kth_largest(sorted_delta_p, 2),
+                "top_4_cutoff_delta_target_prob": kth_largest(sorted_delta_p, 4),
+                "top_8_cutoff_delta_target_prob": kth_largest(sorted_delta_p, 8),
+                "top_16_cutoff_delta_target_prob": kth_largest(sorted_delta_p, 16),
+                "mean_delta_target_rank": mean(delta_rank),
+                "mean_delta_final_entropy_bits": mean(delta_entropy),
+                "mean_delta_target_avg_logprob": mean(delta_avg_logprob),
+                "mean_delta_target_geo_mean_prob": mean(delta_geo_mean_prob),
+                "best_type": best_type_row.get("type", "") if best_type_row is not None else "",
+                "best_type_mean_delta_target_prob": best_type_mean,
+                "best_type_pct_delta_target_prob_positive": (
+                    float(best_type_row.get("pct_delta_target_prob_positive", math.nan))
+                    if best_type_row is not None
+                    else math.nan
+                ),
+                "best_type_n": int(best_type_row.get("n", 0)) if best_type_row is not None else 0,
+                "worst_type": worst_type_row.get("type", "") if worst_type_row is not None else "",
+                "worst_type_mean_delta_target_prob": worst_type_mean,
+                "worst_type_pct_delta_target_prob_positive": (
+                    float(worst_type_row.get("pct_delta_target_prob_positive", math.nan))
+                    if worst_type_row is not None
+                    else math.nan
+                ),
+                "worst_type_n": int(worst_type_row.get("n", 0)) if worst_type_row is not None else 0,
+                "type_delta_spread": type_delta_spread,
+                "balanced_score": balanced_score,
+                "prompt_best_wins": prompt_best_wins,
+                "prompt_worst_losses": prompt_worst_losses,
+                "net_prompt_win_minus_loss": prompt_best_wins - prompt_worst_losses,
+                "prompt_best_win_rate": pct(prompt_best_wins, total_prompt_cases),
+                "prompt_worst_loss_rate": pct(prompt_worst_losses, total_prompt_cases),
+            }
+        )
+
+    def assign_rank(rows_to_rank: list[dict[str, Any]], value_field: str, rank_field: str) -> None:
+        ordered = sorted(
+            rows_to_rank,
+            key=lambda row: (
+                not math.isfinite(float(row.get(value_field, math.nan))),
+                -float(row.get(value_field, math.nan)) if math.isfinite(float(row.get(value_field, math.nan))) else 0.0,
+                str(row.get("g_profile", "")),
+            ),
+        )
+        for rank, row in enumerate(ordered, start=1):
+            row[rank_field] = rank
+
+    assign_rank(summary_rows, "mean_delta_target_prob", "rank_overall_mean_delta_target_prob")
+    assign_rank(summary_rows, "top_1_mean_delta_target_prob", "rank_top_1_mean_delta_target_prob")
+    assign_rank(summary_rows, "top_2_mean_delta_target_prob", "rank_top_2_mean_delta_target_prob")
+    assign_rank(summary_rows, "top_4_mean_delta_target_prob", "rank_top_4_mean_delta_target_prob")
+    assign_rank(summary_rows, "top_8_mean_delta_target_prob", "rank_top_8_mean_delta_target_prob")
+    assign_rank(summary_rows, "top_16_mean_delta_target_prob", "rank_top_16_mean_delta_target_prob")
+    assign_rank(summary_rows, "best_type_mean_delta_target_prob", "rank_best_type_mean_delta_target_prob")
+    assign_rank(summary_rows, "balanced_score", "rank_balanced_score")
+    assign_rank(summary_rows, "type_delta_spread", "rank_type_delta_spread")
+
+    return [round_report_row(row) for row in summary_rows]
+
+
 def build_prompt_winners(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     grouped: dict[tuple[str, int], list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
@@ -645,6 +827,7 @@ def build_report_text(
     run_dir: Path,
     meta: dict[str, Any],
     completion_rows: list[dict[str, Any]],
+    overall_profile_summary: list[dict[str, Any]],
     type_gain_summary: list[dict[str, Any]],
     type_family_summary: list[dict[str, Any]],
     best_profile_by_type: list[dict[str, Any]],
@@ -681,6 +864,110 @@ def build_report_text(
         parts.append("Warnings")
         parts.extend(f"- {warning}" for warning in warnings)
         parts.append("")
+
+    if overall_profile_summary:
+        parts.append("Overall Gain Profile Summary")
+        parts.append("Use these top-8 rankings to shortlist candidates for top-1 / top-2 / top-4 / top-8 profile sets.")
+        parts.append("")
+
+        top_cluster_profiles = sorted(
+            overall_profile_summary,
+            key=lambda row: int(row.get("rank_top_8_mean_delta_target_prob", 10**9)),
+        )[:8]
+        if top_cluster_profiles:
+            parts.append("Profiles With Strongest Positive Prompt Clusters")
+            parts.append(
+                render_table(
+                    ["rank8", "g_profile", "top1", "top2", "top4", "top8", "top16", "pos_n", "pos_mass", "p90", "max"],
+                    [[
+                        str(row.get("rank_top_8_mean_delta_target_prob", "")),
+                        str(row.get("g_profile", "")),
+                        format_float(float(row.get("top_1_mean_delta_target_prob", math.nan))),
+                        format_float(float(row.get("top_2_mean_delta_target_prob", math.nan))),
+                        format_float(float(row.get("top_4_mean_delta_target_prob", math.nan))),
+                        format_float(float(row.get("top_8_mean_delta_target_prob", math.nan))),
+                        format_float(float(row.get("top_16_mean_delta_target_prob", math.nan))),
+                        str(row.get("positive_prompt_count", "")),
+                        format_float(float(row.get("positive_mass_delta_target_prob", math.nan))),
+                        format_float(float(row.get("p90_delta_target_prob", math.nan))),
+                        format_float(float(row.get("max_delta_target_prob", math.nan))),
+                    ] for row in top_cluster_profiles],
+                )
+            )
+            parts.append("")
+
+        sharp_cluster_profiles = sorted(
+            overall_profile_summary,
+            key=lambda row: int(row.get("rank_top_4_mean_delta_target_prob", 10**9)),
+        )[:8]
+        if sharp_cluster_profiles:
+            parts.append("Sharpest Positive Clusters")
+            parts.append(
+                render_table(
+                    ["rank4", "g_profile", "top1", "top2", "top4", "top8_cut", "pos_n", "pos_rate", "mean", "mean-"],
+                    [[
+                        str(row.get("rank_top_4_mean_delta_target_prob", "")),
+                        str(row.get("g_profile", "")),
+                        format_float(float(row.get("top_1_mean_delta_target_prob", math.nan))),
+                        format_float(float(row.get("top_2_mean_delta_target_prob", math.nan))),
+                        format_float(float(row.get("top_4_mean_delta_target_prob", math.nan))),
+                        format_float(float(row.get("top_8_cutoff_delta_target_prob", math.nan))),
+                        str(row.get("positive_prompt_count", "")),
+                        format_float(float(row.get("positive_prompt_rate", math.nan))),
+                        format_float(float(row.get("mean_delta_target_prob", math.nan))),
+                        format_float(float(row.get("mean_negative_delta_target_prob", math.nan))),
+                    ] for row in sharp_cluster_profiles],
+                )
+            )
+            parts.append("")
+
+        top_overall_profiles = sorted(
+            overall_profile_summary,
+            key=lambda row: int(row.get("rank_overall_mean_delta_target_prob", 10**9)),
+        )[:8]
+        if top_overall_profiles:
+            parts.append("Top Overall Profiles By Mean Delta P")
+            parts.append(
+                render_table(
+                    ["rank", "g_profile", "mean_delta_p", "p10", "p90", "%pos", "mean+", "mean-", "best_type(mean)", "worst_type(mean)"],
+                    [[
+                        str(row.get("rank_overall_mean_delta_target_prob", "")),
+                        str(row.get("g_profile", "")),
+                        format_float(float(row.get("mean_delta_target_prob", math.nan))),
+                        format_float(float(row.get("p10_delta_target_prob", math.nan))),
+                        format_float(float(row.get("p90_delta_target_prob", math.nan))),
+                        format_float(float(row.get("pct_delta_target_prob_positive", math.nan))),
+                        format_float(float(row.get("mean_positive_delta_target_prob", math.nan))),
+                        format_float(float(row.get("mean_negative_delta_target_prob", math.nan))),
+                        f"{row.get('best_type', '')} ({format_float(float(row.get('best_type_mean_delta_target_prob', math.nan)))})",
+                        f"{row.get('worst_type', '')} ({format_float(float(row.get('worst_type_mean_delta_target_prob', math.nan)))})",
+                    ] for row in top_overall_profiles],
+                )
+            )
+            parts.append("")
+
+        top_balanced_profiles = sorted(
+            overall_profile_summary,
+            key=lambda row: int(row.get("rank_balanced_score", 10**9)),
+        )[:8]
+        if top_balanced_profiles:
+            parts.append("Top Balanced Profiles By Conservative Score")
+            parts.append(
+                render_table(
+                    ["rank", "g_profile", "balanced", "overall_mean", "worst_type(mean)", "%pos", "wins", "losses"],
+                    [[
+                        str(row.get("rank_balanced_score", "")),
+                        str(row.get("g_profile", "")),
+                        format_float(float(row.get("balanced_score", math.nan))),
+                        format_float(float(row.get("mean_delta_target_prob", math.nan))),
+                        f"{row.get('worst_type', '')} ({format_float(float(row.get('worst_type_mean_delta_target_prob', math.nan)))})",
+                        format_float(float(row.get("pct_delta_target_prob_positive", math.nan))),
+                        str(row.get("prompt_best_wins", "")),
+                        str(row.get("prompt_worst_losses", "")),
+                    ] for row in top_balanced_profiles],
+                )
+            )
+            parts.append("")
 
     top_type_rows = sorted(
         [row for row in type_gain_summary if row.get("g_profile") != BASELINE_PROFILE_NAME],
@@ -816,6 +1103,7 @@ def write_analysis_files(
     file_rows: list[dict[str, Any]],
     warnings: list[str],
     joined_rows: list[dict[str, Any]],
+    overall_profile_summary: list[dict[str, Any]],
     type_gain_summary: list[dict[str, Any]],
     tier_gain_summary: list[dict[str, Any]],
     type_tier_gain_summary: list[dict[str, Any]],
@@ -833,6 +1121,7 @@ def write_analysis_files(
         (f"{prefix}_files.csv", file_rows),
         (f"{prefix}_warnings.csv", [{"warning": warning} for warning in warnings]),
         (f"{prefix}_joined_long.csv", joined_rows),
+        (f"{prefix}_overall_profile_summary.csv", overall_profile_summary),
         (f"{prefix}_type_gain_summary.csv", type_gain_summary),
         (f"{prefix}_tier_gain_summary.csv", tier_gain_summary),
         (f"{prefix}_type_tier_gain_summary.csv", type_tier_gain_summary),
@@ -1021,6 +1310,75 @@ def _betacf(a: float, b: float, x: float) -> float:
     return h
 
 
+def roc_auc_from_scores(scores: np.ndarray, labels: np.ndarray) -> float:
+    """AUROC for binary labels; higher score should indicate positive class."""
+    if scores.size == 0 or labels.size == 0 or scores.size != labels.size:
+        return math.nan
+    pos = scores[labels]
+    neg = scores[~labels]
+    if pos.size == 0 or neg.size == 0:
+        return math.nan
+    comparisons = pos[:, None] - neg[None, :]
+    wins = float((comparisons > 0).sum())
+    ties = float((comparisons == 0).sum())
+    return (wins + 0.5 * ties) / float(comparisons.size)
+
+
+def best_balanced_accuracy(scores: np.ndarray, labels: np.ndarray) -> tuple[float, float]:
+    """Best balanced accuracy over score thresholds; higher score predicts positive class."""
+    if scores.size == 0 or labels.size == 0 or scores.size != labels.size:
+        return (math.nan, math.nan)
+    pos_count = int(labels.sum())
+    neg_count = int((~labels).sum())
+    if pos_count == 0 or neg_count == 0:
+        return (math.nan, math.nan)
+
+    unique_scores = np.unique(scores)
+    if unique_scores.size == 0:
+        return (math.nan, math.nan)
+
+    thresholds: list[float] = [float(unique_scores[0]) - 1e-9]
+    thresholds.extend(
+        float((unique_scores[i] + unique_scores[i + 1]) / 2.0)
+        for i in range(len(unique_scores) - 1)
+    )
+    thresholds.append(float(unique_scores[-1]) + 1e-9)
+
+    best_score = -math.inf
+    best_threshold = math.nan
+    for threshold in thresholds:
+        predicted = scores >= threshold
+        true_positive = int(np.logical_and(predicted, labels).sum())
+        true_negative = int(np.logical_and(~predicted, ~labels).sum())
+        tpr = true_positive / pos_count
+        tnr = true_negative / neg_count
+        balanced = 0.5 * (tpr + tnr)
+        if balanced > best_score:
+            best_score = balanced
+            best_threshold = threshold
+    return (best_score, best_threshold)
+
+
+def select_top_positive_cluster_profiles(
+    overall_profile_summary: list[dict[str, Any]],
+    top_n: int = 4,
+) -> list[dict[str, Any]]:
+    eligible = [
+        row
+        for row in overall_profile_summary
+        if math.isfinite(float(row.get("rank_top_8_mean_delta_target_prob", math.nan)))
+        and math.isfinite(float(row.get("top_8_mean_delta_target_prob", math.nan)))
+        and float(row.get("top_8_mean_delta_target_prob", math.nan)) > 0.0
+    ]
+    eligible.sort(
+        key=lambda row: (
+            int(row.get("rank_top_8_mean_delta_target_prob", 10**9)),
+            str(row.get("g_profile", "")),
+        )
+    )
+    return eligible[: max(top_n, 0)]
+
+
 def build_head_correlation_analysis(
     verbose_baseline_lookup: dict[tuple[str, int], dict[str, Any]],
     joined_rows: list[dict[str, Any]],
@@ -1164,6 +1522,198 @@ def build_head_correlation_analysis(
     }
 
 
+def build_scout_head_rankings(
+    verbose_baseline_lookup: dict[tuple[str, int], dict[str, Any]],
+    joined_rows: list[dict[str, Any]],
+    overall_profile_summary: list[dict[str, Any]],
+    head_corr_result: dict[str, Any] | None,
+    *,
+    cluster_top_k: int = 8,
+    top_n_profiles: int = 4,
+) -> list[dict[str, Any]]:
+    if head_corr_result is None:
+        return []
+
+    n_layers = int(head_corr_result.get("n_layers", 0))
+    n_heads = int(head_corr_result.get("n_heads", 0))
+    layer_indices = head_corr_result.get("layer_indices")
+    expected_dim = n_layers * n_heads
+    if expected_dim <= 0:
+        return []
+
+    entropy_lookup: dict[tuple[str, int], np.ndarray] = {}
+    for (prompt_id, rep), record in sorted(verbose_baseline_lookup.items()):
+        raw = record.get("attn_entropy_per_head_final")
+        if not isinstance(raw, list) or not raw:
+            continue
+        flat = flatten_numeric_values(raw)
+        if len(flat) != expected_dim:
+            continue
+        entropy_lookup[(prompt_id, rep)] = np.array(flat, dtype=np.float64)
+
+    if not entropy_lookup:
+        return []
+
+    profile_lookup = {
+        str(profile.get("g_profile", "")): profile
+        for profile in head_corr_result.get("profiles", [])
+    }
+    selected_profiles = select_top_positive_cluster_profiles(overall_profile_summary, top_n=top_n_profiles)
+    if not selected_profiles:
+        return []
+
+    rows_by_profile: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in joined_rows:
+        g_profile = str(row.get("g_profile", ""))
+        if g_profile != BASELINE_PROFILE_NAME:
+            rows_by_profile[g_profile].append(row)
+
+    output_rows: list[dict[str, Any]] = []
+    for profile_summary in selected_profiles:
+        g_profile = str(profile_summary.get("g_profile", ""))
+        head_profile = profile_lookup.get(g_profile)
+        profile_rows = rows_by_profile.get(g_profile, [])
+        if head_profile is None or not profile_rows:
+            continue
+
+        ranked_rows = sorted(
+            (
+                row
+                for row in profile_rows
+                if math.isfinite(float(row.get("delta_target_prob", math.nan)))
+            ),
+            key=lambda row: float(row.get("delta_target_prob", -math.inf)),
+            reverse=True,
+        )
+        cluster_rows = ranked_rows[: min(cluster_top_k, len(ranked_rows))]
+        if not cluster_rows:
+            continue
+
+        cluster_keys = {
+            (str(row.get("prompt_id", "")), int(row.get("rep", 1)))
+            for row in cluster_rows
+        }
+        cluster_cutoff = float(cluster_rows[-1].get("delta_target_prob", math.nan))
+        cluster_mean_delta = mean([float(row.get("delta_target_prob", math.nan)) for row in cluster_rows])
+
+        vectors: list[np.ndarray] = []
+        labels: list[bool] = []
+        for row in ranked_rows:
+            key = (str(row.get("prompt_id", "")), int(row.get("rep", 1)))
+            vector = entropy_lookup.get(key)
+            if vector is None:
+                continue
+            vectors.append(vector)
+            labels.append(key in cluster_keys)
+
+        if len(vectors) < 10:
+            continue
+
+        labels_arr = np.array(labels, dtype=bool)
+        if int(labels_arr.sum()) == 0 or int((~labels_arr).sum()) == 0:
+            continue
+
+        X = np.vstack(vectors)
+        corr_matrix = np.array(head_profile.get("correlation_matrix", []), dtype=np.float64)
+        pval_matrix = np.array(head_profile.get("p_value_matrix", []), dtype=np.float64)
+        if corr_matrix.size != expected_dim or pval_matrix.size != expected_dim:
+            continue
+        correlations = corr_matrix.reshape(expected_dim)
+        p_values = pval_matrix.reshape(expected_dim)
+        top10_set = {
+            (int(head["layer_slot"]), int(head["head"]))
+            for head in head_profile.get("top_10_heads", [])
+            if isinstance(head, dict)
+            and isinstance(head.get("layer_slot"), int)
+            and isinstance(head.get("head"), int)
+        }
+
+        profile_head_rows: list[dict[str, Any]] = []
+        for idx in range(expected_dim):
+            layer_slot = int(idx // n_heads)
+            head_idx = int(idx % n_heads)
+            raw_scores = X[:, idx]
+            corr = float(correlations[idx])
+            aligned_scores = raw_scores if corr >= 0 else -raw_scores
+            auc = roc_auc_from_scores(aligned_scores, labels_arr)
+            balanced_acc, aligned_threshold = best_balanced_accuracy(aligned_scores, labels_arr)
+            raw_threshold = aligned_threshold if corr >= 0 else -aligned_threshold
+            cluster_mean_entropy = float(raw_scores[labels_arr].mean())
+            noncluster_mean_entropy = float(raw_scores[~labels_arr].mean())
+            profile_head_rows.append(
+                {
+                    "g_profile": g_profile,
+                    "profile_rank_top_8_mean_delta_target_prob": int(
+                        profile_summary.get("rank_top_8_mean_delta_target_prob", 0)
+                    ),
+                    "profile_top_8_mean_delta_target_prob": float(
+                        profile_summary.get("top_8_mean_delta_target_prob", math.nan)
+                    ),
+                    "profile_positive_prompt_count": int(
+                        float(profile_summary.get("positive_prompt_count", 0))
+                    ),
+                    "cluster_top_k": cluster_top_k,
+                    "cluster_size": len(cluster_rows),
+                    "cluster_cutoff_delta_target_prob": cluster_cutoff,
+                    "cluster_mean_delta_target_prob": cluster_mean_delta,
+                    "layer_slot": layer_slot,
+                    "layer_index": layer_indices[layer_slot] if isinstance(layer_indices, list) else layer_slot,
+                    "head": head_idx,
+                    "correlation": corr,
+                    "abs_correlation": abs(corr),
+                    "p_value": float(p_values[idx]),
+                    "correlation_sign": "positive" if corr >= 0 else "negative",
+                    "entropy_direction": (
+                        "higher_entropy_predicts_help"
+                        if corr >= 0
+                        else "lower_entropy_predicts_help"
+                    ),
+                    "directional_auroc": auc,
+                    "best_balanced_accuracy": balanced_acc,
+                    "raw_threshold": raw_threshold,
+                    "threshold_operator": ">=" if corr >= 0 else "<=",
+                    "cluster_mean_entropy": cluster_mean_entropy,
+                    "noncluster_mean_entropy": noncluster_mean_entropy,
+                    "entropy_gap_cluster_minus_noncluster": cluster_mean_entropy - noncluster_mean_entropy,
+                    "is_top10_abs_correlation": int((layer_slot, head_idx) in top10_set),
+                }
+            )
+
+        def assign_profile_rank(
+            rows_to_rank: list[dict[str, Any]],
+            value_field: str,
+            rank_field: str,
+        ) -> None:
+            ordered = sorted(
+                rows_to_rank,
+                key=lambda row: (
+                    not math.isfinite(float(row.get(value_field, math.nan))),
+                    -float(row.get(value_field, math.nan)) if math.isfinite(float(row.get(value_field, math.nan))) else 0.0,
+                    int(row.get("layer_slot", 0)),
+                    int(row.get("head", 0)),
+                ),
+            )
+            for rank, row in enumerate(ordered, start=1):
+                row[rank_field] = rank
+
+        assign_profile_rank(profile_head_rows, "abs_correlation", "rank_abs_correlation_within_profile")
+        assign_profile_rank(profile_head_rows, "directional_auroc", "rank_directional_auroc_within_profile")
+        assign_profile_rank(profile_head_rows, "best_balanced_accuracy", "rank_best_balanced_accuracy_within_profile")
+        output_rows.extend(round_report_row(row) for row in profile_head_rows)
+
+    output_rows.sort(
+        key=lambda row: (
+            int(row.get("profile_rank_top_8_mean_delta_target_prob", 10**9)),
+            int(row.get("rank_directional_auroc_within_profile", 10**9)),
+            int(row.get("rank_best_balanced_accuracy_within_profile", 10**9)),
+            int(row.get("rank_abs_correlation_within_profile", 10**9)),
+            int(row.get("layer_slot", 0)),
+            int(row.get("head", 0)),
+        )
+    )
+    return output_rows
+
+
 def main() -> None:
     args = parse_args()
     configure_data_dir(args.data_dir)
@@ -1201,6 +1751,7 @@ def main() -> None:
     type_family_summary = summarize_delta_rows(joined_rows, ["type", "g_family"])
     best_profile_by_type = build_best_profile_by_type(joined_rows)
     prompt_winners = build_prompt_winners(joined_rows)
+    overall_profile_summary = build_overall_profile_summary(joined_rows, type_gain_summary, prompt_winners)
     completion_rows = build_completion_rows(joined_rows, errors, meta)
     type_gain_matrix_rows = build_matrix_rows(type_gain_summary, "type", "g_profile", "mean_delta_target_prob")
     type_family_matrix_rows = build_matrix_rows(type_family_summary, "type", "g_family", "mean_delta_target_prob")
@@ -1209,6 +1760,7 @@ def main() -> None:
         run_dir=run_dir,
         meta=meta,
         completion_rows=completion_rows,
+        overall_profile_summary=overall_profile_summary,
         type_gain_summary=type_gain_summary,
         type_family_summary=type_family_summary,
         best_profile_by_type=best_profile_by_type,
@@ -1218,6 +1770,14 @@ def main() -> None:
     print(report_text)
 
     file_rows = build_file_rows(run_dir, meta_path, main_path, errors_path, verbose_path)
+    pca_result = build_baseline_attn_pca(verbose_baseline_lookup, battery_lookup)
+    head_corr_result = build_head_correlation_analysis(verbose_baseline_lookup, joined_rows)
+    scout_head_rankings = build_scout_head_rankings(
+        verbose_baseline_lookup,
+        joined_rows,
+        overall_profile_summary,
+        head_corr_result,
+    )
 
     if not args.no_write_files:
         output_dir = Path(args.output_dir).expanduser() if args.output_dir else default_analysis_output_dir(run_dir)
@@ -1228,6 +1788,7 @@ def main() -> None:
             file_rows=file_rows,
             warnings=warnings,
             joined_rows=joined_rows,
+            overall_profile_summary=overall_profile_summary,
             type_gain_summary=type_gain_summary,
             tier_gain_summary=tier_gain_summary,
             type_tier_gain_summary=type_tier_gain_summary,
@@ -1244,7 +1805,6 @@ def main() -> None:
             print(f"- {path}")
 
         # Second-order analysis: PCA on baseline attention entropy.
-        pca_result = build_baseline_attn_pca(verbose_baseline_lookup, battery_lookup)
         if pca_result is not None:
             pca_path = output_dir / f"{args.prefix}_baseline_attn_pca.json"
             with open(pca_path, "w", encoding="utf-8") as f:
@@ -1254,7 +1814,6 @@ def main() -> None:
             print("(Skipped baseline attention PCA — insufficient verbose baseline data.)")
 
         # Second-order analysis: head-level correlation with intervention delta_p.
-        head_corr_result = build_head_correlation_analysis(verbose_baseline_lookup, joined_rows)
         if head_corr_result is not None:
             head_corr_path = output_dir / f"{args.prefix}_head_correlations.json"
             with open(head_corr_path, "w", encoding="utf-8") as f:
@@ -1262,6 +1821,13 @@ def main() -> None:
             print(f"- {head_corr_path}")
         else:
             print("(Skipped head correlation analysis — insufficient data.)")
+
+        if scout_head_rankings:
+            scout_rankings_path = output_dir / f"{args.prefix}_scout_head_rankings.csv"
+            write_csv(scout_rankings_path, scout_head_rankings, list(scout_head_rankings[0].keys()))
+            print(f"- {scout_rankings_path}")
+        else:
+            print("(Skipped scout head ranking summary — insufficient data.)")
 
     if args.json_out:
         json_report = {
@@ -1271,6 +1837,7 @@ def main() -> None:
             "warnings": warnings,
             "files": file_rows,
             "completion": completion_rows,
+            "overall_profile_summary": overall_profile_summary,
             "type_gain_summary": type_gain_summary,
             "tier_gain_summary": tier_gain_summary,
             "type_tier_gain_summary": type_tier_gain_summary,
@@ -1279,6 +1846,7 @@ def main() -> None:
             "prompt_winners": prompt_winners,
             "type_gain_matrix_delta_p": type_gain_matrix_rows,
             "type_family_matrix_delta_p": type_family_matrix_rows,
+            "scout_head_rankings": scout_head_rankings,
         }
         output_path = Path(args.json_out).expanduser()
         output_path.parent.mkdir(parents=True, exist_ok=True)
