@@ -155,7 +155,16 @@ def apply_prompt_selection_overrides(
 def main():
     parser = argparse.ArgumentParser(description="Sweep g profiles over different prompts.")
     parser.add_argument("--cartridge", type=str, required=True, choices=list_cartridges(), help="Named cartridge of g profile configurations to sweep.")
-    parser.add_argument("--model-key", type=str, default="0_8B", choices=VALID_MODEL_KEYS, help="Model to use. Defaults to 0_8B.")
+    parser.add_argument(
+        "--model-key",
+        type=str,
+        default="0_8B",
+        help=(
+            "Model selector to use. May be one of the registered keys "
+            f"({', '.join(VALID_MODEL_KEYS)}) or a raw Hugging Face model id "
+            "for a transformer-only control model."
+        ),
+    )
     parser.add_argument("--device", type=str, default=None, help="Device override: auto (default), cuda, mps, or cpu. Also supports COLONY_DEVICE env var.")
     parser.add_argument(
         "--data-dir",
@@ -226,6 +235,7 @@ def main():
     meta_file = out_dir / "_meta.json"
     metadata: dict[str, Any] = {
         "model": agent.backend.model_name,
+        "model_selector": model_key,
         "device": runtime_device,
         "config": agent.backend.config_summary,
     }
