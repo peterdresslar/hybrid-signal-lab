@@ -133,6 +133,14 @@ uv run -m signal_lab.signal_lab \
 
 Use `signal_lab.sweep` when you want many prompts and/or many gain profiles.
 
+Cartridges now also encode how gain profiles are targeted onto attention layers:
+
+- hybrid-native cartridges such as `kitchen_sink` use each backend's native
+  attention-layer selection
+- control-model cartridges ending in `_all_layers` target every attention layer
+- control-model cartridges ending in `_hybrid_mimic` target every 4th layer to
+  mimic the hybrid cadence on transformer-only models
+
 ### Cartridge-Based Sweep
 
 ```bash
@@ -154,6 +162,23 @@ uv run -m signal_lab.sweep \
   --model-key 35B \
   --device cuda
 ```
+
+### Transformer Control Sweep
+
+```bash
+uv run -m signal_lab.sweep \
+  --cartridge kitchen_sink_all_layers \
+  --run-name qwen25_control \
+  --prompt-battery bench/battery/data/battery_3 \
+  --prompt-types algorithmic \
+  --prompt-tiers short \
+  --model-key Qwen/Qwen2.5-0.5B \
+  --device cuda
+```
+
+For a sparse control run that mimics the hybrid every-4th-layer cadence, swap
+the cartridge to `kitchen_sink_hybrid_mimic` (or the corresponding
+`fine_grain_kitchen_sink_hybrid_mimic` variant).
 
 ### Specific Prompt IDs From A Battery
 
@@ -181,6 +206,13 @@ uv run -m signal_lab.sweep \
 
 Verbose mode adds `verbose.jsonl` with heavier per-run detail.
 
+Useful cartridge families for control-model studies:
+
+- `kitchen_sink_all_layers`
+- `kitchen_sink_hybrid_mimic`
+- `fine_grain_kitchen_sink_all_layers`
+- `fine_grain_kitchen_sink_hybrid_mimic`
+
 ### Sweep Outputs
 
 When you use `--run-name`, the default model run directory is:
@@ -196,6 +228,12 @@ Each model run directory contains:
 - `_meta.json`: model/config/prompt-selection metadata
 - `errors.jsonl`: failures if any occur
 - `verbose.jsonl`: optional detailed output when `--verbose` is enabled
+
+For control sweeps, `_meta.json` also records:
+
+- `attention_targeting`
+- `available_attention_layer_indices`
+- `target_attention_layer_indices`
 
 ## Analyzing A Sweep Run
 
