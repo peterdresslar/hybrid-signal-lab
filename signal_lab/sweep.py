@@ -327,6 +327,7 @@ def main():
     print(f"Will run {len(prompts_to_run)} prompts over {len(g_runs)} g configurations ({args.repetitions} repetitions).")
     total_runs = len(prompts_to_run) * len(g_runs) * args.repetitions
     print(f"Total runs: {total_runs}")
+    attempted_runs = 0
     completed_runs = 0
     sweep_start_time = time.time()
 
@@ -366,6 +367,8 @@ def main():
 
             for rep in range(args.repetitions):
                 for g_run in g_runs:
+                    attempted_runs += 1
+                    current_run = attempted_runs
                     g_scales = g_run["g_scales"]
                     printable = g_run["printable_scales"]
                     is_baseline = bool(np.allclose(g_scales, 1.0, atol=1e-4))
@@ -393,7 +396,10 @@ def main():
                         }
                         f_err.write(json.dumps(err) + "\n")
                         f_err.flush()
-                        print(f"  [ERROR] Rep {rep+1} g={printable} failed: {e}")
+                        print(
+                            f"  [{current_run} of {total_runs}] [ERROR] "
+                            f"Rep {rep+1} g={printable} failed: {e}"
+                        )
                         continue
 
                     if target_str is not None:
@@ -416,7 +422,10 @@ def main():
                             }
                             f_err.write(json.dumps(err) + "\n")
                             f_err.flush()
-                            print(f"  [ERROR] Rep {rep+1} g={printable} target scoring failed: {e}")
+                            print(
+                                f"  [{current_run} of {total_runs}] [ERROR] "
+                                f"Rep {rep+1} g={printable} target scoring failed: {e}"
+                            )
                             continue
 
                         if target_metrics is not None:
@@ -459,7 +468,8 @@ def main():
                         f_verb.flush()
 
                     print(
-                        f"  [Rep {rep+1}] g_profile={g_run['name']} scales={printable} | "
+                        f"  [{current_run} of {total_runs}] [Rep {rep+1}] "
+                        f"g_profile={g_run['name']} scales={printable} | "
                         f"Time: {res['elapsed_time']:.2f}s | Final Ent: {res['final_entropy_bits']:.2f} bits | "
                         f"Target Rank: {res.get('target_rank')} | "
                         f"Target p(tok): "
