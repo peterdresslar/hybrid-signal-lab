@@ -575,12 +575,12 @@ def build_overall_profile_summary(
         type_rows = type_rows_by_profile.get(g_profile, [])
         best_type_row = max(
             type_rows,
-            key=lambda row: float(row.get("mean_delta_target_prob", -math.inf)),
+            key=lambda row: to_float(row.get("mean_delta_target_prob", -math.inf)),
             default=None,
         )
         worst_type_row = min(
             type_rows,
-            key=lambda row: float(row.get("mean_delta_target_prob", math.inf)),
+            key=lambda row: to_float(row.get("mean_delta_target_prob", math.inf)),
             default=None,
         )
 
@@ -670,8 +670,10 @@ def build_overall_profile_summary(
         ordered = sorted(
             rows_to_rank,
             key=lambda row: (
-                not math.isfinite(float(row.get(value_field, math.nan))),
-                -float(row.get(value_field, math.nan)) if math.isfinite(float(row.get(value_field, math.nan))) else 0.0,
+                not math.isfinite(to_float(row.get(value_field, math.nan))),
+                -to_float(row.get(value_field, math.nan))
+                if math.isfinite(to_float(row.get(value_field, math.nan)))
+                else 0.0,
                 str(row.get("g_profile", "")),
             ),
         )
@@ -882,15 +884,15 @@ def build_report_text(
                     [[
                         str(row.get("rank_top_8_mean_delta_target_prob", "")),
                         str(row.get("g_profile", "")),
-                        format_float(float(row.get("top_1_mean_delta_target_prob", math.nan))),
-                        format_float(float(row.get("top_2_mean_delta_target_prob", math.nan))),
-                        format_float(float(row.get("top_4_mean_delta_target_prob", math.nan))),
-                        format_float(float(row.get("top_8_mean_delta_target_prob", math.nan))),
-                        format_float(float(row.get("top_16_mean_delta_target_prob", math.nan))),
+                        format_float(to_float(row.get("top_1_mean_delta_target_prob", math.nan))),
+                        format_float(to_float(row.get("top_2_mean_delta_target_prob", math.nan))),
+                        format_float(to_float(row.get("top_4_mean_delta_target_prob", math.nan))),
+                        format_float(to_float(row.get("top_8_mean_delta_target_prob", math.nan))),
+                        format_float(to_float(row.get("top_16_mean_delta_target_prob", math.nan))),
                         str(row.get("positive_prompt_count", "")),
-                        format_float(float(row.get("positive_mass_delta_target_prob", math.nan))),
-                        format_float(float(row.get("p90_delta_target_prob", math.nan))),
-                        format_float(float(row.get("max_delta_target_prob", math.nan))),
+                        format_float(to_float(row.get("positive_mass_delta_target_prob", math.nan))),
+                        format_float(to_float(row.get("p90_delta_target_prob", math.nan))),
+                        format_float(to_float(row.get("max_delta_target_prob", math.nan))),
                     ] for row in top_cluster_profiles],
                 )
             )
@@ -908,14 +910,14 @@ def build_report_text(
                     [[
                         str(row.get("rank_top_4_mean_delta_target_prob", "")),
                         str(row.get("g_profile", "")),
-                        format_float(float(row.get("top_1_mean_delta_target_prob", math.nan))),
-                        format_float(float(row.get("top_2_mean_delta_target_prob", math.nan))),
-                        format_float(float(row.get("top_4_mean_delta_target_prob", math.nan))),
-                        format_float(float(row.get("top_8_cutoff_delta_target_prob", math.nan))),
+                        format_float(to_float(row.get("top_1_mean_delta_target_prob", math.nan))),
+                        format_float(to_float(row.get("top_2_mean_delta_target_prob", math.nan))),
+                        format_float(to_float(row.get("top_4_mean_delta_target_prob", math.nan))),
+                        format_float(to_float(row.get("top_8_cutoff_delta_target_prob", math.nan))),
                         str(row.get("positive_prompt_count", "")),
-                        format_float(float(row.get("positive_prompt_rate", math.nan))),
-                        format_float(float(row.get("mean_delta_target_prob", math.nan))),
-                        format_float(float(row.get("mean_negative_delta_target_prob", math.nan))),
+                        format_float(to_float(row.get("positive_prompt_rate", math.nan))),
+                        format_float(to_float(row.get("mean_delta_target_prob", math.nan))),
+                        format_float(to_float(row.get("mean_negative_delta_target_prob", math.nan))),
                     ] for row in sharp_cluster_profiles],
                 )
             )
@@ -933,14 +935,14 @@ def build_report_text(
                     [[
                         str(row.get("rank_overall_mean_delta_target_prob", "")),
                         str(row.get("g_profile", "")),
-                        format_float(float(row.get("mean_delta_target_prob", math.nan))),
-                        format_float(float(row.get("p10_delta_target_prob", math.nan))),
-                        format_float(float(row.get("p90_delta_target_prob", math.nan))),
-                        format_float(float(row.get("pct_delta_target_prob_positive", math.nan))),
-                        format_float(float(row.get("mean_positive_delta_target_prob", math.nan))),
-                        format_float(float(row.get("mean_negative_delta_target_prob", math.nan))),
-                        f"{row.get('best_type', '')} ({format_float(float(row.get('best_type_mean_delta_target_prob', math.nan)))})",
-                        f"{row.get('worst_type', '')} ({format_float(float(row.get('worst_type_mean_delta_target_prob', math.nan)))})",
+                        format_float(to_float(row.get("mean_delta_target_prob", math.nan))),
+                        format_float(to_float(row.get("p10_delta_target_prob", math.nan))),
+                        format_float(to_float(row.get("p90_delta_target_prob", math.nan))),
+                        format_float(to_float(row.get("pct_delta_target_prob_positive", math.nan))),
+                        format_float(to_float(row.get("mean_positive_delta_target_prob", math.nan))),
+                        format_float(to_float(row.get("mean_negative_delta_target_prob", math.nan))),
+                        f"{row.get('best_type', '')} ({format_float(to_float(row.get('best_type_mean_delta_target_prob', math.nan)))})",
+                        f"{row.get('worst_type', '')} ({format_float(to_float(row.get('worst_type_mean_delta_target_prob', math.nan)))})",
                     ] for row in top_overall_profiles],
                 )
             )
@@ -958,10 +960,10 @@ def build_report_text(
                     [[
                         str(row.get("rank_balanced_score", "")),
                         str(row.get("g_profile", "")),
-                        format_float(float(row.get("balanced_score", math.nan))),
-                        format_float(float(row.get("mean_delta_target_prob", math.nan))),
-                        f"{row.get('worst_type', '')} ({format_float(float(row.get('worst_type_mean_delta_target_prob', math.nan)))})",
-                        format_float(float(row.get("pct_delta_target_prob_positive", math.nan))),
+                        format_float(to_float(row.get("balanced_score", math.nan))),
+                        format_float(to_float(row.get("mean_delta_target_prob", math.nan))),
+                        f"{row.get('worst_type', '')} ({format_float(to_float(row.get('worst_type_mean_delta_target_prob', math.nan)))})",
+                        format_float(to_float(row.get("pct_delta_target_prob_positive", math.nan))),
                         str(row.get("prompt_best_wins", "")),
                         str(row.get("prompt_worst_losses", "")),
                     ] for row in top_balanced_profiles],
@@ -971,7 +973,7 @@ def build_report_text(
 
     top_type_rows = sorted(
         [row for row in type_gain_summary if row.get("g_profile") != BASELINE_PROFILE_NAME],
-        key=lambda row: float(row.get("mean_delta_target_prob", -math.inf)),
+        key=lambda row: to_float(row.get("mean_delta_target_prob", -math.inf)),
         reverse=True,
     )[:12]
     if top_type_rows:
@@ -982,10 +984,10 @@ def build_report_text(
                 [[
                     str(row.get("type", "")),
                     str(row.get("g_profile", "")),
-                    format_float(float(row.get("mean_delta_target_prob", math.nan))),
-                    format_float(float(row.get("pct_delta_target_prob_positive", math.nan))),
-                    format_float(float(row.get("sign_test_p_delta_target_prob", math.nan))),
-                    format_float(float(row.get("mean_delta_target_rank", math.nan))),
+                    format_float(to_float(row.get("mean_delta_target_prob", math.nan))),
+                    format_float(to_float(row.get("pct_delta_target_prob_positive", math.nan))),
+                    format_float(to_float(row.get("sign_test_p_delta_target_prob", math.nan))),
+                    format_float(to_float(row.get("mean_delta_target_rank", math.nan))),
                     str(row.get("n", "")),
                 ] for row in top_type_rows],
             )
@@ -994,7 +996,7 @@ def build_report_text(
 
     worst_type_rows = sorted(
         [row for row in type_gain_summary if row.get("g_profile") != BASELINE_PROFILE_NAME],
-        key=lambda row: float(row.get("mean_delta_target_prob", math.inf)),
+        key=lambda row: to_float(row.get("mean_delta_target_prob", math.inf)),
     )[:12]
     if worst_type_rows:
         parts.append("Worst Type x Gain Profiles By Mean Delta P")
@@ -1004,10 +1006,10 @@ def build_report_text(
                 [[
                     str(row.get("type", "")),
                     str(row.get("g_profile", "")),
-                    format_float(float(row.get("mean_delta_target_prob", math.nan))),
-                    format_float(float(row.get("pct_delta_target_prob_positive", math.nan))),
-                    format_float(float(row.get("sign_test_p_delta_target_prob", math.nan))),
-                    format_float(float(row.get("mean_delta_target_rank", math.nan))),
+                    format_float(to_float(row.get("mean_delta_target_prob", math.nan))),
+                    format_float(to_float(row.get("pct_delta_target_prob_positive", math.nan))),
+                    format_float(to_float(row.get("sign_test_p_delta_target_prob", math.nan))),
+                    format_float(to_float(row.get("mean_delta_target_rank", math.nan))),
                     str(row.get("n", "")),
                 ] for row in worst_type_rows],
             )
@@ -1016,7 +1018,7 @@ def build_report_text(
 
     family_rows = sorted(
         [row for row in type_family_summary if row.get("g_family") not in {"baseline", "constant"}],
-        key=lambda row: (str(row.get("type", "")), -float(row.get("mean_delta_target_prob", -math.inf))),
+        key=lambda row: (str(row.get("type", "")), -to_float(row.get("mean_delta_target_prob", -math.inf))),
     )[:16]
     if family_rows:
         parts.append("Type x Gain Family Summary")
@@ -1026,9 +1028,9 @@ def build_report_text(
                 [[
                     str(row.get("type", "")),
                     str(row.get("g_family", "")),
-                    format_float(float(row.get("mean_delta_target_prob", math.nan))),
-                    format_float(float(row.get("pct_delta_target_prob_positive", math.nan))),
-                    format_float(float(row.get("mean_delta_target_rank", math.nan))),
+                    format_float(to_float(row.get("mean_delta_target_prob", math.nan))),
+                    format_float(to_float(row.get("pct_delta_target_prob_positive", math.nan))),
+                    format_float(to_float(row.get("mean_delta_target_rank", math.nan))),
                     str(row.get("n", "")),
                 ] for row in family_rows],
             )
@@ -1044,9 +1046,9 @@ def build_report_text(
                     str(row.get("type", "")),
                     str(row.get("best_g_profile", "")),
                     str(row.get("best_g_family", "")),
-                    format_float(float(row.get("mean_delta_target_prob", math.nan))),
-                    format_float(float(row.get("pct_delta_target_prob_positive", math.nan))),
-                    format_float(float(row.get("sign_test_p_delta_target_prob", math.nan))),
+                    format_float(to_float(row.get("mean_delta_target_prob", math.nan))),
+                    format_float(to_float(row.get("pct_delta_target_prob_positive", math.nan))),
+                    format_float(to_float(row.get("sign_test_p_delta_target_prob", math.nan))),
                 ] for row in best_profile_by_type],
             )
         )
@@ -1055,7 +1057,7 @@ def build_report_text(
     if prompt_winners:
         top_prompt_winners = sorted(
             prompt_winners,
-            key=lambda row: float(row.get("best_delta_target_prob", -math.inf)),
+            key=lambda row: to_float(row.get("best_delta_target_prob", -math.inf)),
             reverse=True,
         )[:12]
         parts.append("Top Prompt Winners")
@@ -1066,9 +1068,9 @@ def build_report_text(
                     str(row.get("prompt_id", "")),
                     str(row.get("type", "")),
                     str(row.get("best_g_profile", "")),
-                    format_float(float(row.get("best_delta_target_prob", math.nan))),
+                    format_float(to_float(row.get("best_delta_target_prob", math.nan))),
                     str(row.get("worst_g_profile", "")),
-                    format_float(float(row.get("worst_delta_target_prob", math.nan))),
+                    format_float(to_float(row.get("worst_delta_target_prob", math.nan))),
                 ] for row in top_prompt_winners],
             )
         )
@@ -1076,7 +1078,7 @@ def build_report_text(
 
         worst_prompt_losers = sorted(
             prompt_winners,
-            key=lambda row: float(row.get("worst_delta_target_prob", math.inf)),
+            key=lambda row: to_float(row.get("worst_delta_target_prob", math.inf)),
         )[:12]
         parts.append("Worst Prompt Losers")
         parts.append(
@@ -1086,9 +1088,9 @@ def build_report_text(
                     str(row.get("prompt_id", "")),
                     str(row.get("type", "")),
                     str(row.get("worst_g_profile", "")),
-                    format_float(float(row.get("worst_delta_target_prob", math.nan))),
+                    format_float(to_float(row.get("worst_delta_target_prob", math.nan))),
                     str(row.get("best_g_profile", "")),
-                    format_float(float(row.get("best_delta_target_prob", math.nan))),
+                    format_float(to_float(row.get("best_delta_target_prob", math.nan))),
                 ] for row in worst_prompt_losers],
             )
         )
@@ -1366,9 +1368,9 @@ def select_top_positive_cluster_profiles(
     eligible = [
         row
         for row in overall_profile_summary
-        if math.isfinite(float(row.get("rank_top_8_mean_delta_target_prob", math.nan)))
-        and math.isfinite(float(row.get("top_8_mean_delta_target_prob", math.nan)))
-        and float(row.get("top_8_mean_delta_target_prob", math.nan)) > 0.0
+        if math.isfinite(to_float(row.get("rank_top_8_mean_delta_target_prob", math.nan)))
+        and math.isfinite(to_float(row.get("top_8_mean_delta_target_prob", math.nan)))
+        and to_float(row.get("top_8_mean_delta_target_prob", math.nan)) > 0.0
     ]
     eligible.sort(
         key=lambda row: (
@@ -1580,9 +1582,9 @@ def build_scout_head_rankings(
             (
                 row
                 for row in profile_rows
-                if math.isfinite(float(row.get("delta_target_prob", math.nan)))
+                if math.isfinite(to_float(row.get("delta_target_prob", math.nan)))
             ),
-            key=lambda row: float(row.get("delta_target_prob", -math.inf)),
+            key=lambda row: to_float(row.get("delta_target_prob", -math.inf)),
             reverse=True,
         )
         cluster_rows = ranked_rows[: min(cluster_top_k, len(ranked_rows))]
@@ -1594,7 +1596,7 @@ def build_scout_head_rankings(
             for row in cluster_rows
         }
         cluster_cutoff = float(cluster_rows[-1].get("delta_target_prob", math.nan))
-        cluster_mean_delta = mean([float(row.get("delta_target_prob", math.nan)) for row in cluster_rows])
+        cluster_mean_delta = mean([to_float(row.get("delta_target_prob", math.nan)) for row in cluster_rows])
 
         vectors: list[np.ndarray] = []
         labels: list[bool] = []
@@ -1687,8 +1689,10 @@ def build_scout_head_rankings(
             ordered = sorted(
                 rows_to_rank,
                 key=lambda row: (
-                    not math.isfinite(float(row.get(value_field, math.nan))),
-                    -float(row.get(value_field, math.nan)) if math.isfinite(float(row.get(value_field, math.nan))) else 0.0,
+                    not math.isfinite(to_float(row.get(value_field, math.nan))),
+                    -to_float(row.get(value_field, math.nan))
+                    if math.isfinite(to_float(row.get(value_field, math.nan)))
+                    else 0.0,
                     int(row.get("layer_slot", 0)),
                     int(row.get("head", 0)),
                 ),
