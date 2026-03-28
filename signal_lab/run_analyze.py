@@ -299,11 +299,23 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Optional batch of x-axis metrics for sweep_plot_analyze.",
     )
-    parser.add_argument(
+    intervention_group = parser.add_mutually_exclusive_group()
+    intervention_group.add_argument(
         "--intervention-folders",
+        dest="intervention_folders",
         action="store_true",
-        help="Pass --intervention-folders to sweep_plot_analyze and sweep_plot_compare.",
+        help=(
+            "Write intervention-folder plot bundles (interventions/, baseline/, best_interventions/) "
+            "for sweep_plot_analyze and sweep_plot_compare. Enabled by default."
+        ),
     )
+    intervention_group.add_argument(
+        "--no-intervention-folders",
+        dest="intervention_folders",
+        action="store_false",
+        help="Disable intervention-folder plot bundles.",
+    )
+    parser.set_defaults(intervention_folders=True)
     parser.add_argument(
         "--best-interventions-top-n",
         type=int,

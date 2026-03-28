@@ -290,9 +290,10 @@ uv run -m signal_lab.run_analyze \
 ```
 
 Useful flags: `--data-dir`, `--prefix`, `--no-write-files`, `--no-compare`,
-`--compare-prefix`, `--x-metric` / `--x-metrics`, `--intervention-folders`,
-`--best-interventions-top-n`, `--disagreement-top-n`, `--plot-dpi`, and
-`--dry-run`. For a **single** discovered run, `--json-out` works as in
+`--compare-prefix`, `--x-metric` / `--x-metrics`, `--no-intervention-folders`
+(intervention folders are enabled by default), `--best-interventions-top-n`,
+`--disagreement-top-n`, `--plot-dpi`, and `--dry-run`. For a **single**
+discovered run, `--json-out` works as in
 `sweep_analyze`.
 
 ### Example (single run, classic path)
