@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+# This is a script that I have used with runpod to some success. It is included here for
+# reference purposes also.
+
+
+
 set -euo pipefail
 
 # ── env vars (set these in RunPod pod config or export before running) ──

@@ -313,6 +313,7 @@ def run_model(
     )
 
     summary["model"] = agent.backend.model_name
+    summary["model_selector"] = model_key
     summary["device"] = runtime_device
     summary["config"] = agent.backend.config_summary
     summary["g_spec"] = resolved_g_spec
@@ -373,7 +374,11 @@ def main() -> None:
     )
     parser.add_argument(
         "--model-key", type=str, default="0_8B",
-        help=f"Model to use. One of: {', '.join(VALID_MODEL_KEYS)}.",
+        help=(
+            "Model selector to use. May be one of the registered keys "
+            f"({', '.join(VALID_MODEL_KEYS)}) or a raw Hugging Face model id "
+            "for a transformer-only control model."
+        ),
     )
     parser.add_argument(
         "--g-function", type=str, default="constant",

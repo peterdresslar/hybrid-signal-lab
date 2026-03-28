@@ -84,7 +84,8 @@ def default_probe_output_path() -> Path:
 
 def default_sweep_out_dir(run_name: str, model_key: str) -> Path:
     run_token = validate_path_token(run_name, "run_name")
-    return get_outputs_dir() / "runs" / run_token / validate_path_token(model_key, "model_key")
+    model_token = slugify_path_token(model_key)
+    return get_outputs_dir() / "runs" / run_token / model_token
 
 
 def render_output_path(path_pattern: str) -> Path:

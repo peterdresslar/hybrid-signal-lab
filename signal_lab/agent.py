@@ -47,6 +47,16 @@ class Agent:
     def get_attention_layer_indices(self) -> list[int]:
         return self.backend.get_attention_layer_indices()
 
+    def _resolve_target_attention_layers(
+        self,
+        target_attention_layer_indices: list[int] | None,
+    ) -> list[int]:
+        return (
+            list(target_attention_layer_indices)
+            if target_attention_layer_indices is not None
+            else self.get_attention_layer_indices()
+        )
+
     def run_pass(
         self,
         prompt: str,
@@ -57,12 +67,13 @@ class Agent:
         baseline_logits: torch.Tensor | None = None,
         return_raw_logits: bool = False,
         return_verbose: bool = False,
+        target_attention_layer_indices: list[int] | None = None,
     ) -> dict[str, Any]:
         """Run a single forward pass with gain-scaled attention hooks."""
         start_time = time.perf_counter()
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
 
-        attn_layers = self.get_attention_layer_indices()
+        attn_layers = self._resolve_target_attention_layers(target_attention_layer_indices)
         scales = np.asarray(g_attention_scales, dtype=float)
         if scales.ndim != 1 or scales.size != len(attn_layers):
             raise ValueError(
@@ -153,6 +164,8 @@ class Agent:
         prompt: str,
         target_text: str,
         g_attention_scales: np.ndarray | list[float],
+        *,
+        target_attention_layer_indices: list[int] | None = None,
     ) -> dict[str, Any] | None:
         """Score an entire target continuation token-by-token (teacher forcing)."""
         prompt_ids = self.tokenizer.encode(prompt, add_special_tokens=False)
@@ -165,7 +178,7 @@ class Agent:
         all_ids = prompt_ids + target_ids
         input_ids = torch.tensor([all_ids], dtype=torch.long, device=self.device)
 
-        attn_layers = self.get_attention_layer_indices()
+        attn_layers = self._resolve_target_attention_layers(target_attention_layer_indices)
         scales = np.asarray(g_attention_scales, dtype=float)
         if scales.ndim != 1 or scales.size != len(attn_layers):
             raise ValueError(

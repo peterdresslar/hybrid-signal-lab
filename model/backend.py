@@ -1,4 +1,4 @@
-"""ModelBackend ABC — the model-specific contract for hybrid transformer inference."""
+"""ModelBackend ABC — the model-specific contract for attention-scaling inference."""
 
 from __future__ import annotations
 
@@ -120,9 +120,39 @@ class ModelBackend(ABC):
             f"hidden_size={self._model.config.hidden_size}"
         )
 
+    def get_decoder_layers(self) -> Any:
+        """Return the decoder layer collection for common HF causal LM layouts."""
+        candidate_paths = [
+            ("model", "layers"),
+            ("model", "decoder", "layers"),
+            ("transformer", "h"),
+            ("gpt_neox", "layers"),
+        ]
+        for path in candidate_paths:
+            current = self.model
+            for part in path:
+                if not hasattr(current, part):
+                    current = None
+                    break
+                current = getattr(current, part)
+            if current is not None:
+                return current
+        raise RuntimeError(
+            f"Could not locate decoder layers for model '{self.model_name}'. "
+            "Tried common HF paths: model.layers, model.decoder.layers, transformer.h, gpt_neox.layers."
+        )
+
+    def get_layer_attention_module(self, layer: Any) -> torch.nn.Module | None:
+        """Return a layer's attention module when one can be identified."""
+        for attr_name in ("self_attn", "attn", "attention"):
+            module = getattr(layer, attr_name, None)
+            if isinstance(module, torch.nn.Module):
+                return module
+        return None
+
     @abstractmethod
     def get_attention_layer_indices(self) -> list[int]:
-        """Return the layer indices where full attention lives."""
+        """Return the layer indices whose attention contribution is gain-scaled."""
 
     @abstractmethod
     def get_hook_module(self, layer_idx: int) -> torch.nn.Module:

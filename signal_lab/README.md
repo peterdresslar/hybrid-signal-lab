@@ -33,6 +33,7 @@ The main subtrees are:
 - `signal_lab.sweep`: batch runner over cartridges or battery selections
 - `signal_lab.sweep_cartridges`: named gain-profile sweep specs
 - `signal_lab.sweep_analyze`: summarize one sweep run directory
+- `signal_lab.run_analyze`: analyze every model subfolder under a run collection (see below)
 - `signal_lab.sweep_compare`: compare two analyzed run directories
 - `signal_lab.sweep_plot_analyze`: plot one analyzed run
 - `signal_lab.sweep_plot_compare`: plot one pairwise comparison bundle
@@ -133,6 +134,14 @@ uv run -m signal_lab.signal_lab \
 
 Use `signal_lab.sweep` when you want many prompts and/or many gain profiles.
 
+Cartridges now also encode how gain profiles are targeted onto attention layers:
+
+- hybrid-native cartridges such as `kitchen_sink` use each backend's native
+  attention-layer selection
+- control-model cartridges ending in `_all_layers` target every attention layer
+- control-model cartridges ending in `_hybrid_mimic` target every 4th layer to
+  mimic the hybrid cadence on transformer-only models
+
 ### Cartridge-Based Sweep
 
 ```bash
@@ -154,6 +163,23 @@ uv run -m signal_lab.sweep \
   --model-key 35B \
   --device cuda
 ```
+
+### Transformer Control Sweep
+
+```bash
+uv run -m signal_lab.sweep \
+  --cartridge kitchen_sink_all_layers \
+  --run-name qwen25_control \
+  --prompt-battery bench/battery/data/battery_3 \
+  --prompt-types algorithmic \
+  --prompt-tiers short \
+  --model-key Qwen/Qwen2.5-0.5B \
+  --device cuda
+```
+
+For a sparse control run that mimics the hybrid every-4th-layer cadence, swap
+the cartridge to `kitchen_sink_hybrid_mimic` (or the corresponding
+`fine_grain_kitchen_sink_hybrid_mimic` variant).
 
 ### Specific Prompt IDs From A Battery
 
@@ -181,6 +207,13 @@ uv run -m signal_lab.sweep \
 
 Verbose mode adds `verbose.jsonl` with heavier per-run detail.
 
+Useful cartridge families for control-model studies:
+
+- `kitchen_sink_all_layers`
+- `kitchen_sink_hybrid_mimic`
+- `fine_grain_kitchen_sink_all_layers`
+- `fine_grain_kitchen_sink_hybrid_mimic`
+
 ### Sweep Outputs
 
 When you use `--run-name`, the default model run directory is:
@@ -197,11 +230,72 @@ Each model run directory contains:
 - `errors.jsonl`: failures if any occur
 - `verbose.jsonl`: optional detailed output when `--verbose` is enabled
 
+For control sweeps, `_meta.json` also records:
+
+- `attention_targeting`
+- `available_attention_layer_indices`
+- `target_attention_layer_indices`
+
 ## Analyzing A Sweep Run
 
-Use `signal_lab.sweep_analyze` on one sweep output directory.
+Sweeps that used `--run-name` lay out each model under a **collection** directory:
 
-### Example
+- `[DATA_DIR]/outputs/signal_lab/runs/<collection_name>/<model_slug>/`
+
+Example: `runs/fine/35B_20260322_123428/` holds `main.jsonl`, `_meta.json`, and by default analysis lands in `.../35B_.../analysis/`.
+
+### One model (single run directory)
+
+Use `signal_lab.sweep_analyze` on that folder:
+
+```bash
+uv run -m signal_lab.sweep_analyze \
+  --run-dir [DATA_DIR]/outputs/signal_lab/runs/fine/35B_20260322_123428
+```
+
+### Every model in a collection (batch)
+
+Use `signal_lab.run_analyze` with the **parent** of the model folders (the directory that contains `2B_...`, `35B_...`, `OLMO_...`, etc.):
+
+```bash
+uv run -m signal_lab.run_analyze \
+  --input-dir [DATA_DIR]/outputs/signal_lab/runs/fine
+```
+
+By default (when not using `--no-write-files`), `run_analyze` also runs
+`sweep_plot_analyze` on each model’s analysis directory. If two or more models
+are present, it then runs **all pairwise** `sweep_compare` and
+`sweep_plot_compare` steps (for K models that is K*(K-1)/2 pairs). Use
+`--no-compare` to skip only the pairwise comparison and comparison-plot steps;
+per-model plots still run.
+
+Optional: put all analyses under a separate tree (mirrors each model folder name):
+
+```bash
+uv run -m signal_lab.run_analyze \
+  --input-dir [DATA_DIR]/outputs/signal_lab/runs/fine \
+  --output-parent [DATA_DIR]/outputs/signal_lab/analysis_exports/fine
+```
+
+That writes `.../analysis_exports/fine/<model_slug>/analysis/`, and comparisons
+to `.../analysis_exports/fine/_comparisons/<model-a>_vs_<model-b>/` (order
+matches `--run-a` / `--run-b` in `sweep_compare`).
+
+Machine-readable JSON per model when batching:
+
+```bash
+uv run -m signal_lab.run_analyze \
+  --input-dir [DATA_DIR]/outputs/signal_lab/runs/fine \
+  --json-out-dir [DATA_DIR]/outputs/signal_lab/analysis_exports/fine_json
+```
+
+Useful flags: `--data-dir`, `--prefix`, `--no-write-files`, `--no-compare`,
+`--compare-prefix`, `--x-metric` / `--x-metrics`, `--intervention-folders`,
+`--best-interventions-top-n`, `--disagreement-top-n`, `--plot-dpi`, and
+`--dry-run`. For a **single** discovered run, `--json-out` works as in
+`sweep_analyze`.
+
+### Example (single run, classic path)
 
 ```bash
 uv run -m signal_lab.sweep_analyze \

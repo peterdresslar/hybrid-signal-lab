@@ -21,7 +21,13 @@ from signal_lab.paths import (
     get_data_dir,
     render_output_path,
 )
-from signal_lab.sweep_cartridges import get_cartridge, list_cartridges
+from signal_lab.sweep_cartridges import (
+    ATTENTION_TARGETING_ALL_LAYERS,
+    ATTENTION_TARGETING_EVERY_4TH,
+    ATTENTION_TARGETING_NATIVE,
+    get_cartridge,
+    list_cartridges,
+)
 
 TIER_TO_CATALOG = {
     "short": "prompts_short.json",
@@ -41,6 +47,28 @@ def _parse_csv_strings(raw_value: str | None) -> list[str] | None:
         return None
     values = [piece.strip() for piece in raw_value.split(",") if piece.strip()]
     return values or None
+
+
+def resolve_target_attention_layers(
+    available_attention_layers: list[int],
+    attention_targeting: str,
+) -> list[int]:
+    if attention_targeting in {
+        ATTENTION_TARGETING_NATIVE,
+        ATTENTION_TARGETING_ALL_LAYERS,
+    }:
+        selected = list(available_attention_layers)
+    elif attention_targeting == ATTENTION_TARGETING_EVERY_4TH:
+        selected = [layer_idx for layer_idx in available_attention_layers if (layer_idx + 1) % 4 == 0]
+    else:
+        raise ValueError(f"Unknown attention_targeting '{attention_targeting}'.")
+
+    if not selected:
+        raise ValueError(
+            f"attention_targeting='{attention_targeting}' selected no attention layers from "
+            f"{available_attention_layers}."
+        )
+    return selected
 
 
 def _prompts_from_tiers(prompt_tiers: list[str]) -> list[Prompt]:
@@ -155,7 +183,16 @@ def apply_prompt_selection_overrides(
 def main():
     parser = argparse.ArgumentParser(description="Sweep g profiles over different prompts.")
     parser.add_argument("--cartridge", type=str, required=True, choices=list_cartridges(), help="Named cartridge of g profile configurations to sweep.")
-    parser.add_argument("--model-key", type=str, default="0_8B", choices=VALID_MODEL_KEYS, help="Model to use. Defaults to 0_8B.")
+    parser.add_argument(
+        "--model-key",
+        type=str,
+        default="0_8B",
+        help=(
+            "Model selector to use. May be one of the registered keys "
+            f"({', '.join(VALID_MODEL_KEYS)}) or a raw Hugging Face model id "
+            "for a transformer-only control model."
+        ),
+    )
     parser.add_argument("--device", type=str, default=None, help="Device override: auto (default), cuda, mps, or cpu. Also supports COLONY_DEVICE env var.")
     parser.add_argument(
         "--data-dir",
@@ -226,6 +263,7 @@ def main():
     meta_file = out_dir / "_meta.json"
     metadata: dict[str, Any] = {
         "model": agent.backend.model_name,
+        "model_selector": model_key,
         "device": runtime_device,
         "config": agent.backend.config_summary,
     }
@@ -233,11 +271,19 @@ def main():
         json.dump(metadata, f_meta, indent=2)
     print(f"Saved metadata to {meta_file}")
     
-    attn_layers = agent.get_attention_layer_indices()
+    available_attention_layers = agent.get_attention_layer_indices()
+    attention_targeting = cartridge.get("attention_targeting", ATTENTION_TARGETING_NATIVE)
+    target_attention_layers = resolve_target_attention_layers(
+        available_attention_layers,
+        attention_targeting,
+    )
     g_specs = cartridge["g_specs"]
     g_runs: list[dict[str, Any]] = []
     for idx, g_spec in enumerate(g_specs):
-        g_scales = build_attention_scales_from_spec(g_spec, attention_slots=len(attn_layers))
+        g_scales = build_attention_scales_from_spec(
+            g_spec,
+            attention_slots=len(target_attention_layers),
+        )
         g_runs.append(
             {
                 "index": idx,
@@ -245,6 +291,7 @@ def main():
                 "g_spec": g_spec,
                 "g_scales": g_scales,
                 "printable_scales": printable_scales(g_scales),
+                "attention_layer_indices": list(target_attention_layers),
             }
         )
 
@@ -254,12 +301,24 @@ def main():
     metadata["cartridge_description"] = cartridge["description"]
     metadata["model_key"] = model_key
     metadata["run_name"] = args.run_name
-    metadata["attention_layer_indices"] = attn_layers
-    metadata["attention_slot_count"] = len(attn_layers)
+    metadata["attention_targeting"] = attention_targeting
+    metadata["available_attention_layer_indices"] = available_attention_layers
+    metadata["target_attention_layer_indices"] = target_attention_layers
+    metadata["attention_layer_indices"] = target_attention_layers
+    metadata["attention_slot_count"] = len(target_attention_layers)
     metadata["g_specs"] = g_specs
     metadata["prompt_selection"] = {
         key: cartridge[key]
-        for key in ["prompt", "prompt_battery", "prompt_id", "prompt_ids", "prompt_tiers", "prompt_types", "target"]
+        for key in [
+            "prompt",
+            "prompt_battery",
+            "prompt_id",
+            "prompt_ids",
+            "prompt_tiers",
+            "prompt_types",
+            "target",
+            "attention_targeting",
+        ]
         if key in cartridge
     }
     with open(meta_file, "w") as f_meta:
@@ -268,6 +327,7 @@ def main():
     print(f"Will run {len(prompts_to_run)} prompts over {len(g_runs)} g configurations ({args.repetitions} repetitions).")
     total_runs = len(prompts_to_run) * len(g_runs) * args.repetitions
     print(f"Total runs: {total_runs}")
+    attempted_runs = 0
     completed_runs = 0
     sweep_start_time = time.time()
 
@@ -282,10 +342,11 @@ def main():
             try:
                 baseline_result = agent.run_pass(
                     prompt_text,
-                    np.ones(len(attn_layers), dtype=float),
+                    np.ones(len(target_attention_layers), dtype=float),
                     prompt_id=prompt_id,
                     return_raw_logits=True,
                     return_verbose=args.verbose,
+                    target_attention_layer_indices=target_attention_layers,
                 )
                 baseline_logits = baseline_result.pop("_raw_logits")
             except Exception as e:
@@ -306,6 +367,8 @@ def main():
 
             for rep in range(args.repetitions):
                 for g_run in g_runs:
+                    attempted_runs += 1
+                    current_run = attempted_runs
                     g_scales = g_run["g_scales"]
                     printable = g_run["printable_scales"]
                     is_baseline = bool(np.allclose(g_scales, 1.0, atol=1e-4))
@@ -319,6 +382,7 @@ def main():
                                 prompt_id=prompt_id,
                                 baseline_logits=baseline_logits,
                                 return_verbose=args.verbose,
+                                target_attention_layer_indices=target_attention_layers,
                             )
                     except Exception as e:
                         err = {
@@ -332,7 +396,10 @@ def main():
                         }
                         f_err.write(json.dumps(err) + "\n")
                         f_err.flush()
-                        print(f"  [ERROR] Rep {rep+1} g={printable} failed: {e}")
+                        print(
+                            f"  [{current_run} of {total_runs}] [ERROR] "
+                            f"Rep {rep+1} g={printable} failed: {e}"
+                        )
                         continue
 
                     if target_str is not None:
@@ -341,6 +408,7 @@ def main():
                                 prompt_text,
                                 target_str,
                                 g_scales,
+                                target_attention_layer_indices=target_attention_layers,
                             )
                         except Exception as e:
                             err = {
@@ -354,7 +422,10 @@ def main():
                             }
                             f_err.write(json.dumps(err) + "\n")
                             f_err.flush()
-                            print(f"  [ERROR] Rep {rep+1} g={printable} target scoring failed: {e}")
+                            print(
+                                f"  [{current_run} of {total_runs}] [ERROR] "
+                                f"Rep {rep+1} g={printable} target scoring failed: {e}"
+                            )
                             continue
 
                         if target_metrics is not None:
@@ -371,6 +442,8 @@ def main():
                         "g_function": g_run["g_spec"].get("g_function"),
                         "g_spec": g_run["g_spec"],
                         "g_attention_scales": res["g_attention_scales"],
+                        "attention_targeting": attention_targeting,
+                        "attention_layer_indices": res["attention_layer_indices"],
                         "rep": res["rep"],
                         "target_text": res.get("target_text"),
                         "target_num_tokens": res.get("target_num_tokens"),
@@ -395,7 +468,8 @@ def main():
                         f_verb.flush()
 
                     print(
-                        f"  [Rep {rep+1}] g_profile={g_run['name']} scales={printable} | "
+                        f"  [{current_run} of {total_runs}] [Rep {rep+1}] "
+                        f"g_profile={g_run['name']} scales={printable} | "
                         f"Time: {res['elapsed_time']:.2f}s | Final Ent: {res['final_entropy_bits']:.2f} bits | "
                         f"Target Rank: {res.get('target_rank')} | "
                         f"Target p(tok): "
