@@ -174,6 +174,32 @@ CARTRIDGES = {
         "prompt_tiers": ["short", "brief", "med", "long"],
         "model_key": "0_8B",
     },
+    "uniform_type_smoke": {
+        "description": "One representative prompt from each battery_3 prompt type across five balanced uniform gain levels.",
+        "g_specs": [
+            _constant(0.5),
+            _constant(0.75),
+            _constant(1.0, name="baseline"),
+            _constant(1.25),
+            _constant(1.5),
+        ],
+        "attention_targeting": ATTENTION_TARGETING_NATIVE,
+        "prompt_battery": "battery/data/battery_3",
+        "prompt_ids": [
+            "sc_gen_alpha_seq_0000",        # structural_copying
+            "rn_gen_0000",                  # reasoning_numerical
+            "rt_gen_0000",                  # reasoning_tracking
+            "alg_gen_arithmetic_0000",      # algorithmic
+            "sp_gen_agreement_0000",        # syntactic_pattern
+            "lr_gen_0000",                  # long_range_retrieval
+            "dk_gen-wikipedia-random_0001", # domain_knowledge
+            "cc_gen_0000",                  # code_comprehension
+            "fr_counterfact_0000",          # factual_recall
+            "fret_counterfact_0000",        # factual_retrieval
+            "cm_lambada_0000",              # cultural_memorized
+        ],
+        "model_key": "0_8B",
+    },
     "middle_bump_lite": {
         "description": "Middle-depth influence probe via normalized-depth control points.",
         "g_specs": [
