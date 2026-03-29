@@ -65,7 +65,11 @@ def resolve_max_memory() -> dict[str, str] | None:
         ) from exc
     if not isinstance(parsed, dict):
         raise ValueError("HSL_MAX_MEMORY_JSON must decode to a JSON object.")
-    return parsed
+    normalized: dict[Any, str] = {}
+    for key, value in parsed.items():
+        normalized_key: Any = int(key) if isinstance(key, str) and key.isdigit() else key
+        normalized[normalized_key] = value
+    return normalized
 
 
 def attention_scaler_hook(scale: float):

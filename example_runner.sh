@@ -13,7 +13,7 @@ export XDG_CACHE_HOME=/workspace/.cache
 
 # === uncomment these for cluster run ===
 export HSL_DEVICE_MAP=balanced
-export HSL_MAX_MEMORY_JSON='{0:"80GiB",1:"80GiB",2:"80GiB",3:"80GiB",4:"80GiB",5:"80GiB",6:"80GiB",7:"80GiB",cpu:"1000GiB"}'
+export HSL_MAX_MEMORY_JSON='{"0":"80GiB","1":"80GiB","2":"80GiB","3":"80GiB","4":"80GiB","5":"80GiB","6":"80GiB","cpu":"1000GiB"}'
 
  uv run -m signal_lab.sweep \
   --cartridge uniform_check \
