@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 from abc import ABC, abstractmethod
 from typing import Any
@@ -17,6 +18,54 @@ def resolve_hf_token() -> str | None:
         if value:
             return value
     return None
+
+
+def resolve_device_map(default_device_map: str) -> Any:
+    """Resolve a HF device_map override from environment.
+
+    - HSL_DEVICE_MAP unset: use ``default_device_map``.
+    - HSL_DEVICE_MAP='balanced' (or any HF string strategy): pass through.
+    - HSL_DEVICE_MAP='{"model.layers.0":"cuda:0", ...}': parsed as JSON dict.
+    """
+    raw_value = os.getenv("HSL_DEVICE_MAP")
+    if not raw_value:
+        return default_device_map
+
+    value = raw_value.strip()
+    if not value:
+        return default_device_map
+
+    if value.startswith("{"):
+        try:
+            parsed = json.loads(value)
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                "Invalid HSL_DEVICE_MAP JSON. "
+                "Expected a HF device_map strategy string (e.g. 'balanced') "
+                "or a JSON object."
+            ) from exc
+        if not isinstance(parsed, dict):
+            raise ValueError("HSL_DEVICE_MAP JSON must decode to an object.")
+        return parsed
+
+    return value
+
+
+def resolve_max_memory() -> dict[str, str] | None:
+    """Resolve optional HF max_memory mapping from environment JSON."""
+    raw_value = os.getenv("HSL_MAX_MEMORY_JSON")
+    if not raw_value:
+        return None
+    try:
+        parsed = json.loads(raw_value)
+    except json.JSONDecodeError as exc:
+        raise ValueError(
+            "Invalid HSL_MAX_MEMORY_JSON. Expected a JSON object, e.g. "
+            '\'{"0":"70GiB","1":"70GiB","cpu":"512GiB"}\'.'
+        ) from exc
+    if not isinstance(parsed, dict):
+        raise ValueError("HSL_MAX_MEMORY_JSON must decode to a JSON object.")
+    return parsed
 
 
 def attention_scaler_hook(scale: float):
@@ -91,20 +140,32 @@ class ModelBackend(ABC):
                 "If model download fails, set one of these env vars."
             )
 
+        device_map = resolve_device_map(device)
+        max_memory = resolve_max_memory()
+
         print(f"Loading {self._model_name}...")
+        print(f"HF device_map: {device_map}")
+        if max_memory is not None:
+            print("HF max_memory: set via HSL_MAX_MEMORY_JSON")
         try:
             self._tokenizer = AutoTokenizer.from_pretrained(
                 self._model_name,
                 token=hf_token,
             )
+            model_kwargs: dict[str, Any] = {
+                "token": hf_token,
+                "dtype": torch.float16,
+                "device_map": device_map,
+                "attn_implementation": "eager",
+                "output_hidden_states": True,
+                "output_attentions": True,
+                "low_cpu_mem_usage": True,
+            }
+            if max_memory is not None:
+                model_kwargs["max_memory"] = max_memory
             self._model = AutoModelForCausalLM.from_pretrained(
                 self._model_name,
-                token=hf_token,
-                dtype=torch.float16,
-                device_map=device,
-                attn_implementation="eager",
-                output_hidden_states=True,
-                output_attentions=True,
+                **model_kwargs,
             )
         except Exception as exc:
             if not hf_token:
