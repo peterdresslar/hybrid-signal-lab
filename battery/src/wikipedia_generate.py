@@ -205,15 +205,18 @@ GENERATION_SYSTEM_PROMPT = """You are generating a cloze-style prompt for a lang
 You will receive the text of a Wikipedia article. Your task:
 
 1. Write a passage that draws ONLY on facts stated in the article. Do not add information from your own knowledge.
-2. LENGTH IS IMPORTANT. Your passage length should match the richness of the source article:
+2. LENGTH IS IMPORTANT. Default to LONG, information-dense passages whenever the article provides enough material.
    - If the article is a stub or very short: write 2-4 sentences (50-80 words). This is the MINIMUM acceptable length.
-   - If the article has moderate detail: write a substantial paragraph (100-200 words).
-   - If the article is rich and detailed: write a multi-paragraph mini-essay (200-500 words) that builds context progressively, establishing the domain, historical background, technical details, and specific facts before arriving at the target. These long passages are the MOST VALUABLE outputs.
-   - When in doubt, write LONGER. A 300-word passage grounded in a rich article is much more useful than an 80-word summary of the same article.
-3. The final clause must be an incomplete sentence whose completion is a single key term, name, or short phrase from the article.
-4. Prefer targets that are domain-specific vocabulary, technical terms, or classifications rather than extremely obscure proper nouns. Proper nouns are acceptable when they are the natural focal point of the article.
-5. The target should be determinable from the passage content — a knowledgeable reader should be able to infer the answer.
-6. Do NOT reveal the target word/phrase anywhere earlier in the passage.
+   - If the article has moderate detail: write at least 150-250 words.
+   - If the article is rich and detailed: write a multi-paragraph mini-essay of roughly 350-700 words.
+   - For rich articles, passages above 500 tokens are especially valuable and should be treated as the preferred outcome, not an edge case.
+   - Do not compress a rich article into a short summary. Use the available detail.
+3. Build the passage progressively. Start with broad framing, then add historical, scientific, technical, classificatory, or contextual details from the article, and only then arrive at the final cloze sentence.
+4. The final clause must be an incomplete sentence whose completion is a single key term, name, or short phrase from the article.
+5. Prefer targets that are domain-specific vocabulary, technical terms, or classifications rather than extremely obscure proper nouns. Proper nouns are acceptable when they are the natural focal point of the article.
+6. The target should be determinable from the passage content — a knowledgeable reader should be able to infer the answer.
+7. Do NOT reveal the target word/phrase anywhere earlier in the passage.
+8. Do not stop after one paragraph if the article clearly supports more context. Rich articles should usually yield multiple paragraphs.
 
 Output ONLY a JSON object with exactly two keys:
   "prompt": the passage text ending mid-sentence (no trailing space)

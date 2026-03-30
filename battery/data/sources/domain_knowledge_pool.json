@@ -936,5 +936,236 @@
     "source": "gen-wikipedia-random-battery4",
     "approx_tokens": 222,
     "word_count": 171
+  },
+  {
+    "prompt": "In the complex hierarchy of Chinese mythology and Taoism, certain celestial figures serve as protectors of the cosmic order and commanders of vast spiritual armies. One such deity is Marshal Tianpeng, a formidable general associated with the North Pole and the Big Dipper constellation. According to the Ming dynasty text *Daofa Huiyuan*, this marshal was originally a historical figure from the time of Confucius named Bian Zhuang, who was celebrated for his immense bravery and his reputation as a heroic slayer of tigers. Within the Taoist pantheon, he is classified as one of the Four Saints of the North Pole, serving alongside other powerful entities such as the Protective Sage Yisheng and the Great Emperor Zhenwu. In his divine form, he is often depicted with three heads and six arms, wielding a variety of ritual implements and weapons while commanding a force of 36 celestial armies. Despite his high standing in Taoist ritual and his role as an exorcist of evil spirits during the Tang and Song dynasties, his most enduring legacy in popular culture is his transition from a commander of 80,000 naval troops to a fallen deity. In the classic novel *Journey to the West*, his hubris and misconduct toward the Moon Goddess lead to his banishment from the heavens and a botched reincarnation. This event transforms the once-mighty celestial marshal into the gluttonous and half-human disciple of Tang Sanzang known as",
+    "target": " Zhu Bajie",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 304,
+    "word_count": 234
+  },
+  {
+    "prompt": "Located in the Streeterville neighborhood of Chicago, the 900\u2013910 North Lake Shore apartments represent a significant evolution in the modernist high-rise designs of Ludwig Mies van der Rohe. Developed by Herbert Greenwald, who had previously collaborated with Mies on the Promontory Apartments and the 860\u2013880 Lake Shore Drive project, these buildings were characterized by their strict adherence to a 21-foot grid and a minimalist aesthetic that critics of the time occasionally labeled as too sparse. A major technical achievement of this project was the refinement of the building's exterior. While earlier projects had experimented with similar concepts, 900\u2013910 was the first to successfully implement an autonomous aluminum and glass skin that functioned as a separate, continuous element from the structural skeleton. This innovative design feature, which Mies would go on to reproduce in all his subsequent high-rise works, is known as the",
+    "target": " curtain wall",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 184,
+    "word_count": 142
+  },
+  {
+    "prompt": "Established under Article 237 of the Constitution of Kenya, the Teachers Service Commission (TSC) serves as an independent government body headquartered in Nairobi. The commission is tasked with a wide range of human resource functions essential to the nation's education sector, including the registration of trained educators, the recruitment and employment of staff, and the management of promotions, transfers, and disciplinary actions. Beyond administrative oversight, the TSC is responsible for reviewing educational standards for new entrants and advising the national government on the teaching profession. To support its workforce, the commission provides various financial supplements, such as hardship allowances for those in challenging locations and responsibility allowances for those in administrative roles. To modernize its services, the commission launched a digital portal that allows employees to manage their financial records and view updates. This specific online service is known as",
+    "target": " T-Pay",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 182,
+    "word_count": 140
+  },
+  {
+    "prompt": "Founded in Waverly, Iowa, in 1879, Wartburg College began as a normal school dedicated to the training of men for service in Lutheran parochial schools. The institution's oldest surviving physical legacy is a three-story brick building constructed just one year after the school's relocation to the area. This structure is historically significant as the first building in the state of Iowa associated with German Lutheran higher education. Architecturally, the building is a five-bay by four-bay structure designed in the vernacular Italianate style. It features distinctive decorative elements such as a denticular cornice, a paneled frieze, cast-iron window sills, and white-painted corbelled brick window hoods. Originally, the building was highly multifunctional, serving as the entire campus under one roof; the basement housed dining and kitchen facilities, the first floor provided living quarters for the two teachers, and the attic served as a dormitory. Because of its historical role in training educators for the church, the building was added to the National Register of Historic Places in 1978 under the name of the",
+    "target": " Wartburg Teachers' Seminary",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 222,
+    "word_count": 171
+  },
+  {
+    "prompt": "Originating from South Africa, the genus Agapanthus was introduced to New Zealand and eventually became a ubiquitous feature of the local landscape. The plant's popularity surged in the early twentieth century, largely driven by troops returning from the Second Boer War who admired the species in its native range. Due to its extreme hardiness, salt-tolerance, and minimal maintenance requirements, it became a staple of home gardens, often used to frame driveways or line fences. These characteristics also made the plant particularly favored for landscaping at traditional New Zealand holiday homes, commonly referred to as",
+    "target": " baches",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 122,
+    "word_count": 94
+  },
+  {
+    "prompt": "Historically, the United States relied heavily on state militias rather than a large standing army, but the variable readiness of these units led to significant legislative reforms in the early 20th century. The Militia Act of 1903 was a pivotal moment in this evolution, requiring states to bifurcate their militia forces into two distinct sections. While the first section was intended for federal administration and eventually became the modern National Guard, the law recommended that the remaining portion of the state-controlled forces be referred to as the",
+    "target": " Reserve Militia",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 113,
+    "word_count": 87
+  },
+  {
+    "prompt": "Native to a broad range of Asian countries including India, Thailand, and Indonesia, Calotropis gigantea is a large shrub characterized by its milky latex and waxy flowers. The plant's morphology is distinct; its flowers feature a central structure resembling a crown and exhibit a specific type of aestivation where the petals or sepals touch at the margins without overlapping. Beyond its botanical interest, the plant holds significant cultural value, being used in Thai floral arrangements, Cambodian funerals, and as a sacred offering to Lord Shiva in Hindu tradition. Economically, it provides a durable fiber known as 'bowstring of India' and its latex is utilized in the traditional tanning process to create leather. Biologically, the plant is a host for monarch butterflies and utilizes a specialized pollination system involving bees. In this process, the stigma and androecium are fused into a single unit known as a",
+    "target": " gynostegium",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 188,
+    "word_count": 145
+  },
+  {
+    "prompt": "The People's Liberation Army (PLA) occupies a unique constitutional and political position within the Chinese state, functioning not as a traditional national military but as the armed wing of the Chinese Communist Party (CCP). This relationship is characterized by the party's absolute control over the armed forces, a principle that ensures the military serves as the guarantor of the party's survival and rule. Historically, the PLA's roots trace back to the Chinese Workers' and Peasants' Red Army, which was formed following the 1927 Nanchang uprising. During the Second Sino-Japanese War, these communist forces were nominally integrated into the National Revolutionary Army as the Eighth Route Army and the New Fourth Army before being formally reconstituted under their current name in 1947. To maintain this party-led structure, the military operates under the leadership of a specific body whose chairman serves as the commander-in-chief and is typically the CCP general secretary. While the Ministry of National Defense handles external relations and state-level interfaces, it possesses no actual command authority. Instead, supreme military command and the power to direct the four services and four arms of the military are exercised by the",
+    "target": " Central Military Commission",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 245,
+    "word_count": 189
+  },
+  {
+    "prompt": "Located in the Raso da Catarina region of Bahia, Brazil, the Cocorob\u00f3 Dam serves as a critical water resource within the arid caatinga environment. Managed by the Departamento Nacional de Obras Contras as Secas (DNOCS), the dam was designed to provide irrigation for 460 hectares, control seasonal flooding, and supply water to the town of Nova Canudos. The physical structure is a fan-shaped earth dam featuring a sand-clay core, reaching a maximum height of 33.5 meters and a length of 643 meters. Its spillway and water intake systems are engineered to manage the flow of the Vaza-Barris River, which drains a watershed of approximately 3,600 square kilometers. Beyond its technical and agricultural functions, the dam carries significant historical weight. The reservoir created by the dam intentionally submerged the ruins of a city that was the site of a bloody conflict between 1896 and 1897. While the nearby Canudos State Park was established in 1986 to preserve the memory of the martyrs who fought there, the construction of the dam itself is often viewed as a deliberate effort to erase the physical remnants of a popular revolt suppressed by the republican army known as the",
+    "target": " War of Canudos",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 252,
+    "word_count": 194
+  },
+  {
+    "prompt": "Commissioned in the 1470s by a prominent Italian banker serving the Medici family in Bruges, the Portinari Altarpiece stands as a monumental achievement of Flemish oil painting. The work was originally destined for the church of the hospital of Santa Maria Nuova in Florence, a charitable institution founded by the patron's ancestor. While the side panels feature the donor's family alongside their patron saints\u2014including Saint Thomas, Saint Margaret, and Mary Magdalen\u2014the central panel focuses on a realistic and rustic depiction of the Adoration of the Shepherds. The exterior of the triptych follows a common Northern European tradition of the period, presenting the Annunciation in a monochromatic style intended to imitate the appearance of stone sculpture, a technique known as",
+    "target": " grisaille",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 154,
+    "word_count": 119
+  },
+  {
+    "prompt": "The development of the Valiant-class submarine represented a significant milestone for the Royal Navy, marking the transition to the first fully British nuclear-powered fleet submarines. While the preceding HMS Dreadnought had paved the way for nuclear propulsion in the United Kingdom, it relied heavily on an American-designed reactor. The Valiant class, built by Vickers at Barrow-in-Furness, expanded upon this foundation by enlarging the hull by 20 feet and increasing the dived displacement to 4,900 tons. These vessels were primarily utilized in anti-submarine warfare roles during the Cold War and demonstrated their endurance in 1967 when the lead ship set a record by traveling 12,000 miles submerged while returning from Singapore. Beyond their operational achievements, the design of the class introduced critical technological advancements in acoustic stealth. One of the most notable features was a specialized system designed to isolate the ship's machinery from the hull to minimize noise. Despite initial skepticism from US Admiral Hyman G. Rickover regarding this innovation, the Royal Navy successfully implemented this noise-reduction technology known as a",
+    "target": " rafting system",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 222,
+    "word_count": 171
+  },
+  {
+    "prompt": "The little spinefoot is a marine ray-finned fish found throughout the Indo-Pacific, from the coasts of India to the Tuamotu Islands and Japan. First described by Carl Linnaeus in 1758, the species is characterized by a laterally compressed, slender body covered in a labyrinthine pattern of thin brown markings. Like other members of its family, this fish possesses thirteen spines in its dorsal fin and seven in its anal fin, all of which contain venom glands. While adults are typically found in shallow coral reef flats or occasionally in rivers, the juveniles tend to aggregate in larger groups around corals with algae at their bases. As they mature, their diet transitions from fine filamentous algae to coarser varieties, though they remain diurnal feeders throughout their life cycle. Because of the specific arrangement and nature of its fin structure, this species belongs to the family",
+    "target": " Siganidae",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 187,
+    "word_count": 144
+  },
+  {
+    "prompt": "Beginning in August 2010, central Arkansas experienced a significant period of seismic activity characterized by a linear distribution of epicenters that gradually shifted toward the southwest. The most intense event during this period reached a moment magnitude of 4.7 in early 2011. While initial public concerns focused on the relatively shallow drilling activities used for the exploration and production of natural gas within the regional Fayetteville Shale, scientific analysis found no direct link to those specific operations. Instead, researchers identified a correlation between the seismic events and deep-well activity used for the management of fluid byproducts. This specific type of environmental and industrial interaction, which mirrored historical precedents such as those at the Rocky Mountain Arsenal in the 1960s, is known as",
+    "target": " deep waste disposal drilling",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 158,
+    "word_count": 122
+  },
+  {
+    "prompt": "Starch derivatives, commonly known as modified starches, are functional ingredients created by altering native starch through physical, enzymatic, or chemical processes. These modifications are essential for industrial applications where native starch might fail, such as in environments involving high heat, acid, or intense shear. By tailoring the molecular structure, manufacturers can adjust the starch's viscosity, gelatinization time, and stability during freezing. Various chemical treatments result in specific functional properties; for instance, the addition of propylene oxide creates a starch ether that improves viscosity stability, while treatment with sodium hypochlorite produces a variant used to increase the stickiness of batters. In the pharmaceutical sector, these substances are utilized as excipients or to help tablets break apart upon ingestion. When used in this capacity to ensure a tablet dissolves properly, the modified starch serves as a",
+    "target": " disintegrant",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 174,
+    "word_count": 134
+  },
+  {
+    "prompt": "The Humane Slaughter Association (HSA) traces its origins back to the Council of Justice to Animals, founded in 1911 by Netta Ivory and Nancy Price. In its early years, the organization focused on replacing the poleaxe, which it characterized as a cruel weapon, with more reliable methods like the RSPCA Humane Killer. A significant figure in this movement was Violet Wood, who performed demonstrations across Europe to prove that livestock could be dispatched more humanely using a pistol. By the 1920s, the HSA had introduced a mechanical stunner that was adopted by hundreds of local authorities and eventually influenced major legislation, including the Slaughter of Animals Act 1933. Today, the charity continues to fund scientific research and technical development, offering various grants and scholarships to students. Specifically, to support trainees or students in the industry conducting projects to improve animal welfare during transport or at market, the HSA awards the",
+    "target": " Dorothy Sidley Scholarships",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 195,
+    "word_count": 150
+  },
+  {
+    "prompt": "Belonging to the family Viperidae, the species Pseudocerastes fieldi is a venomous snake native to the arid desert and shrubland habitats of the Middle East, including regions within the Sinai Peninsula, Israel, Jordan, and Iraq. Named in honor of anthropologist Henry Field, the snake was historically classified as a subspecies of the Persian horned viper, Pseudocerastes persicus. However, phylogenetic studies and morphological analysis have led researchers to elevate it to a full species. While they share physical similarities, such as the characteristic horn-like scales above the eyes, they can be distinguished by specific scale counts and the texture of their lateral scales. Beyond these physical traits, a critical distinction exists in the physiological impact of their bites. Most vipers, including the Persian horned viper, possess venom that primarily causes hemorrhaging. In contrast, the venom of Field's horned viper is distinct and particularly dangerous because it contains fractions that exhibit potent",
+    "target": " neurotoxic activity",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 195,
+    "word_count": 150
+  },
+  {
+    "prompt": "Founded originally in 1985 as Financial Data Systems, Inc., the firm that would eventually become a major global exchange-traded fund sponsor underwent several transformations. After a period as a financial media company publishing titles like Individual Investor, the organization pivoted toward developing fundamentally weighted index methodologies. This strategic shift culminated in the June 2006 launch of its first family of ETFs, which utilized a specific weighting strategy influenced by the research of Professor Jeremy Siegel. Siegel's work suggested that long-term performance could be optimized with lower risk by focusing on companies that distributed earnings to shareholders. Consequently, WisdomTree distinguished itself in the market by launching its first family of",
+    "target": " dividend weighted ETFs",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 141,
+    "word_count": 109
+  },
+  {
+    "prompt": "Published in 1997 by Fitzroy Dearborn, the Encyclopedia of Indo-European Culture (EIEC) serves as a comprehensive reference work focused on the Proto-Indo-Europeans and the broader field of Indo-European studies. The editorial leadership of the project was divided between two primary scholars who managed different disciplinary perspectives: J. P. Mallory was responsible for the archaeological entries, while the linguistic articles were authored by Douglas Q. Adams. In addition to these primary editors, the work featured a substantial list of sub-editors representing a notable collection of 1990s Indo-Europeanists. While the encyclopedia is not presented as a polemic, its content provides a degree of support for a specific model of origins that challenges the more traditional steppe-based theories. This model, which suggests a different geographic starting point and timeframe for the dispersal of these languages, is known as the",
+    "target": " Anatolian hypothesis",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 176,
+    "word_count": 136
+  },
+  {
+    "prompt": "Constructed in 1872 by Knut Johannesson Skaale in Rosendal, Norway, the vessel that would eventually achieve polar fame began its life as a modest 70-foot square-sterned sloop used for herring fishing. In 1901, the ship was purchased by Roald Amundsen, who sought a small, shallow-draught vessel capable of navigating the treacherous shoals of the Arctic Archipelago while supporting a minimal crew. After a refit that included the installation of a small paraffin motor and reinforced ice sheathing, the ship departed from the Oslofjord in 1903. Over the course of a three-year journey, the crew conducted vital magnetic pole research while wintering at King William Island and Herschel Island. This historic expedition concluded in 1906, marking the first time a single vessel successfully completed a transit of the",
+    "target": " Northwest Passage",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 165,
+    "word_count": 127
+  },
+  {
+    "prompt": "Rooted in the late 19th-century theories of Daniel David Palmer, the practice of spinal adjustment serves as a cornerstone of chiropractic care. While practitioners often claim benefits ranging from temporary palliative relief to long-term wellness, systematic reviews have struggled to find convincing evidence of its efficacy for medical conditions. Central to the philosophy of this practice is the correction of a joint's alignment or function, specifically targeting a functional entity that chiropractors refer to as a 'subluxation.' The World Health Organization defines this as a lesion where joint contact remains intact but physiological function is altered, distinguishing it from the structural displacement recognized in traditional medicine. To address these issues, practitioners utilize various methods such as the 'Toggle Drop,' the 'Lumbar Roll,' or instrument-assisted techniques. Regardless of the specific method, the most common clinical application involves a manual force characterized by its speed and depth, a technique technically abbreviated as",
+    "target": " HVLA",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 195,
+    "word_count": 150
+  },
+  {
+    "prompt": "The plant species known as Dirichletia virgata, which is also identified by the synonym Placopoda virgata, is a member of the diverse Rubiaceae family. This shrub is not found globally but is instead restricted to a specific geographical range, being endemic to the islands of Socotra and Samhah. Within this unique environment, it occupies a variety of ecological niches ranging from 10 to 600 metres in elevation. It is commonly observed in low-elevation habitats such as coastal plains, dry foothills, and limestone plateaus. The species thrives in specific botanical communities, notably the drought-deciduous woodlands and the shrublands dominated by the species Croton socotranus. Politically, the natural distribution of this plant is confined to the territory of the",
+    "target": " Socotra Archipelago",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 152,
+    "word_count": 117
+  },
+  {
+    "prompt": "Founded in Paris on November 6, 2011, the European Federalist Party (EFP) emerged from the reunification of the French Parti f\u00e9d\u00e9raliste and a multi-country organization established in 2005 known as Europe United. Unlike many other political groups active in the region, the EFP distinguishes itself by being a direct organization of individual members from civil society across twelve countries rather than a mere coalition of pre-existing national parties. Its core mission is the transformation of the European Union into a supranational state, characterized by a bicameral legislative system and a president elected by direct universal suffrage. While a 2016 merger involving the movements USE Now and Stand-up for the United States of Europe led to the creation of a new entity, several national associations chose to maintain their original identity and political action. The party's platform advocates for a federal constitution, a common European army, and the elevation of the European Court of Justice into a body functioning as a true",
+    "target": " Supreme Court",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 209,
+    "word_count": 161
+  },
+  {
+    "prompt": "The LGBTQ tourism market is a significant economic force, with the Gay European Tourism Association estimating its annual value at \u20ac50 billion in Europe, while spending in the United States alone reaches approximately $65 billion. Major corporations have increasingly recognized the profitability of this niche, seeking to capture the community's substantial purchasing power. This specific economic influence, driven by the spending of LGBTQ consumers and targeted by specialized marketing campaigns, is colloquially referred to as",
+    "target": " pink money",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 97,
+    "word_count": 75
+  },
+  {
+    "prompt": "In the study of language and neurological conditions, researchers distinguish between various forms of vocal repetition based on their origin and timing. While the repetition of one's own words is known as palilalia, the involuntary repetition of vocalizations made by another person is a separate phenomenon. This behavior is considered a subset of imitative behavior and is often categorized alongside the automatic imitation of movements. Depending on the delay between the stimulus and the response, it can be classified as immediate or delayed. For instance, immediate repetition might involve a child echoing a question back to a parent, whereas a delayed version could involve repeating phrases hours or even years later. Furthermore, when an individual alters the syntax or pronouns of the original stimulus during repetition, the behavior is specifically referred to as",
+    "target": " mitigated echolalia",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 172,
+    "word_count": 133
+  },
+  {
+    "prompt": "Deeply rooted in the regional identity of South East England, the county of Sussex possesses a distinct dialect and a history of independence. This spirit is perhaps best exemplified by a local maxim that asserts the autonomy and stubbornness of its people, suggesting they have minds of their own and cannot be forced against their will. Historically, this defiant attitude is linked to the Weald, a region where commoners enjoyed more freedom from manorial control and participated in significant uprisings like the Peasants' Revolt of 1381 and Jack Cade's rebellion in 1450. The sentiment was recorded in 19th-century dialect dictionaries and popularized in early 20th-century literature by authors such as E. V. Lucas and W. Victor Cook. It even found a Latin translation, *Non cogemur*, used by the organization known as The Men of Sussex. This cultural insistence on self-determination is frequently associated with the pig, an animal respected locally for its independent nature, and the phrase is often featured on earthenware flasks shaped like the animal. While the standard English interpretation is \"we will not be driven,\" the traditional Sussex dialect motto is",
+    "target": " We wunt be druv",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 239,
+    "word_count": 184
+  },
+  {
+    "prompt": "The Republic of Indonesia faces significant economic and environmental challenges due to overfishing, overcapacity, and the marginalization of local fishermen. To address these issues and protect national pride, the government established a specialized agency on November 23, 2000, via Presidential Decree No. 165/2000. Operating as an Echelon I Unit under the Ministry of Marine Affairs and Fisheries, this agency is tasked with developing policies, managing supervisory vessels, and handling criminal acts related to marine resources. Its legal authority is derived from several domestic laws and international conventions, including UNCLOS and the FAO Compliance Agreement. The organization is structured into several directorates, including those focused on fleet monitoring, marine offence management, and fisheries management supervision. To combat activities that threaten the sustainability of fish stocks, the agency focuses specifically on the prevention of illegal, unreported and",
+    "target": " unregulated fishing",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 175,
+    "word_count": 135
+  },
+  {
+    "prompt": "Lawn mower racing emerged as an accessible alternative to expensive motorsports, defined by the use of modified garden machinery with the cutting blades removed for safety. In the United Kingdom, the sport's formal organization was spearheaded by Jim Gavin, who founded the British Lawn Mower Racing Association in 1973 after a discussion at a pub in Wisborough Green. The sport classifies vehicles into different groups based on their design; for instance, Group 2 consists of cylinder mowers with towed seats, while ride-on mowers and lawn tractors fall into Groups 3 and 4. While the sport is popular globally, one of its most prestigious endurance events is a 12-hour race that has featured legendary drivers like Sir Stirling Moss and Derek Bell. Across the Atlantic, the United States has its own rich history of the sport, including the Twelve Mile 500 in Indiana and events in North Carolina that mirror the dirt-track origins of stock car racing. In 1992, the U.S. Lawn Mower Racing Association was established as a national sanctioning body by the manufacturers of a petrol stabilizer known as",
+    "target": " Sta-bil",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 234,
+    "word_count": 180
+  },
+  {
+    "prompt": "Oscar Wilde's final drawing-room play, first performed in 1895, is a farcical comedy that explores themes of social obligation and dual identities through the protagonists Jack Worthing and Algernon Moncrieff. While Jack pretends to have a wastrel brother in London to escape his country responsibilities, Algernon employs a similar deception by inventing a fictional, perpetually ill friend whom he frequently visits to avoid tedious social engagements. This practice of maintaining a convenient alter ego or excuse to escape one's duties is referred to in the play as",
+    "target": " Bunburying",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 113,
+    "word_count": 87
+  },
+  {
+    "prompt": "Within the field of carbohydrate chemistry, cyclic oligosaccharides are valued for their lack of a reducing end and their unique structural geometries. While the most well-known members of this category are the cyclodextrins, which are characterized specifically by \u03b1-1,4-linked glucose units, researchers in 1993 identified a distinct class of cyclic products during the study of bacterial cultures. These molecules, which can be found in trace amounts in brown sugar, are primarily synthesized through the enzymatic action of cycloisomaltooligosaccharide glucanotransferase (CITase) on dextran or similar glucans. Unlike their \u03b1-1,4-linked counterparts, these non-reducing carbohydrates are composed of glucose units connected primarily by \u03b1-1,6 glycosidic bonds. This specific linkage pattern and cyclic structure define the molecule known as",
+    "target": " cyclodextran",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 149,
+    "word_count": 115
+  },
+  {
+    "prompt": "The rapid adoption of plug-in electric vehicles has brought increased attention to the safety of their high-energy traction batteries. While these vehicles experience fires less frequently per-unit than internal combustion engine cars, the specific chemistry of lithium-ion cells presents unique challenges. Regulatory bodies like the National Highway Traffic Safety Administration (NHTSA) have investigated various risks, including underbody debris strikes and the impact of salt water immersion following natural disasters like Hurricane Ian. On a global scale, safety standards are being developed through the World Forum for Harmonization of Vehicle Regulations. Within this framework, an Informal Working Group on Electric Vehicle Safety divided its research into two phases, establishing nine specialized task forces to address different technical concerns. According to reports from late 2024, field data indicates that the single most important safety issue currently being addressed in Phase 2 is",
+    "target": " thermal propagation",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 182,
+    "word_count": 140
+  },
+  {
+    "prompt": "Within the diverse ecosystem of the Caribbean Sea, certain echinoderms exhibit specialized physical adaptations and behaviors suited for life on sandy seabeds and seagrass meadows. One such organism is a robust, soft-bodied species that can reach lengths of up to 40 centimeters and is characterized by a dark grey or chocolate brown coloration. Its entire body is covered in hundreds of tube feet, with those on the upper surface extending into fleshy, conical projections known as papillae. While many related organisms are slow-moving, this particular animal is remarkably agile, capable of covering nearly two meters in a single minute through crawling, rolling, or a distinctive \"bounding\" motion. As a nocturnal scavenger and detritivore, it remains buried in the sediment during the day to avoid detection. Although it is currently classified as a species of Least Concern by the IUCN, it face potential threats from future commercial exploitation as other regional stocks are depleted. Known colloquially as the furry or fissured sea cucumber, this monotypic genus is scientifically identified as",
+    "target": " Astichopus",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 219,
+    "word_count": 169
+  },
+  {
+    "prompt": "Endemic to the Northern Territory of Australia, *Nasutitermes triodiae* is a species of termite renowned for constructing some of the most impressive biological structures in the animal kingdom. Often referred to by names reflecting their habitat or architectural prowess, these insects thrive in arid grasslands where they feed primarily on both living and dead plant matter. Their massive mounds, which can exceed 15 feet in height, are composed of a durable mixture of mud, saliva, feces, and plant fragments. These structures are not merely shelters but sophisticated climate-controlled environments; they utilize hollow columns to facilitate an internal air-conditioning system that draws cooler air from the base to the top, protecting the colony from extreme external temperatures. Beyond their architectural skills, these termites possess a specialized soldier caste equipped with a distinct anatomical feature used for defense. These soldiers have a dark brown head characterized by an elongated, tubular snout. When the nest is threatened, they use this specialized appendage to spray a sticky, irritating chemical cocktail of monoterpenes, sesquiterpenes, and diterpenes to repel predators. This horn-like projection, which serves as the primary tool for chemical warfare, is known as a",
+    "target": " nasus",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 247,
+    "word_count": 190
+  },
+  {
+    "prompt": "The genus Megaphragma, part of the family Trichogrammatidae, is known for containing some of the smallest insects ever identified, with species like M. caribea and M. mymaripenne reaching lengths as small as 170 to 200 micrometers. These wasps possess highly specialized anatomical features to accommodate their diminutive size. Their wings are notably narrow with depleted venation, often featuring a fringe of long setae around the perimeter. The head is hypognathous and rounded, containing compound eyes made of approximately 30 ommatidia and a small, keyhole-shaped occipital foramen. Within the mesothorax, the mesonotum is divided into various sections, including the mesoscutum and scutellum. A particularly distinctive feature of this genus is the structure formed by the posterior margin of the mesonotum, which is exceptionally long and extends nearly to the tip of the metasoma, known as the",
+    "target": " mesophargma",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 175,
+    "word_count": 135
   }
 ]

@@ -173,26 +173,163 @@ def gen_constraint_count(rng: random.Random) -> dict:
     return wrap_item(prompt, str(answer), "constraint_counting", "count_divisible_and_large", "medium", "rn_constraints")
 
 
+def gen_modulo_reasoning(rng: random.Random) -> dict:
+    n = rng.randint(20, 120)
+    divisor = rng.choice([3, 4, 5, 6, 7, 8, 9])
+    answer = n % divisor
+    prompt = f"What is the remainder when {n} is divided by {divisor}?\nAnswer:"
+    return wrap_item(prompt, str(answer), "modulo", "remainder", "medium", "rn_modulo")
+
+
+def gen_unit_conversion(rng: random.Random) -> dict:
+    if rng.choice([True, False]):
+        meters = rng.randint(2, 25)
+        answer = meters * 100
+        prompt = f"Convert {meters} meters to centimeters.\nAnswer:"
+    else:
+        hours = rng.randint(2, 12)
+        answer = hours * 60
+        prompt = f"Convert {hours} hours to minutes.\nAnswer:"
+    return wrap_item(prompt, str(answer), "unit_conversion", "simple_unit_conversion", "easy", "rn_units")
+
+
+def gen_ordering_gap(rng: random.Random) -> dict:
+    nums = rng.sample(range(5, 50), 5)
+    ordered = sorted(nums)
+    answer = ordered[-1] - ordered[0]
+    prompt = (
+        "Find the difference between the largest and smallest numbers in: "
+        + ", ".join(map(str, nums))
+        + "\nAnswer:"
+    )
+    return wrap_item(prompt, str(answer), "ordering", "range_gap", "medium", "rn_ordering")
+
+
+def gen_table_reasoning(rng: random.Random) -> dict:
+    a = rng.randint(3, 12)
+    b = rng.randint(3, 12)
+    c = rng.randint(3, 12)
+    answer = max(a, b, c) + min(a, b, c)
+    prompt = (
+        "Scores are:\n"
+        f"Ada: {a}\n"
+        f"Bo: {b}\n"
+        f"Cy: {c}\n"
+        "Add the highest and lowest score.\nAnswer:"
+    )
+    return wrap_item(prompt, str(answer), "table_reasoning", "max_plus_min", "medium", "rn_table")
+
+
+def gen_brief_multi_step_word_problem(rng: random.Random) -> dict:
+    start = rng.randint(15, 45)
+    morning = rng.randint(4, 12)
+    afternoon = rng.randint(3, 10)
+    gave = rng.randint(2, 8)
+    answer = start + morning + afternoon - gave
+    item = rng.choice(["marbles", "stickers", "tickets", "cards"])
+    person = rng.choice(["Mia", "Noah", "Lena", "Owen", "Sara"])
+    prompt = (
+        f"{person} started the day with {start} {item}. In the morning, {person.lower()} received {morning} more. "
+        f"Later that afternoon, {person.lower()} found {afternoon} extra {item} in a drawer. "
+        f"Before going home, {person.lower()} gave {gave} {item} to a friend. "
+        f"How many {item} does {person.lower()} have now?\nAnswer:"
+    )
+    return wrap_item(prompt, str(answer), "word_problem", "three_step_quantity_change_brief", "medium", "rn_word_brief")
+
+
+def gen_brief_rate_trip(rng: random.Random) -> dict:
+    speed1 = rng.choice([20, 30, 40, 50])
+    time1 = rng.randint(2, 4)
+    speed2 = rng.choice([25, 35, 45, 55])
+    time2 = rng.randint(1, 3)
+    answer = speed1 * time1 + speed2 * time2
+    vehicle = rng.choice(["train", "bus", "boat", "car"])
+    prompt = (
+        f"A {vehicle} travels for {time1} hours at {speed1} miles per hour, then continues for "
+        f"{time2} more hours at {speed2} miles per hour. "
+        f"What total distance does the {vehicle} travel?\nAnswer:"
+    )
+    return wrap_item(prompt, str(answer), "rate", "two_leg_trip_distance", "medium", "rn_rate_brief")
+
+
+def gen_brief_ratio_context(rng: random.Random) -> dict:
+    total = rng.choice([24, 30, 36, 42, 48, 54])
+    a = rng.randint(1, 4)
+    b = rng.randint(1, 4)
+    first = total * a // (a + b)
+    second = total - first
+    answer = second - first
+    prompt = (
+        f"A total of {total} points is split between two teams in the ratio {a}:{b}. "
+        "After the split, compare the teams' shares. "
+        "How many more points does the larger share have than the smaller share?\nAnswer:"
+    )
+    return wrap_item(prompt, str(answer), "ratios", "ratio_difference_brief", "medium", "rn_ratio_brief")
+
+
+def gen_brief_table_reasoning(rng: random.Random) -> dict:
+    a = rng.randint(5, 18)
+    b = rng.randint(5, 18)
+    c = rng.randint(5, 18)
+    d = rng.randint(5, 18)
+    answer = (a + d) - (b + c)
+    prompt = (
+        "A small score table is shown below:\n"
+        f"Ada: {a}\n"
+        f"Bo: {b}\n"
+        f"Cy: {c}\n"
+        f"Di: {d}\n"
+        "Add Ada and Di's scores together. Then subtract the sum of Bo and Cy's scores. "
+        "What is the result?\nAnswer:"
+    )
+    return wrap_item(prompt, str(answer), "table_reasoning", "paired_sum_difference_brief", "medium", "rn_table_brief")
+
+
+def gen_brief_average_reasoning(rng: random.Random) -> dict:
+    nums = rng.sample(range(6, 24), 4)
+    total = sum(nums)
+    adjust = (4 - (total % 4)) % 4
+    nums[-1] += adjust
+    avg = sum(nums) // 4
+    answer = avg + nums[0]
+    prompt = (
+        "Consider these numbers: "
+        + ", ".join(map(str, nums))
+        + ". First find their average. Then add the first number in the list to that average. "
+        "What is the result?\nAnswer:"
+    )
+    return wrap_item(prompt, str(answer), "averages", "average_then_add_first_brief", "medium", "rn_average_brief")
+
+
 FAMILIES = [
     ("word_problem", 4, gen_multi_step_word_problem),
+    ("word_problem", 4, gen_brief_multi_step_word_problem),
     ("rate", 2, gen_rate_time_distance),
+    ("rate", 3, gen_brief_rate_trip),
     ("grouping", 3, gen_remaining_after_groups),
     ("comparison", 2, gen_compare_totals),
     ("percentages", 3, gen_discount_price),
     ("ratios", 3, gen_ratio_sharing),
+    ("ratios", 3, gen_brief_ratio_context),
     ("signed_numbers", 3, gen_signed_change),
     ("averages", 3, gen_average_of_values),
+    ("averages", 3, gen_brief_average_reasoning),
     ("sequences", 3, gen_sequence_accumulation),
     ("constraint_counting", 3, gen_constraint_count),
+    ("modulo", 3, gen_modulo_reasoning),
+    ("unit_conversion", 2, gen_unit_conversion),
+    ("ordering", 3, gen_ordering_gap),
+    ("table_reasoning", 3, gen_table_reasoning),
+    ("table_reasoning", 3, gen_brief_table_reasoning),
 ]
 
 
 def family_limit(num_prompts: int) -> int:
-    return max(5, (num_prompts + 5) // 6)
+    return max(8, (num_prompts + 7) // 8)
 
 
 def concept_limit(num_prompts: int) -> int:
-    return max(4, (num_prompts + 19) // 20)
+    return max(8, (num_prompts + 14) // 15)
 
 
 def existing_prompts(output_path: str) -> set[str]:
@@ -215,7 +352,7 @@ def generate_items(num_prompts: int, seed: int, existing: set[str] | None = None
     max_per_family = family_limit(num_prompts)
     max_per_concept = concept_limit(num_prompts)
     attempts = 0
-    max_attempts = max(100, num_prompts * 12)
+    max_attempts = max(160, num_prompts * 18)
 
     while len(items) < num_prompts and attempts < max_attempts:
         attempts += 1

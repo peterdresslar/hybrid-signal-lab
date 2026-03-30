@@ -1,175 +1,7 @@
 [
   {
-    "prompt": "First total: 18 + 19. Second total: 15 + 13. Which is larger: first, second, or equal?\nAnswer:",
-    "target": " first",
-    "type": "reasoning_numerical",
-    "tokens_approx": 23,
-    "tier": "short",
-    "source": "rn_compare",
-    "metadata": {
-      "family": "comparison",
-      "concept": "compare_two_totals",
-      "difficulty": "easy"
-    },
-    "id": "rn_seed_0000"
-  },
-  {
-    "prompt": "A total of 36 points is shared in the ratio 1:4. How many points does the first part receive?\nAnswer:",
-    "target": " 7",
-    "type": "reasoning_numerical",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rn_ratio",
-    "metadata": {
-      "family": "ratios",
-      "concept": "ratio_share",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0001"
-  },
-  {
-    "prompt": "The temperature starts at -2 degrees, rises by 3, then falls by 4. What is the final temperature?\nAnswer:",
-    "target": " -3",
-    "type": "reasoning_numerical",
-    "tokens_approx": 24,
-    "tier": "short",
-    "source": "rn_signed",
-    "metadata": {
-      "family": "signed_numbers",
-      "concept": "signed_change",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0002"
-  },
-  {
-    "prompt": "How many numbers are both greater than 10 and divisible by 3 in: 16, 18, 1, 11, 19, 14, 8, 23\nAnswer:",
-    "target": " 1",
-    "type": "reasoning_numerical",
-    "tokens_approx": 28,
-    "tier": "short",
-    "source": "rn_constraints",
-    "metadata": {
-      "family": "constraint_counting",
-      "concept": "count_divisible_and_large",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0003"
-  },
-  {
-    "prompt": "A total of 30 points is shared in the ratio 4:2. How many points does the first part receive?\nAnswer:",
+    "prompt": "An item costs 40 dollars and is discounted by 50%. What is the final price?\nAnswer:",
     "target": " 20",
-    "type": "reasoning_numerical",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rn_ratio",
-    "metadata": {
-      "family": "ratios",
-      "concept": "ratio_share",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0004"
-  },
-  {
-    "prompt": "Noah had 21 coins. Then noah got 8 more and later gave away 6. How many coins does noah have now?\nAnswer:",
-    "target": " 23",
-    "type": "reasoning_numerical",
-    "tokens_approx": 28,
-    "tier": "short",
-    "source": "rn_word",
-    "metadata": {
-      "family": "word_problem",
-      "concept": "two_step_quantity_change",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0005"
-  },
-  {
-    "prompt": "What is the average of these numbers: 5, 6, 9, 20\nAnswer:",
-    "target": " 10",
-    "type": "reasoning_numerical",
-    "tokens_approx": 15,
-    "tier": "short",
-    "source": "rn_average",
-    "metadata": {
-      "family": "averages",
-      "concept": "average_of_four",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0006"
-  },
-  {
-    "prompt": "First total: 17 + 13. Second total: 8 + 12. Which is larger: first, second, or equal?\nAnswer:",
-    "target": " first",
-    "type": "reasoning_numerical",
-    "tokens_approx": 23,
-    "tier": "short",
-    "source": "rn_compare",
-    "metadata": {
-      "family": "comparison",
-      "concept": "compare_two_totals",
-      "difficulty": "easy"
-    },
-    "id": "rn_seed_0007"
-  },
-  {
-    "prompt": "How many numbers are both greater than 10 and divisible by 3 in: 11, 7, 16, 4, 14, 12, 10, 8\nAnswer:",
-    "target": " 1",
-    "type": "reasoning_numerical",
-    "tokens_approx": 28,
-    "tier": "short",
-    "source": "rn_constraints",
-    "metadata": {
-      "family": "constraint_counting",
-      "concept": "count_divisible_and_large",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0008"
-  },
-  {
-    "prompt": "A sequence starts at 6 and increases by 4. After writing 6 numbers, add the first and last. Result:\nAnswer:",
-    "target": " 32",
-    "type": "reasoning_numerical",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rn_sequence",
-    "metadata": {
-      "family": "sequences",
-      "concept": "first_last_sum",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0009"
-  },
-  {
-    "prompt": "A total of 36 points is shared in the ratio 3:4. How many points does the first part receive?\nAnswer:",
-    "target": " 15",
-    "type": "reasoning_numerical",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rn_ratio",
-    "metadata": {
-      "family": "ratios",
-      "concept": "ratio_share",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0010"
-  },
-  {
-    "prompt": "There are 53 cards. 2 groups of 4 are used. How many cards remain?\nAnswer:",
-    "target": " 45",
-    "type": "reasoning_numerical",
-    "tokens_approx": 19,
-    "tier": "short",
-    "source": "rn_group",
-    "metadata": {
-      "family": "grouping",
-      "concept": "remaining_after_groups",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0011"
-  },
-  {
-    "prompt": "An item costs 30 dollars and is discounted by 20%. What is the final price?\nAnswer:",
-    "target": " 24",
     "type": "reasoning_numerical",
     "tokens_approx": 20,
     "tier": "short",
@@ -179,7 +11,63 @@
       "concept": "discount_price",
       "difficulty": "medium"
     },
-    "id": "rn_seed_0012"
+    "id": "rn_seed_0000"
+  },
+  {
+    "prompt": "What is the average of these numbers: 12, 19, 10, 19\nAnswer:",
+    "target": " 15",
+    "type": "reasoning_numerical",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "rn_average",
+    "metadata": {
+      "family": "averages",
+      "concept": "average_of_four",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0001"
+  },
+  {
+    "prompt": "Consider these numbers: 19, 6, 9, 22. First find their average. Then add the first number in the list to that average. What is the result?\nAnswer:",
+    "target": " 33",
+    "type": "reasoning_numerical",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "rn_average_brief",
+    "metadata": {
+      "family": "averages",
+      "concept": "average_then_add_first_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0002"
+  },
+  {
+    "prompt": "There are 50 tokens. 2 groups of 8 are used. How many tokens remain?\nAnswer:",
+    "target": " 34",
+    "type": "reasoning_numerical",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "rn_group",
+    "metadata": {
+      "family": "grouping",
+      "concept": "remaining_after_groups",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0003"
+  },
+  {
+    "prompt": "What is the average of these numbers: 11, 7, 12, 18\nAnswer:",
+    "target": " 12",
+    "type": "reasoning_numerical",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "rn_average",
+    "metadata": {
+      "family": "averages",
+      "concept": "average_of_four",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0004"
   },
   {
     "prompt": "An item costs 25 dollars and is discounted by 10%. What is the final price?\nAnswer:",
@@ -193,346 +81,10 @@
       "concept": "discount_price",
       "difficulty": "medium"
     },
-    "id": "rn_seed_0013"
+    "id": "rn_seed_0005"
   },
   {
-    "prompt": "Lena had 26 books. Then lena got 12 more and later gave away 8. How many books does lena have now?\nAnswer:",
-    "target": " 30",
-    "type": "reasoning_numerical",
-    "tokens_approx": 28,
-    "tier": "short",
-    "source": "rn_word",
-    "metadata": {
-      "family": "word_problem",
-      "concept": "two_step_quantity_change",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0014"
-  },
-  {
-    "prompt": "How many numbers are both greater than 10 and divisible by 3 in: 2, 20, 9, 21, 23, 17, 16, 11\nAnswer:",
-    "target": " 1",
-    "type": "reasoning_numerical",
-    "tokens_approx": 28,
-    "tier": "short",
-    "source": "rn_constraints",
-    "metadata": {
-      "family": "constraint_counting",
-      "concept": "count_divisible_and_large",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0015"
-  },
-  {
-    "prompt": "A sequence starts at 5 and increases by 3. After writing 5 numbers, add the first and last. Result:\nAnswer:",
-    "target": " 22",
-    "type": "reasoning_numerical",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rn_sequence",
-    "metadata": {
-      "family": "sequences",
-      "concept": "first_last_sum",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0016"
-  },
-  {
-    "prompt": "An item costs 80 dollars and is discounted by 20%. What is the final price?\nAnswer:",
-    "target": " 64",
-    "type": "reasoning_numerical",
-    "tokens_approx": 20,
-    "tier": "short",
-    "source": "rn_percent",
-    "metadata": {
-      "family": "percentages",
-      "concept": "discount_price",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0017"
-  },
-  {
-    "prompt": "A train travels at 30 miles per hour for 3 hours. How far does it travel?\nAnswer:",
-    "target": " 90",
-    "type": "reasoning_numerical",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "rn_rate",
-    "metadata": {
-      "family": "rate",
-      "concept": "distance_from_rate_time",
-      "difficulty": "easy"
-    },
-    "id": "rn_seed_0018"
-  },
-  {
-    "prompt": "Mia had 35 books. Then mia got 12 more and later gave away 6. How many books does mia have now?\nAnswer:",
-    "target": " 41",
-    "type": "reasoning_numerical",
-    "tokens_approx": 28,
-    "tier": "short",
-    "source": "rn_word",
-    "metadata": {
-      "family": "word_problem",
-      "concept": "two_step_quantity_change",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0019"
-  },
-  {
-    "prompt": "There are 20 blocks. 2 groups of 8 are used. How many blocks remain?\nAnswer:",
-    "target": " 4",
-    "type": "reasoning_numerical",
-    "tokens_approx": 19,
-    "tier": "short",
-    "source": "rn_group",
-    "metadata": {
-      "family": "grouping",
-      "concept": "remaining_after_groups",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0020"
-  },
-  {
-    "prompt": "Noah had 10 coins. Then noah got 7 more and later gave away 1. How many coins does noah have now?\nAnswer:",
-    "target": " 16",
-    "type": "reasoning_numerical",
-    "tokens_approx": 28,
-    "tier": "short",
-    "source": "rn_word",
-    "metadata": {
-      "family": "word_problem",
-      "concept": "two_step_quantity_change",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0021"
-  },
-  {
-    "prompt": "What is the average of these numbers: 19, 7, 16, 18\nAnswer:",
-    "target": " 15",
-    "type": "reasoning_numerical",
-    "tokens_approx": 15,
-    "tier": "short",
-    "source": "rn_average",
-    "metadata": {
-      "family": "averages",
-      "concept": "average_of_four",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0022"
-  },
-  {
-    "prompt": "A sequence starts at 10 and increases by 5. After writing 6 numbers, add the first and last. Result:\nAnswer:",
-    "target": " 45",
-    "type": "reasoning_numerical",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rn_sequence",
-    "metadata": {
-      "family": "sequences",
-      "concept": "first_last_sum",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0023"
-  },
-  {
-    "prompt": "A total of 18 points is shared in the ratio 2:2. How many points does the first part receive?\nAnswer:",
-    "target": " 9",
-    "type": "reasoning_numerical",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rn_ratio",
-    "metadata": {
-      "family": "ratios",
-      "concept": "ratio_share",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0024"
-  },
-  {
-    "prompt": "How many numbers are both greater than 10 and divisible by 3 in: 11, 21, 2, 20, 8, 22, 13, 4\nAnswer:",
-    "target": " 1",
-    "type": "reasoning_numerical",
-    "tokens_approx": 28,
-    "tier": "short",
-    "source": "rn_constraints",
-    "metadata": {
-      "family": "constraint_counting",
-      "concept": "count_divisible_and_large",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0025"
-  },
-  {
-    "prompt": "Sara had 19 coins. Then sara got 3 more and later gave away 5. How many coins does sara have now?\nAnswer:",
-    "target": " 17",
-    "type": "reasoning_numerical",
-    "tokens_approx": 28,
-    "tier": "short",
-    "source": "rn_word",
-    "metadata": {
-      "family": "word_problem",
-      "concept": "two_step_quantity_change",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0026"
-  },
-  {
-    "prompt": "A sequence starts at 10 and increases by 3. After writing 6 numbers, add the first and last. Result:\nAnswer:",
-    "target": " 35",
-    "type": "reasoning_numerical",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rn_sequence",
-    "metadata": {
-      "family": "sequences",
-      "concept": "first_last_sum",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0027"
-  },
-  {
-    "prompt": "A total of 30 points is shared in the ratio 1:4. How many points does the first part receive?\nAnswer:",
-    "target": " 6",
-    "type": "reasoning_numerical",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rn_ratio",
-    "metadata": {
-      "family": "ratios",
-      "concept": "ratio_share",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0028"
-  },
-  {
-    "prompt": "First total: 6 + 8. Second total: 18 + 18. Which is larger: first, second, or equal?\nAnswer:",
-    "target": " second",
-    "type": "reasoning_numerical",
-    "tokens_approx": 23,
-    "tier": "short",
-    "source": "rn_compare",
-    "metadata": {
-      "family": "comparison",
-      "concept": "compare_two_totals",
-      "difficulty": "easy"
-    },
-    "id": "rn_seed_0029"
-  },
-  {
-    "prompt": "First total: 14 + 20. Second total: 9 + 7. Which is larger: first, second, or equal?\nAnswer:",
-    "target": " first",
-    "type": "reasoning_numerical",
-    "tokens_approx": 23,
-    "tier": "short",
-    "source": "rn_compare",
-    "metadata": {
-      "family": "comparison",
-      "concept": "compare_two_totals",
-      "difficulty": "easy"
-    },
-    "id": "rn_seed_0030"
-  },
-  {
-    "prompt": "How many numbers are both greater than 10 and divisible by 3 in: 4, 15, 21, 23, 1, 14, 17, 3\nAnswer:",
-    "target": " 2",
-    "type": "reasoning_numerical",
-    "tokens_approx": 28,
-    "tier": "short",
-    "source": "rn_constraints",
-    "metadata": {
-      "family": "constraint_counting",
-      "concept": "count_divisible_and_large",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0031"
-  },
-  {
-    "prompt": "What is the average of these numbers: 13, 16, 15, 12\nAnswer:",
-    "target": " 14",
-    "type": "reasoning_numerical",
-    "tokens_approx": 15,
-    "tier": "short",
-    "source": "rn_average",
-    "metadata": {
-      "family": "averages",
-      "concept": "average_of_four",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0032"
-  },
-  {
-    "prompt": "A total of 24 points is shared in the ratio 3:3. How many points does the first part receive?\nAnswer:",
-    "target": " 12",
-    "type": "reasoning_numerical",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rn_ratio",
-    "metadata": {
-      "family": "ratios",
-      "concept": "ratio_share",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0033"
-  },
-  {
-    "prompt": "A train travels at 20 miles per hour for 6 hours. How far does it travel?\nAnswer:",
-    "target": " 120",
-    "type": "reasoning_numerical",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "rn_rate",
-    "metadata": {
-      "family": "rate",
-      "concept": "distance_from_rate_time",
-      "difficulty": "easy"
-    },
-    "id": "rn_seed_0034"
-  },
-  {
-    "prompt": "The temperature starts at 9 degrees, rises by 7, then falls by 7. What is the final temperature?\nAnswer:",
-    "target": " 9",
-    "type": "reasoning_numerical",
-    "tokens_approx": 24,
-    "tier": "short",
-    "source": "rn_signed",
-    "metadata": {
-      "family": "signed_numbers",
-      "concept": "signed_change",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0035"
-  },
-  {
-    "prompt": "A total of 18 points is shared in the ratio 2:3. How many points does the first part receive?\nAnswer:",
-    "target": " 7",
-    "type": "reasoning_numerical",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rn_ratio",
-    "metadata": {
-      "family": "ratios",
-      "concept": "ratio_share",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0036"
-  },
-  {
-    "prompt": "Mia had 18 books. Then mia got 11 more and later gave away 8. How many books does mia have now?\nAnswer:",
-    "target": " 21",
-    "type": "reasoning_numerical",
-    "tokens_approx": 28,
-    "tier": "short",
-    "source": "rn_word",
-    "metadata": {
-      "family": "word_problem",
-      "concept": "two_step_quantity_change",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0037"
-  },
-  {
-    "prompt": "What is the average of these numbers: 7, 18, 12, 15\nAnswer:",
+    "prompt": "What is the average of these numbers: 15, 13, 9, 15\nAnswer:",
     "target": " 13",
     "type": "reasoning_numerical",
     "tokens_approx": 15,
@@ -543,11 +95,529 @@
       "concept": "average_of_four",
       "difficulty": "medium"
     },
+    "id": "rn_seed_0006"
+  },
+  {
+    "prompt": "What is the average of these numbers: 10, 7, 16, 15\nAnswer:",
+    "target": " 12",
+    "type": "reasoning_numerical",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "rn_average",
+    "metadata": {
+      "family": "averages",
+      "concept": "average_of_four",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0007"
+  },
+  {
+    "prompt": "Scores are:\nAda: 3\nBo: 5\nCy: 8\nAdd the highest and lowest score.\nAnswer:",
+    "target": " 11",
+    "type": "reasoning_numerical",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "rn_table",
+    "metadata": {
+      "family": "table_reasoning",
+      "concept": "max_plus_min",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0008"
+  },
+  {
+    "prompt": "Lena started the day with 33 stickers. In the morning, lena received 10 more. Later that afternoon, lena found 7 extra stickers in a drawer. Before going home, lena gave 2 stickers to a friend. How many stickers does lena have now?\nAnswer:",
+    "target": " 48",
+    "type": "reasoning_numerical",
+    "tokens_approx": 55,
+    "tier": "brief",
+    "source": "rn_word_brief",
+    "metadata": {
+      "family": "word_problem",
+      "concept": "three_step_quantity_change_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0009"
+  },
+  {
+    "prompt": "A boat travels for 3 hours at 20 miles per hour, then continues for 3 more hours at 45 miles per hour. What total distance does the boat travel?\nAnswer:",
+    "target": " 195",
+    "type": "reasoning_numerical",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "rn_rate_brief",
+    "metadata": {
+      "family": "rate",
+      "concept": "two_leg_trip_distance",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0010"
+  },
+  {
+    "prompt": "Find the difference between the largest and smallest numbers in: 20, 40, 21, 27, 39\nAnswer:",
+    "target": " 20",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "rn_ordering",
+    "metadata": {
+      "family": "ordering",
+      "concept": "range_gap",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0011"
+  },
+  {
+    "prompt": "What is the average of these numbers: 19, 8, 13, 16\nAnswer:",
+    "target": " 14",
+    "type": "reasoning_numerical",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "rn_average",
+    "metadata": {
+      "family": "averages",
+      "concept": "average_of_four",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0012"
+  },
+  {
+    "prompt": "A total of 42 points is shared in the ratio 2:1. How many points does the first part receive?\nAnswer:",
+    "target": " 28",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "rn_ratio",
+    "metadata": {
+      "family": "ratios",
+      "concept": "ratio_share",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0013"
+  },
+  {
+    "prompt": "Consider these numbers: 12, 18, 21, 13. First find their average. Then add the first number in the list to that average. What is the result?\nAnswer:",
+    "target": " 28",
+    "type": "reasoning_numerical",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "rn_average_brief",
+    "metadata": {
+      "family": "averages",
+      "concept": "average_then_add_first_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0014"
+  },
+  {
+    "prompt": "A small score table is shown below:\nAda: 13\nBo: 7\nCy: 12\nDi: 5\nAdd Ada and Di's scores together. Then subtract the sum of Bo and Cy's scores. What is the result?\nAnswer:",
+    "target": " -1",
+    "type": "reasoning_numerical",
+    "tokens_approx": 45,
+    "tier": "brief",
+    "source": "rn_table_brief",
+    "metadata": {
+      "family": "table_reasoning",
+      "concept": "paired_sum_difference_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0015"
+  },
+  {
+    "prompt": "A small score table is shown below:\nAda: 13\nBo: 15\nCy: 17\nDi: 17\nAdd Ada and Di's scores together. Then subtract the sum of Bo and Cy's scores. What is the result?\nAnswer:",
+    "target": " -2",
+    "type": "reasoning_numerical",
+    "tokens_approx": 45,
+    "tier": "brief",
+    "source": "rn_table_brief",
+    "metadata": {
+      "family": "table_reasoning",
+      "concept": "paired_sum_difference_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0016"
+  },
+  {
+    "prompt": "Lena started the day with 23 cards. In the morning, lena received 12 more. Later that afternoon, lena found 10 extra cards in a drawer. Before going home, lena gave 8 cards to a friend. How many cards does lena have now?\nAnswer:",
+    "target": " 37",
+    "type": "reasoning_numerical",
+    "tokens_approx": 55,
+    "tier": "brief",
+    "source": "rn_word_brief",
+    "metadata": {
+      "family": "word_problem",
+      "concept": "three_step_quantity_change_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0017"
+  },
+  {
+    "prompt": "Scores are:\nAda: 3\nBo: 12\nCy: 7\nAdd the highest and lowest score.\nAnswer:",
+    "target": " 15",
+    "type": "reasoning_numerical",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "rn_table",
+    "metadata": {
+      "family": "table_reasoning",
+      "concept": "max_plus_min",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0018"
+  },
+  {
+    "prompt": "Scores are:\nAda: 12\nBo: 11\nCy: 10\nAdd the highest and lowest score.\nAnswer:",
+    "target": " 22",
+    "type": "reasoning_numerical",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "rn_table",
+    "metadata": {
+      "family": "table_reasoning",
+      "concept": "max_plus_min",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0019"
+  },
+  {
+    "prompt": "Scores are:\nAda: 8\nBo: 3\nCy: 12\nAdd the highest and lowest score.\nAnswer:",
+    "target": " 15",
+    "type": "reasoning_numerical",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "rn_table",
+    "metadata": {
+      "family": "table_reasoning",
+      "concept": "max_plus_min",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0020"
+  },
+  {
+    "prompt": "There are 42 cards. 3 groups of 6 are used. How many cards remain?\nAnswer:",
+    "target": " 24",
+    "type": "reasoning_numerical",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "rn_group",
+    "metadata": {
+      "family": "grouping",
+      "concept": "remaining_after_groups",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0021"
+  },
+  {
+    "prompt": "A total of 30 points is split between two teams in the ratio 2:1. After the split, compare the teams' shares. How many more points does the larger share have than the smaller share?\nAnswer:",
+    "target": " -10",
+    "type": "reasoning_numerical",
+    "tokens_approx": 45,
+    "tier": "brief",
+    "source": "rn_ratio_brief",
+    "metadata": {
+      "family": "ratios",
+      "concept": "ratio_difference_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0022"
+  },
+  {
+    "prompt": "Owen started the day with 40 tickets. In the morning, owen received 9 more. Later that afternoon, owen found 9 extra tickets in a drawer. Before going home, owen gave 2 tickets to a friend. How many tickets does owen have now?\nAnswer:",
+    "target": " 56",
+    "type": "reasoning_numerical",
+    "tokens_approx": 55,
+    "tier": "brief",
+    "source": "rn_word_brief",
+    "metadata": {
+      "family": "word_problem",
+      "concept": "three_step_quantity_change_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0023"
+  },
+  {
+    "prompt": "Mia had 13 stickers. Then mia got 9 more and later gave away 2. How many stickers does mia have now?\nAnswer:",
+    "target": " 20",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "rn_word",
+    "metadata": {
+      "family": "word_problem",
+      "concept": "two_step_quantity_change",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0024"
+  },
+  {
+    "prompt": "There are 28 cards. 5 groups of 4 are used. How many cards remain?\nAnswer:",
+    "target": " 8",
+    "type": "reasoning_numerical",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "rn_group",
+    "metadata": {
+      "family": "grouping",
+      "concept": "remaining_after_groups",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0025"
+  },
+  {
+    "prompt": "What is the remainder when 83 is divided by 7?\nAnswer:",
+    "target": " 6",
+    "type": "reasoning_numerical",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "rn_modulo",
+    "metadata": {
+      "family": "modulo",
+      "concept": "remainder",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0026"
+  },
+  {
+    "prompt": "A total of 48 points is split between two teams in the ratio 1:1. After the split, compare the teams' shares. How many more points does the larger share have than the smaller share?\nAnswer:",
+    "target": " 0",
+    "type": "reasoning_numerical",
+    "tokens_approx": 45,
+    "tier": "brief",
+    "source": "rn_ratio_brief",
+    "metadata": {
+      "family": "ratios",
+      "concept": "ratio_difference_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0027"
+  },
+  {
+    "prompt": "A boat travels at 30 miles per hour for 6 hours. How far does it travel?\nAnswer:",
+    "target": " 180",
+    "type": "reasoning_numerical",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "rn_rate",
+    "metadata": {
+      "family": "rate",
+      "concept": "distance_from_rate_time",
+      "difficulty": "easy"
+    },
+    "id": "rn_seed_0028"
+  },
+  {
+    "prompt": "Consider these numbers: 7, 13, 23, 13. First find their average. Then add the first number in the list to that average. What is the result?\nAnswer:",
+    "target": " 21",
+    "type": "reasoning_numerical",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "rn_average_brief",
+    "metadata": {
+      "family": "averages",
+      "concept": "average_then_add_first_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0029"
+  },
+  {
+    "prompt": "Noah started the day with 17 tickets. In the morning, noah received 8 more. Later that afternoon, noah found 3 extra tickets in a drawer. Before going home, noah gave 6 tickets to a friend. How many tickets does noah have now?\nAnswer:",
+    "target": " 22",
+    "type": "reasoning_numerical",
+    "tokens_approx": 55,
+    "tier": "brief",
+    "source": "rn_word_brief",
+    "metadata": {
+      "family": "word_problem",
+      "concept": "three_step_quantity_change_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0030"
+  },
+  {
+    "prompt": "Consider these numbers: 23, 10, 14, 17. First find their average. Then add the first number in the list to that average. What is the result?\nAnswer:",
+    "target": " 39",
+    "type": "reasoning_numerical",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "rn_average_brief",
+    "metadata": {
+      "family": "averages",
+      "concept": "average_then_add_first_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0031"
+  },
+  {
+    "prompt": "Find the difference between the largest and smallest numbers in: 41, 10, 36, 26, 40\nAnswer:",
+    "target": " 31",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "rn_ordering",
+    "metadata": {
+      "family": "ordering",
+      "concept": "range_gap",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0032"
+  },
+  {
+    "prompt": "Lena had 13 stickers. Then lena got 9 more and later gave away 7. How many stickers does lena have now?\nAnswer:",
+    "target": " 15",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "rn_word",
+    "metadata": {
+      "family": "word_problem",
+      "concept": "two_step_quantity_change",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0033"
+  },
+  {
+    "prompt": "What is the average of these numbers: 19, 13, 6, 6\nAnswer:",
+    "target": " 11",
+    "type": "reasoning_numerical",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "rn_average",
+    "metadata": {
+      "family": "averages",
+      "concept": "average_of_four",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0034"
+  },
+  {
+    "prompt": "A small score table is shown below:\nAda: 6\nBo: 12\nCy: 15\nDi: 17\nAdd Ada and Di's scores together. Then subtract the sum of Bo and Cy's scores. What is the result?\nAnswer:",
+    "target": " -4",
+    "type": "reasoning_numerical",
+    "tokens_approx": 45,
+    "tier": "brief",
+    "source": "rn_table_brief",
+    "metadata": {
+      "family": "table_reasoning",
+      "concept": "paired_sum_difference_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0035"
+  },
+  {
+    "prompt": "A total of 24 points is split between two teams in the ratio 4:1. After the split, compare the teams' shares. How many more points does the larger share have than the smaller share?\nAnswer:",
+    "target": " -14",
+    "type": "reasoning_numerical",
+    "tokens_approx": 45,
+    "tier": "brief",
+    "source": "rn_ratio_brief",
+    "metadata": {
+      "family": "ratios",
+      "concept": "ratio_difference_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0036"
+  },
+  {
+    "prompt": "What is the remainder when 56 is divided by 9?\nAnswer:",
+    "target": " 2",
+    "type": "reasoning_numerical",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "rn_modulo",
+    "metadata": {
+      "family": "modulo",
+      "concept": "remainder",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0037"
+  },
+  {
+    "prompt": "How many numbers are both greater than 10 and divisible by 3 in: 17, 4, 8, 12, 11, 6, 15, 1\nAnswer:",
+    "target": " 2",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "rn_constraints",
+    "metadata": {
+      "family": "constraint_counting",
+      "concept": "count_divisible_and_large",
+      "difficulty": "medium"
+    },
     "id": "rn_seed_0038"
   },
   {
-    "prompt": "The temperature starts at 10 degrees, rises by 8, then falls by 6. What is the final temperature?\nAnswer:",
+    "prompt": "What is the average of these numbers: 18, 11, 8, 15\nAnswer:",
+    "target": " 13",
+    "type": "reasoning_numerical",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "rn_average",
+    "metadata": {
+      "family": "averages",
+      "concept": "average_of_four",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0039"
+  },
+  {
+    "prompt": "What is the average of these numbers: 4, 12, 7, 17\nAnswer:",
+    "target": " 10",
+    "type": "reasoning_numerical",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "rn_average",
+    "metadata": {
+      "family": "averages",
+      "concept": "average_of_four",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0040"
+  },
+  {
+    "prompt": "First total: 13 + 20. Second total: 17 + 7. Which is larger: first, second, or equal?\nAnswer:",
+    "target": " first",
+    "type": "reasoning_numerical",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "rn_compare",
+    "metadata": {
+      "family": "comparison",
+      "concept": "compare_two_totals",
+      "difficulty": "easy"
+    },
+    "id": "rn_seed_0041"
+  },
+  {
+    "prompt": "How many numbers are both greater than 10 and divisible by 3 in: 4, 17, 19, 20, 16, 18, 12, 10\nAnswer:",
+    "target": " 2",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "rn_constraints",
+    "metadata": {
+      "family": "constraint_counting",
+      "concept": "count_divisible_and_large",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0042"
+  },
+  {
+    "prompt": "A total of 24 points is shared in the ratio 1:1. How many points does the first part receive?\nAnswer:",
     "target": " 12",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "rn_ratio",
+    "metadata": {
+      "family": "ratios",
+      "concept": "ratio_share",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0043"
+  },
+  {
+    "prompt": "The temperature starts at 4 degrees, rises by 9, then falls by 4. What is the final temperature?\nAnswer:",
+    "target": " 9",
     "type": "reasoning_numerical",
     "tokens_approx": 24,
     "tier": "short",
@@ -557,10 +627,52 @@
       "concept": "signed_change",
       "difficulty": "medium"
     },
-    "id": "rn_seed_0039"
+    "id": "rn_seed_0044"
   },
   {
-    "prompt": "First total: 11 + 7. Second total: 8 + 14. Which is larger: first, second, or equal?\nAnswer:",
+    "prompt": "What is the average of these numbers: 15, 17, 5, 19\nAnswer:",
+    "target": " 14",
+    "type": "reasoning_numerical",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "rn_average",
+    "metadata": {
+      "family": "averages",
+      "concept": "average_of_four",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0045"
+  },
+  {
+    "prompt": "Find the difference between the largest and smallest numbers in: 32, 28, 8, 27, 42\nAnswer:",
+    "target": " 34",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "rn_ordering",
+    "metadata": {
+      "family": "ordering",
+      "concept": "range_gap",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0046"
+  },
+  {
+    "prompt": "Find the difference between the largest and smallest numbers in: 30, 45, 22, 21, 18\nAnswer:",
+    "target": " 27",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "rn_ordering",
+    "metadata": {
+      "family": "ordering",
+      "concept": "range_gap",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0047"
+  },
+  {
+    "prompt": "First total: 19 + 14. Second total: 19 + 19. Which is larger: first, second, or equal?\nAnswer:",
     "target": " second",
     "type": "reasoning_numerical",
     "tokens_approx": 23,
@@ -571,91 +683,7 @@
       "concept": "compare_two_totals",
       "difficulty": "easy"
     },
-    "id": "rn_seed_0040"
-  },
-  {
-    "prompt": "An item costs 30 dollars and is discounted by 25%. What is the final price?\nAnswer:",
-    "target": " 23",
-    "type": "reasoning_numerical",
-    "tokens_approx": 20,
-    "tier": "short",
-    "source": "rn_percent",
-    "metadata": {
-      "family": "percentages",
-      "concept": "discount_price",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0041"
-  },
-  {
-    "prompt": "A sequence starts at 3 and increases by 6. After writing 6 numbers, add the first and last. Result:\nAnswer:",
-    "target": " 36",
-    "type": "reasoning_numerical",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rn_sequence",
-    "metadata": {
-      "family": "sequences",
-      "concept": "first_last_sum",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0042"
-  },
-  {
-    "prompt": "An item costs 20 dollars and is discounted by 25%. What is the final price?\nAnswer:",
-    "target": " 15",
-    "type": "reasoning_numerical",
-    "tokens_approx": 20,
-    "tier": "short",
-    "source": "rn_percent",
-    "metadata": {
-      "family": "percentages",
-      "concept": "discount_price",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0043"
-  },
-  {
-    "prompt": "A total of 18 points is shared in the ratio 4:3. How many points does the first part receive?\nAnswer:",
-    "target": " 10",
-    "type": "reasoning_numerical",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rn_ratio",
-    "metadata": {
-      "family": "ratios",
-      "concept": "ratio_share",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0044"
-  },
-  {
-    "prompt": "There are 38 tokens. 5 groups of 4 are used. How many tokens remain?\nAnswer:",
-    "target": " 18",
-    "type": "reasoning_numerical",
-    "tokens_approx": 19,
-    "tier": "short",
-    "source": "rn_group",
-    "metadata": {
-      "family": "grouping",
-      "concept": "remaining_after_groups",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0045"
-  },
-  {
-    "prompt": "An item costs 80 dollars and is discounted by 50%. What is the final price?\nAnswer:",
-    "target": " 40",
-    "type": "reasoning_numerical",
-    "tokens_approx": 20,
-    "tier": "short",
-    "source": "rn_percent",
-    "metadata": {
-      "family": "percentages",
-      "concept": "discount_price",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0046"
+    "id": "rn_seed_0048"
   },
   {
     "prompt": "First total: 6 + 9. Second total: 20 + 5. Which is larger: first, second, or equal?\nAnswer:",
@@ -669,7 +697,7 @@
       "concept": "compare_two_totals",
       "difficulty": "easy"
     },
-    "id": "rn_seed_0047"
+    "id": "rn_seed_0049"
   },
   {
     "prompt": "Lena had 37 stickers. Then lena got 10 more and later gave away 8. How many stickers does lena have now?\nAnswer:",
@@ -683,35 +711,35 @@
       "concept": "two_step_quantity_change",
       "difficulty": "medium"
     },
-    "id": "rn_seed_0048"
+    "id": "rn_seed_0050"
   },
   {
-    "prompt": "Owen had 13 stickers. Then owen got 5 more and later gave away 7. How many stickers does owen have now?\nAnswer:",
-    "target": " 11",
+    "prompt": "Owen started the day with 18 cards. In the morning, owen received 6 more. Later that afternoon, owen found 9 extra cards in a drawer. Before going home, owen gave 4 cards to a friend. How many cards does owen have now?\nAnswer:",
+    "target": " 29",
     "type": "reasoning_numerical",
-    "tokens_approx": 28,
-    "tier": "short",
-    "source": "rn_word",
+    "tokens_approx": 55,
+    "tier": "brief",
+    "source": "rn_word_brief",
     "metadata": {
       "family": "word_problem",
-      "concept": "two_step_quantity_change",
+      "concept": "three_step_quantity_change_brief",
       "difficulty": "medium"
     },
-    "id": "rn_seed_0049"
+    "id": "rn_seed_0051"
   },
   {
-    "prompt": "An item costs 25 dollars and is discounted by 25%. What is the final price?\nAnswer:",
-    "target": " 19",
+    "prompt": "A small score table is shown below:\nAda: 13\nBo: 14\nCy: 13\nDi: 9\nAdd Ada and Di's scores together. Then subtract the sum of Bo and Cy's scores. What is the result?\nAnswer:",
+    "target": " -5",
     "type": "reasoning_numerical",
-    "tokens_approx": 20,
-    "tier": "short",
-    "source": "rn_percent",
+    "tokens_approx": 45,
+    "tier": "brief",
+    "source": "rn_table_brief",
     "metadata": {
-      "family": "percentages",
-      "concept": "discount_price",
+      "family": "table_reasoning",
+      "concept": "paired_sum_difference_brief",
       "difficulty": "medium"
     },
-    "id": "rn_seed_0050"
+    "id": "rn_seed_0052"
   },
   {
     "prompt": "First total: 5 + 17. Second total: 19 + 10. Which is larger: first, second, or equal?\nAnswer:",
@@ -725,94 +753,66 @@
       "concept": "compare_two_totals",
       "difficulty": "easy"
     },
-    "id": "rn_seed_0051"
-  },
-  {
-    "prompt": "The temperature starts at 7 degrees, rises by 3, then falls by 3. What is the final temperature?\nAnswer:",
-    "target": " 7",
-    "type": "reasoning_numerical",
-    "tokens_approx": 24,
-    "tier": "short",
-    "source": "rn_signed",
-    "metadata": {
-      "family": "signed_numbers",
-      "concept": "signed_change",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0052"
-  },
-  {
-    "prompt": "The temperature starts at 0 degrees, rises by 4, then falls by 5. What is the final temperature?\nAnswer:",
-    "target": " -1",
-    "type": "reasoning_numerical",
-    "tokens_approx": 24,
-    "tier": "short",
-    "source": "rn_signed",
-    "metadata": {
-      "family": "signed_numbers",
-      "concept": "signed_change",
-      "difficulty": "medium"
-    },
     "id": "rn_seed_0053"
   },
   {
-    "prompt": "An item costs 25 dollars and is discounted by 50%. What is the final price?\nAnswer:",
-    "target": " 13",
+    "prompt": "A sequence starts at 8 and increases by 2. After writing 4 numbers, add the first and last. Result:\nAnswer:",
+    "target": " 22",
     "type": "reasoning_numerical",
-    "tokens_approx": 20,
+    "tokens_approx": 26,
     "tier": "short",
-    "source": "rn_percent",
+    "source": "rn_sequence",
     "metadata": {
-      "family": "percentages",
-      "concept": "discount_price",
+      "family": "sequences",
+      "concept": "first_last_sum",
       "difficulty": "medium"
     },
     "id": "rn_seed_0054"
   },
   {
-    "prompt": "A train travels at 60 miles per hour for 5 hours. How far does it travel?\nAnswer:",
-    "target": " 300",
+    "prompt": "Consider these numbers: 11, 8, 21, 12. First find their average. Then add the first number in the list to that average. What is the result?\nAnswer:",
+    "target": " 24",
     "type": "reasoning_numerical",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "rn_rate",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "rn_average_brief",
     "metadata": {
-      "family": "rate",
-      "concept": "distance_from_rate_time",
-      "difficulty": "easy"
+      "family": "averages",
+      "concept": "average_then_add_first_brief",
+      "difficulty": "medium"
     },
     "id": "rn_seed_0055"
   },
   {
-    "prompt": "The temperature starts at -3 degrees, rises by 9, then falls by 2. What is the final temperature?\nAnswer:",
-    "target": " 4",
+    "prompt": "Sara had 24 marbles. Then sara got 5 more and later gave away 7. How many marbles does sara have now?\nAnswer:",
+    "target": " 22",
     "type": "reasoning_numerical",
-    "tokens_approx": 24,
+    "tokens_approx": 28,
     "tier": "short",
-    "source": "rn_signed",
+    "source": "rn_word",
     "metadata": {
-      "family": "signed_numbers",
-      "concept": "signed_change",
+      "family": "word_problem",
+      "concept": "two_step_quantity_change",
       "difficulty": "medium"
     },
     "id": "rn_seed_0056"
   },
   {
-    "prompt": "The temperature starts at -2 degrees, rises by 9, then falls by 2. What is the final temperature?\nAnswer:",
-    "target": " 5",
+    "prompt": "Owen started the day with 17 cards. In the morning, owen received 12 more. Later that afternoon, owen found 9 extra cards in a drawer. Before going home, owen gave 2 cards to a friend. How many cards does owen have now?\nAnswer:",
+    "target": " 36",
     "type": "reasoning_numerical",
-    "tokens_approx": 24,
-    "tier": "short",
-    "source": "rn_signed",
+    "tokens_approx": 55,
+    "tier": "brief",
+    "source": "rn_word_brief",
     "metadata": {
-      "family": "signed_numbers",
-      "concept": "signed_change",
+      "family": "word_problem",
+      "concept": "three_step_quantity_change_brief",
       "difficulty": "medium"
     },
     "id": "rn_seed_0057"
   },
   {
-    "prompt": "How many numbers are both greater than 10 and divisible by 3 in: 16, 11, 21, 22, 4, 9, 24, 3\nAnswer:",
+    "prompt": "How many numbers are both greater than 10 and divisible by 3 in: 21, 12, 4, 17, 13, 22, 3, 14\nAnswer:",
     "target": " 2",
     "type": "reasoning_numerical",
     "tokens_approx": 28,
@@ -826,64 +826,64 @@
     "id": "rn_seed_0058"
   },
   {
-    "prompt": "First total: 5 + 17. Second total: 7 + 12. Which is larger: first, second, or equal?\nAnswer:",
-    "target": " first",
+    "prompt": "A total of 42 points is shared in the ratio 1:2. How many points does the first part receive?\nAnswer:",
+    "target": " 14",
     "type": "reasoning_numerical",
-    "tokens_approx": 23,
+    "tokens_approx": 26,
     "tier": "short",
-    "source": "rn_compare",
+    "source": "rn_ratio",
     "metadata": {
-      "family": "comparison",
-      "concept": "compare_two_totals",
-      "difficulty": "easy"
+      "family": "ratios",
+      "concept": "ratio_share",
+      "difficulty": "medium"
     },
     "id": "rn_seed_0059"
   },
   {
-    "prompt": "What is the average of these numbers: 19, 15, 7, 11\nAnswer:",
-    "target": " 13",
+    "prompt": "Scores are:\nAda: 10\nBo: 10\nCy: 10\nAdd the highest and lowest score.\nAnswer:",
+    "target": " 20",
     "type": "reasoning_numerical",
-    "tokens_approx": 15,
+    "tokens_approx": 19,
     "tier": "short",
-    "source": "rn_average",
+    "source": "rn_table",
     "metadata": {
-      "family": "averages",
-      "concept": "average_of_four",
+      "family": "table_reasoning",
+      "concept": "max_plus_min",
       "difficulty": "medium"
     },
     "id": "rn_seed_0060"
   },
   {
-    "prompt": "The temperature starts at -5 degrees, rises by 9, then falls by 6. What is the final temperature?\nAnswer:",
-    "target": " -2",
+    "prompt": "Consider these numbers: 8, 18, 16, 14. First find their average. Then add the first number in the list to that average. What is the result?\nAnswer:",
+    "target": " 22",
     "type": "reasoning_numerical",
-    "tokens_approx": 24,
-    "tier": "short",
-    "source": "rn_signed",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "rn_average_brief",
     "metadata": {
-      "family": "signed_numbers",
-      "concept": "signed_change",
+      "family": "averages",
+      "concept": "average_then_add_first_brief",
       "difficulty": "medium"
     },
     "id": "rn_seed_0061"
   },
   {
-    "prompt": "There are 55 tokens. 2 groups of 5 are used. How many tokens remain?\nAnswer:",
-    "target": " 45",
+    "prompt": "How many numbers are both greater than 10 and divisible by 3 in: 7, 11, 13, 3, 5, 16, 23, 4\nAnswer:",
+    "target": " 0",
     "type": "reasoning_numerical",
-    "tokens_approx": 19,
+    "tokens_approx": 28,
     "tier": "short",
-    "source": "rn_group",
+    "source": "rn_constraints",
     "metadata": {
-      "family": "grouping",
-      "concept": "remaining_after_groups",
+      "family": "constraint_counting",
+      "concept": "count_divisible_and_large",
       "difficulty": "medium"
     },
     "id": "rn_seed_0062"
   },
   {
-    "prompt": "There are 60 apples. 4 groups of 4 are used. How many apples remain?\nAnswer:",
-    "target": " 44",
+    "prompt": "There are 25 blocks. 2 groups of 5 are used. How many blocks remain?\nAnswer:",
+    "target": " 15",
     "type": "reasoning_numerical",
     "tokens_approx": 19,
     "tier": "short",
@@ -896,147 +896,21 @@
     "id": "rn_seed_0063"
   },
   {
-    "prompt": "A sequence starts at 4 and increases by 4. After writing 4 numbers, add the first and last. Result:\nAnswer:",
+    "prompt": "Consider these numbers: 8, 13, 12, 15. First find their average. Then add the first number in the list to that average. What is the result?\nAnswer:",
     "target": " 20",
     "type": "reasoning_numerical",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rn_sequence",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "rn_average_brief",
     "metadata": {
-      "family": "sequences",
-      "concept": "first_last_sum",
+      "family": "averages",
+      "concept": "average_then_add_first_brief",
       "difficulty": "medium"
     },
     "id": "rn_seed_0064"
   },
   {
-    "prompt": "A sequence starts at 8 and increases by 6. After writing 6 numbers, add the first and last. Result:\nAnswer:",
-    "target": " 46",
-    "type": "reasoning_numerical",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rn_sequence",
-    "metadata": {
-      "family": "sequences",
-      "concept": "first_last_sum",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0065"
-  },
-  {
-    "prompt": "How many numbers are both greater than 10 and divisible by 3 in: 22, 14, 16, 17, 24, 21, 4, 8\nAnswer:",
-    "target": " 2",
-    "type": "reasoning_numerical",
-    "tokens_approx": 28,
-    "tier": "short",
-    "source": "rn_constraints",
-    "metadata": {
-      "family": "constraint_counting",
-      "concept": "count_divisible_and_large",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0066"
-  },
-  {
-    "prompt": "A car travels at 20 miles per hour for 6 hours. How far does it travel?\nAnswer:",
-    "target": " 120",
-    "type": "reasoning_numerical",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "rn_rate",
-    "metadata": {
-      "family": "rate",
-      "concept": "distance_from_rate_time",
-      "difficulty": "easy"
-    },
-    "id": "rn_seed_0067"
-  },
-  {
-    "prompt": "A sequence starts at 2 and increases by 4. After writing 5 numbers, add the first and last. Result:\nAnswer:",
-    "target": " 20",
-    "type": "reasoning_numerical",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rn_sequence",
-    "metadata": {
-      "family": "sequences",
-      "concept": "first_last_sum",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0068"
-  },
-  {
-    "prompt": "How many numbers are both greater than 10 and divisible by 3 in: 18, 7, 12, 22, 5, 23, 15, 2\nAnswer:",
-    "target": " 3",
-    "type": "reasoning_numerical",
-    "tokens_approx": 28,
-    "tier": "short",
-    "source": "rn_constraints",
-    "metadata": {
-      "family": "constraint_counting",
-      "concept": "count_divisible_and_large",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0069"
-  },
-  {
-    "prompt": "There are 27 tokens. 5 groups of 6 are used. How many tokens remain?\nAnswer:",
-    "target": " -3",
-    "type": "reasoning_numerical",
-    "tokens_approx": 19,
-    "tier": "short",
-    "source": "rn_group",
-    "metadata": {
-      "family": "grouping",
-      "concept": "remaining_after_groups",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0070"
-  },
-  {
-    "prompt": "What is the average of these numbers: 12, 4, 15, 13\nAnswer:",
-    "target": " 11",
-    "type": "reasoning_numerical",
-    "tokens_approx": 15,
-    "tier": "short",
-    "source": "rn_average",
-    "metadata": {
-      "family": "averages",
-      "concept": "average_of_four",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0071"
-  },
-  {
-    "prompt": "What is the average of these numbers: 19, 7, 8, 10\nAnswer:",
-    "target": " 11",
-    "type": "reasoning_numerical",
-    "tokens_approx": 15,
-    "tier": "short",
-    "source": "rn_average",
-    "metadata": {
-      "family": "averages",
-      "concept": "average_of_four",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0072"
-  },
-  {
-    "prompt": "There are 30 blocks. 3 groups of 4 are used. How many blocks remain?\nAnswer:",
-    "target": " 18",
-    "type": "reasoning_numerical",
-    "tokens_approx": 19,
-    "tier": "short",
-    "source": "rn_group",
-    "metadata": {
-      "family": "grouping",
-      "concept": "remaining_after_groups",
-      "difficulty": "medium"
-    },
-    "id": "rn_seed_0073"
-  },
-  {
-    "prompt": "There are 43 tokens. 3 groups of 6 are used. How many tokens remain?\nAnswer:",
+    "prompt": "There are 39 apples. 2 groups of 7 are used. How many apples remain?\nAnswer:",
     "target": " 25",
     "type": "reasoning_numerical",
     "tokens_approx": 19,
@@ -1047,7 +921,483 @@
       "concept": "remaining_after_groups",
       "difficulty": "medium"
     },
+    "id": "rn_seed_0065"
+  },
+  {
+    "prompt": "First total: 10 + 20. Second total: 12 + 17. Which is larger: first, second, or equal?\nAnswer:",
+    "target": " first",
+    "type": "reasoning_numerical",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "rn_compare",
+    "metadata": {
+      "family": "comparison",
+      "concept": "compare_two_totals",
+      "difficulty": "easy"
+    },
+    "id": "rn_seed_0066"
+  },
+  {
+    "prompt": "Consider these numbers: 6, 18, 13, 19. First find their average. Then add the first number in the list to that average. What is the result?\nAnswer:",
+    "target": " 20",
+    "type": "reasoning_numerical",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "rn_average_brief",
+    "metadata": {
+      "family": "averages",
+      "concept": "average_then_add_first_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0067"
+  },
+  {
+    "prompt": "A small score table is shown below:\nAda: 10\nBo: 17\nCy: 17\nDi: 6\nAdd Ada and Di's scores together. Then subtract the sum of Bo and Cy's scores. What is the result?\nAnswer:",
+    "target": " -18",
+    "type": "reasoning_numerical",
+    "tokens_approx": 45,
+    "tier": "brief",
+    "source": "rn_table_brief",
+    "metadata": {
+      "family": "table_reasoning",
+      "concept": "paired_sum_difference_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0068"
+  },
+  {
+    "prompt": "There are 31 cards. 3 groups of 3 are used. How many cards remain?\nAnswer:",
+    "target": " 22",
+    "type": "reasoning_numerical",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "rn_group",
+    "metadata": {
+      "family": "grouping",
+      "concept": "remaining_after_groups",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0069"
+  },
+  {
+    "prompt": "How many numbers are both greater than 10 and divisible by 3 in: 3, 24, 5, 19, 13, 12, 4, 14\nAnswer:",
+    "target": " 2",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "rn_constraints",
+    "metadata": {
+      "family": "constraint_counting",
+      "concept": "count_divisible_and_large",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0070"
+  },
+  {
+    "prompt": "First total: 12 + 16. Second total: 7 + 15. Which is larger: first, second, or equal?\nAnswer:",
+    "target": " first",
+    "type": "reasoning_numerical",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "rn_compare",
+    "metadata": {
+      "family": "comparison",
+      "concept": "compare_two_totals",
+      "difficulty": "easy"
+    },
+    "id": "rn_seed_0071"
+  },
+  {
+    "prompt": "Lena started the day with 21 marbles. In the morning, lena received 12 more. Later that afternoon, lena found 5 extra marbles in a drawer. Before going home, lena gave 4 marbles to a friend. How many marbles does lena have now?\nAnswer:",
+    "target": " 34",
+    "type": "reasoning_numerical",
+    "tokens_approx": 55,
+    "tier": "brief",
+    "source": "rn_word_brief",
+    "metadata": {
+      "family": "word_problem",
+      "concept": "three_step_quantity_change_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0072"
+  },
+  {
+    "prompt": "What is the remainder when 104 is divided by 6?\nAnswer:",
+    "target": " 2",
+    "type": "reasoning_numerical",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "rn_modulo",
+    "metadata": {
+      "family": "modulo",
+      "concept": "remainder",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0073"
+  },
+  {
+    "prompt": "The temperature starts at 13 degrees, rises by 8, then falls by 8. What is the final temperature?\nAnswer:",
+    "target": " 13",
+    "type": "reasoning_numerical",
+    "tokens_approx": 24,
+    "tier": "short",
+    "source": "rn_signed",
+    "metadata": {
+      "family": "signed_numbers",
+      "concept": "signed_change",
+      "difficulty": "medium"
+    },
     "id": "rn_seed_0074"
+  },
+  {
+    "prompt": "The temperature starts at 8 degrees, rises by 10, then falls by 5. What is the final temperature?\nAnswer:",
+    "target": " 13",
+    "type": "reasoning_numerical",
+    "tokens_approx": 24,
+    "tier": "short",
+    "source": "rn_signed",
+    "metadata": {
+      "family": "signed_numbers",
+      "concept": "signed_change",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0075"
+  },
+  {
+    "prompt": "A sequence starts at 9 and increases by 2. After writing 4 numbers, add the first and last. Result:\nAnswer:",
+    "target": " 24",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "rn_sequence",
+    "metadata": {
+      "family": "sequences",
+      "concept": "first_last_sum",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0076"
+  },
+  {
+    "prompt": "A small score table is shown below:\nAda: 5\nBo: 14\nCy: 11\nDi: 6\nAdd Ada and Di's scores together. Then subtract the sum of Bo and Cy's scores. What is the result?\nAnswer:",
+    "target": " -14",
+    "type": "reasoning_numerical",
+    "tokens_approx": 45,
+    "tier": "brief",
+    "source": "rn_table_brief",
+    "metadata": {
+      "family": "table_reasoning",
+      "concept": "paired_sum_difference_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0077"
+  },
+  {
+    "prompt": "Find the difference between the largest and smallest numbers in: 32, 8, 26, 16, 47\nAnswer:",
+    "target": " 39",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "rn_ordering",
+    "metadata": {
+      "family": "ordering",
+      "concept": "range_gap",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0078"
+  },
+  {
+    "prompt": "A total of 42 points is shared in the ratio 4:1. How many points does the first part receive?\nAnswer:",
+    "target": " 33",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "rn_ratio",
+    "metadata": {
+      "family": "ratios",
+      "concept": "ratio_share",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0079"
+  },
+  {
+    "prompt": "Scores are:\nAda: 6\nBo: 6\nCy: 3\nAdd the highest and lowest score.\nAnswer:",
+    "target": " 9",
+    "type": "reasoning_numerical",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "rn_table",
+    "metadata": {
+      "family": "table_reasoning",
+      "concept": "max_plus_min",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0080"
+  },
+  {
+    "prompt": "What is the average of these numbers: 14, 18, 6, 22\nAnswer:",
+    "target": " 15",
+    "type": "reasoning_numerical",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "rn_average",
+    "metadata": {
+      "family": "averages",
+      "concept": "average_of_four",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0081"
+  },
+  {
+    "prompt": "A train travels at 40 miles per hour for 2 hours. How far does it travel?\nAnswer:",
+    "target": " 80",
+    "type": "reasoning_numerical",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "rn_rate",
+    "metadata": {
+      "family": "rate",
+      "concept": "distance_from_rate_time",
+      "difficulty": "easy"
+    },
+    "id": "rn_seed_0082"
+  },
+  {
+    "prompt": "How many numbers are both greater than 10 and divisible by 3 in: 20, 10, 2, 21, 24, 1, 9, 12\nAnswer:",
+    "target": " 3",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "rn_constraints",
+    "metadata": {
+      "family": "constraint_counting",
+      "concept": "count_divisible_and_large",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0083"
+  },
+  {
+    "prompt": "Scores are:\nAda: 11\nBo: 6\nCy: 8\nAdd the highest and lowest score.\nAnswer:",
+    "target": " 17",
+    "type": "reasoning_numerical",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "rn_table",
+    "metadata": {
+      "family": "table_reasoning",
+      "concept": "max_plus_min",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0084"
+  },
+  {
+    "prompt": "Scores are:\nAda: 5\nBo: 6\nCy: 10\nAdd the highest and lowest score.\nAnswer:",
+    "target": " 15",
+    "type": "reasoning_numerical",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "rn_table",
+    "metadata": {
+      "family": "table_reasoning",
+      "concept": "max_plus_min",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0085"
+  },
+  {
+    "prompt": "Consider these numbers: 15, 23, 19, 7. First find their average. Then add the first number in the list to that average. What is the result?\nAnswer:",
+    "target": " 31",
+    "type": "reasoning_numerical",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "rn_average_brief",
+    "metadata": {
+      "family": "averages",
+      "concept": "average_then_add_first_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0086"
+  },
+  {
+    "prompt": "A total of 36 points is shared in the ratio 3:4. How many points does the first part receive?\nAnswer:",
+    "target": " 15",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "rn_ratio",
+    "metadata": {
+      "family": "ratios",
+      "concept": "ratio_share",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0087"
+  },
+  {
+    "prompt": "A small score table is shown below:\nAda: 5\nBo: 16\nCy: 14\nDi: 16\nAdd Ada and Di's scores together. Then subtract the sum of Bo and Cy's scores. What is the result?\nAnswer:",
+    "target": " -9",
+    "type": "reasoning_numerical",
+    "tokens_approx": 45,
+    "tier": "brief",
+    "source": "rn_table_brief",
+    "metadata": {
+      "family": "table_reasoning",
+      "concept": "paired_sum_difference_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0088"
+  },
+  {
+    "prompt": "How many numbers are both greater than 10 and divisible by 3 in: 16, 8, 9, 13, 2, 1, 21, 7\nAnswer:",
+    "target": " 1",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "rn_constraints",
+    "metadata": {
+      "family": "constraint_counting",
+      "concept": "count_divisible_and_large",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0089"
+  },
+  {
+    "prompt": "What is the remainder when 66 is divided by 7?\nAnswer:",
+    "target": " 3",
+    "type": "reasoning_numerical",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "rn_modulo",
+    "metadata": {
+      "family": "modulo",
+      "concept": "remainder",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0090"
+  },
+  {
+    "prompt": "Mia started the day with 38 marbles. In the morning, mia received 9 more. Later that afternoon, mia found 10 extra marbles in a drawer. Before going home, mia gave 8 marbles to a friend. How many marbles does mia have now?\nAnswer:",
+    "target": " 49",
+    "type": "reasoning_numerical",
+    "tokens_approx": 55,
+    "tier": "brief",
+    "source": "rn_word_brief",
+    "metadata": {
+      "family": "word_problem",
+      "concept": "three_step_quantity_change_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0091"
+  },
+  {
+    "prompt": "A small score table is shown below:\nAda: 9\nBo: 6\nCy: 7\nDi: 8\nAdd Ada and Di's scores together. Then subtract the sum of Bo and Cy's scores. What is the result?\nAnswer:",
+    "target": " 4",
+    "type": "reasoning_numerical",
+    "tokens_approx": 45,
+    "tier": "brief",
+    "source": "rn_table_brief",
+    "metadata": {
+      "family": "table_reasoning",
+      "concept": "paired_sum_difference_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0092"
+  },
+  {
+    "prompt": "A train travels for 3 hours at 50 miles per hour, then continues for 2 more hours at 35 miles per hour. What total distance does the train travel?\nAnswer:",
+    "target": " 220",
+    "type": "reasoning_numerical",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "rn_rate_brief",
+    "metadata": {
+      "family": "rate",
+      "concept": "two_leg_trip_distance",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0093"
+  },
+  {
+    "prompt": "Sara started the day with 33 stickers. In the morning, sara received 4 more. Later that afternoon, sara found 7 extra stickers in a drawer. Before going home, sara gave 6 stickers to a friend. How many stickers does sara have now?\nAnswer:",
+    "target": " 38",
+    "type": "reasoning_numerical",
+    "tokens_approx": 55,
+    "tier": "brief",
+    "source": "rn_word_brief",
+    "metadata": {
+      "family": "word_problem",
+      "concept": "three_step_quantity_change_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0094"
+  },
+  {
+    "prompt": "An item costs 25 dollars and is discounted by 25%. What is the final price?\nAnswer:",
+    "target": " 19",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "rn_percent",
+    "metadata": {
+      "family": "percentages",
+      "concept": "discount_price",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0095"
+  },
+  {
+    "prompt": "An item costs 20 dollars and is discounted by 50%. What is the final price?\nAnswer:",
+    "target": " 10",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "rn_percent",
+    "metadata": {
+      "family": "percentages",
+      "concept": "discount_price",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0096"
+  },
+  {
+    "prompt": "First total: 16 + 5. Second total: 8 + 5. Which is larger: first, second, or equal?\nAnswer:",
+    "target": " first",
+    "type": "reasoning_numerical",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "rn_compare",
+    "metadata": {
+      "family": "comparison",
+      "concept": "compare_two_totals",
+      "difficulty": "easy"
+    },
+    "id": "rn_seed_0097"
+  },
+  {
+    "prompt": "There are 23 apples. 3 groups of 7 are used. How many apples remain?\nAnswer:",
+    "target": " 2",
+    "type": "reasoning_numerical",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "rn_group",
+    "metadata": {
+      "family": "grouping",
+      "concept": "remaining_after_groups",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0098"
+  },
+  {
+    "prompt": "Owen had 27 books. Then owen got 12 more and later gave away 1. How many books does owen have now?\nAnswer:",
+    "target": " 38",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "rn_word",
+    "metadata": {
+      "family": "word_problem",
+      "concept": "two_step_quantity_change",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0099"
   },
   {
     "prompt": "A boat travels at 40 miles per hour for 5 hours. How far does it travel?\nAnswer:",
@@ -1061,25 +1411,487 @@
       "concept": "distance_from_rate_time",
       "difficulty": "easy"
     },
-    "id": "rn_seed_0075"
+    "id": "rn_seed_0100"
   },
   {
-    "prompt": "What is the average of these numbers: 16, 6, 8, 6\nAnswer:",
-    "target": " 9",
+    "prompt": "Sara had 12 marbles. Then sara got 7 more and later gave away 5. How many marbles does sara have now?\nAnswer:",
+    "target": " 14",
     "type": "reasoning_numerical",
-    "tokens_approx": 15,
+    "tokens_approx": 28,
     "tier": "short",
-    "source": "rn_average",
+    "source": "rn_word",
     "metadata": {
-      "family": "averages",
-      "concept": "average_of_four",
+      "family": "word_problem",
+      "concept": "two_step_quantity_change",
       "difficulty": "medium"
     },
-    "id": "rn_seed_0076"
+    "id": "rn_seed_0101"
   },
   {
-    "prompt": "A car travels at 40 miles per hour for 6 hours. How far does it travel?\nAnswer:",
-    "target": " 240",
+    "prompt": "Scores are:\nAda: 10\nBo: 9\nCy: 8\nAdd the highest and lowest score.\nAnswer:",
+    "target": " 18",
+    "type": "reasoning_numerical",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "rn_table",
+    "metadata": {
+      "family": "table_reasoning",
+      "concept": "max_plus_min",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0102"
+  },
+  {
+    "prompt": "How many numbers are both greater than 10 and divisible by 3 in: 9, 14, 12, 4, 13, 20, 6, 10\nAnswer:",
+    "target": " 1",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "rn_constraints",
+    "metadata": {
+      "family": "constraint_counting",
+      "concept": "count_divisible_and_large",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0103"
+  },
+  {
+    "prompt": "Sara had 28 coins. Then sara got 12 more and later gave away 4. How many coins does sara have now?\nAnswer:",
+    "target": " 36",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "rn_word",
+    "metadata": {
+      "family": "word_problem",
+      "concept": "two_step_quantity_change",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0104"
+  },
+  {
+    "prompt": "A car travels for 3 hours at 20 miles per hour, then continues for 2 more hours at 55 miles per hour. What total distance does the car travel?\nAnswer:",
+    "target": " 170",
+    "type": "reasoning_numerical",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "rn_rate_brief",
+    "metadata": {
+      "family": "rate",
+      "concept": "two_leg_trip_distance",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0105"
+  },
+  {
+    "prompt": "The temperature starts at -1 degrees, rises by 5, then falls by 8. What is the final temperature?\nAnswer:",
+    "target": " -4",
+    "type": "reasoning_numerical",
+    "tokens_approx": 24,
+    "tier": "short",
+    "source": "rn_signed",
+    "metadata": {
+      "family": "signed_numbers",
+      "concept": "signed_change",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0106"
+  },
+  {
+    "prompt": "What is the remainder when 114 is divided by 9?\nAnswer:",
+    "target": " 6",
+    "type": "reasoning_numerical",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "rn_modulo",
+    "metadata": {
+      "family": "modulo",
+      "concept": "remainder",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0107"
+  },
+  {
+    "prompt": "An item costs 60 dollars and is discounted by 50%. What is the final price?\nAnswer:",
+    "target": " 30",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "rn_percent",
+    "metadata": {
+      "family": "percentages",
+      "concept": "discount_price",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0108"
+  },
+  {
+    "prompt": "There are 29 cards. 2 groups of 3 are used. How many cards remain?\nAnswer:",
+    "target": " 23",
+    "type": "reasoning_numerical",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "rn_group",
+    "metadata": {
+      "family": "grouping",
+      "concept": "remaining_after_groups",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0109"
+  },
+  {
+    "prompt": "Convert 4 meters to centimeters.\nAnswer:",
+    "target": " 400",
+    "type": "reasoning_numerical",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "rn_units",
+    "metadata": {
+      "family": "unit_conversion",
+      "concept": "simple_unit_conversion",
+      "difficulty": "easy"
+    },
+    "id": "rn_seed_0110"
+  },
+  {
+    "prompt": "Scores are:\nAda: 5\nBo: 4\nCy: 11\nAdd the highest and lowest score.\nAnswer:",
+    "target": " 15",
+    "type": "reasoning_numerical",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "rn_table",
+    "metadata": {
+      "family": "table_reasoning",
+      "concept": "max_plus_min",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0111"
+  },
+  {
+    "prompt": "What is the remainder when 98 is divided by 9?\nAnswer:",
+    "target": " 8",
+    "type": "reasoning_numerical",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "rn_modulo",
+    "metadata": {
+      "family": "modulo",
+      "concept": "remainder",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0112"
+  },
+  {
+    "prompt": "Find the difference between the largest and smallest numbers in: 6, 15, 43, 39, 42\nAnswer:",
+    "target": " 37",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "rn_ordering",
+    "metadata": {
+      "family": "ordering",
+      "concept": "range_gap",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0113"
+  },
+  {
+    "prompt": "Find the difference between the largest and smallest numbers in: 14, 19, 12, 23, 44\nAnswer:",
+    "target": " 32",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "rn_ordering",
+    "metadata": {
+      "family": "ordering",
+      "concept": "range_gap",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0114"
+  },
+  {
+    "prompt": "A total of 54 points is split between two teams in the ratio 4:4. After the split, compare the teams' shares. How many more points does the larger share have than the smaller share?\nAnswer:",
+    "target": " 0",
+    "type": "reasoning_numerical",
+    "tokens_approx": 45,
+    "tier": "brief",
+    "source": "rn_ratio_brief",
+    "metadata": {
+      "family": "ratios",
+      "concept": "ratio_difference_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0115"
+  },
+  {
+    "prompt": "Find the difference between the largest and smallest numbers in: 43, 24, 31, 33, 16\nAnswer:",
+    "target": " 27",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "rn_ordering",
+    "metadata": {
+      "family": "ordering",
+      "concept": "range_gap",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0116"
+  },
+  {
+    "prompt": "Lena had 35 books. Then lena got 10 more and later gave away 8. How many books does lena have now?\nAnswer:",
+    "target": " 37",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "rn_word",
+    "metadata": {
+      "family": "word_problem",
+      "concept": "two_step_quantity_change",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0117"
+  },
+  {
+    "prompt": "An item costs 30 dollars and is discounted by 25%. What is the final price?\nAnswer:",
+    "target": " 23",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "rn_percent",
+    "metadata": {
+      "family": "percentages",
+      "concept": "discount_price",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0118"
+  },
+  {
+    "prompt": "An item costs 80 dollars and is discounted by 50%. What is the final price?\nAnswer:",
+    "target": " 40",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "rn_percent",
+    "metadata": {
+      "family": "percentages",
+      "concept": "discount_price",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0119"
+  },
+  {
+    "prompt": "Owen had 34 coins. Then owen got 11 more and later gave away 5. How many coins does owen have now?\nAnswer:",
+    "target": " 40",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "rn_word",
+    "metadata": {
+      "family": "word_problem",
+      "concept": "two_step_quantity_change",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0120"
+  },
+  {
+    "prompt": "An item costs 80 dollars and is discounted by 10%. What is the final price?\nAnswer:",
+    "target": " 72",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "rn_percent",
+    "metadata": {
+      "family": "percentages",
+      "concept": "discount_price",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0121"
+  },
+  {
+    "prompt": "The temperature starts at 6 degrees, rises by 8, then falls by 7. What is the final temperature?\nAnswer:",
+    "target": " 7",
+    "type": "reasoning_numerical",
+    "tokens_approx": 24,
+    "tier": "short",
+    "source": "rn_signed",
+    "metadata": {
+      "family": "signed_numbers",
+      "concept": "signed_change",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0122"
+  },
+  {
+    "prompt": "How many numbers are both greater than 10 and divisible by 3 in: 5, 1, 9, 12, 6, 2, 14, 16\nAnswer:",
+    "target": " 1",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "rn_constraints",
+    "metadata": {
+      "family": "constraint_counting",
+      "concept": "count_divisible_and_large",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0123"
+  },
+  {
+    "prompt": "How many numbers are both greater than 10 and divisible by 3 in: 5, 9, 23, 11, 14, 4, 7, 6\nAnswer:",
+    "target": " 0",
+    "type": "reasoning_numerical",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "rn_constraints",
+    "metadata": {
+      "family": "constraint_counting",
+      "concept": "count_divisible_and_large",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0124"
+  },
+  {
+    "prompt": "A sequence starts at 5 and increases by 4. After writing 6 numbers, add the first and last. Result:\nAnswer:",
+    "target": " 30",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "rn_sequence",
+    "metadata": {
+      "family": "sequences",
+      "concept": "first_last_sum",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0125"
+  },
+  {
+    "prompt": "A small score table is shown below:\nAda: 12\nBo: 16\nCy: 17\nDi: 13\nAdd Ada and Di's scores together. Then subtract the sum of Bo and Cy's scores. What is the result?\nAnswer:",
+    "target": " -8",
+    "type": "reasoning_numerical",
+    "tokens_approx": 45,
+    "tier": "brief",
+    "source": "rn_table_brief",
+    "metadata": {
+      "family": "table_reasoning",
+      "concept": "paired_sum_difference_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0126"
+  },
+  {
+    "prompt": "There are 29 apples. 4 groups of 7 are used. How many apples remain?\nAnswer:",
+    "target": " 1",
+    "type": "reasoning_numerical",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "rn_group",
+    "metadata": {
+      "family": "grouping",
+      "concept": "remaining_after_groups",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0127"
+  },
+  {
+    "prompt": "Convert 20 meters to centimeters.\nAnswer:",
+    "target": " 2000",
+    "type": "reasoning_numerical",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "rn_units",
+    "metadata": {
+      "family": "unit_conversion",
+      "concept": "simple_unit_conversion",
+      "difficulty": "easy"
+    },
+    "id": "rn_seed_0128"
+  },
+  {
+    "prompt": "Convert 12 hours to minutes.\nAnswer:",
+    "target": " 720",
+    "type": "reasoning_numerical",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "rn_units",
+    "metadata": {
+      "family": "unit_conversion",
+      "concept": "simple_unit_conversion",
+      "difficulty": "easy"
+    },
+    "id": "rn_seed_0129"
+  },
+  {
+    "prompt": "A total of 24 points is shared in the ratio 2:4. How many points does the first part receive?\nAnswer:",
+    "target": " 8",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "rn_ratio",
+    "metadata": {
+      "family": "ratios",
+      "concept": "ratio_share",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0130"
+  },
+  {
+    "prompt": "Mia started the day with 42 cards. In the morning, mia received 12 more. Later that afternoon, mia found 6 extra cards in a drawer. Before going home, mia gave 4 cards to a friend. How many cards does mia have now?\nAnswer:",
+    "target": " 56",
+    "type": "reasoning_numerical",
+    "tokens_approx": 55,
+    "tier": "brief",
+    "source": "rn_word_brief",
+    "metadata": {
+      "family": "word_problem",
+      "concept": "three_step_quantity_change_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0131"
+  },
+  {
+    "prompt": "First total: 16 + 8. Second total: 17 + 16. Which is larger: first, second, or equal?\nAnswer:",
+    "target": " second",
+    "type": "reasoning_numerical",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "rn_compare",
+    "metadata": {
+      "family": "comparison",
+      "concept": "compare_two_totals",
+      "difficulty": "easy"
+    },
+    "id": "rn_seed_0132"
+  },
+  {
+    "prompt": "A sequence starts at 5 and increases by 4. After writing 5 numbers, add the first and last. Result:\nAnswer:",
+    "target": " 26",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "rn_sequence",
+    "metadata": {
+      "family": "sequences",
+      "concept": "first_last_sum",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0133"
+  },
+  {
+    "prompt": "Find the difference between the largest and smallest numbers in: 48, 49, 46, 25, 41\nAnswer:",
+    "target": " 24",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "rn_ordering",
+    "metadata": {
+      "family": "ordering",
+      "concept": "range_gap",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0134"
+  },
+  {
+    "prompt": "A boat travels at 60 miles per hour for 3 hours. How far does it travel?\nAnswer:",
+    "target": " 180",
     "type": "reasoning_numerical",
     "tokens_approx": 22,
     "tier": "short",
@@ -1089,34 +1901,202 @@
       "concept": "distance_from_rate_time",
       "difficulty": "easy"
     },
-    "id": "rn_seed_0077"
+    "id": "rn_seed_0135"
   },
   {
-    "prompt": "A car travels at 40 miles per hour for 4 hours. How far does it travel?\nAnswer:",
-    "target": " 160",
+    "prompt": "A total of 36 points is split between two teams in the ratio 1:2. After the split, compare the teams' shares. How many more points does the larger share have than the smaller share?\nAnswer:",
+    "target": " 12",
     "type": "reasoning_numerical",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "rn_rate",
+    "tokens_approx": 45,
+    "tier": "brief",
+    "source": "rn_ratio_brief",
     "metadata": {
-      "family": "rate",
-      "concept": "distance_from_rate_time",
-      "difficulty": "easy"
+      "family": "ratios",
+      "concept": "ratio_difference_brief",
+      "difficulty": "medium"
     },
-    "id": "rn_seed_0078"
+    "id": "rn_seed_0136"
   },
   {
-    "prompt": "A train travels at 50 miles per hour for 5 hours. How far does it travel?\nAnswer:",
-    "target": " 250",
+    "prompt": "The temperature starts at 3 degrees, rises by 8, then falls by 4. What is the final temperature?\nAnswer:",
+    "target": " 7",
     "type": "reasoning_numerical",
-    "tokens_approx": 22,
+    "tokens_approx": 24,
     "tier": "short",
-    "source": "rn_rate",
+    "source": "rn_signed",
+    "metadata": {
+      "family": "signed_numbers",
+      "concept": "signed_change",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0137"
+  },
+  {
+    "prompt": "A bus travels for 2 hours at 30 miles per hour, then continues for 3 more hours at 45 miles per hour. What total distance does the bus travel?\nAnswer:",
+    "target": " 195",
+    "type": "reasoning_numerical",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "rn_rate_brief",
     "metadata": {
       "family": "rate",
-      "concept": "distance_from_rate_time",
+      "concept": "two_leg_trip_distance",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0138"
+  },
+  {
+    "prompt": "There are 51 blocks. 2 groups of 6 are used. How many blocks remain?\nAnswer:",
+    "target": " 39",
+    "type": "reasoning_numerical",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "rn_group",
+    "metadata": {
+      "family": "grouping",
+      "concept": "remaining_after_groups",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0139"
+  },
+  {
+    "prompt": "A sequence starts at 4 and increases by 2. After writing 5 numbers, add the first and last. Result:\nAnswer:",
+    "target": " 16",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "rn_sequence",
+    "metadata": {
+      "family": "sequences",
+      "concept": "first_last_sum",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0140"
+  },
+  {
+    "prompt": "An item costs 25 dollars and is discounted by 50%. What is the final price?\nAnswer:",
+    "target": " 13",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "rn_percent",
+    "metadata": {
+      "family": "percentages",
+      "concept": "discount_price",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0141"
+  },
+  {
+    "prompt": "An item costs 30 dollars and is discounted by 10%. What is the final price?\nAnswer:",
+    "target": " 27",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "rn_percent",
+    "metadata": {
+      "family": "percentages",
+      "concept": "discount_price",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0142"
+  },
+  {
+    "prompt": "A train travels for 3 hours at 40 miles per hour, then continues for 1 more hours at 35 miles per hour. What total distance does the train travel?\nAnswer:",
+    "target": " 155",
+    "type": "reasoning_numerical",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "rn_rate_brief",
+    "metadata": {
+      "family": "rate",
+      "concept": "two_leg_trip_distance",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0143"
+  },
+  {
+    "prompt": "The temperature starts at 5 degrees, rises by 10, then falls by 8. What is the final temperature?\nAnswer:",
+    "target": " 7",
+    "type": "reasoning_numerical",
+    "tokens_approx": 24,
+    "tier": "short",
+    "source": "rn_signed",
+    "metadata": {
+      "family": "signed_numbers",
+      "concept": "signed_change",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0144"
+  },
+  {
+    "prompt": "First total: 6 + 7. Second total: 13 + 19. Which is larger: first, second, or equal?\nAnswer:",
+    "target": " second",
+    "type": "reasoning_numerical",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "rn_compare",
+    "metadata": {
+      "family": "comparison",
+      "concept": "compare_two_totals",
       "difficulty": "easy"
     },
-    "id": "rn_seed_0079"
+    "id": "rn_seed_0145"
+  },
+  {
+    "prompt": "A total of 48 points is split between two teams in the ratio 4:3. After the split, compare the teams' shares. How many more points does the larger share have than the smaller share?\nAnswer:",
+    "target": " -6",
+    "type": "reasoning_numerical",
+    "tokens_approx": 45,
+    "tier": "brief",
+    "source": "rn_ratio_brief",
+    "metadata": {
+      "family": "ratios",
+      "concept": "ratio_difference_brief",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0146"
+  },
+  {
+    "prompt": "The temperature starts at 15 degrees, rises by 8, then falls by 6. What is the final temperature?\nAnswer:",
+    "target": " 17",
+    "type": "reasoning_numerical",
+    "tokens_approx": 24,
+    "tier": "short",
+    "source": "rn_signed",
+    "metadata": {
+      "family": "signed_numbers",
+      "concept": "signed_change",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0147"
+  },
+  {
+    "prompt": "A sequence starts at 4 and increases by 3. After writing 4 numbers, add the first and last. Result:\nAnswer:",
+    "target": " 17",
+    "type": "reasoning_numerical",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "rn_sequence",
+    "metadata": {
+      "family": "sequences",
+      "concept": "first_last_sum",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0148"
+  },
+  {
+    "prompt": "Find the difference between the largest and smallest numbers in: 42, 43, 45, 40, 26\nAnswer:",
+    "target": " 19",
+    "type": "reasoning_numerical",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "rn_ordering",
+    "metadata": {
+      "family": "ordering",
+      "concept": "range_gap",
+      "difficulty": "medium"
+    },
+    "id": "rn_seed_0149"
   }
 ]
