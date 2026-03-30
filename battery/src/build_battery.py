@@ -297,16 +297,24 @@ def generate_structural_copying(n: int = 60, seed: int = 45) -> list[dict]:
     rng = random.Random(seed)
     items = []
 
+    family_targets = {
+        "alpha_seq": max(1, n // 7),
+        "num_seq": max(1, n // 7),
+        "schema_blocks": max(1, n // 7),
+        "word_lists": max(1, n // 7),
+        "paired_delimiters": max(1, n // 7),
+        "tabular_rows": max(1, n // 7),
+        "mirrored_patterns": max(1, n // 7),
+    }
+
     # Type 1: Alphabetic list continuation
-    for i in range(n // 4):
+    for _ in range(family_targets["alpha_seq"]):
         start = rng.randint(0, 20)
         length = rng.randint(3, 8)
         letters = [chr(ord('A') + (start + j) % 26) for j in range(length)]
         next_letter = chr(ord('A') + (start + length) % 26)
-
-        sep = rng.choice([", ", " ", " - ", "; "])
+        sep = rng.choice([", ", " ", " - ", "; ", " | "])
         prompt = sep.join(letters) + sep
-
         items.append({
             "prompt": prompt,
             "target": " " + next_letter,
@@ -316,17 +324,14 @@ def generate_structural_copying(n: int = 60, seed: int = 45) -> list[dict]:
         })
 
     # Type 2: Number list continuation
-    for i in range(n // 4):
-        # Arithmetic sequences
+    for _ in range(family_targets["num_seq"]):
         start = rng.randint(1, 50)
-        step = rng.choice([1, 2, 3, 5, 10])
+        step = rng.choice([1, 2, 3, 4, 5, 10])
         length = rng.randint(3, 7)
         nums = [str(start + j * step) for j in range(length)]
         target_num = str(start + length * step)
-
-        sep = rng.choice([", ", " ", "; "])
+        sep = rng.choice([", ", " ", "; ", " | "])
         prompt = sep.join(nums) + sep
-
         items.append({
             "prompt": prompt,
             "target": " " + target_num,
@@ -335,39 +340,55 @@ def generate_structural_copying(n: int = 60, seed: int = 45) -> list[dict]:
             "metadata": {"pattern": "arithmetic", "start": start, "step": step}
         })
 
-    # Type 3: Repeated structure copying
-    structures = [
-        ("Name: {name}\nAge: {age}\nCity: {city}\n\nName: {name2}\nAge: {age2}\nCity:",
-         lambda rng: {
-             "name": rng.choice(["Alice", "Bob", "Carol", "Dave", "Eve"]),
-             "age": str(rng.randint(20, 60)),
-             "city": rng.choice(["London", "Paris", "Tokyo", "Berlin", "Cairo"]),
-             "name2": rng.choice(["Frank", "Grace", "Hank", "Iris", "Jack"]),
-             "age2": str(rng.randint(20, 60)),
-         },
-         lambda vals: " " + rng.choice(["London", "Paris", "Tokyo", "Berlin", "Cairo", "Rome", "Delhi"])),
-
-        ("Item: apple, Color: red\nItem: banana, Color: yellow\nItem: grass, Color:",
-         lambda rng: {},
-         lambda vals: " green"),
-
-        ("Q: What is 2+2? A: 4\nQ: What is 3+3? A: 6\nQ: What is 5+5? A:",
-         lambda rng: {},
-         lambda vals: " 10"),
+    # Type 3: Structured schema copying
+    schema_templates = [
+        (
+            "Name: {name}\nAge: {age}\nCity: {city}\n\nName: {name2}\nAge: {age2}\nCity:",
+            lambda rng: {
+                "name": rng.choice(["Alice", "Bob", "Carol", "Dave", "Eve"]),
+                "age": str(rng.randint(20, 60)),
+                "city": rng.choice(["London", "Paris", "Tokyo", "Berlin", "Cairo"]),
+                "name2": rng.choice(["Frank", "Grace", "Hank", "Iris", "Jack"]),
+                "age2": str(rng.randint(20, 60)),
+            },
+            lambda vals: " " + rng.choice(["London", "Paris", "Tokyo", "Berlin", "Cairo", "Rome", "Delhi"]),
+            "person_card",
+        ),
+        (
+            "Item: apple, Color: red\nItem: banana, Color: yellow\nItem: grass, Color:",
+            lambda rng: {},
+            lambda vals: " green",
+            "label_value",
+        ),
+        (
+            "Q: What is 2+2? A: 4\nQ: What is 3+3? A: 6\nQ: What is 5+5? A:",
+            lambda rng: {},
+            lambda vals: " 10",
+            "qa_pair",
+        ),
+        (
+            "Planet={p1}; Moon={m1}\nPlanet={p2}; Moon={m2}\nPlanet={p3}; Moon:",
+            lambda rng: {
+                "p1": "Earth", "m1": "Moon",
+                "p2": "Mars", "m2": rng.choice(["Phobos", "Deimos"]),
+                "p3": "Jupiter",
+            },
+            lambda vals: " " + rng.choice(["Europa", "Io", "Ganymede"]),
+            "semicolon_schema",
+        ),
     ]
 
-    for i in range(n // 4):
-        template, val_fn, target_fn = rng.choice(structures)
+    for _ in range(family_targets["schema_blocks"]):
+        template, val_fn, target_fn, pattern = rng.choice(schema_templates)
         vals = val_fn(rng)
         prompt = template.format(**vals) if vals else template
         target = target_fn(vals)
-
         items.append({
             "prompt": prompt,
             "target": target,
             "type": "structural_copying",
             "source": "gen_struct",
-            "metadata": {"pattern": "structure_copy"}
+            "metadata": {"pattern": pattern}
         })
 
     # Type 4: Word list pattern copying
@@ -378,14 +399,11 @@ def generate_structural_copying(n: int = 60, seed: int = 45) -> list[dict]:
         "countries": ["France", "Japan", "Brazil", "Egypt", "India", "Canada", "Italy", "Spain", "China", "Kenya"],
     }
 
-    for i in range(n - len(items)):
+    for _ in range(family_targets["word_lists"]):
         cat = rng.choice(list(word_categories.keys()))
         words = rng.sample(word_categories[cat], min(5, len(word_categories[cat])))
         target_word = rng.choice([w for w in word_categories[cat] if w not in words])
-
-        # Present as a list with one more to complete
         prompt = f"List of {cat}: " + ", ".join(words) + ","
-
         items.append({
             "prompt": prompt,
             "target": " " + target_word,
@@ -393,6 +411,140 @@ def generate_structural_copying(n: int = 60, seed: int = 45) -> list[dict]:
             "source": "gen_word_list",
             "metadata": {"pattern": "category_list", "category": cat}
         })
+
+    # Type 5: Delimiter / closure continuation
+    delimiter_pairs = [
+        ("(", ")"),
+        ("[", "]"),
+        ("{", "}"),
+        ("<", ">"),
+    ]
+    for _ in range(family_targets["paired_delimiters"]):
+        left, right = rng.choice(delimiter_pairs)
+        reps = rng.randint(2, 5)
+        inner = rng.choice(["abc", "123", "xy", "k9"])
+        pieces = [f"{left}{inner}{right}" for _ in range(reps)]
+        prompt = " ".join(pieces) + f" {left}{inner}"
+        items.append({
+            "prompt": prompt,
+            "target": right,
+            "type": "structural_copying",
+            "source": "gen_delim",
+            "metadata": {"pattern": "paired_delimiter", "left": left, "right": right}
+        })
+
+    # Type 6: Tabular / row continuation
+    for _ in range(family_targets["tabular_rows"]):
+        row_type = rng.choice(["csv", "kv", "pipe"])
+        if row_type == "csv":
+            prompt = "id,name,score\n1,Ada,91\n2,Bo,88\n3,Cy,"
+            target = " 95"
+        elif row_type == "kv":
+            prompt = "key=alpha value=3\nkey=beta value=5\nkey=gamma value="
+            target = " 8"
+        else:
+            prompt = "A | 1 | red\nB | 2 | blue\nC | 3 |"
+            target = " green"
+        items.append({
+            "prompt": prompt,
+            "target": target,
+            "type": "structural_copying",
+            "source": "gen_table",
+            "metadata": {"pattern": "tabular_row", "row_type": row_type}
+        })
+
+    # Type 7: Mirrored / repeated symbol patterns
+    mirrored_tokens = ["ab", "xy", "12", "pq"]
+    for _ in range(family_targets["mirrored_patterns"]):
+        token = rng.choice(mirrored_tokens)
+        sep = rng.choice(["-", ":", "|"])
+        left = [token * k for k in range(1, 4)]
+        right = [token * k for k in range(3, 0, -1)]
+        body = left + right[:-1]
+        prompt = sep.join(body) + sep
+        target = right[-1]
+        items.append({
+            "prompt": prompt,
+            "target": " " + target,
+            "type": "structural_copying",
+            "source": "gen_mirror",
+            "metadata": {"pattern": "mirrored_repetition", "token": token}
+        })
+
+    # Fill any remainder with a weighted mix favoring more structured families
+    filler_families = ["schema_blocks", "paired_delimiters", "tabular_rows", "mirrored_patterns", "word_lists"]
+    while len(items) < n:
+        filler = rng.choice(filler_families)
+        if filler == "schema_blocks":
+            template, val_fn, target_fn, pattern = rng.choice(schema_templates)
+            vals = val_fn(rng)
+            prompt = template.format(**vals) if vals else template
+            target = target_fn(vals)
+            items.append({
+                "prompt": prompt,
+                "target": target,
+                "type": "structural_copying",
+                "source": "gen_struct",
+                "metadata": {"pattern": pattern}
+            })
+        elif filler == "paired_delimiters":
+            left, right = rng.choice(delimiter_pairs)
+            inner = rng.choice(["abc", "123", "xy", "k9"])
+            reps = rng.randint(2, 5)
+            pieces = [f"{left}{inner}{right}" for _ in range(reps)]
+            prompt = " ".join(pieces) + f" {left}{inner}"
+            items.append({
+                "prompt": prompt,
+                "target": right,
+                "type": "structural_copying",
+                "source": "gen_delim",
+                "metadata": {"pattern": "paired_delimiter", "left": left, "right": right}
+            })
+        elif filler == "tabular_rows":
+            row_type = rng.choice(["csv", "kv", "pipe"])
+            if row_type == "csv":
+                prompt = "id,name,score\n1,Ada,91\n2,Bo,88\n3,Cy,"
+                target = " 95"
+            elif row_type == "kv":
+                prompt = "key=alpha value=3\nkey=beta value=5\nkey=gamma value="
+                target = " 8"
+            else:
+                prompt = "A | 1 | red\nB | 2 | blue\nC | 3 |"
+                target = " green"
+            items.append({
+                "prompt": prompt,
+                "target": target,
+                "type": "structural_copying",
+                "source": "gen_table",
+                "metadata": {"pattern": "tabular_row", "row_type": row_type}
+            })
+        elif filler == "mirrored_patterns":
+            token = rng.choice(mirrored_tokens)
+            sep = rng.choice(["-", ":", "|"])
+            left = [token * k for k in range(1, 4)]
+            right = [token * k for k in range(3, 0, -1)]
+            body = left + right[:-1]
+            prompt = sep.join(body) + sep
+            target = right[-1]
+            items.append({
+                "prompt": prompt,
+                "target": " " + target,
+                "type": "structural_copying",
+                "source": "gen_mirror",
+                "metadata": {"pattern": "mirrored_repetition", "token": token}
+            })
+        else:
+            cat = rng.choice(list(word_categories.keys()))
+            words = rng.sample(word_categories[cat], min(5, len(word_categories[cat])))
+            target_word = rng.choice([w for w in word_categories[cat] if w not in words])
+            prompt = f"List of {cat}: " + ", ".join(words) + ","
+            items.append({
+                "prompt": prompt,
+                "target": " " + target_word,
+                "type": "structural_copying",
+                "source": "gen_word_list",
+                "metadata": {"pattern": "category_list", "category": cat}
+            })
 
     for i, item in enumerate(items[:n]):
         tok_count = approx_tokens(item["prompt"])
@@ -1579,6 +1731,34 @@ def default_code_pool_path() -> str | None:
     return None
 
 
+def default_algorithmic_pool_path() -> str | None:
+    """Return the default external algorithmic pool path when present."""
+    root = Path(__file__).resolve().parents[1]
+    candidates = [
+        root / "data" / "sources" / "algorithmic_seed.json",
+        root / "data" / "algorithmic_seed.json",
+        root / "data" / "battery_4" / "algorithmic_seed.json",
+    ]
+    for path in candidates:
+        if path.exists():
+            return str(path)
+    return None
+
+
+def default_reasoning_numerical_pool_path() -> str | None:
+    """Return the default external reasoning_numerical pool path when present."""
+    root = Path(__file__).resolve().parents[1]
+    candidates = [
+        root / "data" / "sources" / "reasoning_numerical_seed.json",
+        root / "data" / "reasoning_numerical_seed.json",
+        root / "data" / "battery_4" / "reasoning_numerical_seed.json",
+    ]
+    for path in candidates:
+        if path.exists():
+            return str(path)
+    return None
+
+
 def load_external_type_pool(pool_path: str, type_name: str, n: int, seed: int) -> list[dict]:
     """Load a pre-generated item pool for one type and sample n items."""
     with open(pool_path) as f:
@@ -1603,6 +1783,8 @@ def build_type(
     seed: int = 42,
     n_override: int | None = None,
     code_pool_path: str | None = None,
+    algorithmic_pool_path: str | None = None,
+    reasoning_numerical_pool_path: str | None = None,
 ) -> list[dict]:
     """Build items for a single type."""
 
@@ -1611,6 +1793,18 @@ def build_type(
         n = default_n if n_override is None else n_override
         print(f"Loading external code pool for {type_name} (n={n}) from {code_pool_path}...")
         return load_external_type_pool(code_pool_path, type_name, n=n, seed=seed)
+
+    if type_name == "algorithmic" and algorithmic_pool_path:
+        _, default_n = GENERATED_TYPES[type_name]
+        n = default_n if n_override is None else n_override
+        print(f"Loading external algorithmic pool for {type_name} (n={n}) from {algorithmic_pool_path}...")
+        return load_external_type_pool(algorithmic_pool_path, type_name, n=n, seed=seed)
+
+    if type_name == "reasoning_numerical" and reasoning_numerical_pool_path:
+        _, default_n = GENERATED_TYPES[type_name]
+        n = default_n if n_override is None else n_override
+        print(f"Loading external reasoning_numerical pool for {type_name} (n={n}) from {reasoning_numerical_pool_path}...")
+        return load_external_type_pool(reasoning_numerical_pool_path, type_name, n=n, seed=seed)
 
     if type_name in GENERATED_TYPES:
         gen_fn, n = GENERATED_TYPES[type_name]
@@ -1690,6 +1884,10 @@ def main():
                         help="Optional JSON recipe with per-type prompt counts")
     parser.add_argument("--code-pool", type=str, default=None,
                         help="Optional JSON pool for code_comprehension items")
+    parser.add_argument("--algorithmic-pool", type=str, default=None,
+                        help="Optional JSON pool for algorithmic items")
+    parser.add_argument("--reasoning-numerical-pool", type=str, default=None,
+                        help="Optional JSON pool for reasoning_numerical items")
     parser.add_argument("--no-datasets", action="store_true",
                         help="Skip HuggingFace dataset downloads (generators only)")
     parser.add_argument("--types", type=str, nargs="*", default=None,
@@ -1720,11 +1918,17 @@ def main():
     n_override = 1 if args.smoke else None
     recipe_overrides = load_recipe(args.recipe)
     code_pool_path = args.code_pool or default_code_pool_path()
+    algorithmic_pool_path = args.algorithmic_pool or default_algorithmic_pool_path()
+    reasoning_numerical_pool_path = args.reasoning_numerical_pool or default_reasoning_numerical_pool_path()
 
     if args.recipe:
         manifest["recipe"] = str(args.recipe)
     if code_pool_path:
         manifest["code_pool"] = str(code_pool_path)
+    if algorithmic_pool_path:
+        manifest["algorithmic_pool"] = str(algorithmic_pool_path)
+    if reasoning_numerical_pool_path:
+        manifest["reasoning_numerical_pool"] = str(reasoning_numerical_pool_path)
 
     for type_name in type_names:
         try:
@@ -1737,6 +1941,8 @@ def main():
                 seed=args.seed,
                 n_override=type_n_override,
                 code_pool_path=code_pool_path,
+                algorithmic_pool_path=algorithmic_pool_path,
+                reasoning_numerical_pool_path=reasoning_numerical_pool_path,
             )
             items = deduplicate(items)
         except Exception as e:

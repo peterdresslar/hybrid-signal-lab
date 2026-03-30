@@ -1,4 +1,4 @@
-# Battery Builder — Attention Is In The Air
+# Battery Builder — Hybrid Signal Lab
 
 Generates a ~445-candidate prompt battery for g-profile sweep experiments.
 After generation, run a baseline calibration sweep and filter to ~200 items
