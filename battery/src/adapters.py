@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 """Prompt adapters for battery calibration.
 
-These adapters let calibration present the same underlying battery item in a
-task-appropriate way without changing the stored candidate data itself.
-
-Prompt rendering is versioned explicitly so calibration artifacts record the
-exact prompt-adaptation scheme that produced them.
+Calibration currently uses identity rendering only. The adapter layer remains
+so artifacts record prompt-render policy explicitly and can be versioned if
+task-specific adapters are reintroduced later.
 """
 
 
@@ -31,18 +29,11 @@ ADAPTERS = {
 }
 
 
-PROMPT_RENDER_VERSION = "prompt_render_v3_identity_default"
+PROMPT_RENDER_VERSION = "prompt_render_v4_identity_only"
 
 # Active adapter mapping for the current prompt-rendering version.
 TYPE_TO_ADAPTER = {}
 
-# Retained for future experiments; changing the active mapping should be paired
-# with a PROMPT_RENDER_VERSION bump so calibration artifacts remain traceable.
-EXPERIMENTAL_TYPE_TO_ADAPTER = {
-    "factual_recall": "factual_suffix_v2",
-    "factual_retrieval": "factual_suffix_v2",
-    "syntactic_pattern": "sentence_suffix_v2",
-}
 
 
 def get_adapter_name(item: dict) -> str:

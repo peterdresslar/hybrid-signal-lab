@@ -78,7 +78,15 @@ def get_model_input_device(model, requested_device: str) -> torch.device:
     return torch.device(requested_device)
 
 
-def run_baseline(model, tokenizer, prompt: str, target: str, device: str = "cuda"):
+def run_baseline(
+    model,
+    tokenizer,
+    prompt: str,
+    target: str,
+    device: str = "cuda",
+    output_attentions: bool = False,
+    output_hidden_states: bool = False,
+):
     """Run a single forward pass at baseline and extract signals."""
 
     # Tokenize
@@ -93,7 +101,11 @@ def run_baseline(model, tokenizer, prompt: str, target: str, device: str = "cuda
     target_token_id = target_ids[0]
 
     with torch.no_grad():
-        outputs = model(input_ids, output_attentions=True, output_hidden_states=True)
+        outputs = model(
+            input_ids,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+        )
 
     logits = outputs.logits[0, -1, :]  # Last token logits
     logits_log2 = torch.log(torch.tensor(2.0, device=logits.device))
@@ -171,6 +183,10 @@ def main():
     )
     parser.add_argument("--resume-from", type=int, default=0,
                         help="Resume from this item index (for crash recovery)")
+    parser.add_argument("--output-attentions", action="store_true",
+                        help="Request attention tensors and compute attention entropy.")
+    parser.add_argument("--output-hidden-states", action="store_true",
+                        help="Request hidden states during calibration.")
     args = parser.parse_args()
 
     battery_path, output_path, mode = prepare_paths(
@@ -196,21 +212,42 @@ def main():
 
             t0 = time.time()
             prompt_for_model, adapter_name, prompt_render_version = adapt_prompt(item)
-            result = run_baseline(model, tokenizer, prompt_for_model, item["target"], args.device)
+            result = run_baseline(
+                model,
+                tokenizer,
+                prompt_for_model,
+                item["target"],
+                args.device,
+                output_attentions=args.output_attentions,
+                output_hidden_states=args.output_hidden_states,
+            )
             elapsed = time.time() - t0
 
             if result is None:
                 print(f"  [{idx}/{len(battery)}] {item['id']} — SKIP (empty target)")
                 continue
 
+            target_ids = tokenizer.encode(item["target"], add_special_tokens=False)
+            first_target_token = tokenizer.decode([target_ids[0]]) if target_ids else ""
+            metadata = item.get("metadata", {}) if isinstance(item.get("metadata"), dict) else {}
+
             record = {
                 "id": item["id"],
                 "type": item["type"],
                 "tier": item["tier"],
+                "source": item.get("source"),
+                "tokens_approx": item.get("tokens_approx"),
+                "family": metadata.get("family"),
+                "concept": metadata.get("concept"),
+                "difficulty": metadata.get("difficulty"),
                 "model": args.model,
                 "adapter": adapter_name,
                 "prompt_render_version": prompt_render_version,
                 "rendered_prompt_sha256": hashlib.sha256(prompt_for_model.encode()).hexdigest(),
+                "target": item["target"],
+                "target_num_tokens": len(target_ids),
+                "target_starts_with_space": item["target"].startswith(" "),
+                "target_first_token_str": first_target_token,
                 **result,
                 "time_s": round(elapsed, 3),
             }
