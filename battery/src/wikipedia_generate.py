@@ -205,10 +205,11 @@ GENERATION_SYSTEM_PROMPT = """You are generating a cloze-style prompt for a lang
 You will receive the text of a Wikipedia article. Your task:
 
 1. Write a passage that draws ONLY on facts stated in the article. Do not add information from your own knowledge.
-2. Let the article's depth guide your passage length:
-   - For a short or narrowly-focused article, write a concise passage of 1-3 sentences.
-   - For a rich, detailed article with substantial content, write a longer passage — up to several hundred words — that builds context progressively like a mini-essay from a specialist reference work.
-   - In general, prefer LONGER passages when the article supports it. Dense, well-contextualized prompts are more valuable than short ones.
+2. LENGTH IS IMPORTANT. Your passage length should match the richness of the source article:
+   - If the article is a stub or very short: write 2-4 sentences (50-80 words). This is the MINIMUM acceptable length.
+   - If the article has moderate detail: write a substantial paragraph (100-200 words).
+   - If the article is rich and detailed: write a multi-paragraph mini-essay (200-500 words) that builds context progressively, establishing the domain, historical background, technical details, and specific facts before arriving at the target. These long passages are the MOST VALUABLE outputs.
+   - When in doubt, write LONGER. A 300-word passage grounded in a rich article is much more useful than an 80-word summary of the same article.
 3. The final clause must be an incomplete sentence whose completion is a single key term, name, or short phrase from the article.
 4. Prefer targets that are domain-specific vocabulary, technical terms, or classifications rather than extremely obscure proper nouns. Proper nouns are acceptable when they are the natural focal point of the article.
 5. The target should be determinable from the passage content — a knowledgeable reader should be able to infer the answer.
@@ -350,6 +351,8 @@ def generate_items(
             "prompt": prompt,
             "target": target,
             "source": source_tag,
+            "approx_tokens": prompt_tokens,
+            "word_count": prompt_words,
         }
 
         items.append(item)
