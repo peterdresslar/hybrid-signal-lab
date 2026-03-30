@@ -127,7 +127,7 @@ def call_llm(messages: list, api_key: str, model: str, max_tokens: int = 256, te
             if content is None:
                 return None
             return content.strip()
-    except (urllib.error.URLError, json.JSONDecodeError, KeyError, IndexError) as e:
+    except (urllib.error.URLError, json.JSONDecodeError, KeyError, IndexError, TimeoutError, ConnectionError) as e:
         print(f"  [warn] LLM call failed: {e}", file=sys.stderr)
         return None
 
@@ -285,7 +285,7 @@ def generate_items(
     wiki_delay = 2.0  # starting delay between Wikipedia requests
     WIKI_DELAY_MIN = 2.0
     WIKI_DELAY_MAX = 120.0
-    WIKI_BACKOFF_FACTOR = 1.5
+    WIKI_BACKOFF_FACTOR = 2.0
     wiki_consecutive_fails = 0
 
     while len(items) < num_prompts and attempts < max_total_attempts:
@@ -302,13 +302,13 @@ def generate_items(
         summary = fetch_random_article_summary()
         if not summary:
             wiki_consecutive_fails += 1
-            wiki_delay = min(wiki_delay * WIKI_BACKOFF_FACTOR, WIKI_DELAY_MAX)
-            print(f"skip (fetch failed, backoff → {wiki_delay:.1f}s)")
+            wiki_delay = min(WIKI_DELAY_MIN * (WIKI_BACKOFF_FACTOR ** wiki_consecutive_fails), WIKI_DELAY_MAX)
+            print(f"skip (fetch failed, geometric backoff → {wiki_delay:.1f}s)")
             continue
 
-        # Successful fetch — ease back toward minimum
+        # Successful fetch — reset consecutive fails and backoff
         wiki_consecutive_fails = 0
-        wiki_delay = max(wiki_delay * 0.8, WIKI_DELAY_MIN)
+        wiki_delay = WIKI_DELAY_MIN
 
         title = summary["title"]
         print(f"'{title}'", end=" ")

@@ -1,0 +1,37 @@
+[
+  {
+    "prompt": "During the French and Indian War, a British expedition led by General John Forbes set out in July 1758 with 6,000 troops to seize control of the Ohio Country. As the army advanced slowly toward its objective, Forbes fell ill and delegated command to his Swiss subordinate, Lt. Col. Henry Bouquet. In late August, Bouquet authorized a reconnaissance mission of 850 men led by Major James Grant of the 77th Regiment. Grant underestimated the enemy strength, believing the garrison consisted of only 200 men rather than the actual force of hundreds of French soldiers and their native allies led by Fran\u00e7ois-Marie Le Marchand de Lignery. On the morning of September 14, Grant attempted to lure the defenders into an ambush by sending a decoy party forward with drums beating and bagpipes playing. However, the French and Indians moved swiftly to surround the British, utilizing the forest cover and high ground to inflict heavy casualties. Although the British were defeated and Grant was captured, the French eventually realized they could not withstand the main army's superior numbers. Before retreating in November, the French destroyed the fortifications, which the British subsequently rebuilt and renamed",
+    "target": " Fort Pitt",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 249,
+    "word_count": 192
+  },
+  {
+    "prompt": "Established in the early 18th century near St. Patrick's Cathedral in Dublin, Marsh's Library remains a remarkably preserved monument to the late Renaissance and early Enlightenment. Founded by Narcissus Marsh, the former Provost of Trinity College and later Archbishop of Dublin, the institution was designed by Sir William Robinson and formally incorporated by an act of the Irish Parliament in 1707. This legislative foundation vested the property and its vast collection\u2014which includes over 25,000 books and 300 manuscripts\u2014in a governing body known as the Governors and Guardians. \n\nThe library's holdings are diverse, featuring significant collections from Marsh himself, as well as the personal library of the first librarian, a Huguenot refugee named Elias Bouhereau. The interior of the building maintains its original character, with Baltic oak bookcases that still bear bullet holes from the 1916 Easter Rising. To prevent the loss of valuable volumes, the library installed wired alcoves during the 1770s where readers were confined while consulting books. These distinctive security enclosures are commonly referred to as",
+    "target": " cages",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 218,
+    "word_count": 168
+  },
+  {
+    "prompt": "Established in 1965 as the Federation of Debate Clubs, the Revolutionary Youth Federation of Turkey emerged as a prominent Marxist-Leninist organization during a period of intense political upheaval. Commonly referred to by its shortened name, the group became a focal point for radical student activism and militant opposition to foreign influence in Turkey. Throughout the late 1960s, its members were involved in high-profile acts of defiance, such as the 1969 incident where they set fire to the car of U.S. Ambassador Robert Komer during a university visit, and their active participation in protests against the U.S. Sixth Fleet. The organization also played a significant role in the labor movement, specifically during the worker actions of June 1970. Despite its influence, the group faced severe state repression; following the 1971 military coup, it was banned and its members were subjected to mass trials in military courts. The internal security of the movement was further compromised when CIA agent Aldrich Ames exposed the identities of many participants. Though various successor groups and journals attempted to revive its legacy throughout the 1970s, the movement is most famously identified by the Turkish abbreviation",
+    "target": " DEV-GEN\u00c7",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 245,
+    "word_count": 189
+  },
+  {
+    "prompt": "Within the superfamily of scale insects, the family Eriococcidae contains various genera often referred to as felt scales. One specific genus in this group consists of at least ten described species, including organisms such as L. eucalypti, L. hirsutus, and L. sealakeensis. These insects are geographically restricted, with all known members of the genus having been found in Australia. Taxonomically, this group is classified as the genus",
+    "target": " Lachnodius",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 87,
+    "word_count": 67
+  },
+  {
+    "prompt": "Within the cultural traditions of the Khiamniungan people in Nagaland, specific regalia are reserved for use during the folk dances performed at annual tribal and village festivals. Among these items is a distinctive conical headpiece characterized by its intricate construction and deep symbolic value. Historically, these items were not only used locally but were also crafted alongside leggings known as Hokthie and gauntlets for trade with neighboring communities. The construction of an authentic piece is a complex process requiring more than twelve different materials sourced from the wild, each carrying its own historical significance. The frame is typically made of fine cane, often dyed red, and embellished with red goat hair, bear hair, and hornbill feathers. Some versions are further decorated with transparent flat horns made from mithan horn, while a chain of tiger claws often hangs around the chin. Collectively, these wild-sourced materials, including wild boar teeth, serve as a visual testament to the wearer's wealth, bravery, and victory over enemies. This traditional headgear of the Khiamniungans is known as",
+    "target": " Ahangk\u00fcha",
+    "source": "gen-wikipedia-random-battery4",
+    "approx_tokens": 222,
+    "word_count": 171
+  }
+]
