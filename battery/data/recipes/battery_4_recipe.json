@@ -3,13 +3,13 @@
     "factual_recall": 150,
     "domain_knowledge": 120,
     "structural_copying": 100,
+    "code_comprehension": 100,
+    "syntactic_pattern": 100,
     "reasoning_numerical": 90,
     "reasoning_tracking": 90,
     "factual_retrieval": 80,
     "algorithmic": 80,
     "long_range_retrieval": 80,
-    "cultural_memorized": 60,
-    "syntactic_pattern": 60,
-    "code_comprehension": 50
+    "cultural_memorized": 80
   }
 }

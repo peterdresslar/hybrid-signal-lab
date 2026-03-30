@@ -1,7 +1,49 @@
 [
   {
-    "prompt": "Eva was first in line, Rosa was second, and Sam was third. Then Sam moved ahead of Rosa. After that, Rosa moved ahead of Eva. Who is second in line now?\nAnswer:",
-    "target": " Eva",
+    "prompt": "The book was first put in the drawer. Then it was moved to the bag. Later, it was removed from the bag and placed in the box. Which container holds the book now?\nAnswer:",
+    "target": " box",
+    "type": "reasoning_tracking",
+    "tokens_approx": 44,
+    "tier": "brief",
+    "source": "rt_container",
+    "metadata": {
+      "family": "containers",
+      "concept": "container_move_chain",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0000"
+  },
+  {
+    "prompt": "Dylan had the lantern. Then Dylan gave the lantern to Rosa. Later, Rosa passed the lantern to Cara. Who has the lantern now?\nAnswer:",
+    "target": " Cara",
+    "type": "reasoning_tracking",
+    "tokens_approx": 31,
+    "tier": "brief",
+    "source": "rt_transfer",
+    "metadata": {
+      "family": "transfer",
+      "concept": "two_transfer_chain",
+      "difficulty": "easy"
+    },
+    "id": "rt_seed_0001"
+  },
+  {
+    "prompt": "Cara started in the office. Then cara walked to the garden. After that, cara went to the library. Where is cara now?\nAnswer:",
+    "target": " library",
+    "type": "reasoning_tracking",
+    "tokens_approx": 29,
+    "tier": "short",
+    "source": "rt_location",
+    "metadata": {
+      "family": "location",
+      "concept": "three_step_location",
+      "difficulty": "easy"
+    },
+    "id": "rt_seed_0002"
+  },
+  {
+    "prompt": "Rosa was first in line, Grace was second, and Tara was third. Then Tara moved ahead of Grace. After that, Grace moved ahead of Rosa. Who is second in line now?\nAnswer:",
+    "target": " Rosa",
     "type": "reasoning_tracking",
     "tokens_approx": 41,
     "tier": "brief",
@@ -11,164 +53,38 @@
       "concept": "line_reordering",
       "difficulty": "medium"
     },
-    "id": "rt_seed_0000"
-  },
-  {
-    "prompt": "Quinn paints a box blue. Then quinn paints the same box yellow. Finally, quinn paints it red. What color is the box at the end?\nAnswer:",
-    "target": " red",
-    "type": "reasoning_tracking",
-    "tokens_approx": 33,
-    "tier": "brief",
-    "source": "rt_overwrite",
-    "metadata": {
-      "family": "overwrite",
-      "concept": "final_state_overwrite",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0001"
-  },
-  {
-    "prompt": "Dylan had the notebook. Then Dylan gave the notebook to Pia. Later, Pia passed the notebook to Hugo. Who has the notebook now?\nAnswer:",
-    "target": " Hugo",
-    "type": "reasoning_tracking",
-    "tokens_approx": 31,
-    "tier": "brief",
-    "source": "rt_transfer",
-    "metadata": {
-      "family": "transfer",
-      "concept": "two_transfer_chain",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0002"
-  },
-  {
-    "prompt": "Rosa felt excited in the morning. After a long walk, rosa felt tired. At the end of the day, after some good news, rosa felt nervous. How does rosa feel at the end?\nAnswer:",
-    "target": " nervous",
-    "type": "reasoning_tracking",
-    "tokens_approx": 44,
-    "tier": "brief",
-    "source": "rt_state",
-    "metadata": {
-      "family": "overwrite",
-      "concept": "final_state_update_brief",
-      "difficulty": "medium"
-    },
     "id": "rt_seed_0003"
   },
   {
-    "prompt": "Cara has the coin and Noah has the map. They swap items. After the swap, who has the coin?\nAnswer:",
-    "target": " Noah",
+    "prompt": "In the morning, Owen placed the book in the garage. At noon, Sam moved the book from the garage to the hall. In the evening, Iris checked the hall but did not move the book. Where is the book now?\nAnswer:",
+    "target": " hall",
     "type": "reasoning_tracking",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rt_swap",
+    "tokens_approx": 53,
+    "tier": "brief",
+    "source": "rt_object_location",
     "metadata": {
-      "family": "swap",
-      "concept": "simple_swap",
-      "difficulty": "easy"
+      "family": "location",
+      "concept": "object_moved_between_locations",
+      "difficulty": "medium"
     },
     "id": "rt_seed_0004"
   },
   {
-    "prompt": "Finn started with the card. Finn handed it to Eva. Eva later gave it to Ben. After using it, Ben passed it to Jack. Who has the card at the end?\nAnswer:",
-    "target": " Jack",
+    "prompt": "In the morning, Iris placed the card in the garden. At noon, Eva moved the card from the garden to the kitchen. In the evening, Grace checked the kitchen but did not move the card. Where is the card now?\nAnswer:",
+    "target": " kitchen",
     "type": "reasoning_tracking",
-    "tokens_approx": 41,
+    "tokens_approx": 53,
     "tier": "brief",
-    "source": "rt_transfer_brief",
+    "source": "rt_object_location",
     "metadata": {
-      "family": "transfer",
-      "concept": "three_transfer_chain",
+      "family": "location",
+      "concept": "object_moved_between_locations",
       "difficulty": "medium"
     },
     "id": "rt_seed_0005"
   },
   {
-    "prompt": "The coin was first put in the bag. Then it was moved to the drawer. Later, it was removed from the drawer and placed in the cabinet. Which container holds the coin now?\nAnswer:",
-    "target": " cabinet",
-    "type": "reasoning_tracking",
-    "tokens_approx": 44,
-    "tier": "brief",
-    "source": "rt_container",
-    "metadata": {
-      "family": "containers",
-      "concept": "container_move_chain",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0006"
-  },
-  {
-    "prompt": "The ticket was first put in the bag. Then it was moved to the drawer. Later, it was removed from the drawer and placed in the basket. Which container holds the ticket now?\nAnswer:",
-    "target": " basket",
-    "type": "reasoning_tracking",
-    "tokens_approx": 44,
-    "tier": "brief",
-    "source": "rt_container",
-    "metadata": {
-      "family": "containers",
-      "concept": "container_move_chain",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0007"
-  },
-  {
-    "prompt": "Grace started with the card. Grace handed it to Maya. Maya later gave it to Iris. After using it, Iris passed it to Alice. Who has the card at the end?\nAnswer:",
-    "target": " Alice",
-    "type": "reasoning_tracking",
-    "tokens_approx": 41,
-    "tier": "brief",
-    "source": "rt_transfer_brief",
-    "metadata": {
-      "family": "transfer",
-      "concept": "three_transfer_chain",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0008"
-  },
-  {
-    "prompt": "Sam had the coin. Then Sam gave the coin to Jack. Later, Jack passed the coin to Pia. Who has the coin now?\nAnswer:",
-    "target": " Pia",
-    "type": "reasoning_tracking",
-    "tokens_approx": 31,
-    "tier": "brief",
-    "source": "rt_transfer",
-    "metadata": {
-      "family": "transfer",
-      "concept": "two_transfer_chain",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0009"
-  },
-  {
-    "prompt": "Hugo felt tired in the morning. After a long walk, hugo felt calm. At the end of the day, after some good news, hugo felt excited. How does hugo feel at the end?\nAnswer:",
-    "target": " excited",
-    "type": "reasoning_tracking",
-    "tokens_approx": 44,
-    "tier": "brief",
-    "source": "rt_state",
-    "metadata": {
-      "family": "overwrite",
-      "concept": "final_state_update_brief",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0010"
-  },
-  {
-    "prompt": "Kira started with the card. Kira handed it to Noah. Noah later gave it to Dylan. After using it, Dylan passed it to Alice. Who has the card at the end?\nAnswer:",
-    "target": " Alice",
-    "type": "reasoning_tracking",
-    "tokens_approx": 41,
-    "tier": "brief",
-    "source": "rt_transfer_brief",
-    "metadata": {
-      "family": "transfer",
-      "concept": "three_transfer_chain",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0011"
-  },
-  {
-    "prompt": "In the morning, Kira placed the map in the attic. At noon, Alice moved the map from the attic to the library. In the evening, Maya checked the library but did not move the map. Where is the map now?\nAnswer:",
+    "prompt": "In the morning, Lena placed the book in the bedroom. At noon, Tara moved the book from the bedroom to the library. In the evening, Iris checked the library but did not move the book. Where is the book now?\nAnswer:",
     "target": " library",
     "type": "reasoning_tracking",
     "tokens_approx": 53,
@@ -179,25 +95,109 @@
       "concept": "object_moved_between_locations",
       "difficulty": "medium"
     },
+    "id": "rt_seed_0006"
+  },
+  {
+    "prompt": "Maya had the ticket. Then Maya gave the ticket to Cara. Later, Cara passed the ticket to Rosa. Who has the ticket now?\nAnswer:",
+    "target": " Rosa",
+    "type": "reasoning_tracking",
+    "tokens_approx": 31,
+    "tier": "brief",
+    "source": "rt_transfer",
+    "metadata": {
+      "family": "transfer",
+      "concept": "two_transfer_chain",
+      "difficulty": "easy"
+    },
+    "id": "rt_seed_0007"
+  },
+  {
+    "prompt": "Tara put the notebook on the table and the card on the shelf. Then Lena moved the notebook to the shelf and moved the card to the drawer. Which item is on the shelf now?\nAnswer:",
+    "target": " notebook",
+    "type": "reasoning_tracking",
+    "tokens_approx": 46,
+    "tier": "brief",
+    "source": "rt_reference",
+    "metadata": {
+      "family": "reference",
+      "concept": "which_item_in_location",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0008"
+  },
+  {
+    "prompt": "Hugo started in the library. Then hugo walked to the kitchen. After that, hugo went to the garden. Where is hugo now?\nAnswer:",
+    "target": " garden",
+    "type": "reasoning_tracking",
+    "tokens_approx": 29,
+    "tier": "short",
+    "source": "rt_location",
+    "metadata": {
+      "family": "location",
+      "concept": "three_step_location",
+      "difficulty": "easy"
+    },
+    "id": "rt_seed_0009"
+  },
+  {
+    "prompt": "Maya put the map on the table and the card on the shelf. Then Iris moved the map to the shelf and moved the card to the drawer. Which item is on the shelf now?\nAnswer:",
+    "target": " map",
+    "type": "reasoning_tracking",
+    "tokens_approx": 46,
+    "tier": "brief",
+    "source": "rt_reference",
+    "metadata": {
+      "family": "reference",
+      "concept": "which_item_in_location",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0010"
+  },
+  {
+    "prompt": "Finn put the card on the table and the coin on the shelf. Then Lena moved the card to the shelf and moved the coin to the drawer. Which item is on the shelf now?\nAnswer:",
+    "target": " card",
+    "type": "reasoning_tracking",
+    "tokens_approx": 46,
+    "tier": "brief",
+    "source": "rt_reference",
+    "metadata": {
+      "family": "reference",
+      "concept": "which_item_in_location",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0011"
+  },
+  {
+    "prompt": "The coin was first put in the cabinet. Then it was moved to the bag. Later, it was removed from the bag and placed in the drawer. Which container holds the coin now?\nAnswer:",
+    "target": " drawer",
+    "type": "reasoning_tracking",
+    "tokens_approx": 44,
+    "tier": "brief",
+    "source": "rt_container",
+    "metadata": {
+      "family": "containers",
+      "concept": "container_move_chain",
+      "difficulty": "medium"
+    },
     "id": "rt_seed_0012"
   },
   {
-    "prompt": "Lena paints a box blue. Then lena paints the same box yellow. Finally, lena paints it green. What color is the box at the end?\nAnswer:",
-    "target": " green",
+    "prompt": "Finn felt nervous in the morning. After a long walk, finn felt excited. At the end of the day, after some good news, finn felt tired. How does finn feel at the end?\nAnswer:",
+    "target": " tired",
     "type": "reasoning_tracking",
-    "tokens_approx": 33,
+    "tokens_approx": 44,
     "tier": "brief",
-    "source": "rt_overwrite",
+    "source": "rt_state",
     "metadata": {
       "family": "overwrite",
-      "concept": "final_state_overwrite",
-      "difficulty": "easy"
+      "concept": "final_state_update_brief",
+      "difficulty": "medium"
     },
     "id": "rt_seed_0013"
   },
   {
-    "prompt": "Hugo placed the key inside a box, then put the box inside a bag. Later, hugo removed the box from the bag but did not open it. Where is the key now?\nAnswer:",
-    "target": " box",
+    "prompt": "Rosa placed the card inside a drawer, then put the drawer inside a bag. Later, rosa removed the drawer from the bag but did not open it. Where is the card now?\nAnswer:",
+    "target": " drawer",
     "type": "reasoning_tracking",
     "tokens_approx": 42,
     "tier": "brief",
@@ -210,288 +210,8 @@
     "id": "rt_seed_0014"
   },
   {
-    "prompt": "Sam had the lantern. Then Sam gave the lantern to Noah. Later, Noah passed the lantern to Quinn. Who has the lantern now?\nAnswer:",
-    "target": " Quinn",
-    "type": "reasoning_tracking",
-    "tokens_approx": 31,
-    "tier": "brief",
-    "source": "rt_transfer",
-    "metadata": {
-      "family": "transfer",
-      "concept": "two_transfer_chain",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0015"
-  },
-  {
-    "prompt": "Alice was first in line, Owen was second, and Quinn was third. Then Quinn moved ahead of Owen. After that, Owen moved ahead of Alice. Who is second in line now?\nAnswer:",
-    "target": " Alice",
-    "type": "reasoning_tracking",
-    "tokens_approx": 41,
-    "tier": "brief",
-    "source": "rt_order",
-    "metadata": {
-      "family": "ordering",
-      "concept": "line_reordering",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0016"
-  },
-  {
-    "prompt": "Dylan paints a box red. Then dylan paints the same box black. Finally, dylan paints it green. What color is the box at the end?\nAnswer:",
-    "target": " green",
-    "type": "reasoning_tracking",
-    "tokens_approx": 33,
-    "tier": "brief",
-    "source": "rt_overwrite",
-    "metadata": {
-      "family": "overwrite",
-      "concept": "final_state_overwrite",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0017"
-  },
-  {
-    "prompt": "Kira started in the hall. Then kira walked to the kitchen. After that, kira went to the bedroom. Where is kira now?\nAnswer:",
-    "target": " bedroom",
-    "type": "reasoning_tracking",
-    "tokens_approx": 29,
-    "tier": "short",
-    "source": "rt_location",
-    "metadata": {
-      "family": "location",
-      "concept": "three_step_location",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0018"
-  },
-  {
-    "prompt": "Tara felt nervous in the morning. After a long walk, tara felt excited. At the end of the day, after some good news, tara felt happy. How does tara feel at the end?\nAnswer:",
-    "target": " happy",
-    "type": "reasoning_tracking",
-    "tokens_approx": 44,
-    "tier": "brief",
-    "source": "rt_state",
-    "metadata": {
-      "family": "overwrite",
-      "concept": "final_state_update_brief",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0019"
-  },
-  {
-    "prompt": "Sam placed the key inside a bag, then put the bag inside a box. Later, sam removed the bag from the box but did not open it. Where is the key now?\nAnswer:",
-    "target": " bag",
-    "type": "reasoning_tracking",
-    "tokens_approx": 42,
-    "tier": "brief",
-    "source": "rt_nested",
-    "metadata": {
-      "family": "nested_tracking",
-      "concept": "object_inside_inner_container",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0020"
-  },
-  {
-    "prompt": "Cara has the notebook and Grace has the key. They swap items. After the swap, who has the notebook?\nAnswer:",
-    "target": " Grace",
-    "type": "reasoning_tracking",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rt_swap",
-    "metadata": {
-      "family": "swap",
-      "concept": "simple_swap",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0021"
-  },
-  {
-    "prompt": "Rosa started in the attic. Then rosa walked to the kitchen. After that, rosa went to the garage. Where is rosa now?\nAnswer:",
-    "target": " garage",
-    "type": "reasoning_tracking",
-    "tokens_approx": 29,
-    "tier": "short",
-    "source": "rt_location",
-    "metadata": {
-      "family": "location",
-      "concept": "three_step_location",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0022"
-  },
-  {
-    "prompt": "Kira was first in line, Maya was second, and Noah was third. Then Noah moved ahead of Maya. After that, Maya moved ahead of Kira. Who is second in line now?\nAnswer:",
-    "target": " Kira",
-    "type": "reasoning_tracking",
-    "tokens_approx": 41,
-    "tier": "brief",
-    "source": "rt_order",
-    "metadata": {
-      "family": "ordering",
-      "concept": "line_reordering",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0023"
-  },
-  {
-    "prompt": "Hugo started in the bedroom. Then hugo walked to the garage. After that, hugo went to the kitchen. Where is hugo now?\nAnswer:",
-    "target": " kitchen",
-    "type": "reasoning_tracking",
-    "tokens_approx": 29,
-    "tier": "short",
-    "source": "rt_location",
-    "metadata": {
-      "family": "location",
-      "concept": "three_step_location",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0024"
-  },
-  {
-    "prompt": "The coin was first put in the bag. Then it was moved to the cabinet. Later, it was removed from the cabinet and placed in the box. Which container holds the coin now?\nAnswer:",
-    "target": " box",
-    "type": "reasoning_tracking",
-    "tokens_approx": 44,
-    "tier": "brief",
-    "source": "rt_container",
-    "metadata": {
-      "family": "containers",
-      "concept": "container_move_chain",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0025"
-  },
-  {
-    "prompt": "Dylan placed the ticket inside a box, then put the box inside a bag. Later, dylan removed the box from the bag but did not open it. Where is the ticket now?\nAnswer:",
-    "target": " box",
-    "type": "reasoning_tracking",
-    "tokens_approx": 42,
-    "tier": "brief",
-    "source": "rt_nested",
-    "metadata": {
-      "family": "nested_tracking",
-      "concept": "object_inside_inner_container",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0026"
-  },
-  {
-    "prompt": "In the morning, Eva placed the book in the garden. At noon, Sam moved the book from the garden to the library. In the evening, Noah checked the library but did not move the book. Where is the book now?\nAnswer:",
-    "target": " library",
-    "type": "reasoning_tracking",
-    "tokens_approx": 53,
-    "tier": "brief",
-    "source": "rt_object_location",
-    "metadata": {
-      "family": "location",
-      "concept": "object_moved_between_locations",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0027"
-  },
-  {
-    "prompt": "Cara was first in line, Maya was second, and Quinn was third. Then Quinn moved ahead of Maya. After that, Maya moved ahead of Cara. Who is second in line now?\nAnswer:",
-    "target": " Cara",
-    "type": "reasoning_tracking",
-    "tokens_approx": 41,
-    "tier": "brief",
-    "source": "rt_order",
-    "metadata": {
-      "family": "ordering",
-      "concept": "line_reordering",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0028"
-  },
-  {
-    "prompt": "Iris started in the garage. Then iris walked to the attic. After that, iris went to the kitchen. Where is iris now?\nAnswer:",
-    "target": " kitchen",
-    "type": "reasoning_tracking",
-    "tokens_approx": 29,
-    "tier": "short",
-    "source": "rt_location",
-    "metadata": {
-      "family": "location",
-      "concept": "three_step_location",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0029"
-  },
-  {
-    "prompt": "Cara had the map. Then Cara gave the map to Dylan. Later, Dylan passed the map to Maya. Who has the map now?\nAnswer:",
-    "target": " Maya",
-    "type": "reasoning_tracking",
-    "tokens_approx": 31,
-    "tier": "brief",
-    "source": "rt_transfer",
-    "metadata": {
-      "family": "transfer",
-      "concept": "two_transfer_chain",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0030"
-  },
-  {
-    "prompt": "Kira was first in line, Owen was second, and Maya was third. Then Maya moved ahead of Owen. After that, Owen moved ahead of Kira. Who is second in line now?\nAnswer:",
-    "target": " Kira",
-    "type": "reasoning_tracking",
-    "tokens_approx": 41,
-    "tier": "brief",
-    "source": "rt_order",
-    "metadata": {
-      "family": "ordering",
-      "concept": "line_reordering",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0031"
-  },
-  {
-    "prompt": "The ticket was first put in the basket. Then it was moved to the bag. Later, it was removed from the bag and placed in the box. Which container holds the ticket now?\nAnswer:",
-    "target": " box",
-    "type": "reasoning_tracking",
-    "tokens_approx": 44,
-    "tier": "brief",
-    "source": "rt_container",
-    "metadata": {
-      "family": "containers",
-      "concept": "container_move_chain",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0032"
-  },
-  {
-    "prompt": "Owen started in the attic. Then owen walked to the garden. After that, owen went to the library. Where is owen now?\nAnswer:",
-    "target": " library",
-    "type": "reasoning_tracking",
-    "tokens_approx": 29,
-    "tier": "short",
-    "source": "rt_location",
-    "metadata": {
-      "family": "location",
-      "concept": "three_step_location",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0033"
-  },
-  {
-    "prompt": "In the morning, Grace placed the lantern in the garden. At noon, Ben moved the lantern from the garden to the garage. In the evening, Finn checked the garage but did not move the lantern. Where is the lantern now?\nAnswer:",
-    "target": " garage",
-    "type": "reasoning_tracking",
-    "tokens_approx": 53,
-    "tier": "brief",
-    "source": "rt_object_location",
-    "metadata": {
-      "family": "location",
-      "concept": "object_moved_between_locations",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0034"
-  },
-  {
-    "prompt": "Maya put the card on the table and the ticket on the shelf. Then Ben moved the card to the shelf and moved the ticket to the drawer. Which item is on the shelf now?\nAnswer:",
-    "target": " card",
+    "prompt": "Ben put the book on the table and the lantern on the shelf. Then Hugo moved the book to the shelf and moved the lantern to the drawer. Which item is on the shelf now?\nAnswer:",
+    "target": " book",
     "type": "reasoning_tracking",
     "tokens_approx": 46,
     "tier": "brief",
@@ -501,39 +221,25 @@
       "concept": "which_item_in_location",
       "difficulty": "medium"
     },
-    "id": "rt_seed_0035"
+    "id": "rt_seed_0015"
   },
   {
-    "prompt": "The key was first put in the bag. Then it was moved to the drawer. Later, it was removed from the drawer and placed in the basket. Which container holds the key now?\nAnswer:",
-    "target": " basket",
+    "prompt": "In the morning, Iris placed the card in the office. At noon, Cara moved the card from the office to the hall. In the evening, Grace checked the hall but did not move the card. Where is the card now?\nAnswer:",
+    "target": " hall",
     "type": "reasoning_tracking",
-    "tokens_approx": 44,
+    "tokens_approx": 53,
     "tier": "brief",
-    "source": "rt_container",
+    "source": "rt_object_location",
     "metadata": {
-      "family": "containers",
-      "concept": "container_move_chain",
+      "family": "location",
+      "concept": "object_moved_between_locations",
       "difficulty": "medium"
     },
-    "id": "rt_seed_0036"
+    "id": "rt_seed_0016"
   },
   {
-    "prompt": "Rosa had the book. Then Rosa gave the book to Grace. Later, Grace passed the book to Ben. Who has the book now?\nAnswer:",
-    "target": " Ben",
-    "type": "reasoning_tracking",
-    "tokens_approx": 31,
-    "tier": "brief",
-    "source": "rt_transfer",
-    "metadata": {
-      "family": "transfer",
-      "concept": "two_transfer_chain",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0037"
-  },
-  {
-    "prompt": "Eva started with the book. Eva handed it to Pia. Pia later gave it to Lena. After using it, Lena passed it to Dylan. Who has the book at the end?\nAnswer:",
-    "target": " Dylan",
+    "prompt": "Owen started with the notebook. Owen handed it to Eva. Eva later gave it to Iris. After using it, Iris passed it to Sam. Who has the notebook at the end?\nAnswer:",
+    "target": " Sam",
     "type": "reasoning_tracking",
     "tokens_approx": 41,
     "tier": "brief",
@@ -543,11 +249,305 @@
       "concept": "three_transfer_chain",
       "difficulty": "medium"
     },
+    "id": "rt_seed_0017"
+  },
+  {
+    "prompt": "Rosa felt calm in the morning. After a long walk, rosa felt nervous. At the end of the day, after some good news, rosa felt excited. How does rosa feel at the end?\nAnswer:",
+    "target": " excited",
+    "type": "reasoning_tracking",
+    "tokens_approx": 44,
+    "tier": "brief",
+    "source": "rt_state",
+    "metadata": {
+      "family": "overwrite",
+      "concept": "final_state_update_brief",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0018"
+  },
+  {
+    "prompt": "In the morning, Hugo placed the map in the garden. At noon, Eva moved the map from the garden to the attic. In the evening, Quinn checked the attic but did not move the map. Where is the map now?\nAnswer:",
+    "target": " attic",
+    "type": "reasoning_tracking",
+    "tokens_approx": 53,
+    "tier": "brief",
+    "source": "rt_object_location",
+    "metadata": {
+      "family": "location",
+      "concept": "object_moved_between_locations",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0019"
+  },
+  {
+    "prompt": "Dylan started in the garage. Then dylan walked to the hall. After that, dylan went to the garden. Where is dylan now?\nAnswer:",
+    "target": " garden",
+    "type": "reasoning_tracking",
+    "tokens_approx": 29,
+    "tier": "short",
+    "source": "rt_location",
+    "metadata": {
+      "family": "location",
+      "concept": "three_step_location",
+      "difficulty": "easy"
+    },
+    "id": "rt_seed_0020"
+  },
+  {
+    "prompt": "Noah felt excited in the morning. After a long walk, noah felt happy. At the end of the day, after some good news, noah felt tired. How does noah feel at the end?\nAnswer:",
+    "target": " tired",
+    "type": "reasoning_tracking",
+    "tokens_approx": 44,
+    "tier": "brief",
+    "source": "rt_state",
+    "metadata": {
+      "family": "overwrite",
+      "concept": "final_state_update_brief",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0021"
+  },
+  {
+    "prompt": "In the morning, Owen placed the book in the garden. At noon, Quinn moved the book from the garden to the hall. In the evening, Iris checked the hall but did not move the book. Where is the book now?\nAnswer:",
+    "target": " hall",
+    "type": "reasoning_tracking",
+    "tokens_approx": 53,
+    "tier": "brief",
+    "source": "rt_object_location",
+    "metadata": {
+      "family": "location",
+      "concept": "object_moved_between_locations",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0022"
+  },
+  {
+    "prompt": "Iris put the coin on the table and the key on the shelf. Then Kira moved the coin to the shelf and moved the key to the drawer. Which item is on the shelf now?\nAnswer:",
+    "target": " coin",
+    "type": "reasoning_tracking",
+    "tokens_approx": 46,
+    "tier": "brief",
+    "source": "rt_reference",
+    "metadata": {
+      "family": "reference",
+      "concept": "which_item_in_location",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0023"
+  },
+  {
+    "prompt": "Owen started with the key. Owen handed it to Alice. Alice later gave it to Iris. After using it, Iris passed it to Quinn. Who has the key at the end?\nAnswer:",
+    "target": " Quinn",
+    "type": "reasoning_tracking",
+    "tokens_approx": 41,
+    "tier": "brief",
+    "source": "rt_transfer_brief",
+    "metadata": {
+      "family": "transfer",
+      "concept": "three_transfer_chain",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0024"
+  },
+  {
+    "prompt": "Dylan started with the key. Dylan handed it to Jack. Jack later gave it to Quinn. After using it, Quinn passed it to Grace. Who has the key at the end?\nAnswer:",
+    "target": " Grace",
+    "type": "reasoning_tracking",
+    "tokens_approx": 41,
+    "tier": "brief",
+    "source": "rt_transfer_brief",
+    "metadata": {
+      "family": "transfer",
+      "concept": "three_transfer_chain",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0025"
+  },
+  {
+    "prompt": "Lena started in the library. Then lena walked to the garden. After that, lena went to the kitchen. Where is lena now?\nAnswer:",
+    "target": " kitchen",
+    "type": "reasoning_tracking",
+    "tokens_approx": 29,
+    "tier": "short",
+    "source": "rt_location",
+    "metadata": {
+      "family": "location",
+      "concept": "three_step_location",
+      "difficulty": "easy"
+    },
+    "id": "rt_seed_0026"
+  },
+  {
+    "prompt": "Sam has the coin and Cara has the card. They swap items. After the swap, who has the coin?\nAnswer:",
+    "target": " Cara",
+    "type": "reasoning_tracking",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "rt_swap",
+    "metadata": {
+      "family": "swap",
+      "concept": "simple_swap",
+      "difficulty": "easy"
+    },
+    "id": "rt_seed_0027"
+  },
+  {
+    "prompt": "Cara started with the map. Cara handed it to Rosa. Rosa later gave it to Eva. After using it, Eva passed it to Sam. Who has the map at the end?\nAnswer:",
+    "target": " Sam",
+    "type": "reasoning_tracking",
+    "tokens_approx": 41,
+    "tier": "brief",
+    "source": "rt_transfer_brief",
+    "metadata": {
+      "family": "transfer",
+      "concept": "three_transfer_chain",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0028"
+  },
+  {
+    "prompt": "Finn placed the lantern inside a cabinet, then put the cabinet inside a drawer. Later, finn removed the cabinet from the drawer but did not open it. Where is the lantern now?\nAnswer:",
+    "target": " cabinet",
+    "type": "reasoning_tracking",
+    "tokens_approx": 42,
+    "tier": "brief",
+    "source": "rt_nested",
+    "metadata": {
+      "family": "nested_tracking",
+      "concept": "object_inside_inner_container",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0029"
+  },
+  {
+    "prompt": "Rosa placed the ticket inside a drawer, then put the drawer inside a bag. Later, rosa removed the drawer from the bag but did not open it. Where is the ticket now?\nAnswer:",
+    "target": " drawer",
+    "type": "reasoning_tracking",
+    "tokens_approx": 42,
+    "tier": "brief",
+    "source": "rt_nested",
+    "metadata": {
+      "family": "nested_tracking",
+      "concept": "object_inside_inner_container",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0030"
+  },
+  {
+    "prompt": "Kira has the notebook and Alice has the ticket. They swap items. After the swap, who has the notebook?\nAnswer:",
+    "target": " Alice",
+    "type": "reasoning_tracking",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "rt_swap",
+    "metadata": {
+      "family": "swap",
+      "concept": "simple_swap",
+      "difficulty": "easy"
+    },
+    "id": "rt_seed_0031"
+  },
+  {
+    "prompt": "Cara has the notebook and Ben has the book. They swap items. After the swap, who has the notebook?\nAnswer:",
+    "target": " Ben",
+    "type": "reasoning_tracking",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "rt_swap",
+    "metadata": {
+      "family": "swap",
+      "concept": "simple_swap",
+      "difficulty": "easy"
+    },
+    "id": "rt_seed_0032"
+  },
+  {
+    "prompt": "Kira put the notebook on the table and the key on the shelf. Then Cara moved the notebook to the shelf and moved the key to the drawer. Which item is on the shelf now?\nAnswer:",
+    "target": " notebook",
+    "type": "reasoning_tracking",
+    "tokens_approx": 46,
+    "tier": "brief",
+    "source": "rt_reference",
+    "metadata": {
+      "family": "reference",
+      "concept": "which_item_in_location",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0033"
+  },
+  {
+    "prompt": "The notebook was first put in the cabinet. Then it was moved to the bag. Later, it was removed from the bag and placed in the drawer. Which container holds the notebook now?\nAnswer:",
+    "target": " drawer",
+    "type": "reasoning_tracking",
+    "tokens_approx": 44,
+    "tier": "brief",
+    "source": "rt_container",
+    "metadata": {
+      "family": "containers",
+      "concept": "container_move_chain",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0034"
+  },
+  {
+    "prompt": "Sam placed the map inside a box, then put the box inside a cabinet. Later, sam removed the box from the cabinet but did not open it. Where is the map now?\nAnswer:",
+    "target": " box",
+    "type": "reasoning_tracking",
+    "tokens_approx": 42,
+    "tier": "brief",
+    "source": "rt_nested",
+    "metadata": {
+      "family": "nested_tracking",
+      "concept": "object_inside_inner_container",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0035"
+  },
+  {
+    "prompt": "Grace felt happy in the morning. After a long walk, grace felt excited. At the end of the day, after some good news, grace felt calm. How does grace feel at the end?\nAnswer:",
+    "target": " calm",
+    "type": "reasoning_tracking",
+    "tokens_approx": 44,
+    "tier": "brief",
+    "source": "rt_state",
+    "metadata": {
+      "family": "overwrite",
+      "concept": "final_state_update_brief",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0036"
+  },
+  {
+    "prompt": "Noah started with the coin. Noah handed it to Tara. Tara later gave it to Owen. After using it, Owen passed it to Ben. Who has the coin at the end?\nAnswer:",
+    "target": " Ben",
+    "type": "reasoning_tracking",
+    "tokens_approx": 41,
+    "tier": "brief",
+    "source": "rt_transfer_brief",
+    "metadata": {
+      "family": "transfer",
+      "concept": "three_transfer_chain",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0037"
+  },
+  {
+    "prompt": "Kira started in the garden. Then kira walked to the bedroom. After that, kira went to the attic. Where is kira now?\nAnswer:",
+    "target": " attic",
+    "type": "reasoning_tracking",
+    "tokens_approx": 29,
+    "tier": "short",
+    "source": "rt_location",
+    "metadata": {
+      "family": "location",
+      "concept": "three_step_location",
+      "difficulty": "easy"
+    },
     "id": "rt_seed_0038"
   },
   {
-    "prompt": "Cara has the key and Ben has the coin. They swap items. After the swap, who has the key?\nAnswer:",
-    "target": " Ben",
+    "prompt": "Owen has the lantern and Eva has the coin. They swap items. After the swap, who has the lantern?\nAnswer:",
+    "target": " Eva",
     "type": "reasoning_tracking",
     "tokens_approx": 26,
     "tier": "short",
@@ -560,35 +560,49 @@
     "id": "rt_seed_0039"
   },
   {
-    "prompt": "In the morning, Ben placed the key in the garden. At noon, Owen moved the key from the garden to the kitchen. In the evening, Pia checked the kitchen but did not move the key. Where is the key now?\nAnswer:",
-    "target": " kitchen",
+    "prompt": "Hugo paints a box red. Then hugo paints the same box yellow. Finally, hugo paints it green. What color is the box at the end?\nAnswer:",
+    "target": " green",
     "type": "reasoning_tracking",
-    "tokens_approx": 53,
+    "tokens_approx": 33,
     "tier": "brief",
-    "source": "rt_object_location",
+    "source": "rt_overwrite",
     "metadata": {
-      "family": "location",
-      "concept": "object_moved_between_locations",
-      "difficulty": "medium"
+      "family": "overwrite",
+      "concept": "final_state_overwrite",
+      "difficulty": "easy"
     },
     "id": "rt_seed_0040"
   },
   {
-    "prompt": "The coin was first put in the cabinet. Then it was moved to the bag. Later, it was removed from the bag and placed in the basket. Which container holds the coin now?\nAnswer:",
-    "target": " basket",
+    "prompt": "Rosa had the notebook. Then Rosa gave the notebook to Alice. Later, Alice passed the notebook to Cara. Who has the notebook now?\nAnswer:",
+    "target": " Cara",
     "type": "reasoning_tracking",
-    "tokens_approx": 44,
+    "tokens_approx": 31,
     "tier": "brief",
-    "source": "rt_container",
+    "source": "rt_transfer",
     "metadata": {
-      "family": "containers",
-      "concept": "container_move_chain",
-      "difficulty": "medium"
+      "family": "transfer",
+      "concept": "two_transfer_chain",
+      "difficulty": "easy"
     },
     "id": "rt_seed_0041"
   },
   {
-    "prompt": "Lena paints a box red. Then lena paints the same box green. Finally, lena paints it black. What color is the box at the end?\nAnswer:",
+    "prompt": "Pia had the lantern. Then Pia gave the lantern to Tara. Later, Tara passed the lantern to Grace. Who has the lantern now?\nAnswer:",
+    "target": " Grace",
+    "type": "reasoning_tracking",
+    "tokens_approx": 31,
+    "tier": "brief",
+    "source": "rt_transfer",
+    "metadata": {
+      "family": "transfer",
+      "concept": "two_transfer_chain",
+      "difficulty": "easy"
+    },
+    "id": "rt_seed_0042"
+  },
+  {
+    "prompt": "Owen paints a box green. Then owen paints the same box yellow. Finally, owen paints it black. What color is the box at the end?\nAnswer:",
     "target": " black",
     "type": "reasoning_tracking",
     "tokens_approx": 33,
@@ -599,38 +613,52 @@
       "concept": "final_state_overwrite",
       "difficulty": "easy"
     },
-    "id": "rt_seed_0042"
-  },
-  {
-    "prompt": "Kira put the lantern on the table and the ticket on the shelf. Then Noah moved the lantern to the shelf and moved the ticket to the drawer. Which item is on the shelf now?\nAnswer:",
-    "target": " lantern",
-    "type": "reasoning_tracking",
-    "tokens_approx": 46,
-    "tier": "brief",
-    "source": "rt_reference",
-    "metadata": {
-      "family": "reference",
-      "concept": "which_item_in_location",
-      "difficulty": "medium"
-    },
     "id": "rt_seed_0043"
   },
   {
-    "prompt": "Kira started with the key. Kira handed it to Lena. Lena later gave it to Sam. After using it, Sam passed it to Grace. Who has the key at the end?\nAnswer:",
-    "target": " Grace",
+    "prompt": "Rosa placed the notebook inside a box, then put the box inside a cabinet. Later, rosa removed the box from the cabinet but did not open it. Where is the notebook now?\nAnswer:",
+    "target": " box",
     "type": "reasoning_tracking",
-    "tokens_approx": 41,
+    "tokens_approx": 42,
     "tier": "brief",
-    "source": "rt_transfer_brief",
+    "source": "rt_nested",
     "metadata": {
-      "family": "transfer",
-      "concept": "three_transfer_chain",
+      "family": "nested_tracking",
+      "concept": "object_inside_inner_container",
       "difficulty": "medium"
     },
     "id": "rt_seed_0044"
   },
   {
-    "prompt": "Quinn felt happy in the morning. After a long walk, quinn felt tired. At the end of the day, after some good news, quinn felt calm. How does quinn feel at the end?\nAnswer:",
+    "prompt": "Ben paints a box black. Then ben paints the same box red. Finally, ben paints it green. What color is the box at the end?\nAnswer:",
+    "target": " green",
+    "type": "reasoning_tracking",
+    "tokens_approx": 33,
+    "tier": "brief",
+    "source": "rt_overwrite",
+    "metadata": {
+      "family": "overwrite",
+      "concept": "final_state_overwrite",
+      "difficulty": "easy"
+    },
+    "id": "rt_seed_0045"
+  },
+  {
+    "prompt": "Finn started in the garden. Then finn walked to the library. After that, finn went to the kitchen. Where is finn now?\nAnswer:",
+    "target": " kitchen",
+    "type": "reasoning_tracking",
+    "tokens_approx": 29,
+    "tier": "short",
+    "source": "rt_location",
+    "metadata": {
+      "family": "location",
+      "concept": "three_step_location",
+      "difficulty": "easy"
+    },
+    "id": "rt_seed_0046"
+  },
+  {
+    "prompt": "Hugo felt nervous in the morning. After a long walk, hugo felt happy. At the end of the day, after some good news, hugo felt calm. How does hugo feel at the end?\nAnswer:",
     "target": " calm",
     "type": "reasoning_tracking",
     "tokens_approx": 44,
@@ -641,25 +669,53 @@
       "concept": "final_state_update_brief",
       "difficulty": "medium"
     },
-    "id": "rt_seed_0045"
+    "id": "rt_seed_0047"
   },
   {
-    "prompt": "Jack was first in line, Noah was second, and Cara was third. Then Cara moved ahead of Noah. After that, Noah moved ahead of Jack. Who is second in line now?\nAnswer:",
-    "target": " Jack",
+    "prompt": "Tara paints a box red. Then tara paints the same box black. Finally, tara paints it blue. What color is the box at the end?\nAnswer:",
+    "target": " blue",
     "type": "reasoning_tracking",
-    "tokens_approx": 41,
+    "tokens_approx": 33,
     "tier": "brief",
-    "source": "rt_order",
+    "source": "rt_overwrite",
     "metadata": {
-      "family": "ordering",
-      "concept": "line_reordering",
+      "family": "overwrite",
+      "concept": "final_state_overwrite",
+      "difficulty": "easy"
+    },
+    "id": "rt_seed_0048"
+  },
+  {
+    "prompt": "Sam felt excited in the morning. After a long walk, sam felt calm. At the end of the day, after some good news, sam felt tired. How does sam feel at the end?\nAnswer:",
+    "target": " tired",
+    "type": "reasoning_tracking",
+    "tokens_approx": 44,
+    "tier": "brief",
+    "source": "rt_state",
+    "metadata": {
+      "family": "overwrite",
+      "concept": "final_state_update_brief",
       "difficulty": "medium"
     },
-    "id": "rt_seed_0046"
+    "id": "rt_seed_0049"
   },
   {
-    "prompt": "Iris has the map and Sam has the notebook. They swap items. After the swap, who has the map?\nAnswer:",
-    "target": " Sam",
+    "prompt": "Kira paints a box blue. Then kira paints the same box green. Finally, kira paints it black. What color is the box at the end?\nAnswer:",
+    "target": " black",
+    "type": "reasoning_tracking",
+    "tokens_approx": 33,
+    "tier": "brief",
+    "source": "rt_overwrite",
+    "metadata": {
+      "family": "overwrite",
+      "concept": "final_state_overwrite",
+      "difficulty": "easy"
+    },
+    "id": "rt_seed_0050"
+  },
+  {
+    "prompt": "Jack has the card and Owen has the lantern. They swap items. After the swap, who has the card?\nAnswer:",
+    "target": " Owen",
     "type": "reasoning_tracking",
     "tokens_approx": 26,
     "tier": "short",
@@ -669,305 +725,95 @@
       "concept": "simple_swap",
       "difficulty": "easy"
     },
-    "id": "rt_seed_0047"
-  },
-  {
-    "prompt": "The ticket was first put in the basket. Then it was moved to the box. Later, it was removed from the box and placed in the bag. Which container holds the ticket now?\nAnswer:",
-    "target": " bag",
-    "type": "reasoning_tracking",
-    "tokens_approx": 44,
-    "tier": "brief",
-    "source": "rt_container",
-    "metadata": {
-      "family": "containers",
-      "concept": "container_move_chain",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0048"
-  },
-  {
-    "prompt": "Tara had the lantern. Then Tara gave the lantern to Iris. Later, Iris passed the lantern to Ben. Who has the lantern now?\nAnswer:",
-    "target": " Ben",
-    "type": "reasoning_tracking",
-    "tokens_approx": 31,
-    "tier": "brief",
-    "source": "rt_transfer",
-    "metadata": {
-      "family": "transfer",
-      "concept": "two_transfer_chain",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0049"
-  },
-  {
-    "prompt": "Lena put the key on the table and the map on the shelf. Then Noah moved the key to the shelf and moved the map to the drawer. Which item is on the shelf now?\nAnswer:",
-    "target": " key",
-    "type": "reasoning_tracking",
-    "tokens_approx": 46,
-    "tier": "brief",
-    "source": "rt_reference",
-    "metadata": {
-      "family": "reference",
-      "concept": "which_item_in_location",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0050"
-  },
-  {
-    "prompt": "Kira put the lantern on the table and the map on the shelf. Then Finn moved the lantern to the shelf and moved the map to the drawer. Which item is on the shelf now?\nAnswer:",
-    "target": " lantern",
-    "type": "reasoning_tracking",
-    "tokens_approx": 46,
-    "tier": "brief",
-    "source": "rt_reference",
-    "metadata": {
-      "family": "reference",
-      "concept": "which_item_in_location",
-      "difficulty": "medium"
-    },
     "id": "rt_seed_0051"
   },
   {
-    "prompt": "Ben put the book on the table and the map on the shelf. Then Rosa moved the book to the shelf and moved the map to the drawer. Which item is on the shelf now?\nAnswer:",
-    "target": " book",
+    "prompt": "Alice placed the coin inside a drawer, then put the drawer inside a cabinet. Later, alice removed the drawer from the cabinet but did not open it. Where is the coin now?\nAnswer:",
+    "target": " drawer",
     "type": "reasoning_tracking",
-    "tokens_approx": 46,
+    "tokens_approx": 42,
     "tier": "brief",
-    "source": "rt_reference",
+    "source": "rt_nested",
     "metadata": {
-      "family": "reference",
-      "concept": "which_item_in_location",
+      "family": "nested_tracking",
+      "concept": "object_inside_inner_container",
       "difficulty": "medium"
     },
     "id": "rt_seed_0052"
   },
   {
-    "prompt": "The card was first put in the basket. Then it was moved to the bag. Later, it was removed from the bag and placed in the box. Which container holds the card now?\nAnswer:",
-    "target": " box",
+    "prompt": "Grace had the key. Then Grace gave the key to Quinn. Later, Quinn passed the key to Iris. Who has the key now?\nAnswer:",
+    "target": " Iris",
     "type": "reasoning_tracking",
-    "tokens_approx": 44,
+    "tokens_approx": 31,
     "tier": "brief",
-    "source": "rt_container",
+    "source": "rt_transfer",
     "metadata": {
-      "family": "containers",
-      "concept": "container_move_chain",
-      "difficulty": "medium"
+      "family": "transfer",
+      "concept": "two_transfer_chain",
+      "difficulty": "easy"
     },
     "id": "rt_seed_0053"
   },
   {
-    "prompt": "Jack placed the ticket inside a box, then put the box inside a cabinet. Later, jack removed the box from the cabinet but did not open it. Where is the ticket now?\nAnswer:",
-    "target": " box",
+    "prompt": "Rosa has the book and Jack has the card. They swap items. After the swap, who has the book?\nAnswer:",
+    "target": " Jack",
     "type": "reasoning_tracking",
-    "tokens_approx": 42,
-    "tier": "brief",
-    "source": "rt_nested",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "rt_swap",
     "metadata": {
-      "family": "nested_tracking",
-      "concept": "object_inside_inner_container",
-      "difficulty": "medium"
+      "family": "swap",
+      "concept": "simple_swap",
+      "difficulty": "easy"
     },
     "id": "rt_seed_0054"
   },
   {
-    "prompt": "The key was first put in the drawer. Then it was moved to the cabinet. Later, it was removed from the cabinet and placed in the bag. Which container holds the key now?\nAnswer:",
-    "target": " bag",
+    "prompt": "Grace started with the map. Grace handed it to Kira. Kira later gave it to Tara. After using it, Tara passed it to Iris. Who has the map at the end?\nAnswer:",
+    "target": " Iris",
     "type": "reasoning_tracking",
-    "tokens_approx": 44,
+    "tokens_approx": 41,
     "tier": "brief",
-    "source": "rt_container",
+    "source": "rt_transfer_brief",
     "metadata": {
-      "family": "containers",
-      "concept": "container_move_chain",
+      "family": "transfer",
+      "concept": "three_transfer_chain",
       "difficulty": "medium"
     },
     "id": "rt_seed_0055"
   },
   {
-    "prompt": "Ben started in the office. Then ben walked to the library. After that, ben went to the hall. Where is ben now?\nAnswer:",
-    "target": " hall",
+    "prompt": "Ben paints a box red. Then ben paints the same box yellow. Finally, ben paints it blue. What color is the box at the end?\nAnswer:",
+    "target": " blue",
     "type": "reasoning_tracking",
-    "tokens_approx": 29,
-    "tier": "short",
-    "source": "rt_location",
+    "tokens_approx": 33,
+    "tier": "brief",
+    "source": "rt_overwrite",
     "metadata": {
-      "family": "location",
-      "concept": "three_step_location",
+      "family": "overwrite",
+      "concept": "final_state_overwrite",
       "difficulty": "easy"
     },
     "id": "rt_seed_0056"
   },
   {
-    "prompt": "Kira started in the library. Then kira walked to the hall. After that, kira went to the office. Where is kira now?\nAnswer:",
-    "target": " office",
+    "prompt": "Kira had the key. Then Kira gave the key to Eva. Later, Eva passed the key to Iris. Who has the key now?\nAnswer:",
+    "target": " Iris",
     "type": "reasoning_tracking",
-    "tokens_approx": 29,
-    "tier": "short",
-    "source": "rt_location",
+    "tokens_approx": 31,
+    "tier": "brief",
+    "source": "rt_transfer",
     "metadata": {
-      "family": "location",
-      "concept": "three_step_location",
+      "family": "transfer",
+      "concept": "two_transfer_chain",
       "difficulty": "easy"
     },
     "id": "rt_seed_0057"
   },
   {
-    "prompt": "Lena felt tired in the morning. After a long walk, lena felt happy. At the end of the day, after some good news, lena felt excited. How does lena feel at the end?\nAnswer:",
-    "target": " excited",
-    "type": "reasoning_tracking",
-    "tokens_approx": 44,
-    "tier": "brief",
-    "source": "rt_state",
-    "metadata": {
-      "family": "overwrite",
-      "concept": "final_state_update_brief",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0058"
-  },
-  {
-    "prompt": "Sam started with the book. Sam handed it to Hugo. Hugo later gave it to Maya. After using it, Maya passed it to Cara. Who has the book at the end?\nAnswer:",
-    "target": " Cara",
-    "type": "reasoning_tracking",
-    "tokens_approx": 41,
-    "tier": "brief",
-    "source": "rt_transfer_brief",
-    "metadata": {
-      "family": "transfer",
-      "concept": "three_transfer_chain",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0059"
-  },
-  {
-    "prompt": "Eva started with the book. Eva handed it to Jack. Jack later gave it to Hugo. After using it, Hugo passed it to Grace. Who has the book at the end?\nAnswer:",
-    "target": " Grace",
-    "type": "reasoning_tracking",
-    "tokens_approx": 41,
-    "tier": "brief",
-    "source": "rt_transfer_brief",
-    "metadata": {
-      "family": "transfer",
-      "concept": "three_transfer_chain",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0060"
-  },
-  {
-    "prompt": "In the morning, Noah placed the book in the hall. At noon, Cara moved the book from the hall to the kitchen. In the evening, Pia checked the kitchen but did not move the book. Where is the book now?\nAnswer:",
-    "target": " kitchen",
-    "type": "reasoning_tracking",
-    "tokens_approx": 53,
-    "tier": "brief",
-    "source": "rt_object_location",
-    "metadata": {
-      "family": "location",
-      "concept": "object_moved_between_locations",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0061"
-  },
-  {
-    "prompt": "Finn placed the book inside a box, then put the box inside a cabinet. Later, finn removed the box from the cabinet but did not open it. Where is the book now?\nAnswer:",
+    "prompt": "The key was first put in the basket. Then it was moved to the bag. Later, it was removed from the bag and placed in the box. Which container holds the key now?\nAnswer:",
     "target": " box",
-    "type": "reasoning_tracking",
-    "tokens_approx": 42,
-    "tier": "brief",
-    "source": "rt_nested",
-    "metadata": {
-      "family": "nested_tracking",
-      "concept": "object_inside_inner_container",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0062"
-  },
-  {
-    "prompt": "Dylan put the map on the table and the lantern on the shelf. Then Hugo moved the map to the shelf and moved the lantern to the drawer. Which item is on the shelf now?\nAnswer:",
-    "target": " map",
-    "type": "reasoning_tracking",
-    "tokens_approx": 46,
-    "tier": "brief",
-    "source": "rt_reference",
-    "metadata": {
-      "family": "reference",
-      "concept": "which_item_in_location",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0063"
-  },
-  {
-    "prompt": "Iris had the map. Then Iris gave the map to Cara. Later, Cara passed the map to Ben. Who has the map now?\nAnswer:",
-    "target": " Ben",
-    "type": "reasoning_tracking",
-    "tokens_approx": 31,
-    "tier": "brief",
-    "source": "rt_transfer",
-    "metadata": {
-      "family": "transfer",
-      "concept": "two_transfer_chain",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0064"
-  },
-  {
-    "prompt": "Owen started with the map. Owen handed it to Quinn. Quinn later gave it to Dylan. After using it, Dylan passed it to Kira. Who has the map at the end?\nAnswer:",
-    "target": " Kira",
-    "type": "reasoning_tracking",
-    "tokens_approx": 41,
-    "tier": "brief",
-    "source": "rt_transfer_brief",
-    "metadata": {
-      "family": "transfer",
-      "concept": "three_transfer_chain",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0065"
-  },
-  {
-    "prompt": "Noah put the coin on the table and the map on the shelf. Then Owen moved the coin to the shelf and moved the map to the drawer. Which item is on the shelf now?\nAnswer:",
-    "target": " coin",
-    "type": "reasoning_tracking",
-    "tokens_approx": 46,
-    "tier": "brief",
-    "source": "rt_reference",
-    "metadata": {
-      "family": "reference",
-      "concept": "which_item_in_location",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0066"
-  },
-  {
-    "prompt": "Pia had the map. Then Pia gave the map to Eva. Later, Eva passed the map to Kira. Who has the map now?\nAnswer:",
-    "target": " Kira",
-    "type": "reasoning_tracking",
-    "tokens_approx": 31,
-    "tier": "brief",
-    "source": "rt_transfer",
-    "metadata": {
-      "family": "transfer",
-      "concept": "two_transfer_chain",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0067"
-  },
-  {
-    "prompt": "Owen started in the kitchen. Then owen walked to the attic. After that, owen went to the hall. Where is owen now?\nAnswer:",
-    "target": " hall",
-    "type": "reasoning_tracking",
-    "tokens_approx": 29,
-    "tier": "short",
-    "source": "rt_location",
-    "metadata": {
-      "family": "location",
-      "concept": "three_step_location",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0068"
-  },
-  {
-    "prompt": "The coin was first put in the drawer. Then it was moved to the basket. Later, it was removed from the basket and placed in the cabinet. Which container holds the coin now?\nAnswer:",
-    "target": " cabinet",
     "type": "reasoning_tracking",
     "tokens_approx": 44,
     "tier": "brief",
@@ -977,136 +823,38 @@
       "concept": "container_move_chain",
       "difficulty": "medium"
     },
-    "id": "rt_seed_0069"
+    "id": "rt_seed_0058"
   },
   {
-    "prompt": "Tara started in the bedroom. Then tara walked to the kitchen. After that, tara went to the garden. Where is tara now?\nAnswer:",
-    "target": " garden",
-    "type": "reasoning_tracking",
-    "tokens_approx": 29,
-    "tier": "short",
-    "source": "rt_location",
-    "metadata": {
-      "family": "location",
-      "concept": "three_step_location",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0070"
-  },
-  {
-    "prompt": "Iris has the card and Hugo has the coin. They swap items. After the swap, who has the card?\nAnswer:",
-    "target": " Hugo",
-    "type": "reasoning_tracking",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rt_swap",
-    "metadata": {
-      "family": "swap",
-      "concept": "simple_swap",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0071"
-  },
-  {
-    "prompt": "Alice placed the coin inside a drawer, then put the drawer inside a box. Later, alice removed the drawer from the box but did not open it. Where is the coin now?\nAnswer:",
-    "target": " drawer",
-    "type": "reasoning_tracking",
-    "tokens_approx": 42,
-    "tier": "brief",
-    "source": "rt_nested",
-    "metadata": {
-      "family": "nested_tracking",
-      "concept": "object_inside_inner_container",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0072"
-  },
-  {
-    "prompt": "Cara had the card. Then Cara gave the card to Sam. Later, Sam passed the card to Rosa. Who has the card now?\nAnswer:",
-    "target": " Rosa",
-    "type": "reasoning_tracking",
-    "tokens_approx": 31,
-    "tier": "brief",
-    "source": "rt_transfer",
-    "metadata": {
-      "family": "transfer",
-      "concept": "two_transfer_chain",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0073"
-  },
-  {
-    "prompt": "Quinn started with the coin. Quinn handed it to Grace. Grace later gave it to Ben. After using it, Ben passed it to Finn. Who has the coin at the end?\nAnswer:",
-    "target": " Finn",
+    "prompt": "Ben was first in line, Lena was second, and Grace was third. Then Grace moved ahead of Lena. After that, Lena moved ahead of Ben. Who is second in line now?\nAnswer:",
+    "target": " Ben",
     "type": "reasoning_tracking",
     "tokens_approx": 41,
     "tier": "brief",
-    "source": "rt_transfer_brief",
+    "source": "rt_order",
     "metadata": {
-      "family": "transfer",
-      "concept": "three_transfer_chain",
+      "family": "ordering",
+      "concept": "line_reordering",
       "difficulty": "medium"
     },
-    "id": "rt_seed_0074"
+    "id": "rt_seed_0059"
   },
   {
-    "prompt": "Kira placed the book inside a box, then put the box inside a cabinet. Later, kira removed the box from the cabinet but did not open it. Where is the book now?\nAnswer:",
-    "target": " box",
+    "prompt": "Dylan was first in line, Maya was second, and Ben was third. Then Ben moved ahead of Maya. After that, Maya moved ahead of Dylan. Who is second in line now?\nAnswer:",
+    "target": " Dylan",
     "type": "reasoning_tracking",
-    "tokens_approx": 42,
+    "tokens_approx": 41,
     "tier": "brief",
-    "source": "rt_nested",
+    "source": "rt_order",
     "metadata": {
-      "family": "nested_tracking",
-      "concept": "object_inside_inner_container",
+      "family": "ordering",
+      "concept": "line_reordering",
       "difficulty": "medium"
     },
-    "id": "rt_seed_0075"
+    "id": "rt_seed_0060"
   },
   {
-    "prompt": "Finn placed the notebook inside a cabinet, then put the cabinet inside a box. Later, finn removed the cabinet from the box but did not open it. Where is the notebook now?\nAnswer:",
-    "target": " cabinet",
-    "type": "reasoning_tracking",
-    "tokens_approx": 42,
-    "tier": "brief",
-    "source": "rt_nested",
-    "metadata": {
-      "family": "nested_tracking",
-      "concept": "object_inside_inner_container",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0076"
-  },
-  {
-    "prompt": "Noah put the book on the table and the notebook on the shelf. Then Grace moved the book to the shelf and moved the notebook to the drawer. Which item is on the shelf now?\nAnswer:",
-    "target": " book",
-    "type": "reasoning_tracking",
-    "tokens_approx": 46,
-    "tier": "brief",
-    "source": "rt_reference",
-    "metadata": {
-      "family": "reference",
-      "concept": "which_item_in_location",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0077"
-  },
-  {
-    "prompt": "Dylan placed the key inside a bag, then put the bag inside a box. Later, dylan removed the bag from the box but did not open it. Where is the key now?\nAnswer:",
-    "target": " bag",
-    "type": "reasoning_tracking",
-    "tokens_approx": 42,
-    "tier": "brief",
-    "source": "rt_nested",
-    "metadata": {
-      "family": "nested_tracking",
-      "concept": "object_inside_inner_container",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0078"
-  },
-  {
-    "prompt": "Hugo was first in line, Owen was second, and Rosa was third. Then Rosa moved ahead of Owen. After that, Owen moved ahead of Hugo. Who is second in line now?\nAnswer:",
+    "prompt": "Hugo was first in line, Tara was second, and Alice was third. Then Alice moved ahead of Tara. After that, Tara moved ahead of Hugo. Who is second in line now?\nAnswer:",
     "target": " Hugo",
     "type": "reasoning_tracking",
     "tokens_approx": 41,
@@ -1117,362 +865,26 @@
       "concept": "line_reordering",
       "difficulty": "medium"
     },
-    "id": "rt_seed_0079"
+    "id": "rt_seed_0061"
   },
   {
-    "prompt": "Lena felt excited in the morning. After a long walk, lena felt tired. At the end of the day, after some good news, lena felt nervous. How does lena feel at the end?\nAnswer:",
-    "target": " nervous",
-    "type": "reasoning_tracking",
-    "tokens_approx": 44,
-    "tier": "brief",
-    "source": "rt_state",
-    "metadata": {
-      "family": "overwrite",
-      "concept": "final_state_update_brief",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0080"
-  },
-  {
-    "prompt": "Maya placed the coin inside a drawer, then put the drawer inside a box. Later, maya removed the drawer from the box but did not open it. Where is the coin now?\nAnswer:",
-    "target": " drawer",
-    "type": "reasoning_tracking",
-    "tokens_approx": 42,
-    "tier": "brief",
-    "source": "rt_nested",
-    "metadata": {
-      "family": "nested_tracking",
-      "concept": "object_inside_inner_container",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0081"
-  },
-  {
-    "prompt": "Cara was first in line, Pia was second, and Kira was third. Then Kira moved ahead of Pia. After that, Pia moved ahead of Cara. Who is second in line now?\nAnswer:",
-    "target": " Cara",
-    "type": "reasoning_tracking",
-    "tokens_approx": 41,
-    "tier": "brief",
-    "source": "rt_order",
-    "metadata": {
-      "family": "ordering",
-      "concept": "line_reordering",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0082"
-  },
-  {
-    "prompt": "Hugo felt nervous in the morning. After a long walk, hugo felt calm. At the end of the day, after some good news, hugo felt tired. How does hugo feel at the end?\nAnswer:",
-    "target": " tired",
-    "type": "reasoning_tracking",
-    "tokens_approx": 44,
-    "tier": "brief",
-    "source": "rt_state",
-    "metadata": {
-      "family": "overwrite",
-      "concept": "final_state_update_brief",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0083"
-  },
-  {
-    "prompt": "Noah started in the garage. Then noah walked to the library. After that, noah went to the office. Where is noah now?\nAnswer:",
-    "target": " office",
-    "type": "reasoning_tracking",
-    "tokens_approx": 29,
-    "tier": "short",
-    "source": "rt_location",
-    "metadata": {
-      "family": "location",
-      "concept": "three_step_location",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0084"
-  },
-  {
-    "prompt": "Hugo started with the ticket. Hugo handed it to Iris. Iris later gave it to Grace. After using it, Grace passed it to Jack. Who has the ticket at the end?\nAnswer:",
-    "target": " Jack",
-    "type": "reasoning_tracking",
-    "tokens_approx": 41,
-    "tier": "brief",
-    "source": "rt_transfer_brief",
-    "metadata": {
-      "family": "transfer",
-      "concept": "three_transfer_chain",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0085"
-  },
-  {
-    "prompt": "In the morning, Grace placed the key in the office. At noon, Maya moved the key from the office to the garden. In the evening, Sam checked the garden but did not move the key. Where is the key now?\nAnswer:",
-    "target": " garden",
-    "type": "reasoning_tracking",
-    "tokens_approx": 53,
-    "tier": "brief",
-    "source": "rt_object_location",
-    "metadata": {
-      "family": "location",
-      "concept": "object_moved_between_locations",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0086"
-  },
-  {
-    "prompt": "In the morning, Kira placed the card in the garden. At noon, Quinn moved the card from the garden to the hall. In the evening, Maya checked the hall but did not move the card. Where is the card now?\nAnswer:",
-    "target": " hall",
-    "type": "reasoning_tracking",
-    "tokens_approx": 53,
-    "tier": "brief",
-    "source": "rt_object_location",
-    "metadata": {
-      "family": "location",
-      "concept": "object_moved_between_locations",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0087"
-  },
-  {
-    "prompt": "Dylan has the notebook and Kira has the lantern. They swap items. After the swap, who has the notebook?\nAnswer:",
-    "target": " Kira",
-    "type": "reasoning_tracking",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rt_swap",
-    "metadata": {
-      "family": "swap",
-      "concept": "simple_swap",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0088"
-  },
-  {
-    "prompt": "Jack put the lantern on the table and the coin on the shelf. Then Hugo moved the lantern to the shelf and moved the coin to the drawer. Which item is on the shelf now?\nAnswer:",
-    "target": " lantern",
-    "type": "reasoning_tracking",
-    "tokens_approx": 46,
-    "tier": "brief",
-    "source": "rt_reference",
-    "metadata": {
-      "family": "reference",
-      "concept": "which_item_in_location",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0089"
-  },
-  {
-    "prompt": "Dylan has the notebook and Cara has the book. They swap items. After the swap, who has the notebook?\nAnswer:",
-    "target": " Cara",
-    "type": "reasoning_tracking",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rt_swap",
-    "metadata": {
-      "family": "swap",
-      "concept": "simple_swap",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0090"
-  },
-  {
-    "prompt": "In the morning, Jack placed the book in the bedroom. At noon, Hugo moved the book from the bedroom to the library. In the evening, Eva checked the library but did not move the book. Where is the book now?\nAnswer:",
-    "target": " library",
-    "type": "reasoning_tracking",
-    "tokens_approx": 53,
-    "tier": "brief",
-    "source": "rt_object_location",
-    "metadata": {
-      "family": "location",
-      "concept": "object_moved_between_locations",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0091"
-  },
-  {
-    "prompt": "Owen felt excited in the morning. After a long walk, owen felt nervous. At the end of the day, after some good news, owen felt tired. How does owen feel at the end?\nAnswer:",
-    "target": " tired",
-    "type": "reasoning_tracking",
-    "tokens_approx": 44,
-    "tier": "brief",
-    "source": "rt_state",
-    "metadata": {
-      "family": "overwrite",
-      "concept": "final_state_update_brief",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0092"
-  },
-  {
-    "prompt": "In the morning, Pia placed the key in the bedroom. At noon, Sam moved the key from the bedroom to the office. In the evening, Tara checked the office but did not move the key. Where is the key now?\nAnswer:",
-    "target": " office",
-    "type": "reasoning_tracking",
-    "tokens_approx": 53,
-    "tier": "brief",
-    "source": "rt_object_location",
-    "metadata": {
-      "family": "location",
-      "concept": "object_moved_between_locations",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0093"
-  },
-  {
-    "prompt": "Pia felt calm in the morning. After a long walk, pia felt tired. At the end of the day, after some good news, pia felt nervous. How does pia feel at the end?\nAnswer:",
-    "target": " nervous",
-    "type": "reasoning_tracking",
-    "tokens_approx": 44,
-    "tier": "brief",
-    "source": "rt_state",
-    "metadata": {
-      "family": "overwrite",
-      "concept": "final_state_update_brief",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0094"
-  },
-  {
-    "prompt": "Cara put the book on the table and the lantern on the shelf. Then Jack moved the book to the shelf and moved the lantern to the drawer. Which item is on the shelf now?\nAnswer:",
-    "target": " book",
-    "type": "reasoning_tracking",
-    "tokens_approx": 46,
-    "tier": "brief",
-    "source": "rt_reference",
-    "metadata": {
-      "family": "reference",
-      "concept": "which_item_in_location",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0095"
-  },
-  {
-    "prompt": "Noah paints a box black. Then noah paints the same box green. Finally, noah paints it yellow. What color is the box at the end?\nAnswer:",
-    "target": " yellow",
-    "type": "reasoning_tracking",
-    "tokens_approx": 33,
-    "tier": "brief",
-    "source": "rt_overwrite",
-    "metadata": {
-      "family": "overwrite",
-      "concept": "final_state_overwrite",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0096"
-  },
-  {
-    "prompt": "Hugo paints a box blue. Then hugo paints the same box green. Finally, hugo paints it yellow. What color is the box at the end?\nAnswer:",
-    "target": " yellow",
-    "type": "reasoning_tracking",
-    "tokens_approx": 33,
-    "tier": "brief",
-    "source": "rt_overwrite",
-    "metadata": {
-      "family": "overwrite",
-      "concept": "final_state_overwrite",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0097"
-  },
-  {
-    "prompt": "Owen paints a box blue. Then owen paints the same box red. Finally, owen paints it yellow. What color is the box at the end?\nAnswer:",
-    "target": " yellow",
-    "type": "reasoning_tracking",
-    "tokens_approx": 33,
-    "tier": "brief",
-    "source": "rt_overwrite",
-    "metadata": {
-      "family": "overwrite",
-      "concept": "final_state_overwrite",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0098"
-  },
-  {
-    "prompt": "Tara has the lantern and Pia has the coin. They swap items. After the swap, who has the lantern?\nAnswer:",
-    "target": " Pia",
-    "type": "reasoning_tracking",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rt_swap",
-    "metadata": {
-      "family": "swap",
-      "concept": "simple_swap",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0099"
-  },
-  {
-    "prompt": "Cara paints a box blue. Then cara paints the same box green. Finally, cara paints it yellow. What color is the box at the end?\nAnswer:",
-    "target": " yellow",
-    "type": "reasoning_tracking",
-    "tokens_approx": 33,
-    "tier": "brief",
-    "source": "rt_overwrite",
-    "metadata": {
-      "family": "overwrite",
-      "concept": "final_state_overwrite",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0100"
-  },
-  {
-    "prompt": "Ben felt tired in the morning. After a long walk, ben felt nervous. At the end of the day, after some good news, ben felt calm. How does ben feel at the end?\nAnswer:",
-    "target": " calm",
-    "type": "reasoning_tracking",
-    "tokens_approx": 44,
-    "tier": "brief",
-    "source": "rt_state",
-    "metadata": {
-      "family": "overwrite",
-      "concept": "final_state_update_brief",
-      "difficulty": "medium"
-    },
-    "id": "rt_seed_0101"
-  },
-  {
-    "prompt": "Ben has the coin and Noah has the book. They swap items. After the swap, who has the coin?\nAnswer:",
+    "prompt": "Noah was first in line, Alice was second, and Quinn was third. Then Quinn moved ahead of Alice. After that, Alice moved ahead of Noah. Who is second in line now?\nAnswer:",
     "target": " Noah",
     "type": "reasoning_tracking",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rt_swap",
-    "metadata": {
-      "family": "swap",
-      "concept": "simple_swap",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0102"
-  },
-  {
-    "prompt": "Kira paints a box green. Then kira paints the same box black. Finally, kira paints it yellow. What color is the box at the end?\nAnswer:",
-    "target": " yellow",
-    "type": "reasoning_tracking",
-    "tokens_approx": 33,
+    "tokens_approx": 41,
     "tier": "brief",
-    "source": "rt_overwrite",
+    "source": "rt_order",
     "metadata": {
-      "family": "overwrite",
-      "concept": "final_state_overwrite",
-      "difficulty": "easy"
+      "family": "ordering",
+      "concept": "line_reordering",
+      "difficulty": "medium"
     },
-    "id": "rt_seed_0103"
+    "id": "rt_seed_0062"
   },
   {
-    "prompt": "Pia has the lantern and Jack has the notebook. They swap items. After the swap, who has the lantern?\nAnswer:",
+    "prompt": "Jack was first in line, Rosa was second, and Eva was third. Then Eva moved ahead of Rosa. After that, Rosa moved ahead of Jack. Who is second in line now?\nAnswer:",
     "target": " Jack",
     "type": "reasoning_tracking",
-    "tokens_approx": 26,
-    "tier": "short",
-    "source": "rt_swap",
-    "metadata": {
-      "family": "swap",
-      "concept": "simple_swap",
-      "difficulty": "easy"
-    },
-    "id": "rt_seed_0104"
-  },
-  {
-    "prompt": "Owen was first in line, Iris was second, and Grace was third. Then Grace moved ahead of Iris. After that, Iris moved ahead of Owen. Who is second in line now?\nAnswer:",
-    "target": " Owen",
-    "type": "reasoning_tracking",
     "tokens_approx": 41,
     "tier": "brief",
     "source": "rt_order",
@@ -1481,20 +893,34 @@
       "concept": "line_reordering",
       "difficulty": "medium"
     },
-    "id": "rt_seed_0105"
+    "id": "rt_seed_0063"
   },
   {
-    "prompt": "Pia was first in line, Jack was second, and Lena was third. Then Lena moved ahead of Jack. After that, Jack moved ahead of Pia. Who is second in line now?\nAnswer:",
-    "target": " Pia",
+    "prompt": "The book was first put in the drawer. Then it was moved to the cabinet. Later, it was removed from the cabinet and placed in the box. Which container holds the book now?\nAnswer:",
+    "target": " box",
     "type": "reasoning_tracking",
-    "tokens_approx": 41,
+    "tokens_approx": 44,
     "tier": "brief",
-    "source": "rt_order",
+    "source": "rt_container",
     "metadata": {
-      "family": "ordering",
-      "concept": "line_reordering",
+      "family": "containers",
+      "concept": "container_move_chain",
       "difficulty": "medium"
     },
-    "id": "rt_seed_0106"
+    "id": "rt_seed_0064"
+  },
+  {
+    "prompt": "The card was first put in the basket. Then it was moved to the cabinet. Later, it was removed from the cabinet and placed in the bag. Which container holds the card now?\nAnswer:",
+    "target": " bag",
+    "type": "reasoning_tracking",
+    "tokens_approx": 44,
+    "tier": "brief",
+    "source": "rt_container",
+    "metadata": {
+      "family": "containers",
+      "concept": "container_move_chain",
+      "difficulty": "medium"
+    },
+    "id": "rt_seed_0065"
   }
 ]

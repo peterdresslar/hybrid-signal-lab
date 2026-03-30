@@ -1,0 +1,1442 @@
+[
+  {
+    "prompt": "Before anything else happened, the ticket was placed in the kitchen. The market road was crowded with carts loaded with supplies and tools. Vendors called out prices while shoppers compared baskets of produce and cloth. Merchants arranged their goods carefully while customers drifted between the stalls. Near the edge of the square, porters stacked crates beside waiting wagons. After the long story concluded, the narrator reminded the reader that the ticket was in the",
+    "target": " kitchen",
+    "type": "long_range_retrieval",
+    "tokens_approx": 96,
+    "tier": "med",
+    "source": "lrr_density",
+    "metadata": {
+      "family": "story_distractor_density",
+      "concept": "same_fact_varied_distractor_load",
+      "difficulty": "easy",
+      "fact_position": "early",
+      "distractor_level": "light",
+      "answer_type": "location",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0067"
+  },
+  {
+    "prompt": "A pair of riders arrived late and asked for directions before moving on. In the distance, bells rang softly from a tower near the main gate. Dust from the road settled slowly over the fence near the entrance. The watch at the gate recorded the names of those entering after noon. In the middle of the report, it was stated that Meridian maintained 42 storage vaults near the river. Carters checked their wheels and harnesses before setting out again. Travelers resting nearby exchanged stories about roads, weather, and inns. A senior archivist paused to compare two copies of the same report. Stacks of documents were arranged in neat bundles beside the reference desk. At the end of the report, the writer returned to the topic. Meridian maintained",
+    "target": " 42",
+    "type": "long_range_retrieval",
+    "tokens_approx": 165,
+    "tier": "med",
+    "source": "lrr_mid",
+    "metadata": {
+      "family": "mid_fact_late_query",
+      "concept": "city_count_after_delay",
+      "difficulty": "medium",
+      "fact_position": "mid",
+      "distractor_level": "medium",
+      "answer_type": "number",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0109"
+  },
+  {
+    "prompt": "A messenger crossed the courtyard carrying notes for the town council. Several workers paused to compare schedules before returning to their tasks. A few late visitors lingered to finish conversations before the doors closed. Children played near the fountain until they were called home for dinner. A caretaker checked the lamps one by one as evening approached. In the middle of the report, it was stated that Silverport maintained 48 storage vaults near the river. By sunset, the central square had become quieter as people returned indoors. Several visitors spent the afternoon discussing local events in quiet conversation. Travelers resting nearby exchanged stories about roads, weather, and inns. A gardener paused to trim a row of herbs growing near the path. The stage manager walked the route twice to confirm the order of events. In the nearby square, musicians were rehearsing for a festival later that week. At the end of the report, the writer returned to the topic. Silverport maintained",
+    "target": " 48",
+    "type": "long_range_retrieval",
+    "tokens_approx": 209,
+    "tier": "long",
+    "source": "lrr_mid",
+    "metadata": {
+      "family": "mid_fact_late_query",
+      "concept": "city_count_after_delay",
+      "difficulty": "hard",
+      "fact_position": "mid",
+      "distractor_level": "high",
+      "answer_type": "number",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0114"
+  },
+  {
+    "prompt": "At the beginning of the meeting, everyone noted that Maya's favorite food was noodles. Children played near the fountain until they were called home for dinner. Several workers paused to compare schedules before returning to their tasks. A messenger crossed the courtyard carrying notes for the town council. A few late visitors lingered to finish conversations before the doors closed. By sunset, the central square had become quieter as people returned indoors. Several visitors spent the afternoon discussing local events in quiet conversation. A caretaker checked the lamps one by one as evening approached. Two traders argued amiably over weights, measures, and delivery times. Much later, someone asked about Maya. Maya's favorite food was",
+    "target": " noodles",
+    "type": "long_range_retrieval",
+    "tokens_approx": 148,
+    "tier": "med",
+    "source": "lrr_early",
+    "metadata": {
+      "family": "early_fact_late_query",
+      "concept": "favorite_food_after_delay",
+      "difficulty": "medium",
+      "fact_position": "early",
+      "distractor_level": "medium",
+      "answer_type": "food",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0049"
+  },
+  {
+    "prompt": "The lantern was stored in the bedroom. The map was stored in the garage. The walls of the hall were decorated with maps, notices, and faded paintings. Along the corridor, small tables held baskets, tools, and folded papers. The medallion was stored in the attic. The compass was stored in the hall. The ticket was stored in the library. A senior archivist paused to compare two copies of the same report. Stacks of documents were arranged in neat bundles beside the reference desk. The library remained unusually busy, with readers moving between the shelves. An assistant carefully copied names and dates from one register to another. At the very end of the catalog, the summary returned to one entry. The lantern was stored in the",
+    "target": " bedroom",
+    "type": "long_range_retrieval",
+    "tokens_approx": 162,
+    "tier": "med",
+    "source": "lrr_list",
+    "metadata": {
+      "family": "list_context_retrieval",
+      "concept": "catalog_attribute_lookup_location",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "medium",
+      "answer_type": "location",
+      "num_entities": 5
+    },
+    "id": "lrr_seed_0065"
+  },
+  {
+    "prompt": "During the planning session, several people introduced themselves. Finn said they worked as the gardener. The library remained unusually busy, with readers moving between the shelves. The walls of the hall were decorated with maps, notices, and faded paintings. Hugo said they worked as the carpenter. Quinn said they worked as the archivist. Lena said they worked as the messenger. Stacks of documents were arranged in neat bundles beside the reference desk. Along the corridor, small tables held baskets, tools, and folded papers. An assistant carefully copied names and dates from one register to another. A senior archivist paused to compare two copies of the same report. Workers tested lantern hooks and banners before the evening ceremony began. Several cooks were already preparing trays for the celebration meal. The market road was crowded with carts loaded with supplies and tools. After many other details were discussed, the note-taker asked one final question. Finn worked as the",
+    "target": " gardener",
+    "type": "long_range_retrieval",
+    "tokens_approx": 202,
+    "tier": "long",
+    "source": "lrr_entity_attr",
+    "metadata": {
+      "family": "multiple_entities_single_attribute",
+      "concept": "retrieve_role_from_entity_list",
+      "difficulty": "medium",
+      "fact_position": "early-mid",
+      "distractor_level": "medium",
+      "answer_type": "role",
+      "num_entities": 4
+    },
+    "id": "lrr_seed_0016"
+  },
+  {
+    "prompt": "Before anything else happened, the map was placed in the library. The watch at the gate recorded the names of those entering after noon. In the distance, bells rang softly from a tower near the main gate. Carters checked their wheels and harnesses before setting out again. Dust from the road settled slowly over the fence near the entrance. Travelers resting nearby exchanged stories about roads, weather, and inns. A pair of riders arrived late and asked for directions before moving on. The air smelled faintly of wood smoke and fresh bread from a nearby bakery. The old stone paths were lined with flowering plants and trimmed hedges. Water ran quietly through a narrow channel beside the planted beds. The air smelled faintly of wood smoke and fresh bread from a nearby bakery. Several workers paused to compare schedules before returning to their tasks. Workers tested lantern hooks and banners before the evening ceremony began. After the long story concluded, the narrator reminded the reader that the map was in the",
+    "target": " library",
+    "type": "long_range_retrieval",
+    "tokens_approx": 222,
+    "tier": "long",
+    "source": "lrr_density",
+    "metadata": {
+      "family": "story_distractor_density",
+      "concept": "same_fact_varied_distractor_load",
+      "difficulty": "hard",
+      "fact_position": "early",
+      "distractor_level": "high",
+      "answer_type": "location",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0063"
+  },
+  {
+    "prompt": "Noah was listed with the role merchant. Jack was listed with the role archivist. The walls of the hall were decorated with maps, notices, and faded paintings. A senior archivist paused to compare two copies of the same report. Lena was listed with the role carpenter. Rosa was listed with the role teacher. Grace was listed with the role painter. An assistant carefully copied names and dates from one register to another. The library remained unusually busy, with readers moving between the shelves. Stacks of documents were arranged in neat bundles beside the reference desk. Along the corridor, small tables held baskets, tools, and folded papers. The old stone paths were lined with flowering plants and trimmed hedges. Dust from the road settled slowly over the fence near the entrance. At the very end of the catalog, the summary returned to one entry. The role listed for Jack was",
+    "target": " archivist",
+    "type": "long_range_retrieval",
+    "tokens_approx": 193,
+    "tier": "med",
+    "source": "lrr_list",
+    "metadata": {
+      "family": "list_context_retrieval",
+      "concept": "catalog_attribute_lookup_role",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "medium",
+      "answer_type": "role",
+      "num_entities": 5
+    },
+    "id": "lrr_seed_0074"
+  },
+  {
+    "prompt": "At the opening count, Ben was said to be carrying 48 stones. Several cooks were already preparing trays for the celebration meal. Colorful ribbons had been tied to poles along the edge of the plaza. In the nearby square, musicians were rehearsing for a festival later that week. Workers tested lantern hooks and banners before the evening ceremony began. A group of children practiced their steps near the bandstand. The stage manager walked the route twice to confirm the order of events. A senior archivist paused to compare two copies of the same report. Much later, someone asked about the earlier count. Ben had",
+    "target": " 48",
+    "type": "long_range_retrieval",
+    "tokens_approx": 135,
+    "tier": "med",
+    "source": "lrr_early",
+    "metadata": {
+      "family": "early_fact_late_query",
+      "concept": "object_count_after_delay",
+      "difficulty": "medium",
+      "fact_position": "early",
+      "distractor_level": "medium",
+      "answer_type": "number",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0076"
+  },
+  {
+    "prompt": "Maya was assigned the card and was told to wait in the bedroom. An assistant carefully copied names and dates from one register to another. The walls of the hall were decorated with maps, notices, and faded paintings. Stacks of documents were arranged in neat bundles beside the reference desk. Grace was assigned the key and was told to wait in the garage. Kira was assigned the compass and was told to wait in the attic. Along the corridor, small tables held baskets, tools, and folded papers. The library remained unusually busy, with readers moving between the shelves. A senior archivist paused to compare two copies of the same report. At the end of the announcement, someone asked where Grace had been told to wait. Grace was told to wait in the",
+    "target": " garage",
+    "type": "long_range_retrieval",
+    "tokens_approx": 171,
+    "tier": "med",
+    "source": "lrr_binding",
+    "metadata": {
+      "family": "attribute_binding",
+      "concept": "entity_location_binding",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "medium",
+      "answer_type": "location",
+      "num_entities": 3
+    },
+    "id": "lrr_seed_0061"
+  },
+  {
+    "prompt": "During the planning session, several people introduced themselves. Finn said they worked as the merchant. By sunset, the central square had become quieter as people returned indoors. A caretaker checked the lamps one by one as evening approached. Alice said they worked as the gardener. Maya said they worked as the teacher. Sam said they worked as the messenger. Several visitors spent the afternoon discussing local events in quiet conversation. A messenger crossed the courtyard carrying notes for the town council. Several workers paused to compare schedules before returning to their tasks. A few late visitors lingered to finish conversations before the doors closed. Children played near the fountain until they were called home for dinner. Stacks of documents were arranged in neat bundles beside the reference desk. An assistant carefully copied names and dates from one register to another. After many other details were discussed, the note-taker asked one final question. Finn worked as the",
+    "target": " merchant",
+    "type": "long_range_retrieval",
+    "tokens_approx": 202,
+    "tier": "long",
+    "source": "lrr_entity_attr",
+    "metadata": {
+      "family": "multiple_entities_single_attribute",
+      "concept": "retrieve_role_from_entity_list",
+      "difficulty": "medium",
+      "fact_position": "early-mid",
+      "distractor_level": "medium",
+      "answer_type": "role",
+      "num_entities": 4
+    },
+    "id": "lrr_seed_0030"
+  },
+  {
+    "prompt": "Silverport was associated with the color blue. Harrowgate was associated with the color red. Near the edge of the square, porters stacked crates beside waiting wagons. The market road was crowded with carts loaded with supplies and tools. Northwatch was associated with the color green. Meridian was associated with the color violet. Eastholm was associated with the color white. Merchants arranged their goods carefully while customers drifted between the stalls. A clerk moved from stall to stall recording payments in a small ledger. Two traders argued amiably over weights, measures, and delivery times. Vendors called out prices while shoppers compared baskets of produce and cloth. At the very end of the catalog, the summary returned to one entry. The color associated with Meridian was",
+    "target": " violet",
+    "type": "long_range_retrieval",
+    "tokens_approx": 161,
+    "tier": "med",
+    "source": "lrr_list",
+    "metadata": {
+      "family": "list_context_retrieval",
+      "concept": "catalog_attribute_lookup_color",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "medium",
+      "answer_type": "color",
+      "num_entities": 5
+    },
+    "id": "lrr_seed_0072"
+  },
+  {
+    "prompt": "Owen was assigned the key and was told to wait in the office. A messenger crossed the courtyard carrying notes for the town council. By sunset, the central square had become quieter as people returned indoors. Several visitors spent the afternoon discussing local events in quiet conversation. Iris was assigned the ticket and was told to wait in the garden. Jack was assigned the card and was told to wait in the garage. A few late visitors lingered to finish conversations before the doors closed. A caretaker checked the lamps one by one as evening approached. Children played near the fountain until they were called home for dinner. Several workers paused to compare schedules before returning to their tasks. At the end of the announcement, someone asked what item belonged to Iris. Iris had the",
+    "target": " ticket",
+    "type": "long_range_retrieval",
+    "tokens_approx": 175,
+    "tier": "med",
+    "source": "lrr_binding",
+    "metadata": {
+      "family": "attribute_binding",
+      "concept": "entity_object_binding",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "medium",
+      "answer_type": "object",
+      "num_entities": 3
+    },
+    "id": "lrr_seed_0009"
+  },
+  {
+    "prompt": "Early in the report, it was noted that Pia came from Meridian. A pair of riders arrived late and asked for directions before moving on. Travelers resting nearby exchanged stories about roads, weather, and inns. Dust from the road settled slowly over the fence near the entrance. The watch at the gate recorded the names of those entering after noon. Several paragraphs later, the report explained that Pia worked as the carpenter. The library remained unusually busy, with readers moving between the shelves. The walls of the hall were decorated with maps, notices, and faded paintings. Along the corridor, small tables held baskets, tools, and folded papers. A senior archivist paused to compare two copies of the same report. An assistant carefully copied names and dates from one register to another. In the closing line, the writer combined both details. Pia was the carpenter from",
+    "target": " Meridian",
+    "type": "long_range_retrieval",
+    "tokens_approx": 188,
+    "tier": "med",
+    "source": "lrr_two_fact",
+    "metadata": {
+      "family": "two_fact_conjunction",
+      "concept": "combine_role_and_origin",
+      "difficulty": "hard",
+      "fact_position": "early+mid",
+      "distractor_level": "medium",
+      "answer_type": "city",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0091"
+  },
+  {
+    "prompt": "Jack was assigned the card and was told to wait in the office. Merchants arranged their goods carefully while customers drifted between the stalls. The market road was crowded with carts loaded with supplies and tools. Two traders argued amiably over weights, measures, and delivery times. Rosa was assigned the map and was told to wait in the garage. Dylan was assigned the medallion and was told to wait in the kitchen. A clerk moved from stall to stall recording payments in a small ledger. Near the edge of the square, porters stacked crates beside waiting wagons. Vendors called out prices while shoppers compared baskets of produce and cloth. A pair of riders arrived late and asked for directions before moving on. A gardener paused to trim a row of herbs growing near the path. At the end of the announcement, someone asked what item belonged to Rosa. Rosa had the",
+    "target": " map",
+    "type": "long_range_retrieval",
+    "tokens_approx": 196,
+    "tier": "med",
+    "source": "lrr_binding",
+    "metadata": {
+      "family": "attribute_binding",
+      "concept": "entity_object_binding",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "medium",
+      "answer_type": "object",
+      "num_entities": 3
+    },
+    "id": "lrr_seed_0046"
+  },
+  {
+    "prompt": "A few late visitors lingered to finish conversations before the doors closed. Several workers paused to compare schedules before returning to their tasks. Several visitors spent the afternoon discussing local events in quiet conversation. A caretaker checked the lamps one by one as evening approached. By sunset, the central square had become quieter as people returned indoors. In the middle of the report, it was stated that Eastholm maintained 48 storage vaults near the river. Children played near the fountain until they were called home for dinner. A messenger crossed the courtyard carrying notes for the town council. Travelers resting nearby exchanged stories about roads, weather, and inns. Along the corridor, small tables held baskets, tools, and folded papers. Travelers resting nearby exchanged stories about roads, weather, and inns. At the end of the report, the writer returned to the topic. Eastholm maintained",
+    "target": " 48",
+    "type": "long_range_retrieval",
+    "tokens_approx": 185,
+    "tier": "med",
+    "source": "lrr_mid",
+    "metadata": {
+      "family": "mid_fact_late_query",
+      "concept": "city_count_after_delay",
+      "difficulty": "hard",
+      "fact_position": "mid",
+      "distractor_level": "high",
+      "answer_type": "number",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0088"
+  },
+  {
+    "prompt": "At the beginning of the meeting, everyone noted that Tara's favorite food was tacos. A messenger crossed the courtyard carrying notes for the town council. Several workers paused to compare schedules before returning to their tasks. A few late visitors lingered to finish conversations before the doors closed. Children played near the fountain until they were called home for dinner. A caretaker checked the lamps one by one as evening approached. Several visitors spent the afternoon discussing local events in quiet conversation. Much later, someone asked about Tara. Tara's favorite food was",
+    "target": " tacos",
+    "type": "long_range_retrieval",
+    "tokens_approx": 119,
+    "tier": "med",
+    "source": "lrr_early",
+    "metadata": {
+      "family": "early_fact_late_query",
+      "concept": "favorite_food_after_delay",
+      "difficulty": "medium",
+      "fact_position": "early",
+      "distractor_level": "medium",
+      "answer_type": "food",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0085"
+  },
+  {
+    "prompt": "The watch at the gate recorded the names of those entering after noon. Travelers resting nearby exchanged stories about roads, weather, and inns. A pair of riders arrived late and asked for directions before moving on. Dust from the road settled slowly over the fence near the entrance. In the middle of the report, it was stated that the official trade representative of Silverport was the messenger. Carters checked their wheels and harnesses before setting out again. In the distance, bells rang softly from a tower near the main gate. Several cooks were already preparing trays for the celebration meal. Vendors called out prices while shoppers compared baskets of produce and cloth. At the end of the report, the writer returned to the topic. The official trade representative of Silverport was the",
+    "target": " messenger",
+    "type": "long_range_retrieval",
+    "tokens_approx": 171,
+    "tier": "med",
+    "source": "lrr_mid",
+    "metadata": {
+      "family": "mid_fact_late_query",
+      "concept": "city_official_role_after_delay",
+      "difficulty": "medium",
+      "fact_position": "mid",
+      "distractor_level": "medium",
+      "answer_type": "role",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0089"
+  },
+  {
+    "prompt": "Early in the report, it was noted that Lena came from Dunmere. Travelers resting nearby exchanged stories about roads, weather, and inns. The watch at the gate recorded the names of those entering after noon. In the distance, bells rang softly from a tower near the main gate. Several paragraphs later, the report explained that Lena worked as the merchant. Vendors called out prices while shoppers compared baskets of produce and cloth. Merchants arranged their goods carefully while customers drifted between the stalls. The market road was crowded with carts loaded with supplies and tools. A clerk moved from stall to stall recording payments in a small ledger. In the closing line, the writer combined both details. Lena was the merchant from",
+    "target": " Dunmere",
+    "type": "long_range_retrieval",
+    "tokens_approx": 158,
+    "tier": "med",
+    "source": "lrr_two_fact",
+    "metadata": {
+      "family": "two_fact_conjunction",
+      "concept": "combine_role_and_origin",
+      "difficulty": "hard",
+      "fact_position": "early+mid",
+      "distractor_level": "medium",
+      "answer_type": "city",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0026"
+  },
+  {
+    "prompt": "Tara was listed with the role merchant. Maya was listed with the role archivist. The market road was crowded with carts loaded with supplies and tools. Two traders argued amiably over weights, measures, and delivery times. Rosa was listed with the role teacher. Noah was listed with the role carpenter. Quinn was listed with the role painter. Merchants arranged their goods carefully while customers drifted between the stalls. Vendors called out prices while shoppers compared baskets of produce and cloth. A clerk moved from stall to stall recording payments in a small ledger. Near the edge of the square, porters stacked crates beside waiting wagons. A caretaker checked the lamps one by one as evening approached. Workers tested lantern hooks and banners before the evening ceremony began. At the very end of the catalog, the summary returned to one entry. The role listed for Quinn was",
+    "target": " painter",
+    "type": "long_range_retrieval",
+    "tokens_approx": 189,
+    "tier": "med",
+    "source": "lrr_list",
+    "metadata": {
+      "family": "list_context_retrieval",
+      "concept": "catalog_attribute_lookup_role",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "medium",
+      "answer_type": "role",
+      "num_entities": 5
+    },
+    "id": "lrr_seed_0037"
+  },
+  {
+    "prompt": "At the opening count, Kira was said to be carrying 48 tokens. A few late visitors lingered to finish conversations before the doors closed. A caretaker checked the lamps one by one as evening approached. Children played near the fountain until they were called home for dinner. A messenger crossed the courtyard carrying notes for the town council. Several workers paused to compare schedules before returning to their tasks. By sunset, the central square had become quieter as people returned indoors. Several visitors spent the afternoon discussing local events in quiet conversation. The market road was crowded with carts loaded with supplies and tools. A pair of riders arrived late and asked for directions before moving on. Several cooks were already preparing trays for the celebration meal. The market road was crowded with carts loaded with supplies and tools. Much later, someone asked about the earlier count. Kira had",
+    "target": " 48",
+    "type": "long_range_retrieval",
+    "tokens_approx": 193,
+    "tier": "med",
+    "source": "lrr_early",
+    "metadata": {
+      "family": "early_fact_late_query",
+      "concept": "object_count_after_delay",
+      "difficulty": "hard",
+      "fact_position": "early",
+      "distractor_level": "high",
+      "answer_type": "number",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0001"
+  },
+  {
+    "prompt": "At the start of the inspection, the group noted that Quinn's key was made of linen. Water ran quietly through a narrow channel beside the planted beds. Bees drifted between blossoms near the far wall of the courtyard. The weather was mild, and a light breeze moved through the open windows. The air smelled faintly of wood smoke and fresh bread from a nearby bakery. A gardener paused to trim a row of herbs growing near the path. The old stone paths were lined with flowering plants and trimmed hedges. A messenger crossed the courtyard carrying notes for the town council. Stacks of documents were arranged in neat bundles beside the reference desk. The walls of the hall were decorated with maps, notices, and faded paintings. Children played near the fountain until they were called home for dinner. Much later, the record returned to Quinn. Quinn's key was made of",
+    "target": " linen",
+    "type": "long_range_retrieval",
+    "tokens_approx": 195,
+    "tier": "med",
+    "source": "lrr_early",
+    "metadata": {
+      "family": "early_fact_late_query",
+      "concept": "object_material_after_delay",
+      "difficulty": "hard",
+      "fact_position": "early",
+      "distractor_level": "high",
+      "answer_type": "material",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0032"
+  },
+  {
+    "prompt": "Tara was assigned the compass and was told to wait in the library. Merchants arranged their goods carefully while customers drifted between the stalls. Near the edge of the square, porters stacked crates beside waiting wagons. Vendors called out prices while shoppers compared baskets of produce and cloth. Pia was assigned the medallion and was told to wait in the office. Maya was assigned the card and was told to wait in the bedroom. Two traders argued amiably over weights, measures, and delivery times. The market road was crowded with carts loaded with supplies and tools. A clerk moved from stall to stall recording payments in a small ledger. Water ran quietly through a narrow channel beside the planted beds. Carters checked their wheels and harnesses before setting out again. The old stone paths were lined with flowering plants and trimmed hedges. A few late visitors lingered to finish conversations before the doors closed. At the end of the announcement, someone asked what item belonged to Maya. Maya had the",
+    "target": " card",
+    "type": "long_range_retrieval",
+    "tokens_approx": 221,
+    "tier": "long",
+    "source": "lrr_binding",
+    "metadata": {
+      "family": "attribute_binding",
+      "concept": "entity_object_binding",
+      "difficulty": "hard",
+      "fact_position": "distributed",
+      "distractor_level": "high",
+      "answer_type": "object",
+      "num_entities": 3
+    },
+    "id": "lrr_seed_0021"
+  },
+  {
+    "prompt": "At the beginning of the meeting, everyone noted that Quinn's favorite food was tacos. A gardener paused to trim a row of herbs growing near the path. The old stone paths were lined with flowering plants and trimmed hedges. Bees drifted between blossoms near the far wall of the courtyard. The weather was mild, and a light breeze moved through the open windows. Water ran quietly through a narrow channel beside the planted beds. The air smelled faintly of wood smoke and fresh bread from a nearby bakery. Dust from the road settled slowly over the fence near the entrance. Stacks of documents were arranged in neat bundles beside the reference desk. The market road was crowded with carts loaded with supplies and tools. Several workers paused to compare schedules before returning to their tasks. Much later, someone asked about Quinn. Quinn's favorite food was",
+    "target": " tacos",
+    "type": "long_range_retrieval",
+    "tokens_approx": 188,
+    "tier": "med",
+    "source": "lrr_early",
+    "metadata": {
+      "family": "early_fact_late_query",
+      "concept": "favorite_food_after_delay",
+      "difficulty": "hard",
+      "fact_position": "early",
+      "distractor_level": "high",
+      "answer_type": "food",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0007"
+  },
+  {
+    "prompt": "Before anything else happened, the lantern was placed in the kitchen. Travelers resting nearby exchanged stories about roads, weather, and inns. Dust from the road settled slowly over the fence near the entrance. A pair of riders arrived late and asked for directions before moving on. The watch at the gate recorded the names of those entering after noon. After the long story concluded, the narrator reminded the reader that the lantern was in the",
+    "target": " kitchen",
+    "type": "long_range_retrieval",
+    "tokens_approx": 97,
+    "tier": "med",
+    "source": "lrr_density",
+    "metadata": {
+      "family": "story_distractor_density",
+      "concept": "same_fact_varied_distractor_load",
+      "difficulty": "easy",
+      "fact_position": "early",
+      "distractor_level": "light",
+      "answer_type": "location",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0034"
+  },
+  {
+    "prompt": "During the planning session, several people introduced themselves. Dylan said they worked as the gardener. The library remained unusually busy, with readers moving between the shelves. The walls of the hall were decorated with maps, notices, and faded paintings. Finn said they worked as the carpenter. Pia said they worked as the messenger. Sam said they worked as the archivist. Stacks of documents were arranged in neat bundles beside the reference desk. Along the corridor, small tables held baskets, tools, and folded papers. An assistant carefully copied names and dates from one register to another. A senior archivist paused to compare two copies of the same report. Children played near the fountain until they were called home for dinner. The weather was mild, and a light breeze moved through the open windows. After many other details were discussed, the note-taker asked one final question. Sam worked as the",
+    "target": " archivist",
+    "type": "long_range_retrieval",
+    "tokens_approx": 192,
+    "tier": "med",
+    "source": "lrr_entity_attr",
+    "metadata": {
+      "family": "multiple_entities_single_attribute",
+      "concept": "retrieve_role_from_entity_list",
+      "difficulty": "medium",
+      "fact_position": "early-mid",
+      "distractor_level": "medium",
+      "answer_type": "role",
+      "num_entities": 4
+    },
+    "id": "lrr_seed_0059"
+  },
+  {
+    "prompt": "Travelers resting nearby exchanged stories about roads, weather, and inns. The watch at the gate recorded the names of those entering after noon. Dust from the road settled slowly over the fence near the entrance. Carters checked their wheels and harnesses before setting out again. In the distance, bells rang softly from a tower near the main gate. In the middle of the report, it was stated that the official trade representative of Harrowgate was the teacher. A pair of riders arrived late and asked for directions before moving on. A caretaker checked the lamps one by one as evening approached. Bees drifted between blossoms near the far wall of the courtyard. The old stone paths were lined with flowering plants and trimmed hedges. A group of children practiced their steps near the bandstand. By sunset, the central square had become quieter as people returned indoors. At the end of the report, the writer returned to the topic. The official trade representative of Harrowgate was the",
+    "target": " teacher",
+    "type": "long_range_retrieval",
+    "tokens_approx": 215,
+    "tier": "long",
+    "source": "lrr_mid",
+    "metadata": {
+      "family": "mid_fact_late_query",
+      "concept": "city_official_role_after_delay",
+      "difficulty": "hard",
+      "fact_position": "mid",
+      "distractor_level": "high",
+      "answer_type": "role",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0080"
+  },
+  {
+    "prompt": "Kira was assigned the compass and was told to wait in the garden. The walls of the hall were decorated with maps, notices, and faded paintings. An assistant carefully copied names and dates from one register to another. Along the corridor, small tables held baskets, tools, and folded papers. Maya was assigned the notebook and was told to wait in the garage. Tara was assigned the map and was told to wait in the office. A senior archivist paused to compare two copies of the same report. The library remained unusually busy, with readers moving between the shelves. Stacks of documents were arranged in neat bundles beside the reference desk. Several visitors spent the afternoon discussing local events in quiet conversation. The watch at the gate recorded the names of those entering after noon. At the end of the announcement, someone asked what item belonged to Kira. Kira had the",
+    "target": " compass",
+    "type": "long_range_retrieval",
+    "tokens_approx": 195,
+    "tier": "med",
+    "source": "lrr_binding",
+    "metadata": {
+      "family": "attribute_binding",
+      "concept": "entity_object_binding",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "medium",
+      "answer_type": "object",
+      "num_entities": 3
+    },
+    "id": "lrr_seed_0008"
+  },
+  {
+    "prompt": "Ben was assigned the card and was told to wait in the library. Along the corridor, small tables held baskets, tools, and folded papers. The walls of the hall were decorated with maps, notices, and faded paintings. A senior archivist paused to compare two copies of the same report. Eva was assigned the lantern and was told to wait in the garden. Iris was assigned the notebook and was told to wait in the office. The library remained unusually busy, with readers moving between the shelves. Stacks of documents were arranged in neat bundles beside the reference desk. An assistant carefully copied names and dates from one register to another. Several cooks were already preparing trays for the celebration meal. By sunset, the central square had become quieter as people returned indoors. Bees drifted between blossoms near the far wall of the courtyard. At the end of the announcement, someone asked where Ben had been told to wait. Ben was told to wait in the",
+    "target": " library",
+    "type": "long_range_retrieval",
+    "tokens_approx": 214,
+    "tier": "long",
+    "source": "lrr_binding",
+    "metadata": {
+      "family": "attribute_binding",
+      "concept": "entity_location_binding",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "medium",
+      "answer_type": "location",
+      "num_entities": 3
+    },
+    "id": "lrr_seed_0052"
+  },
+  {
+    "prompt": "Before anything else happened, the ticket was placed in the bedroom. Travelers resting nearby exchanged stories about roads, weather, and inns. In the distance, bells rang softly from a tower near the main gate. Carters checked their wheels and harnesses before setting out again. Dust from the road settled slowly over the fence near the entrance. A pair of riders arrived late and asked for directions before moving on. The watch at the gate recorded the names of those entering after noon. The walls of the hall were decorated with maps, notices, and faded paintings. The walls of the hall were decorated with maps, notices, and faded paintings. After the long story concluded, the narrator reminded the reader that the ticket was in the",
+    "target": " bedroom",
+    "type": "long_range_retrieval",
+    "tokens_approx": 161,
+    "tier": "med",
+    "source": "lrr_density",
+    "metadata": {
+      "family": "story_distractor_density",
+      "concept": "same_fact_varied_distractor_load",
+      "difficulty": "medium",
+      "fact_position": "early",
+      "distractor_level": "medium",
+      "answer_type": "location",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0068"
+  },
+  {
+    "prompt": "At the start of the inspection, the group noted that Tara's ticket was made of clay. Several visitors spent the afternoon discussing local events in quiet conversation. Several workers paused to compare schedules before returning to their tasks. A caretaker checked the lamps one by one as evening approached. By sunset, the central square had become quieter as people returned indoors. A messenger crossed the courtyard carrying notes for the town council. Children played near the fountain until they were called home for dinner. Much later, the record returned to Tara. Tara's ticket was made of",
+    "target": " clay",
+    "type": "long_range_retrieval",
+    "tokens_approx": 124,
+    "tier": "med",
+    "source": "lrr_early",
+    "metadata": {
+      "family": "early_fact_late_query",
+      "concept": "object_material_after_delay",
+      "difficulty": "medium",
+      "fact_position": "early",
+      "distractor_level": "medium",
+      "answer_type": "material",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0051"
+  },
+  {
+    "prompt": "Early in the report, it was noted that Hugo came from Eastholm. A few late visitors lingered to finish conversations before the doors closed. Several visitors spent the afternoon discussing local events in quiet conversation. A messenger crossed the courtyard carrying notes for the town council. Children played near the fountain until they were called home for dinner. Several paragraphs later, the report explained that Hugo worked as the messenger. The library remained unusually busy, with readers moving between the shelves. Stacks of documents were arranged in neat bundles beside the reference desk. The walls of the hall were decorated with maps, notices, and faded paintings. An assistant carefully copied names and dates from one register to another. In the closing line, the writer combined both details. Hugo was the messenger from",
+    "target": " Eastholm",
+    "type": "long_range_retrieval",
+    "tokens_approx": 171,
+    "tier": "med",
+    "source": "lrr_two_fact",
+    "metadata": {
+      "family": "two_fact_conjunction",
+      "concept": "combine_role_and_origin",
+      "difficulty": "hard",
+      "fact_position": "early+mid",
+      "distractor_level": "medium",
+      "answer_type": "city",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0093"
+  },
+  {
+    "prompt": "The ticket was stored in the garden. The key was stored in the kitchen. The library remained unusually busy, with readers moving between the shelves. An assistant carefully copied names and dates from one register to another. The medallion was stored in the hall. The compass was stored in the bedroom. The card was stored in the office. The walls of the hall were decorated with maps, notices, and faded paintings. A senior archivist paused to compare two copies of the same report. Along the corridor, small tables held baskets, tools, and folded papers. At the very end of the catalog, the summary returned to one entry. The compass was stored in the",
+    "target": " bedroom",
+    "type": "long_range_retrieval",
+    "tokens_approx": 146,
+    "tier": "med",
+    "source": "lrr_list",
+    "metadata": {
+      "family": "list_context_retrieval",
+      "concept": "catalog_attribute_lookup_location",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "light",
+      "answer_type": "location",
+      "num_entities": 5
+    },
+    "id": "lrr_seed_0038"
+  },
+  {
+    "prompt": "Maya was listed with the role merchant. Sam was listed with the role messenger. Dust from the road settled slowly over the fence near the entrance. The watch at the gate recorded the names of those entering after noon. Dylan was listed with the role painter. Quinn was listed with the role archivist. Eva was listed with the role gardener. A pair of riders arrived late and asked for directions before moving on. In the distance, bells rang softly from a tower near the main gate. Carters checked their wheels and harnesses before setting out again. Travelers resting nearby exchanged stories about roads, weather, and inns. The stage manager walked the route twice to confirm the order of events. The walls of the hall were decorated with maps, notices, and faded paintings. At the very end of the catalog, the summary returned to one entry. The role listed for Sam was",
+    "target": " messenger",
+    "type": "long_range_retrieval",
+    "tokens_approx": 196,
+    "tier": "med",
+    "source": "lrr_list",
+    "metadata": {
+      "family": "list_context_retrieval",
+      "concept": "catalog_attribute_lookup_role",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "medium",
+      "answer_type": "role",
+      "num_entities": 5
+    },
+    "id": "lrr_seed_0050"
+  },
+  {
+    "prompt": "Travelers resting nearby exchanged stories about roads, weather, and inns. Dust from the road settled slowly over the fence near the entrance. In the distance, bells rang softly from a tower near the main gate. Carters checked their wheels and harnesses before setting out again. A pair of riders arrived late and asked for directions before moving on. The watch at the gate recorded the names of those entering after noon. In the middle of the report, it was stated that Dunmere maintained 15 storage vaults near the river. A senior archivist paused to compare two copies of the same report. The old stone paths were lined with flowering plants and trimmed hedges. The old stone paths were lined with flowering plants and trimmed hedges. Water ran quietly through a narrow channel beside the planted beds. A senior archivist paused to compare two copies of the same report. Merchants arranged their goods carefully while customers drifted between the stalls. At the end of the report, the writer returned to the topic. Dunmere maintained",
+    "target": " 15",
+    "type": "long_range_retrieval",
+    "tokens_approx": 224,
+    "tier": "long",
+    "source": "lrr_mid",
+    "metadata": {
+      "family": "mid_fact_late_query",
+      "concept": "city_count_after_delay",
+      "difficulty": "hard",
+      "fact_position": "mid",
+      "distractor_level": "high",
+      "answer_type": "number",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0041"
+  },
+  {
+    "prompt": "Before anything else happened, the ticket was placed in the office. In the nearby square, musicians were rehearsing for a festival later that week. Workers tested lantern hooks and banners before the evening ceremony began. The stage manager walked the route twice to confirm the order of events. Colorful ribbons had been tied to poles along the edge of the plaza. A group of children practiced their steps near the bandstand. Several cooks were already preparing trays for the celebration meal. A gardener paused to trim a row of herbs growing near the path. Several workers paused to compare schedules before returning to their tasks. After the long story concluded, the narrator reminded the reader that the ticket was in the",
+    "target": " office",
+    "type": "long_range_retrieval",
+    "tokens_approx": 157,
+    "tier": "med",
+    "source": "lrr_density",
+    "metadata": {
+      "family": "story_distractor_density",
+      "concept": "same_fact_varied_distractor_load",
+      "difficulty": "medium",
+      "fact_position": "early",
+      "distractor_level": "medium",
+      "answer_type": "location",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0073"
+  },
+  {
+    "prompt": "At the opening count, Lena was said to be carrying 15 stones. The air smelled faintly of wood smoke and fresh bread from a nearby bakery. The old stone paths were lined with flowering plants and trimmed hedges. The weather was mild, and a light breeze moved through the open windows. A gardener paused to trim a row of herbs growing near the path. Water ran quietly through a narrow channel beside the planted beds. Bees drifted between blossoms near the far wall of the courtyard. Much later, someone asked about the earlier count. Lena had",
+    "target": " 15",
+    "type": "long_range_retrieval",
+    "tokens_approx": 124,
+    "tier": "med",
+    "source": "lrr_early",
+    "metadata": {
+      "family": "early_fact_late_query",
+      "concept": "object_count_after_delay",
+      "difficulty": "medium",
+      "fact_position": "early",
+      "distractor_level": "medium",
+      "answer_type": "number",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0022"
+  },
+  {
+    "prompt": "Jack was assigned the ticket and was told to wait in the kitchen. A caretaker checked the lamps one by one as evening approached. Several visitors spent the afternoon discussing local events in quiet conversation. By sunset, the central square had become quieter as people returned indoors. Kira was assigned the notebook and was told to wait in the bedroom. Pia was assigned the medallion and was told to wait in the hall. A messenger crossed the courtyard carrying notes for the town council. Children played near the fountain until they were called home for dinner. A few late visitors lingered to finish conversations before the doors closed. Several workers paused to compare schedules before returning to their tasks. Along the corridor, small tables held baskets, tools, and folded papers. At the end of the announcement, someone asked what item belonged to Jack. Jack had the",
+    "target": " ticket",
+    "type": "long_range_retrieval",
+    "tokens_approx": 189,
+    "tier": "med",
+    "source": "lrr_binding",
+    "metadata": {
+      "family": "attribute_binding",
+      "concept": "entity_object_binding",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "medium",
+      "answer_type": "object",
+      "num_entities": 3
+    },
+    "id": "lrr_seed_0084"
+  },
+  {
+    "prompt": "Before anything else happened, the lantern was placed in the library. Travelers resting nearby exchanged stories about roads, weather, and inns. A pair of riders arrived late and asked for directions before moving on. Carters checked their wheels and harnesses before setting out again. The watch at the gate recorded the names of those entering after noon. Dust from the road settled slowly over the fence near the entrance. In the distance, bells rang softly from a tower near the main gate. The weather was mild, and a light breeze moved through the open windows. The air smelled faintly of wood smoke and fresh bread from a nearby bakery. In the nearby square, musicians were rehearsing for a festival later that week. The market road was crowded with carts loaded with supplies and tools. Stacks of documents were arranged in neat bundles beside the reference desk. Merchants arranged their goods carefully while customers drifted between the stalls. After the long story concluded, the narrator reminded the reader that the lantern was in the",
+    "target": " library",
+    "type": "long_range_retrieval",
+    "tokens_approx": 224,
+    "tier": "long",
+    "source": "lrr_density",
+    "metadata": {
+      "family": "story_distractor_density",
+      "concept": "same_fact_varied_distractor_load",
+      "difficulty": "hard",
+      "fact_position": "early",
+      "distractor_level": "high",
+      "answer_type": "location",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0010"
+  },
+  {
+    "prompt": "Tara was listed with the role gardener. Quinn was listed with the role carpenter. Travelers resting nearby exchanged stories about roads, weather, and inns. The watch at the gate recorded the names of those entering after noon. Lena was listed with the role messenger. Grace was listed with the role painter. Iris was listed with the role merchant. In the distance, bells rang softly from a tower near the main gate. Dust from the road settled slowly over the fence near the entrance. A pair of riders arrived late and asked for directions before moving on. Carters checked their wheels and harnesses before setting out again. At the very end of the catalog, the summary returned to one entry. The role listed for Lena was",
+    "target": " messenger",
+    "type": "long_range_retrieval",
+    "tokens_approx": 162,
+    "tier": "med",
+    "source": "lrr_list",
+    "metadata": {
+      "family": "list_context_retrieval",
+      "concept": "catalog_attribute_lookup_role",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "medium",
+      "answer_type": "role",
+      "num_entities": 5
+    },
+    "id": "lrr_seed_0079"
+  },
+  {
+    "prompt": "Tara was assigned the map and was told to wait in the garage. Several visitors spent the afternoon discussing local events in quiet conversation. A few late visitors lingered to finish conversations before the doors closed. Several workers paused to compare schedules before returning to their tasks. Eva was assigned the notebook and was told to wait in the kitchen. Jack was assigned the lantern and was told to wait in the library. A messenger crossed the courtyard carrying notes for the town council. A caretaker checked the lamps one by one as evening approached. By sunset, the central square had become quieter as people returned indoors. At the end of the announcement, someone asked what item belonged to Tara. Tara had the",
+    "target": " map",
+    "type": "long_range_retrieval",
+    "tokens_approx": 159,
+    "tier": "med",
+    "source": "lrr_binding",
+    "metadata": {
+      "family": "attribute_binding",
+      "concept": "entity_object_binding",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "medium",
+      "answer_type": "object",
+      "num_entities": 3
+    },
+    "id": "lrr_seed_0103"
+  },
+  {
+    "prompt": "A senior archivist paused to compare two copies of the same report. An assistant carefully copied names and dates from one register to another. The library remained unusually busy, with readers moving between the shelves. Stacks of documents were arranged in neat bundles beside the reference desk. In the middle of the report, it was stated that Avalon maintained 30 storage vaults near the river. Along the corridor, small tables held baskets, tools, and folded papers. The walls of the hall were decorated with maps, notices, and faded paintings. Merchants arranged their goods carefully while customers drifted between the stalls. In the nearby square, musicians were rehearsing for a festival later that week. The market road was crowded with carts loaded with supplies and tools. At the end of the report, the writer returned to the topic. Avalon maintained",
+    "target": " 30",
+    "type": "long_range_retrieval",
+    "tokens_approx": 180,
+    "tier": "med",
+    "source": "lrr_mid",
+    "metadata": {
+      "family": "mid_fact_late_query",
+      "concept": "city_count_after_delay",
+      "difficulty": "medium",
+      "fact_position": "mid",
+      "distractor_level": "medium",
+      "answer_type": "number",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0107"
+  },
+  {
+    "prompt": "Owen was assigned the lantern and was told to wait in the hall. Along the corridor, small tables held baskets, tools, and folded papers. Stacks of documents were arranged in neat bundles beside the reference desk. The walls of the hall were decorated with maps, notices, and faded paintings. Kira was assigned the ticket and was told to wait in the bedroom. Rosa was assigned the notebook and was told to wait in the attic. An assistant carefully copied names and dates from one register to another. The library remained unusually busy, with readers moving between the shelves. A senior archivist paused to compare two copies of the same report. The weather was mild, and a light breeze moved through the open windows. Carters checked their wheels and harnesses before setting out again. A group of children practiced their steps near the bandstand. Colorful ribbons had been tied to poles along the edge of the plaza. At the end of the announcement, someone asked where Owen had been told to wait. Owen was told to wait in the",
+    "target": " hall",
+    "type": "long_range_retrieval",
+    "tokens_approx": 231,
+    "tier": "long",
+    "source": "lrr_binding",
+    "metadata": {
+      "family": "attribute_binding",
+      "concept": "entity_location_binding",
+      "difficulty": "hard",
+      "fact_position": "distributed",
+      "distractor_level": "high",
+      "answer_type": "location",
+      "num_entities": 3
+    },
+    "id": "lrr_seed_0024"
+  },
+  {
+    "prompt": "The compass was stored in the office. The lantern was stored in the kitchen. An assistant carefully copied names and dates from one register to another. Along the corridor, small tables held baskets, tools, and folded papers. The notebook was stored in the hall. The map was stored in the attic. The key was stored in the library. Stacks of documents were arranged in neat bundles beside the reference desk. A senior archivist paused to compare two copies of the same report. The walls of the hall were decorated with maps, notices, and faded paintings. The library remained unusually busy, with readers moving between the shelves. At the very end of the catalog, the summary returned to one entry. The key was stored in the",
+    "target": " library",
+    "type": "long_range_retrieval",
+    "tokens_approx": 162,
+    "tier": "med",
+    "source": "lrr_list",
+    "metadata": {
+      "family": "list_context_retrieval",
+      "concept": "catalog_attribute_lookup_location",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "medium",
+      "answer_type": "location",
+      "num_entities": 5
+    },
+    "id": "lrr_seed_0006"
+  },
+  {
+    "prompt": "Early in the report, it was noted that Finn had left the compass in the kitchen. In the distance, bells rang softly from a tower near the main gate. Carters checked their wheels and harnesses before setting out again. Dust from the road settled slowly over the fence near the entrance. Travelers resting nearby exchanged stories about roads, weather, and inns. The watch at the gate recorded the names of those entering after noon. Several paragraphs later, the report explained that the compass was still the item associated with Finn. Along the corridor, small tables held baskets, tools, and folded papers. The library remained unusually busy, with readers moving between the shelves. The walls of the hall were decorated with maps, notices, and faded paintings. An assistant carefully copied names and dates from one register to another. Stacks of documents were arranged in neat bundles beside the reference desk. In the closing line, the writer combined both details. The compass associated with Finn had been left in the",
+    "target": " kitchen",
+    "type": "long_range_retrieval",
+    "tokens_approx": 218,
+    "tier": "long",
+    "source": "lrr_two_fact",
+    "metadata": {
+      "family": "two_fact_conjunction",
+      "concept": "combine_object_and_location",
+      "difficulty": "hard",
+      "fact_position": "early+mid",
+      "distractor_level": "medium",
+      "answer_type": "location",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0047"
+  },
+  {
+    "prompt": "Before anything else happened, the map was placed in the attic. Dust from the road settled slowly over the fence near the entrance. Travelers resting nearby exchanged stories about roads, weather, and inns. A pair of riders arrived late and asked for directions before moving on. In the distance, bells rang softly from a tower near the main gate. The watch at the gate recorded the names of those entering after noon. Carters checked their wheels and harnesses before setting out again. Along the corridor, small tables held baskets, tools, and folded papers. The library remained unusually busy, with readers moving between the shelves. Stacks of documents were arranged in neat bundles beside the reference desk. Two traders argued amiably over weights, measures, and delivery times. Colorful ribbons had been tied to poles along the edge of the plaza. Two traders argued amiably over weights, measures, and delivery times. After the long story concluded, the narrator reminded the reader that the map was in the",
+    "target": " attic",
+    "type": "long_range_retrieval",
+    "tokens_approx": 214,
+    "tier": "long",
+    "source": "lrr_density",
+    "metadata": {
+      "family": "story_distractor_density",
+      "concept": "same_fact_varied_distractor_load",
+      "difficulty": "hard",
+      "fact_position": "early",
+      "distractor_level": "high",
+      "answer_type": "location",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0062"
+  },
+  {
+    "prompt": "During the planning session, several people introduced themselves. Lena said they worked as the painter. Several workers paused to compare schedules before returning to their tasks. Children played near the fountain until they were called home for dinner. Maya said they worked as the carpenter. Kira said they worked as the merchant. Alice said they worked as the messenger. A caretaker checked the lamps one by one as evening approached. A messenger crossed the courtyard carrying notes for the town council. By sunset, the central square had become quieter as people returned indoors. After many other details were discussed, the note-taker asked one final question. Lena worked as the",
+    "target": " painter",
+    "type": "long_range_retrieval",
+    "tokens_approx": 141,
+    "tier": "med",
+    "source": "lrr_entity_attr",
+    "metadata": {
+      "family": "multiple_entities_single_attribute",
+      "concept": "retrieve_role_from_entity_list",
+      "difficulty": "medium",
+      "fact_position": "early-mid",
+      "distractor_level": "light",
+      "answer_type": "role",
+      "num_entities": 4
+    },
+    "id": "lrr_seed_0060"
+  },
+  {
+    "prompt": "The library remained unusually busy, with readers moving between the shelves. An assistant carefully copied names and dates from one register to another. Stacks of documents were arranged in neat bundles beside the reference desk. A senior archivist paused to compare two copies of the same report. Along the corridor, small tables held baskets, tools, and folded papers. The walls of the hall were decorated with maps, notices, and faded paintings. In the middle of the report, it was stated that the official trade representative of Avalon was the merchant. Water ran quietly through a narrow channel beside the planted beds. A group of children practiced their steps near the bandstand. Several visitors spent the afternoon discussing local events in quiet conversation. The stage manager walked the route twice to confirm the order of events. Vendors called out prices while shoppers compared baskets of produce and cloth. The weather was mild, and a light breeze moved through the open windows. At the end of the report, the writer returned to the topic. The official trade representative of Avalon was the",
+    "target": " merchant",
+    "type": "long_range_retrieval",
+    "tokens_approx": 234,
+    "tier": "long",
+    "source": "lrr_mid",
+    "metadata": {
+      "family": "mid_fact_late_query",
+      "concept": "city_official_role_after_delay",
+      "difficulty": "hard",
+      "fact_position": "mid",
+      "distractor_level": "high",
+      "answer_type": "role",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0113"
+  },
+  {
+    "prompt": "Early in the report, it was noted that Maya came from Silverport. A caretaker checked the lamps one by one as evening approached. Several visitors spent the afternoon discussing local events in quiet conversation. Children played near the fountain until they were called home for dinner. Several paragraphs later, the report explained that Maya worked as the teacher. Stacks of documents were arranged in neat bundles beside the reference desk. The library remained unusually busy, with readers moving between the shelves. The walls of the hall were decorated with maps, notices, and faded paintings. In the closing line, the writer combined both details. Maya was the teacher from",
+    "target": " Silverport",
+    "type": "long_range_retrieval",
+    "tokens_approx": 140,
+    "tier": "med",
+    "source": "lrr_two_fact",
+    "metadata": {
+      "family": "two_fact_conjunction",
+      "concept": "combine_role_and_origin",
+      "difficulty": "hard",
+      "fact_position": "early+mid",
+      "distractor_level": "medium",
+      "answer_type": "city",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0042"
+  },
+  {
+    "prompt": "Early in the report, it was noted that Iris had left the ticket in the garage. A pair of riders arrived late and asked for directions before moving on. Dust from the road settled slowly over the fence near the entrance. In the distance, bells rang softly from a tower near the main gate. Travelers resting nearby exchanged stories about roads, weather, and inns. The watch at the gate recorded the names of those entering after noon. Several paragraphs later, the report explained that the ticket was still the item associated with Iris. Merchants arranged their goods carefully while customers drifted between the stalls. Vendors called out prices while shoppers compared baskets of produce and cloth. A clerk moved from stall to stall recording payments in a small ledger. The market road was crowded with carts loaded with supplies and tools. Two traders argued amiably over weights, measures, and delivery times. In the closing line, the writer combined both details. The ticket associated with Iris had been left in the",
+    "target": " garage",
+    "type": "long_range_retrieval",
+    "tokens_approx": 221,
+    "tier": "long",
+    "source": "lrr_two_fact",
+    "metadata": {
+      "family": "two_fact_conjunction",
+      "concept": "combine_object_and_location",
+      "difficulty": "hard",
+      "fact_position": "early+mid",
+      "distractor_level": "medium",
+      "answer_type": "location",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0002"
+  },
+  {
+    "prompt": "At the beginning of the meeting, everyone noted that Iris's favorite food was chocolate. The stage manager walked the route twice to confirm the order of events. Colorful ribbons had been tied to poles along the edge of the plaza. Workers tested lantern hooks and banners before the evening ceremony began. Several cooks were already preparing trays for the celebration meal. A group of children practiced their steps near the bandstand. In the nearby square, musicians were rehearsing for a festival later that week. A pair of riders arrived late and asked for directions before moving on. A messenger crossed the courtyard carrying notes for the town council. Much later, someone asked about Iris. Iris's favorite food was",
+    "target": " chocolate",
+    "type": "long_range_retrieval",
+    "tokens_approx": 153,
+    "tier": "med",
+    "source": "lrr_early",
+    "metadata": {
+      "family": "early_fact_late_query",
+      "concept": "favorite_food_after_delay",
+      "difficulty": "medium",
+      "fact_position": "early",
+      "distractor_level": "medium",
+      "answer_type": "food",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0098"
+  },
+  {
+    "prompt": "Dylan was listed with the role carpenter. Noah was listed with the role teacher. Carters checked their wheels and harnesses before setting out again. In the distance, bells rang softly from a tower near the main gate. Sam was listed with the role merchant. Pia was listed with the role painter. Hugo was listed with the role archivist. A pair of riders arrived late and asked for directions before moving on. Travelers resting nearby exchanged stories about roads, weather, and inns. The watch at the gate recorded the names of those entering after noon. Dust from the road settled slowly over the fence near the entrance. At the very end of the catalog, the summary returned to one entry. The role listed for Sam was",
+    "target": " merchant",
+    "type": "long_range_retrieval",
+    "tokens_approx": 162,
+    "tier": "med",
+    "source": "lrr_list",
+    "metadata": {
+      "family": "list_context_retrieval",
+      "concept": "catalog_attribute_lookup_role",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "medium",
+      "answer_type": "role",
+      "num_entities": 5
+    },
+    "id": "lrr_seed_0087"
+  },
+  {
+    "prompt": "Early in the report, it was noted that Cara had left the compass in the attic. Several visitors spent the afternoon discussing local events in quiet conversation. A caretaker checked the lamps one by one as evening approached. Children played near the fountain until they were called home for dinner. Several paragraphs later, the report explained that the compass was still the item associated with Cara. A clerk moved from stall to stall recording payments in a small ledger. Vendors called out prices while shoppers compared baskets of produce and cloth. Merchants arranged their goods carefully while customers drifted between the stalls. Near the edge of the square, porters stacked crates beside waiting wagons. In the closing line, the writer combined both details. The compass associated with Cara had been left in the",
+    "target": " attic",
+    "type": "long_range_retrieval",
+    "tokens_approx": 172,
+    "tier": "med",
+    "source": "lrr_two_fact",
+    "metadata": {
+      "family": "two_fact_conjunction",
+      "concept": "combine_object_and_location",
+      "difficulty": "hard",
+      "fact_position": "early+mid",
+      "distractor_level": "medium",
+      "answer_type": "location",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0070"
+  },
+  {
+    "prompt": "Early in the report, it was noted that Sam had left the lantern in the hall. Children played near the fountain until they were called home for dinner. By sunset, the central square had become quieter as people returned indoors. A messenger crossed the courtyard carrying notes for the town council. A few late visitors lingered to finish conversations before the doors closed. Several paragraphs later, the report explained that the lantern was still the item associated with Sam. Near the edge of the square, porters stacked crates beside waiting wagons. Merchants arranged their goods carefully while customers drifted between the stalls. Two traders argued amiably over weights, measures, and delivery times. Vendors called out prices while shoppers compared baskets of produce and cloth. In the closing line, the writer combined both details. The lantern associated with Sam had been left in the",
+    "target": " hall",
+    "type": "long_range_retrieval",
+    "tokens_approx": 185,
+    "tier": "med",
+    "source": "lrr_two_fact",
+    "metadata": {
+      "family": "two_fact_conjunction",
+      "concept": "combine_object_and_location",
+      "difficulty": "hard",
+      "fact_position": "early+mid",
+      "distractor_level": "medium",
+      "answer_type": "location",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0036"
+  },
+  {
+    "prompt": "At the start of the inspection, the group noted that Dylan's compass was made of marble. Several workers paused to compare schedules before returning to their tasks. Children played near the fountain until they were called home for dinner. A messenger crossed the courtyard carrying notes for the town council. A few late visitors lingered to finish conversations before the doors closed. A caretaker checked the lamps one by one as evening approached. Several visitors spent the afternoon discussing local events in quiet conversation. By sunset, the central square had become quieter as people returned indoors. Much later, the record returned to Dylan. Dylan's compass was made of",
+    "target": " marble",
+    "type": "long_range_retrieval",
+    "tokens_approx": 140,
+    "tier": "med",
+    "source": "lrr_early",
+    "metadata": {
+      "family": "early_fact_late_query",
+      "concept": "object_material_after_delay",
+      "difficulty": "medium",
+      "fact_position": "early",
+      "distractor_level": "medium",
+      "answer_type": "material",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0023"
+  },
+  {
+    "prompt": "Eastholm was associated with the color white. Silverport was associated with the color silver. The watch at the gate recorded the names of those entering after noon. A pair of riders arrived late and asked for directions before moving on. Avalon was associated with the color gold. Northwatch was associated with the color violet. Meridian was associated with the color blue. Travelers resting nearby exchanged stories about roads, weather, and inns. Dust from the road settled slowly over the fence near the entrance. In the distance, bells rang softly from a tower near the main gate. Carters checked their wheels and harnesses before setting out again. At the very end of the catalog, the summary returned to one entry. The color associated with Eastholm was",
+    "target": " white",
+    "type": "long_range_retrieval",
+    "tokens_approx": 162,
+    "tier": "med",
+    "source": "lrr_list",
+    "metadata": {
+      "family": "list_context_retrieval",
+      "concept": "catalog_attribute_lookup_color",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "medium",
+      "answer_type": "color",
+      "num_entities": 5
+    },
+    "id": "lrr_seed_0055"
+  },
+  {
+    "prompt": "At the opening count, Alice was said to be carrying 18 stones. In the nearby square, musicians were rehearsing for a festival later that week. The stage manager walked the route twice to confirm the order of events. A group of children practiced their steps near the bandstand. Colorful ribbons had been tied to poles along the edge of the plaza. Workers tested lantern hooks and banners before the evening ceremony began. Several cooks were already preparing trays for the celebration meal. Two traders argued amiably over weights, measures, and delivery times. A few late visitors lingered to finish conversations before the doors closed. Dust from the road settled slowly over the fence near the entrance. Travelers resting nearby exchanged stories about roads, weather, and inns. The library remained unusually busy, with readers moving between the shelves. Much later, someone asked about the earlier count. Alice had",
+    "target": " 18",
+    "type": "long_range_retrieval",
+    "tokens_approx": 191,
+    "tier": "med",
+    "source": "lrr_early",
+    "metadata": {
+      "family": "early_fact_late_query",
+      "concept": "object_count_after_delay",
+      "difficulty": "hard",
+      "fact_position": "early",
+      "distractor_level": "high",
+      "answer_type": "number",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0056"
+  },
+  {
+    "prompt": "At the beginning of the meeting, everyone noted that Owen's favorite food was cheese. Colorful ribbons had been tied to poles along the edge of the plaza. Workers tested lantern hooks and banners before the evening ceremony began. The stage manager walked the route twice to confirm the order of events. In the nearby square, musicians were rehearsing for a festival later that week. Several cooks were already preparing trays for the celebration meal. A group of children practiced their steps near the bandstand. Near the edge of the square, porters stacked crates beside waiting wagons. Travelers resting nearby exchanged stories about roads, weather, and inns. The air smelled faintly of wood smoke and fresh bread from a nearby bakery. The market road was crowded with carts loaded with supplies and tools. Much later, someone asked about Owen. Owen's favorite food was",
+    "target": " cheese",
+    "type": "long_range_retrieval",
+    "tokens_approx": 184,
+    "tier": "med",
+    "source": "lrr_early",
+    "metadata": {
+      "family": "early_fact_late_query",
+      "concept": "favorite_food_after_delay",
+      "difficulty": "hard",
+      "fact_position": "early",
+      "distractor_level": "high",
+      "answer_type": "food",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0039"
+  },
+  {
+    "prompt": "During the planning session, several people introduced themselves. Owen said they worked as the teacher. Along the corridor, small tables held baskets, tools, and folded papers. The library remained unusually busy, with readers moving between the shelves. Cara said they worked as the carpenter. Finn said they worked as the painter. Rosa said they worked as the gardener. Stacks of documents were arranged in neat bundles beside the reference desk. A senior archivist paused to compare two copies of the same report. The walls of the hall were decorated with maps, notices, and faded paintings. An assistant carefully copied names and dates from one register to another. After many other details were discussed, the note-taker asked one final question. Finn worked as the",
+    "target": " painter",
+    "type": "long_range_retrieval",
+    "tokens_approx": 159,
+    "tier": "med",
+    "source": "lrr_entity_attr",
+    "metadata": {
+      "family": "multiple_entities_single_attribute",
+      "concept": "retrieve_role_from_entity_list",
+      "difficulty": "medium",
+      "fact_position": "early-mid",
+      "distractor_level": "medium",
+      "answer_type": "role",
+      "num_entities": 4
+    },
+    "id": "lrr_seed_0040"
+  },
+  {
+    "prompt": "Early in the report, it was noted that Iris had left the map in the office. A messenger crossed the courtyard carrying notes for the town council. Children played near the fountain until they were called home for dinner. Several workers paused to compare schedules before returning to their tasks. Several paragraphs later, the report explained that the map was still the item associated with Iris. An assistant carefully copied names and dates from one register to another. The library remained unusually busy, with readers moving between the shelves. Along the corridor, small tables held baskets, tools, and folded papers. In the closing line, the writer combined both details. The map associated with Iris had been left in the",
+    "target": " office",
+    "type": "long_range_retrieval",
+    "tokens_approx": 154,
+    "tier": "med",
+    "source": "lrr_two_fact",
+    "metadata": {
+      "family": "two_fact_conjunction",
+      "concept": "combine_object_and_location",
+      "difficulty": "hard",
+      "fact_position": "early+mid",
+      "distractor_level": "medium",
+      "answer_type": "location",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0104"
+  },
+  {
+    "prompt": "Before anything else happened, the compass was placed in the garage. The stage manager walked the route twice to confirm the order of events. Several cooks were already preparing trays for the celebration meal. In the nearby square, musicians were rehearsing for a festival later that week. Colorful ribbons had been tied to poles along the edge of the plaza. Workers tested lantern hooks and banners before the evening ceremony began. A group of children practiced their steps near the bandstand. Water ran quietly through a narrow channel beside the planted beds. By sunset, the central square had become quieter as people returned indoors. After the long story concluded, the narrator reminded the reader that the compass was in the",
+    "target": " garage",
+    "type": "long_range_retrieval",
+    "tokens_approx": 156,
+    "tier": "med",
+    "source": "lrr_density",
+    "metadata": {
+      "family": "story_distractor_density",
+      "concept": "same_fact_varied_distractor_load",
+      "difficulty": "medium",
+      "fact_position": "early",
+      "distractor_level": "medium",
+      "answer_type": "location",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0018"
+  },
+  {
+    "prompt": "Early in the report, it was noted that Eva came from Harrowgate. Several workers paused to compare schedules before returning to their tasks. A few late visitors lingered to finish conversations before the doors closed. Children played near the fountain until they were called home for dinner. Several paragraphs later, the report explained that Eva worked as the gardener. An assistant carefully copied names and dates from one register to another. The walls of the hall were decorated with maps, notices, and faded paintings. A senior archivist paused to compare two copies of the same report. Along the corridor, small tables held baskets, tools, and folded papers. Stacks of documents were arranged in neat bundles beside the reference desk. In the closing line, the writer combined both details. Eva was the gardener from",
+    "target": " Harrowgate",
+    "type": "long_range_retrieval",
+    "tokens_approx": 172,
+    "tier": "med",
+    "source": "lrr_two_fact",
+    "metadata": {
+      "family": "two_fact_conjunction",
+      "concept": "combine_role_and_origin",
+      "difficulty": "hard",
+      "fact_position": "early+mid",
+      "distractor_level": "medium",
+      "answer_type": "city",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0092"
+  },
+  {
+    "prompt": "At the beginning of the meeting, everyone noted that Hugo's favorite food was sushi. Several cooks were already preparing trays for the celebration meal. Colorful ribbons had been tied to poles along the edge of the plaza. A group of children practiced their steps near the bandstand. Workers tested lantern hooks and banners before the evening ceremony began. The stage manager walked the route twice to confirm the order of events. In the nearby square, musicians were rehearsing for a festival later that week. A gardener paused to trim a row of herbs growing near the path. Carters checked their wheels and harnesses before setting out again. The old stone paths were lined with flowering plants and trimmed hedges. Much later, someone asked about Hugo. Hugo's favorite food was",
+    "target": " sushi",
+    "type": "long_range_retrieval",
+    "tokens_approx": 167,
+    "tier": "med",
+    "source": "lrr_early",
+    "metadata": {
+      "family": "early_fact_late_query",
+      "concept": "favorite_food_after_delay",
+      "difficulty": "medium",
+      "fact_position": "early",
+      "distractor_level": "medium",
+      "answer_type": "food",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0066"
+  },
+  {
+    "prompt": "The notebook was stored in the library. The map was stored in the garage. The watch at the gate recorded the names of those entering after noon. In the distance, bells rang softly from a tower near the main gate. The key was stored in the attic. The card was stored in the bedroom. The ticket was stored in the hall. Travelers resting nearby exchanged stories about roads, weather, and inns. Dust from the road settled slowly over the fence near the entrance. A pair of riders arrived late and asked for directions before moving on. At the very end of the catalog, the summary returned to one entry. The notebook was stored in the",
+    "target": " library",
+    "type": "long_range_retrieval",
+    "tokens_approx": 149,
+    "tier": "med",
+    "source": "lrr_list",
+    "metadata": {
+      "family": "list_context_retrieval",
+      "concept": "catalog_attribute_lookup_location",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "light",
+      "answer_type": "location",
+      "num_entities": 5
+    },
+    "id": "lrr_seed_0090"
+  },
+  {
+    "prompt": "At the opening count, Rosa was said to be carrying 27 tokens. Colorful ribbons had been tied to poles along the edge of the plaza. Workers tested lantern hooks and banners before the evening ceremony began. Several cooks were already preparing trays for the celebration meal. A group of children practiced their steps near the bandstand. In the nearby square, musicians were rehearsing for a festival later that week. The stage manager walked the route twice to confirm the order of events. The air smelled faintly of wood smoke and fresh bread from a nearby bakery. The watch at the gate recorded the names of those entering after noon. The library remained unusually busy, with readers moving between the shelves. Much later, someone asked about the earlier count. Rosa had",
+    "target": " 27",
+    "type": "long_range_retrieval",
+    "tokens_approx": 169,
+    "tier": "med",
+    "source": "lrr_early",
+    "metadata": {
+      "family": "early_fact_late_query",
+      "concept": "object_count_after_delay",
+      "difficulty": "medium",
+      "fact_position": "early",
+      "distractor_level": "medium",
+      "answer_type": "number",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0015"
+  },
+  {
+    "prompt": "At the opening count, Rosa was said to be carrying 12 tokens. A few late visitors lingered to finish conversations before the doors closed. A caretaker checked the lamps one by one as evening approached. A messenger crossed the courtyard carrying notes for the town council. By sunset, the central square had become quieter as people returned indoors. Several visitors spent the afternoon discussing local events in quiet conversation. Children played near the fountain until they were called home for dinner. Several workers paused to compare schedules before returning to their tasks. Workers tested lantern hooks and banners before the evening ceremony began. The library remained unusually busy, with readers moving between the shelves. The library remained unusually busy, with readers moving between the shelves. A pair of riders arrived late and asked for directions before moving on. Much later, someone asked about the earlier count. Rosa had",
+    "target": " 12",
+    "type": "long_range_retrieval",
+    "tokens_approx": 192,
+    "tier": "med",
+    "source": "lrr_early",
+    "metadata": {
+      "family": "early_fact_late_query",
+      "concept": "object_count_after_delay",
+      "difficulty": "hard",
+      "fact_position": "early",
+      "distractor_level": "high",
+      "answer_type": "number",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0058"
+  },
+  {
+    "prompt": "At the start of the inspection, the group noted that Dylan's lantern was made of oak. A group of children practiced their steps near the bandstand. Workers tested lantern hooks and banners before the evening ceremony began. Colorful ribbons had been tied to poles along the edge of the plaza. In the nearby square, musicians were rehearsing for a festival later that week. The stage manager walked the route twice to confirm the order of events. Several cooks were already preparing trays for the celebration meal. Much later, the record returned to Dylan. Dylan's lantern was made of",
+    "target": " oak",
+    "type": "long_range_retrieval",
+    "tokens_approx": 127,
+    "tier": "med",
+    "source": "lrr_early",
+    "metadata": {
+      "family": "early_fact_late_query",
+      "concept": "object_material_after_delay",
+      "difficulty": "medium",
+      "fact_position": "early",
+      "distractor_level": "medium",
+      "answer_type": "material",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0005"
+  },
+  {
+    "prompt": "Iris was assigned the notebook and was told to wait in the attic. An assistant carefully copied names and dates from one register to another. A senior archivist paused to compare two copies of the same report. The walls of the hall were decorated with maps, notices, and faded paintings. Finn was assigned the medallion and was told to wait in the garden. Rosa was assigned the key and was told to wait in the office. Stacks of documents were arranged in neat bundles beside the reference desk. The library remained unusually busy, with readers moving between the shelves. Along the corridor, small tables held baskets, tools, and folded papers. At the end of the announcement, someone asked what item belonged to Rosa. Rosa had the",
+    "target": " key",
+    "type": "long_range_retrieval",
+    "tokens_approx": 163,
+    "tier": "med",
+    "source": "lrr_binding",
+    "metadata": {
+      "family": "attribute_binding",
+      "concept": "entity_object_binding",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "medium",
+      "answer_type": "object",
+      "num_entities": 3
+    },
+    "id": "lrr_seed_0033"
+  },
+  {
+    "prompt": "Ben was assigned the lantern and was told to wait in the office. An assistant carefully copied names and dates from one register to another. The library remained unusually busy, with readers moving between the shelves. A senior archivist paused to compare two copies of the same report. Dylan was assigned the medallion and was told to wait in the garage. Lena was assigned the map and was told to wait in the garden. Along the corridor, small tables held baskets, tools, and folded papers. Stacks of documents were arranged in neat bundles beside the reference desk. The walls of the hall were decorated with maps, notices, and faded paintings. The old stone paths were lined with flowering plants and trimmed hedges. At the end of the announcement, someone asked where Lena had been told to wait. Lena was told to wait in the",
+    "target": " garden",
+    "type": "long_range_retrieval",
+    "tokens_approx": 187,
+    "tier": "med",
+    "source": "lrr_binding",
+    "metadata": {
+      "family": "attribute_binding",
+      "concept": "entity_location_binding",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "medium",
+      "answer_type": "location",
+      "num_entities": 3
+    },
+    "id": "lrr_seed_0044"
+  },
+  {
+    "prompt": "In the distance, bells rang softly from a tower near the main gate. Dust from the road settled slowly over the fence near the entrance. A pair of riders arrived late and asked for directions before moving on. In the middle of the report, it was stated that the ceremonial flag of Dunmere was blue. Travelers resting nearby exchanged stories about roads, weather, and inns. The watch at the gate recorded the names of those entering after noon. Carters checked their wheels and harnesses before setting out again. The weather was mild, and a light breeze moved through the open windows. At the end of the report, the writer returned to the topic. The ceremonial flag of Dunmere was",
+    "target": " blue",
+    "type": "long_range_retrieval",
+    "tokens_approx": 154,
+    "tier": "med",
+    "source": "lrr_mid",
+    "metadata": {
+      "family": "mid_fact_late_query",
+      "concept": "city_flag_color_after_delay",
+      "difficulty": "medium",
+      "fact_position": "mid",
+      "distractor_level": "medium",
+      "answer_type": "color",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0045"
+  },
+  {
+    "prompt": "A pair of riders arrived late and asked for directions before moving on. In the distance, bells rang softly from a tower near the main gate. Dust from the road settled slowly over the fence near the entrance. The watch at the gate recorded the names of those entering after noon. In the middle of the report, it was stated that the ceremonial flag of Silverport was green. Travelers resting nearby exchanged stories about roads, weather, and inns. Carters checked their wheels and harnesses before setting out again. The stage manager walked the route twice to confirm the order of events. Several visitors spent the afternoon discussing local events in quiet conversation. A group of children practiced their steps near the bandstand. At the end of the report, the writer returned to the topic. The ceremonial flag of Silverport was",
+    "target": " green",
+    "type": "long_range_retrieval",
+    "tokens_approx": 182,
+    "tier": "med",
+    "source": "lrr_mid",
+    "metadata": {
+      "family": "mid_fact_late_query",
+      "concept": "city_flag_color_after_delay",
+      "difficulty": "medium",
+      "fact_position": "mid",
+      "distractor_level": "medium",
+      "answer_type": "color",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0012"
+  },
+  {
+    "prompt": "Travelers resting nearby exchanged stories about roads, weather, and inns. A pair of riders arrived late and asked for directions before moving on. Carters checked their wheels and harnesses before setting out again. Dust from the road settled slowly over the fence near the entrance. The watch at the gate recorded the names of those entering after noon. In the middle of the report, it was stated that the ceremonial flag of Meridian was silver. In the distance, bells rang softly from a tower near the main gate. In the nearby square, musicians were rehearsing for a festival later that week. Stacks of documents were arranged in neat bundles beside the reference desk. Water ran quietly through a narrow channel beside the planted beds. Along the corridor, small tables held baskets, tools, and folded papers. At the end of the report, the writer returned to the topic. The ceremonial flag of Meridian was",
+    "target": " silver",
+    "type": "long_range_retrieval",
+    "tokens_approx": 198,
+    "tier": "med",
+    "source": "lrr_mid",
+    "metadata": {
+      "family": "mid_fact_late_query",
+      "concept": "city_flag_color_after_delay",
+      "difficulty": "hard",
+      "fact_position": "mid",
+      "distractor_level": "high",
+      "answer_type": "color",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0048"
+  },
+  {
+    "prompt": "Before anything else happened, the compass was placed in the garden. Two traders argued amiably over weights, measures, and delivery times. A clerk moved from stall to stall recording payments in a small ledger. The market road was crowded with carts loaded with supplies and tools. Merchants arranged their goods carefully while customers drifted between the stalls. Near the edge of the square, porters stacked crates beside waiting wagons. Vendors called out prices while shoppers compared baskets of produce and cloth. Carters checked their wheels and harnesses before setting out again. An assistant carefully copied names and dates from one register to another. After the long story concluded, the narrator reminded the reader that the compass was in the",
+    "target": " garden",
+    "type": "long_range_retrieval",
+    "tokens_approx": 154,
+    "tier": "med",
+    "source": "lrr_density",
+    "metadata": {
+      "family": "story_distractor_density",
+      "concept": "same_fact_varied_distractor_load",
+      "difficulty": "medium",
+      "fact_position": "early",
+      "distractor_level": "medium",
+      "answer_type": "location",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0096"
+  },
+  {
+    "prompt": "Early in the report, it was noted that Sam had left the ticket in the office. Carters checked their wheels and harnesses before setting out again. The watch at the gate recorded the names of those entering after noon. Travelers resting nearby exchanged stories about roads, weather, and inns. In the distance, bells rang softly from a tower near the main gate. Dust from the road settled slowly over the fence near the entrance. Several paragraphs later, the report explained that the ticket was still the item associated with Sam. Two traders argued amiably over weights, measures, and delivery times. Near the edge of the square, porters stacked crates beside waiting wagons. A clerk moved from stall to stall recording payments in a small ledger. Merchants arranged their goods carefully while customers drifted between the stalls. The market road was crowded with carts loaded with supplies and tools. In the closing line, the writer combined both details. The ticket associated with Sam had been left in the",
+    "target": " office",
+    "type": "long_range_retrieval",
+    "tokens_approx": 217,
+    "tier": "long",
+    "source": "lrr_two_fact",
+    "metadata": {
+      "family": "two_fact_conjunction",
+      "concept": "combine_object_and_location",
+      "difficulty": "hard",
+      "fact_position": "early+mid",
+      "distractor_level": "medium",
+      "answer_type": "location",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0105"
+  },
+  {
+    "prompt": "At the beginning of the meeting, everyone noted that Sam's favorite food was bread. Children played near the fountain until they were called home for dinner. A caretaker checked the lamps one by one as evening approached. Several visitors spent the afternoon discussing local events in quiet conversation. By sunset, the central square had become quieter as people returned indoors. Several workers paused to compare schedules before returning to their tasks. A few late visitors lingered to finish conversations before the doors closed. A messenger crossed the courtyard carrying notes for the town council. A clerk moved from stall to stall recording payments in a small ledger. Much later, someone asked about Sam. Sam's favorite food was",
+    "target": " bread",
+    "type": "long_range_retrieval",
+    "tokens_approx": 152,
+    "tier": "med",
+    "source": "lrr_early",
+    "metadata": {
+      "family": "early_fact_late_query",
+      "concept": "favorite_food_after_delay",
+      "difficulty": "medium",
+      "fact_position": "early",
+      "distractor_level": "medium",
+      "answer_type": "food",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0078"
+  },
+  {
+    "prompt": "The library remained unusually busy, with readers moving between the shelves. An assistant carefully copied names and dates from one register to another. Along the corridor, small tables held baskets, tools, and folded papers. Stacks of documents were arranged in neat bundles beside the reference desk. The walls of the hall were decorated with maps, notices, and faded paintings. In the middle of the report, it was stated that the ceremonial flag of Northwatch was white. A senior archivist paused to compare two copies of the same report. A messenger crossed the courtyard carrying notes for the town council. Merchants arranged their goods carefully while customers drifted between the stalls. Merchants arranged their goods carefully while customers drifted between the stalls. A clerk moved from stall to stall recording payments in a small ledger. Several visitors spent the afternoon discussing local events in quiet conversation. At the end of the report, the writer returned to the topic. The ceremonial flag of Northwatch was",
+    "target": " white",
+    "type": "long_range_retrieval",
+    "tokens_approx": 211,
+    "tier": "long",
+    "source": "lrr_mid",
+    "metadata": {
+      "family": "mid_fact_late_query",
+      "concept": "city_flag_color_after_delay",
+      "difficulty": "hard",
+      "fact_position": "mid",
+      "distractor_level": "high",
+      "answer_type": "color",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0095"
+  },
+  {
+    "prompt": "During the planning session, several people introduced themselves. Cara said they worked as the archivist. Stacks of documents were arranged in neat bundles beside the reference desk. Along the corridor, small tables held baskets, tools, and folded papers. Lena said they worked as the gardener. Sam said they worked as the carpenter. Ben said they worked as the teacher. A senior archivist paused to compare two copies of the same report. The walls of the hall were decorated with maps, notices, and faded paintings. The library remained unusually busy, with readers moving between the shelves. An assistant carefully copied names and dates from one register to another. Two traders argued amiably over weights, measures, and delivery times. The old stone paths were lined with flowering plants and trimmed hedges. Vendors called out prices while shoppers compared baskets of produce and cloth. After many other details were discussed, the note-taker asked one final question. Cara worked as the",
+    "target": " archivist",
+    "type": "long_range_retrieval",
+    "tokens_approx": 204,
+    "tier": "long",
+    "source": "lrr_entity_attr",
+    "metadata": {
+      "family": "multiple_entities_single_attribute",
+      "concept": "retrieve_role_from_entity_list",
+      "difficulty": "medium",
+      "fact_position": "early-mid",
+      "distractor_level": "medium",
+      "answer_type": "role",
+      "num_entities": 4
+    },
+    "id": "lrr_seed_0019"
+  },
+  {
+    "prompt": "Lena was assigned the lantern and was told to wait in the hall. An assistant carefully copied names and dates from one register to another. A senior archivist paused to compare two copies of the same report. The library remained unusually busy, with readers moving between the shelves. Maya was assigned the compass and was told to wait in the bedroom. Sam was assigned the medallion and was told to wait in the attic. Along the corridor, small tables held baskets, tools, and folded papers. The walls of the hall were decorated with maps, notices, and faded paintings. Stacks of documents were arranged in neat bundles beside the reference desk. The stage manager walked the route twice to confirm the order of events. A few late visitors lingered to finish conversations before the doors closed. A gardener paused to trim a row of herbs growing near the path. At the end of the announcement, someone asked what item belonged to Sam. Sam had the",
+    "target": " medallion",
+    "type": "long_range_retrieval",
+    "tokens_approx": 213,
+    "tier": "long",
+    "source": "lrr_binding",
+    "metadata": {
+      "family": "attribute_binding",
+      "concept": "entity_object_binding",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "medium",
+      "answer_type": "object",
+      "num_entities": 3
+    },
+    "id": "lrr_seed_0082"
+  },
+  {
+    "prompt": "Before anything else happened, the lantern was placed in the attic. The market road was crowded with carts loaded with supplies and tools. A clerk moved from stall to stall recording payments in a small ledger. Near the edge of the square, porters stacked crates beside waiting wagons. Two traders argued amiably over weights, measures, and delivery times. Merchants arranged their goods carefully while customers drifted between the stalls. Vendors called out prices while shoppers compared baskets of produce and cloth. The old stone paths were lined with flowering plants and trimmed hedges. Several workers paused to compare schedules before returning to their tasks. After the long story concluded, the narrator reminded the reader that the lantern was in the",
+    "target": " attic",
+    "type": "long_range_retrieval",
+    "tokens_approx": 156,
+    "tier": "med",
+    "source": "lrr_density",
+    "metadata": {
+      "family": "story_distractor_density",
+      "concept": "same_fact_varied_distractor_load",
+      "difficulty": "medium",
+      "fact_position": "early",
+      "distractor_level": "medium",
+      "answer_type": "location",
+      "num_entities": 1
+    },
+    "id": "lrr_seed_0043"
+  },
+  {
+    "prompt": "Eastholm was associated with the color red. Dunmere was associated with the color white. A clerk moved from stall to stall recording payments in a small ledger. Near the edge of the square, porters stacked crates beside waiting wagons. Harrowgate was associated with the color amber. Silverport was associated with the color green. Northwatch was associated with the color silver. Merchants arranged their goods carefully while customers drifted between the stalls. Two traders argued amiably over weights, measures, and delivery times. Vendors called out prices while shoppers compared baskets of produce and cloth. At the very end of the catalog, the summary returned to one entry. The color associated with Silverport was",
+    "target": " green",
+    "type": "long_range_retrieval",
+    "tokens_approx": 145,
+    "tier": "med",
+    "source": "lrr_list",
+    "metadata": {
+      "family": "list_context_retrieval",
+      "concept": "catalog_attribute_lookup_color",
+      "difficulty": "medium",
+      "fact_position": "distributed",
+      "distractor_level": "light",
+      "answer_type": "color",
+      "num_entities": 5
+    },
+    "id": "lrr_seed_0099"
+  }
+]

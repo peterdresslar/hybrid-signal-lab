@@ -1,0 +1,1328 @@
+[
+  {
+    "prompt": "U, V, W, ",
+    "target": " X",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 3,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0000"
+  },
+  {
+    "prompt": "I J K L ",
+    "target": " M",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0001"
+  },
+  {
+    "prompt": "E, F, G, H, I, J, K, L, ",
+    "target": " M",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0002"
+  },
+  {
+    "prompt": "R | S | T | ",
+    "target": " U",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0003"
+  },
+  {
+    "prompt": "N, O, P, ",
+    "target": " Q",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 3,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0004"
+  },
+  {
+    "prompt": "C D E F ",
+    "target": " G",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0005"
+  },
+  {
+    "prompt": "Q, R, S, T, U, V, W, ",
+    "target": " X",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0006"
+  },
+  {
+    "prompt": "R | S | T | U | ",
+    "target": " V",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0007"
+  },
+  {
+    "prompt": "N; O; P; Q; ",
+    "target": " R",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0008"
+  },
+  {
+    "prompt": "S, T, U, V, W, ",
+    "target": " X",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0009"
+  },
+  {
+    "prompt": "F; G; H; I; J; K; L; M; ",
+    "target": " N",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0010"
+  },
+  {
+    "prompt": "22 25 28 31 ",
+    "target": " 34",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 22,
+      "step": 3
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0011"
+  },
+  {
+    "prompt": "49, 52, 55, ",
+    "target": " 58",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 49,
+      "step": 3
+    },
+    "tokens_approx": 3,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0012"
+  },
+  {
+    "prompt": "25; 26; 27; 28; 29; ",
+    "target": " 30",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 25,
+      "step": 1
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0013"
+  },
+  {
+    "prompt": "39 | 42 | 45 | ",
+    "target": " 48",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 39,
+      "step": 3
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0014"
+  },
+  {
+    "prompt": "35, 36, 37, 38, 39, 40, ",
+    "target": " 41",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 35,
+      "step": 1
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0015"
+  },
+  {
+    "prompt": "36; 39; 42; 45; 48; 51; 54; ",
+    "target": " 57",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 36,
+      "step": 3
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0016"
+  },
+  {
+    "prompt": "37, 39, 41, ",
+    "target": " 43",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 37,
+      "step": 2
+    },
+    "tokens_approx": 3,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0017"
+  },
+  {
+    "prompt": "43, 45, 47, 49, 51, ",
+    "target": " 53",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 43,
+      "step": 2
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0018"
+  },
+  {
+    "prompt": "15; 16; 17; 18; 19; 20; ",
+    "target": " 21",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 15,
+      "step": 1
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0019"
+  },
+  {
+    "prompt": "30 40 50 60 70 ",
+    "target": " 80",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 30,
+      "step": 10
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0020"
+  },
+  {
+    "prompt": "24; 27; 30; 33; ",
+    "target": " 36",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 24,
+      "step": 3
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0021"
+  },
+  {
+    "prompt": "Name: Eve\nAge: 60\nCity: Tokyo\n\nName: Jack\nAge: 35\nCity:",
+    "target": " Tokyo",
+    "type": "structural_copying",
+    "source": "gen_struct",
+    "metadata": {
+      "pattern": "person_card"
+    },
+    "tokens_approx": 14,
+    "tier": "short",
+    "id": "sc_gen_struct_0022"
+  },
+  {
+    "prompt": "Planet=Earth; Moon=Moon\nPlanet=Mars; Moon=Deimos\nPlanet=Jupiter; Moon:",
+    "target": " Io",
+    "type": "structural_copying",
+    "source": "gen_struct",
+    "metadata": {
+      "pattern": "semicolon_schema"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_struct_0023"
+  },
+  {
+    "prompt": "Key=beta Value=7\nKey=beta Value=5\nKey=gamma Value:",
+    "target": " 7",
+    "type": "structural_copying",
+    "source": "gen_struct",
+    "metadata": {
+      "pattern": "key_value_block"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_struct_0024"
+  },
+  {
+    "prompt": "Item: snow, Color: black\nItem: sky, Color: green\nItem: rose, Color:",
+    "target": " black",
+    "type": "structural_copying",
+    "source": "gen_struct",
+    "metadata": {
+      "pattern": "label_value"
+    },
+    "tokens_approx": 14,
+    "tier": "short",
+    "id": "sc_gen_struct_0025"
+  },
+  {
+    "prompt": "Q: What is 2+2? A: 4\nQ: What is 3+3? A: 6\nQ: What is 5+5? A:",
+    "target": " 10",
+    "type": "structural_copying",
+    "source": "gen_struct",
+    "metadata": {
+      "pattern": "qa_pair"
+    },
+    "tokens_approx": 22,
+    "tier": "short",
+    "id": "sc_gen_struct_0026"
+  },
+  {
+    "prompt": "Key=gamma Value=8\nKey=epsilon Value=7\nKey=delta Value:",
+    "target": " 4",
+    "type": "structural_copying",
+    "source": "gen_struct",
+    "metadata": {
+      "pattern": "key_value_block"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_struct_0027"
+  },
+  {
+    "prompt": "Key=delta Value=3\nKey=beta Value=3\nKey=delta Value:",
+    "target": " 4",
+    "type": "structural_copying",
+    "source": "gen_struct",
+    "metadata": {
+      "pattern": "key_value_block"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_struct_0028"
+  },
+  {
+    "prompt": "Planet=Earth; Moon=Moon\nPlanet=Mars; Moon=Phobos\nPlanet=Jupiter; Moon:",
+    "target": " Io",
+    "type": "structural_copying",
+    "source": "gen_struct",
+    "metadata": {
+      "pattern": "semicolon_schema"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_struct_0029"
+  },
+  {
+    "prompt": "Fruits = apple, papaya, banana, lemon, elderberry, grape,",
+    "target": " plum",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "fruits"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0030"
+  },
+  {
+    "prompt": "List of animals: bear, bird, wolf, cat, horse,",
+    "target": " frog",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "animals"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0031"
+  },
+  {
+    "prompt": "List of tools: pliers, shovel, wrench, saw,",
+    "target": " chisel",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "tools"
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sc_gen_word_list_0032"
+  },
+  {
+    "prompt": "List of tools: hammer, chisel, rake, ladder, mallet, drill,",
+    "target": " pliers",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "tools"
+    },
+    "tokens_approx": 11,
+    "tier": "short",
+    "id": "sc_gen_word_list_0033"
+  },
+  {
+    "prompt": "Animals -> frog, dog, goat, wolf,",
+    "target": " bird",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "animals"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_word_list_0034"
+  },
+  {
+    "prompt": "Colors -> silver, black, white, green,",
+    "target": " orange",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "colors"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_word_list_0035"
+  },
+  {
+    "prompt": "Tools -> wrench, shovel, ladder, chisel, drill,",
+    "target": " mallet",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "tools"
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sc_gen_word_list_0036"
+  },
+  {
+    "prompt": "Fruits = lemon, kiwi, banana, date, plum,",
+    "target": " apple",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "fruits"
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sc_gen_word_list_0037"
+  },
+  {
+    "prompt": "Animals -> deer, fish, frog, goat, cat, wolf,",
+    "target": " otter",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "animals"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0038"
+  },
+  {
+    "prompt": "Animals = dog, cat, lion, otter,",
+    "target": " bear",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "animals"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_word_list_0039"
+  },
+  {
+    "prompt": "Countries = China, Brazil, Kenya, Spain,",
+    "target": " India",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "countries"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_word_list_0040"
+  },
+  {
+    "prompt": "<abc> <abc> <abc> <abc",
+    "target": ">",
+    "type": "structural_copying",
+    "source": "gen_delim",
+    "metadata": {
+      "pattern": "paired_delimiter",
+      "left": "<",
+      "right": ">"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_delim_0041"
+  },
+  {
+    "prompt": "<k9> ; <k9> ; <k9> ; <k9> ; <k9",
+    "target": ">",
+    "type": "structural_copying",
+    "source": "gen_delim",
+    "metadata": {
+      "pattern": "paired_delimiter",
+      "left": "<",
+      "right": ">"
+    },
+    "tokens_approx": 11,
+    "tier": "short",
+    "id": "sc_gen_delim_0042"
+  },
+  {
+    "prompt": "<pq> <pq> <pq",
+    "target": ">",
+    "type": "structural_copying",
+    "source": "gen_delim",
+    "metadata": {
+      "pattern": "paired_delimiter",
+      "left": "<",
+      "right": ">"
+    },
+    "tokens_approx": 3,
+    "tier": "short",
+    "id": "sc_gen_delim_0043"
+  },
+  {
+    "prompt": "(pq) | (pq) | (pq) | (pq) | (pq) | (pq",
+    "target": ")",
+    "type": "structural_copying",
+    "source": "gen_delim",
+    "metadata": {
+      "pattern": "paired_delimiter",
+      "left": "(",
+      "right": ")"
+    },
+    "tokens_approx": 14,
+    "tier": "short",
+    "id": "sc_gen_delim_0044"
+  },
+  {
+    "prompt": "(123)  (123)  (123)  (123",
+    "target": ")",
+    "type": "structural_copying",
+    "source": "gen_delim",
+    "metadata": {
+      "pattern": "paired_delimiter",
+      "left": "(",
+      "right": ")"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_delim_0045"
+  },
+  {
+    "prompt": "<k9>  <k9>  <k9>  <k9",
+    "target": ">",
+    "type": "structural_copying",
+    "source": "gen_delim",
+    "metadata": {
+      "pattern": "paired_delimiter",
+      "left": "<",
+      "right": ">"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_delim_0046"
+  },
+  {
+    "prompt": "{123} {123} {123} {123} {123} {123",
+    "target": "}",
+    "type": "structural_copying",
+    "source": "gen_delim",
+    "metadata": {
+      "pattern": "paired_delimiter",
+      "left": "{",
+      "right": "}"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_delim_0047"
+  },
+  {
+    "prompt": "<abc> <abc> <abc",
+    "target": ">",
+    "type": "structural_copying",
+    "source": "gen_delim",
+    "metadata": {
+      "pattern": "paired_delimiter",
+      "left": "<",
+      "right": ">"
+    },
+    "tokens_approx": 3,
+    "tier": "short",
+    "id": "sc_gen_delim_0048"
+  },
+  {
+    "prompt": "(123) ; (123) ; (123) ; (123",
+    "target": ")",
+    "type": "structural_copying",
+    "source": "gen_delim",
+    "metadata": {
+      "pattern": "paired_delimiter",
+      "left": "(",
+      "right": ")"
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sc_gen_delim_0049"
+  },
+  {
+    "prompt": "<123> ; <123> ; <123> ; <123> ; <123> ; <123",
+    "target": ">",
+    "type": "structural_copying",
+    "source": "gen_delim",
+    "metadata": {
+      "pattern": "paired_delimiter",
+      "left": "<",
+      "right": ">"
+    },
+    "tokens_approx": 14,
+    "tier": "short",
+    "id": "sc_gen_delim_0050"
+  },
+  {
+    "prompt": "(k9) (k9) (k9) (k9",
+    "target": ")",
+    "type": "structural_copying",
+    "source": "gen_delim",
+    "metadata": {
+      "pattern": "paired_delimiter",
+      "left": "(",
+      "right": ")"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_delim_0051"
+  },
+  {
+    "prompt": "code\tcount\nCZ\t23\nDU\t27\nBY\t",
+    "target": " 25",
+    "type": "structural_copying",
+    "source": "gen_table",
+    "metadata": {
+      "pattern": "tabular_row",
+      "row_type": "tsv"
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sc_gen_table_0052"
+  },
+  {
+    "prompt": "key=beta value=2\nkey=gamma value=10\nkey=alpha value=",
+    "target": " 11",
+    "type": "structural_copying",
+    "source": "gen_table",
+    "metadata": {
+      "pattern": "tabular_row",
+      "row_type": "kv"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_table_0053"
+  },
+  {
+    "prompt": "A | 8 | blue\nE | 5 | red\nC | 7 |",
+    "target": " green",
+    "type": "structural_copying",
+    "source": "gen_table",
+    "metadata": {
+      "pattern": "tabular_row",
+      "row_type": "pipe"
+    },
+    "tokens_approx": 18,
+    "tier": "short",
+    "id": "sc_gen_table_0054"
+  },
+  {
+    "prompt": "id,name,score\n1,Bo,91\n2,Ada,97\n3,Eli,",
+    "target": " 77",
+    "type": "structural_copying",
+    "source": "gen_table",
+    "metadata": {
+      "pattern": "tabular_row",
+      "row_type": "csv"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_table_0055"
+  },
+  {
+    "prompt": "code\tcount\nAX\t29\nBY\t11\nCZ\t",
+    "target": " 12",
+    "type": "structural_copying",
+    "source": "gen_table",
+    "metadata": {
+      "pattern": "tabular_row",
+      "row_type": "tsv"
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sc_gen_table_0056"
+  },
+  {
+    "prompt": "code\tcount\nEV\t16\nCZ\t20\nBY\t",
+    "target": " 17",
+    "type": "structural_copying",
+    "source": "gen_table",
+    "metadata": {
+      "pattern": "tabular_row",
+      "row_type": "tsv"
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sc_gen_table_0057"
+  },
+  {
+    "prompt": "D | 5 | red\nB | 4 | white\nC | 3 |",
+    "target": " blue",
+    "type": "structural_copying",
+    "source": "gen_table",
+    "metadata": {
+      "pattern": "tabular_row",
+      "row_type": "pipe"
+    },
+    "tokens_approx": 18,
+    "tier": "short",
+    "id": "sc_gen_table_0058"
+  },
+  {
+    "prompt": "id,name,score\n1,Ada,86\n2,Eli,78\n3,Bo,",
+    "target": " 74",
+    "type": "structural_copying",
+    "source": "gen_table",
+    "metadata": {
+      "pattern": "tabular_row",
+      "row_type": "csv"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_table_0059"
+  },
+  {
+    "prompt": "A | 5 | white\nB | 2 | green\nD | 4 |",
+    "target": " yellow",
+    "type": "structural_copying",
+    "source": "gen_table",
+    "metadata": {
+      "pattern": "tabular_row",
+      "row_type": "pipe"
+    },
+    "tokens_approx": 18,
+    "tier": "short",
+    "id": "sc_gen_table_0060"
+  },
+  {
+    "prompt": "id,name,score\n1,Fay,91\n2,Eli,73\n3,Cy,",
+    "target": " 98",
+    "type": "structural_copying",
+    "source": "gen_table",
+    "metadata": {
+      "pattern": "tabular_row",
+      "row_type": "csv"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_table_0061"
+  },
+  {
+    "prompt": "key=gamma value=10\nkey=alpha value=4\nkey=delta value=",
+    "target": " 6",
+    "type": "structural_copying",
+    "source": "gen_table",
+    "metadata": {
+      "pattern": "tabular_row",
+      "row_type": "kv"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_table_0062"
+  },
+  {
+    "prompt": "12|1212|121212|121212|1212|",
+    "target": " 12",
+    "type": "structural_copying",
+    "source": "gen_mirror",
+    "metadata": {
+      "pattern": "mirrored_repetition",
+      "token": "12",
+      "max_rep": 3
+    },
+    "tokens_approx": 1,
+    "tier": "short",
+    "id": "sc_gen_mirror_0063"
+  },
+  {
+    "prompt": "12-1212-121212-12121212-1212121212-1212121212-12121212-121212-1212-",
+    "target": " 12",
+    "type": "structural_copying",
+    "source": "gen_mirror",
+    "metadata": {
+      "pattern": "mirrored_repetition",
+      "token": "12",
+      "max_rep": 5
+    },
+    "tokens_approx": 1,
+    "tier": "short",
+    "id": "sc_gen_mirror_0064"
+  },
+  {
+    "prompt": "12|1212|121212|12121212|12121212|121212|1212|",
+    "target": " 12",
+    "type": "structural_copying",
+    "source": "gen_mirror",
+    "metadata": {
+      "pattern": "mirrored_repetition",
+      "token": "12",
+      "max_rep": 4
+    },
+    "tokens_approx": 1,
+    "tier": "short",
+    "id": "sc_gen_mirror_0065"
+  },
+  {
+    "prompt": "12-1212-121212-121212-1212-",
+    "target": " 12",
+    "type": "structural_copying",
+    "source": "gen_mirror",
+    "metadata": {
+      "pattern": "mirrored_repetition",
+      "token": "12",
+      "max_rep": 3
+    },
+    "tokens_approx": 1,
+    "tier": "short",
+    "id": "sc_gen_mirror_0066"
+  },
+  {
+    "prompt": "pq:pqpq:pqpqpq:pqpqpq:pqpq:",
+    "target": " pq",
+    "type": "structural_copying",
+    "source": "gen_mirror",
+    "metadata": {
+      "pattern": "mirrored_repetition",
+      "token": "pq",
+      "max_rep": 3
+    },
+    "tokens_approx": 1,
+    "tier": "short",
+    "id": "sc_gen_mirror_0067"
+  },
+  {
+    "prompt": "ab:abab:ababab:ababab:abab:",
+    "target": " ab",
+    "type": "structural_copying",
+    "source": "gen_mirror",
+    "metadata": {
+      "pattern": "mirrored_repetition",
+      "token": "ab",
+      "max_rep": 3
+    },
+    "tokens_approx": 1,
+    "tier": "short",
+    "id": "sc_gen_mirror_0068"
+  },
+  {
+    "prompt": "pq|pqpq|pqpqpq|pqpqpqpq|pqpqpqpqpq|pqpqpqpqpq|pqpqpqpq|pqpqpq|pqpq|",
+    "target": " pq",
+    "type": "structural_copying",
+    "source": "gen_mirror",
+    "metadata": {
+      "pattern": "mirrored_repetition",
+      "token": "pq",
+      "max_rep": 5
+    },
+    "tokens_approx": 1,
+    "tier": "short",
+    "id": "sc_gen_mirror_0069"
+  },
+  {
+    "prompt": "pq|pqpq|pqpqpq|pqpqpq|pqpq|",
+    "target": " pq",
+    "type": "structural_copying",
+    "source": "gen_mirror",
+    "metadata": {
+      "pattern": "mirrored_repetition",
+      "token": "pq",
+      "max_rep": 3
+    },
+    "tokens_approx": 1,
+    "tier": "short",
+    "id": "sc_gen_mirror_0070"
+  },
+  {
+    "prompt": "ab-abab-ababab-abababab-ababababab-ababababab-abababab-ababab-abab-",
+    "target": " ab",
+    "type": "structural_copying",
+    "source": "gen_mirror",
+    "metadata": {
+      "pattern": "mirrored_repetition",
+      "token": "ab",
+      "max_rep": 5
+    },
+    "tokens_approx": 1,
+    "tier": "short",
+    "id": "sc_gen_mirror_0071"
+  },
+  {
+    "prompt": "xy|xyxy|xyxyxy|xyxyxy|xyxy|",
+    "target": " xy",
+    "type": "structural_copying",
+    "source": "gen_mirror",
+    "metadata": {
+      "pattern": "mirrored_repetition",
+      "token": "xy",
+      "max_rep": 3
+    },
+    "tokens_approx": 1,
+    "tier": "short",
+    "id": "sc_gen_mirror_0072"
+  },
+  {
+    "prompt": "X, dog, X, dog ",
+    "target": " dog",
+    "type": "structural_copying",
+    "source": "gen_alt",
+    "metadata": {
+      "pattern": "alternating_pair",
+      "a": "X",
+      "b": "dog"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_alt_0073"
+  },
+  {
+    "prompt": "A Z A Z A, ",
+    "target": " A",
+    "type": "structural_copying",
+    "source": "gen_alt",
+    "metadata": {
+      "pattern": "alternating_pair",
+      "a": "A",
+      "b": "Z"
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_alt_0074"
+  },
+  {
+    "prompt": "B | blue | B | blue ",
+    "target": " blue",
+    "type": "structural_copying",
+    "source": "gen_alt",
+    "metadata": {
+      "pattern": "alternating_pair",
+      "a": "B",
+      "b": "blue"
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sc_gen_alt_0075"
+  },
+  {
+    "prompt": "X | dog | X | dog | X | dog | ",
+    "target": " dog",
+    "type": "structural_copying",
+    "source": "gen_alt",
+    "metadata": {
+      "pattern": "alternating_pair",
+      "a": "X",
+      "b": "dog"
+    },
+    "tokens_approx": 15,
+    "tier": "short",
+    "id": "sc_gen_alt_0076"
+  },
+  {
+    "prompt": "B 2 B 2, ",
+    "target": " 2",
+    "type": "structural_copying",
+    "source": "gen_alt",
+    "metadata": {
+      "pattern": "alternating_pair",
+      "a": "B",
+      "b": "2"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_alt_0077"
+  },
+  {
+    "prompt": "A, 2, A, 2, A | ",
+    "target": " A",
+    "type": "structural_copying",
+    "source": "gen_alt",
+    "metadata": {
+      "pattern": "alternating_pair",
+      "a": "A",
+      "b": "2"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_alt_0078"
+  },
+  {
+    "prompt": "red 2 red 2 red | ",
+    "target": " red",
+    "type": "structural_copying",
+    "source": "gen_alt",
+    "metadata": {
+      "pattern": "alternating_pair",
+      "a": "red",
+      "b": "2"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_alt_0079"
+  },
+  {
+    "prompt": "A, Q, A ",
+    "target": " A",
+    "type": "structural_copying",
+    "source": "gen_alt",
+    "metadata": {
+      "pattern": "alternating_pair",
+      "a": "A",
+      "b": "Q"
+    },
+    "tokens_approx": 3,
+    "tier": "short",
+    "id": "sc_gen_alt_0080"
+  },
+  {
+    "prompt": "B, Q, B, Q, B ",
+    "target": " B",
+    "type": "structural_copying",
+    "source": "gen_alt",
+    "metadata": {
+      "pattern": "alternating_pair",
+      "a": "B",
+      "b": "Q"
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_alt_0081"
+  },
+  {
+    "prompt": "B, 1, B, 1, ",
+    "target": " 1",
+    "type": "structural_copying",
+    "source": "gen_alt",
+    "metadata": {
+      "pattern": "alternating_pair",
+      "a": "B",
+      "b": "1"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_alt_0082"
+  },
+  {
+    "prompt": "X, 1, X, 1, X | ",
+    "target": " X",
+    "type": "structural_copying",
+    "source": "gen_alt",
+    "metadata": {
+      "pattern": "alternating_pair",
+      "a": "X",
+      "b": "1"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_alt_0083"
+  },
+  {
+    "prompt": "I.\tReview\nII.\tTest\nIII.\t",
+    "target": " Plan",
+    "type": "structural_copying",
+    "source": "gen_indent",
+    "metadata": {
+      "pattern": "indented_block",
+      "style": "outline"
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_indent_0084"
+  },
+  {
+    "prompt": "Parts:\n  - beta\n  - gamma\n  -",
+    "target": " alpha",
+    "type": "structural_copying",
+    "source": "gen_indent",
+    "metadata": {
+      "pattern": "indented_block",
+      "style": "bullet"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_indent_0085"
+  },
+  {
+    "prompt": "Items:\n  - gamma\n  - epsilon\n  -",
+    "target": " beta",
+    "type": "structural_copying",
+    "source": "gen_indent",
+    "metadata": {
+      "pattern": "indented_block",
+      "style": "bullet"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_indent_0086"
+  },
+  {
+    "prompt": "I.\tShip\nII.\tPlan\nIII.\t",
+    "target": " Build",
+    "type": "structural_copying",
+    "source": "gen_indent",
+    "metadata": {
+      "pattern": "indented_block",
+      "style": "outline"
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_indent_0087"
+  },
+  {
+    "prompt": "I.\tBuild\nII.\tTest\nIII.\t",
+    "target": " Plan",
+    "type": "structural_copying",
+    "source": "gen_indent",
+    "metadata": {
+      "pattern": "indented_block",
+      "style": "outline"
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_indent_0088"
+  },
+  {
+    "prompt": "I.\tReview\nII.\tPlan\nIII.\t",
+    "target": " Test",
+    "type": "structural_copying",
+    "source": "gen_indent",
+    "metadata": {
+      "pattern": "indented_block",
+      "style": "outline"
+    },
+    "tokens_approx": 6,
+    "tier": "short",
+    "id": "sc_gen_indent_0089"
+  },
+  {
+    "prompt": "Parts:\n  - epsilon\n  - gamma\n  -",
+    "target": " delta",
+    "type": "structural_copying",
+    "source": "gen_indent",
+    "metadata": {
+      "pattern": "indented_block",
+      "style": "bullet"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_indent_0090"
+  },
+  {
+    "prompt": "record:\n  color: map\n  color: blue\n  color:",
+    "target": " Paris",
+    "type": "structural_copying",
+    "source": "gen_indent",
+    "metadata": {
+      "pattern": "indented_block",
+      "style": "kv_indent"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_indent_0091"
+  },
+  {
+    "prompt": "Items:\n  - delta\n  - beta\n  -",
+    "target": " gamma",
+    "type": "structural_copying",
+    "source": "gen_indent",
+    "metadata": {
+      "pattern": "indented_block",
+      "style": "bullet"
+    },
+    "tokens_approx": 7,
+    "tier": "short",
+    "id": "sc_gen_indent_0092"
+  },
+  {
+    "prompt": "Countries -> France, India, Peru, Egypt, Italy, Spain,",
+    "target": " Kenya",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "countries"
+    },
+    "tokens_approx": 10,
+    "tier": "short",
+    "id": "sc_gen_word_list_0093"
+  },
+  {
+    "prompt": "Y | Q | Y | Q | Y | Q ",
+    "target": " Q",
+    "type": "structural_copying",
+    "source": "gen_alt",
+    "metadata": {
+      "pattern": "alternating_pair",
+      "a": "Y",
+      "b": "Q"
+    },
+    "tokens_approx": 14,
+    "tier": "short",
+    "id": "sc_gen_alt_0094"
+  },
+  {
+    "prompt": "31, 41, 51, 61, ",
+    "target": " 71",
+    "type": "structural_copying",
+    "source": "gen_num_seq",
+    "metadata": {
+      "pattern": "arithmetic",
+      "start": 31,
+      "step": 10
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_num_seq_0095"
+  },
+  {
+    "prompt": "List of tools: ladder, chisel, saw, mallet, rake, drill,",
+    "target": " wrench",
+    "type": "structural_copying",
+    "source": "gen_word_list",
+    "metadata": {
+      "pattern": "category_list",
+      "category": "tools"
+    },
+    "tokens_approx": 11,
+    "tier": "short",
+    "id": "sc_gen_word_list_0096"
+  },
+  {
+    "prompt": "id,name,score\n1,Ada,89\n2,Bo,97\n3,Di,",
+    "target": " 94",
+    "type": "structural_copying",
+    "source": "gen_table",
+    "metadata": {
+      "pattern": "tabular_row",
+      "row_type": "csv"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_table_0097"
+  },
+  {
+    "prompt": "<k9> ; <k9> ; <k9> ; <k9",
+    "target": ">",
+    "type": "structural_copying",
+    "source": "gen_delim",
+    "metadata": {
+      "pattern": "paired_delimiter",
+      "left": "<",
+      "right": ">"
+    },
+    "tokens_approx": 9,
+    "tier": "short",
+    "id": "sc_gen_delim_0098"
+  },
+  {
+    "prompt": "M N O P ",
+    "target": " Q",
+    "type": "structural_copying",
+    "source": "gen_alpha_seq",
+    "metadata": {
+      "pattern": "alpha_continuation"
+    },
+    "tokens_approx": 5,
+    "tier": "short",
+    "id": "sc_gen_alpha_seq_0099"
+  }
+]

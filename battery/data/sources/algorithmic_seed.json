@@ -1,48 +1,48 @@
 [
   {
-    "prompt": "Remove duplicates while keeping first occurrence order: red, red, black, green, yellow, yellow\nHow many items remain?",
-    "target": " 4",
+    "prompt": "Count how many numbers are both greater than 8 and even in: 1, 9, 8, 22, 5, 4, 18, 3\nAnswer:",
+    "target": " 2",
     "type": "algorithmic",
-    "tokens_approx": 22,
+    "tokens_approx": 27,
     "tier": "short",
-    "source": "alg_dedup",
+    "source": "alg_filter_count",
     "metadata": {
-      "family": "deduplication",
-      "concept": "count_unique_ordered",
+      "family": "filtering",
+      "concept": "count_even_above_threshold",
       "difficulty": "medium"
     },
     "id": "alg_seed_0000"
   },
   {
-    "prompt": "Transform each number using this rule: if it is even, add 4; if it is odd, double it. Then subtract the first transformed value from the last transformed value for: 3, 9, 5, 6, 8\nAnswer:",
-    "target": " 6",
+    "prompt": "Sum only the numbers greater than 10 from: 2, 1, 3, 7, 4, 9\nAnswer:",
+    "target": " 0",
     "type": "algorithmic",
-    "tokens_approx": 46,
-    "tier": "brief",
-    "source": "alg_transform_list",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "alg_filter_sum",
     "metadata": {
-      "family": "transforms",
-      "concept": "list_rule_then_difference",
+      "family": "filtering",
+      "concept": "sum_above_threshold",
       "difficulty": "medium"
     },
     "id": "alg_seed_0001"
   },
   {
-    "prompt": "Remove duplicates while keeping first occurrence order: green, green, yellow, red, yellow, blue\nHow many items remain?",
-    "target": " 4",
+    "prompt": "Start with 17. Add 13. Then subtract 9. Result:",
+    "target": " 21",
     "type": "algorithmic",
-    "tokens_approx": 22,
+    "tokens_approx": 11,
     "tier": "short",
-    "source": "alg_dedup",
+    "source": "alg_arithmetic",
     "metadata": {
-      "family": "deduplication",
-      "concept": "count_unique_ordered",
-      "difficulty": "medium"
+      "family": "arithmetic",
+      "concept": "three_step_update",
+      "difficulty": "easy"
     },
     "id": "alg_seed_0002"
   },
   {
-    "prompt": "Remove duplicate numbers, sort the remaining values in ascending order, and give the 2nd number from: 11, 9, 17, 3, 3, 11, 15\nAnswer:",
+    "prompt": "Remove duplicate numbers, sort the remaining values in ascending order, and give the 3rd number from: 12, 6, 15, 1, 6, 9, 1\nAnswer:",
     "target": " 9",
     "type": "algorithmic",
     "tokens_approx": 31,
@@ -56,1502 +56,116 @@
     "id": "alg_seed_0003"
   },
   {
-    "prompt": "Sort these numbers in ascending order and give the 4th number: 12, 25, 7, 27, 4\nAnswer:",
-    "target": " 25",
+    "prompt": "Count how many times \"cat\" appears in: cat cat bird blue leaf sun stone cat cat tree stone dog\nAnswer:",
+    "target": " 4",
     "type": "algorithmic",
-    "tokens_approx": 22,
+    "tokens_approx": 26,
     "tier": "short",
-    "source": "alg_sort",
+    "source": "alg_counting",
     "metadata": {
-      "family": "sorting",
-      "concept": "sorted_position",
-      "difficulty": "medium"
+      "family": "counting",
+      "concept": "token_count",
+      "difficulty": "easy"
     },
     "id": "alg_seed_0004"
   },
   {
-    "prompt": "Take every second word starting from the second item in this list, reverse that smaller list, and return its 2nd item: sigma, alpha, gamma, theta, kappa, delta\nAnswer:",
-    "target": " theta",
+    "prompt": "Rotate this list left by 1 positions and give the 2nd item: alpha, sigma, beta, gamma, theta\nAnswer:",
+    "target": " beta",
     "type": "algorithmic",
-    "tokens_approx": 36,
-    "tier": "brief",
-    "source": "alg_string_rule",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "alg_extract_rotate",
     "metadata": {
-      "family": "string_transform",
-      "concept": "every_second_reverse",
+      "family": "extraction",
+      "concept": "rotation_then_extract",
       "difficulty": "medium"
     },
     "id": "alg_seed_0005"
   },
   {
-    "prompt": "Take the first letter of each word and combine them: black, white, orange\nAnswer:",
-    "target": " bwo",
+    "prompt": "Sort these numbers in ascending order and give the 3rd number: 15, 21, 27, 12, 6\nAnswer:",
+    "target": " 15",
     "type": "algorithmic",
-    "tokens_approx": 18,
+    "tokens_approx": 22,
     "tier": "short",
-    "source": "alg_initials",
+    "source": "alg_sort",
     "metadata": {
-      "family": "string_transform",
-      "concept": "first_letters",
-      "difficulty": "easy"
+      "family": "sorting",
+      "concept": "sorted_position",
+      "difficulty": "medium"
     },
     "id": "alg_seed_0006"
   },
   {
-    "prompt": "Count how many numbers are both greater than 8 and even in: 6, 18, 7, 3, 13, 4, 11, 24\nAnswer:",
-    "target": " 2",
+    "prompt": "Sort these numbers in ascending order and give the 4th number: 22, 9, 23, 21, 3\nAnswer:",
+    "target": " 22",
     "type": "algorithmic",
-    "tokens_approx": 27,
+    "tokens_approx": 22,
     "tier": "short",
-    "source": "alg_filter_count",
+    "source": "alg_sort",
     "metadata": {
-      "family": "filtering",
-      "concept": "count_even_above_threshold",
+      "family": "sorting",
+      "concept": "sorted_position",
       "difficulty": "medium"
     },
     "id": "alg_seed_0007"
   },
   {
-    "prompt": "Sum only the numbers greater than 11 from: 6, 10, 13, 1, 9, 11\nAnswer:",
-    "target": " 13",
+    "prompt": "Count how many numbers are both greater than 8 and even in: 18, 8, 6, 15, 13, 9, 24, 23\nAnswer:",
+    "target": " 2",
     "type": "algorithmic",
-    "tokens_approx": 19,
+    "tokens_approx": 27,
     "tier": "short",
-    "source": "alg_filter_sum",
+    "source": "alg_filter_count",
     "metadata": {
       "family": "filtering",
-      "concept": "sum_above_threshold",
+      "concept": "count_even_above_threshold",
       "difficulty": "medium"
     },
     "id": "alg_seed_0008"
   },
   {
-    "prompt": "Start with 20. Add 7. Then subtract 2. Result:",
-    "target": " 25",
+    "prompt": "What is the word in position 3 of this list: theta, alpha, beta, sigma, omega\nAnswer:",
+    "target": " beta",
     "type": "algorithmic",
-    "tokens_approx": 11,
+    "tokens_approx": 20,
     "tier": "short",
-    "source": "alg_arithmetic",
+    "source": "alg_extract",
     "metadata": {
-      "family": "arithmetic",
-      "concept": "three_step_update",
+      "family": "extraction",
+      "concept": "nth_item",
       "difficulty": "easy"
     },
     "id": "alg_seed_0009"
   },
   {
-    "prompt": "Add 16 and 7. Then multiply that result by the absolute difference between 6 and 14. Result:",
-    "target": " 184",
+    "prompt": "Take every second word starting from the second item in this list, reverse that smaller list, and return its 2nd item: delta, omega, sigma, gamma, beta, theta\nAnswer:",
+    "target": " gamma",
     "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_arithmetic2",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "alg_string_rule",
     "metadata": {
-      "family": "arithmetic",
-      "concept": "two_stage_arithmetic",
+      "family": "string_transform",
+      "concept": "every_second_reverse",
       "difficulty": "medium"
     },
     "id": "alg_seed_0010"
   },
   {
-    "prompt": "Sort these numbers in ascending order and give the 4th number: 25, 28, 27, 9, 24\nAnswer:",
-    "target": " 27",
+    "prompt": "Is 92 divisible by 5? Answer yes or no.\nAnswer:",
+    "target": " no",
     "type": "algorithmic",
-    "tokens_approx": 22,
+    "tokens_approx": 13,
     "tier": "short",
-    "source": "alg_sort",
+    "source": "alg_divisible",
     "metadata": {
-      "family": "sorting",
-      "concept": "sorted_position",
-      "difficulty": "medium"
+      "family": "parity_divisibility",
+      "concept": "divisible_check",
+      "difficulty": "easy"
     },
     "id": "alg_seed_0011"
-  },
-  {
-    "prompt": "Remove duplicate numbers, sort the remaining values in ascending order, and give the 3rd number from: 18, 10, 3, 18, 13, 5, 5\nAnswer:",
-    "target": " 10",
-    "type": "algorithmic",
-    "tokens_approx": 31,
-    "tier": "brief",
-    "source": "alg_sort_dedup",
-    "metadata": {
-      "family": "sorting",
-      "concept": "sort_dedup_position",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0012"
-  },
-  {
-    "prompt": "Count how many numbers are both greater than 8 and even in: 24, 17, 11, 2, 13, 8, 9, 20\nAnswer:",
-    "target": " 2",
-    "type": "algorithmic",
-    "tokens_approx": 27,
-    "tier": "short",
-    "source": "alg_filter_count",
-    "metadata": {
-      "family": "filtering",
-      "concept": "count_even_above_threshold",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0013"
-  },
-  {
-    "prompt": "Is 47 divisible by 6? Answer yes or no.\nAnswer:",
-    "target": " no",
-    "type": "algorithmic",
-    "tokens_approx": 13,
-    "tier": "short",
-    "source": "alg_divisible",
-    "metadata": {
-      "family": "parity_divisibility",
-      "concept": "divisible_check",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0014"
-  },
-  {
-    "prompt": "Add 2 and 12. Then multiply that result by the absolute difference between 14 and 6. Result:",
-    "target": " 112",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_arithmetic2",
-    "metadata": {
-      "family": "arithmetic",
-      "concept": "two_stage_arithmetic",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0015"
-  },
-  {
-    "prompt": "Rotate this list left by 3 positions and give the 3rd item: omega, sigma, theta, delta, alpha\nAnswer:",
-    "target": " omega",
-    "type": "algorithmic",
-    "tokens_approx": 23,
-    "tier": "short",
-    "source": "alg_extract_rotate",
-    "metadata": {
-      "family": "extraction",
-      "concept": "rotation_then_extract",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0016"
-  },
-  {
-    "prompt": "Transform each number using this rule: if it is even, double it; if it is odd, add 3. Then give the largest transformed value from: 15, 2, 4, 17, 12\nAnswer:",
-    "target": " 24",
-    "type": "algorithmic",
-    "tokens_approx": 40,
-    "tier": "brief",
-    "source": "alg_select_transform",
-    "metadata": {
-      "family": "selection",
-      "concept": "largest_after_transform",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0017"
-  },
-  {
-    "prompt": "Transform each number using this rule: if it is even, add 4; if it is odd, double it. Then subtract the first transformed value from the last transformed value for: 10, 4, 1, 6, 3\nAnswer:",
-    "target": " -8",
-    "type": "algorithmic",
-    "tokens_approx": 46,
-    "tier": "brief",
-    "source": "alg_transform_list",
-    "metadata": {
-      "family": "transforms",
-      "concept": "list_rule_then_difference",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0018"
-  },
-  {
-    "prompt": "Take the first letter of each word and combine them: red, orange, black\nAnswer:",
-    "target": " rob",
-    "type": "algorithmic",
-    "tokens_approx": 18,
-    "tier": "short",
-    "source": "alg_initials",
-    "metadata": {
-      "family": "string_transform",
-      "concept": "first_letters",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0019"
-  },
-  {
-    "prompt": "Rotate this list left by 1 positions and give the 4th item: sigma, delta, alpha, beta, gamma\nAnswer:",
-    "target": " gamma",
-    "type": "algorithmic",
-    "tokens_approx": 23,
-    "tier": "short",
-    "source": "alg_extract_rotate",
-    "metadata": {
-      "family": "extraction",
-      "concept": "rotation_then_extract",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0020"
-  },
-  {
-    "prompt": "Sort these numbers in ascending order and give the 2nd number: 21, 1, 14, 5, 7\nAnswer:",
-    "target": " 5",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_sort",
-    "metadata": {
-      "family": "sorting",
-      "concept": "sorted_position",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0021"
-  },
-  {
-    "prompt": "Transform each number using this rule: if it is even, double it; if it is odd, add 3. Then give the largest transformed value from: 6, 17, 10, 8, 12\nAnswer:",
-    "target": " 24",
-    "type": "algorithmic",
-    "tokens_approx": 40,
-    "tier": "brief",
-    "source": "alg_select_transform",
-    "metadata": {
-      "family": "selection",
-      "concept": "largest_after_transform",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0022"
-  },
-  {
-    "prompt": "Take the first letter of each word and combine them: red, blue, green\nAnswer:",
-    "target": " rbg",
-    "type": "algorithmic",
-    "tokens_approx": 18,
-    "tier": "short",
-    "source": "alg_initials",
-    "metadata": {
-      "family": "string_transform",
-      "concept": "first_letters",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0023"
-  },
-  {
-    "prompt": "Take every second word starting from the second item in this list, reverse that smaller list, and return its 2nd item: omega, gamma, theta, kappa, alpha, beta\nAnswer:",
-    "target": " kappa",
-    "type": "algorithmic",
-    "tokens_approx": 36,
-    "tier": "brief",
-    "source": "alg_string_rule",
-    "metadata": {
-      "family": "string_transform",
-      "concept": "every_second_reverse",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0024"
-  },
-  {
-    "prompt": "Sum only the numbers greater than 11 from: 18, 9, 8, 14, 17, 13\nAnswer:",
-    "target": " 62",
-    "type": "algorithmic",
-    "tokens_approx": 19,
-    "tier": "short",
-    "source": "alg_filter_sum",
-    "metadata": {
-      "family": "filtering",
-      "concept": "sum_above_threshold",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0025"
-  },
-  {
-    "prompt": "Remove duplicate numbers, sort the remaining values in ascending order, and give the 4th number from: 6, 14, 15, 3, 17, 3, 14\nAnswer:",
-    "target": " 15",
-    "type": "algorithmic",
-    "tokens_approx": 31,
-    "tier": "brief",
-    "source": "alg_sort_dedup",
-    "metadata": {
-      "family": "sorting",
-      "concept": "sort_dedup_position",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0026"
-  },
-  {
-    "prompt": "Transform each number using this rule: if it is even, add 4; if it is odd, double it. Then subtract the first transformed value from the last transformed value for: 2, 4, 6, 11, 7\nAnswer:",
-    "target": " 8",
-    "type": "algorithmic",
-    "tokens_approx": 46,
-    "tier": "brief",
-    "source": "alg_transform_list",
-    "metadata": {
-      "family": "transforms",
-      "concept": "list_rule_then_difference",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0027"
-  },
-  {
-    "prompt": "For each number, use this rule: if it is even, halve it; if it is odd, add 1. Then sum the results for: 3, 13, 10, 4, 5, 6\nAnswer:",
-    "target": " 34",
-    "type": "algorithmic",
-    "tokens_approx": 39,
-    "tier": "brief",
-    "source": "alg_parity_rule",
-    "metadata": {
-      "family": "parity_divisibility",
-      "concept": "parity_sum_rule",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0028"
-  },
-  {
-    "prompt": "Is 89 divisible by 5? Answer yes or no.\nAnswer:",
-    "target": " no",
-    "type": "algorithmic",
-    "tokens_approx": 13,
-    "tier": "short",
-    "source": "alg_divisible",
-    "metadata": {
-      "family": "parity_divisibility",
-      "concept": "divisible_check",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0029"
-  },
-  {
-    "prompt": "Start with 9. Add 3. Double. Halve. Result:",
-    "target": " 12",
-    "type": "algorithmic",
-    "tokens_approx": 10,
-    "tier": "short",
-    "source": "alg_transform",
-    "metadata": {
-      "family": "transforms",
-      "concept": "running_transform",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0030"
-  },
-  {
-    "prompt": "Transform each number using this rule: if it is even, double it; if it is odd, add 3. Then give the largest transformed value from: 12, 19, 13, 5, 4\nAnswer:",
-    "target": " 24",
-    "type": "algorithmic",
-    "tokens_approx": 40,
-    "tier": "brief",
-    "source": "alg_select_transform",
-    "metadata": {
-      "family": "selection",
-      "concept": "largest_after_transform",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0031"
-  },
-  {
-    "prompt": "Use this mapping A=2, B=3, C=5, D=7. Sum the values for: B, A, A, D, C\nAnswer:",
-    "target": " 19",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_mapping",
-    "metadata": {
-      "family": "mapping",
-      "concept": "symbol_sum",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0032"
-  },
-  {
-    "prompt": "Remove duplicate numbers, sort the remaining values in ascending order, and give the 2nd number from: 2, 11, 11, 2, 5, 3, 16\nAnswer:",
-    "target": " 3",
-    "type": "algorithmic",
-    "tokens_approx": 31,
-    "tier": "brief",
-    "source": "alg_sort_dedup",
-    "metadata": {
-      "family": "sorting",
-      "concept": "sort_dedup_position",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0033"
-  },
-  {
-    "prompt": "Take the first letter of each word and combine them: blue, green, red\nAnswer:",
-    "target": " bgr",
-    "type": "algorithmic",
-    "tokens_approx": 18,
-    "tier": "short",
-    "source": "alg_initials",
-    "metadata": {
-      "family": "string_transform",
-      "concept": "first_letters",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0034"
-  },
-  {
-    "prompt": "Start with 26. Add 9. Then subtract 5. Result:",
-    "target": " 30",
-    "type": "algorithmic",
-    "tokens_approx": 11,
-    "tier": "short",
-    "source": "alg_arithmetic",
-    "metadata": {
-      "family": "arithmetic",
-      "concept": "three_step_update",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0035"
-  },
-  {
-    "prompt": "Take the first letter of each word and combine them: orange, black, yellow\nAnswer:",
-    "target": " oby",
-    "type": "algorithmic",
-    "tokens_approx": 18,
-    "tier": "short",
-    "source": "alg_initials",
-    "metadata": {
-      "family": "string_transform",
-      "concept": "first_letters",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0036"
-  },
-  {
-    "prompt": "For each number, use this rule: if it is even, halve it; if it is odd, add 1. Then sum the results for: 5, 7, 10, 6, 11, 2\nAnswer:",
-    "target": " 35",
-    "type": "algorithmic",
-    "tokens_approx": 39,
-    "tier": "brief",
-    "source": "alg_parity_rule",
-    "metadata": {
-      "family": "parity_divisibility",
-      "concept": "parity_sum_rule",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0037"
-  },
-  {
-    "prompt": "Transform each number using this rule: if it is even, add 4; if it is odd, double it. Then subtract the first transformed value from the last transformed value for: 11, 6, 2, 4, 8\nAnswer:",
-    "target": " -10",
-    "type": "algorithmic",
-    "tokens_approx": 46,
-    "tier": "brief",
-    "source": "alg_transform_list",
-    "metadata": {
-      "family": "transforms",
-      "concept": "list_rule_then_difference",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0038"
-  },
-  {
-    "prompt": "Take the first letter of each word and combine them: red, white, blue\nAnswer:",
-    "target": " rwb",
-    "type": "algorithmic",
-    "tokens_approx": 18,
-    "tier": "short",
-    "source": "alg_initials",
-    "metadata": {
-      "family": "string_transform",
-      "concept": "first_letters",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0039"
-  },
-  {
-    "prompt": "Take every second word starting from the second item in this list, reverse that smaller list, and return its 2nd item: omega, gamma, delta, theta, kappa, alpha\nAnswer:",
-    "target": " theta",
-    "type": "algorithmic",
-    "tokens_approx": 36,
-    "tier": "brief",
-    "source": "alg_string_rule",
-    "metadata": {
-      "family": "string_transform",
-      "concept": "every_second_reverse",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0040"
-  },
-  {
-    "prompt": "Add 6 and 12. Then multiply that result by the absolute difference between 10 and 8. Result:",
-    "target": " 36",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_arithmetic2",
-    "metadata": {
-      "family": "arithmetic",
-      "concept": "two_stage_arithmetic",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0041"
-  },
-  {
-    "prompt": "Start with 29. Add 14. Then subtract 9. Result:",
-    "target": " 34",
-    "type": "algorithmic",
-    "tokens_approx": 11,
-    "tier": "short",
-    "source": "alg_arithmetic",
-    "metadata": {
-      "family": "arithmetic",
-      "concept": "three_step_update",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0042"
-  },
-  {
-    "prompt": "Transform each number using this rule: if it is even, add 4; if it is odd, double it. Then subtract the first transformed value from the last transformed value for: 9, 11, 7, 5, 4\nAnswer:",
-    "target": " -10",
-    "type": "algorithmic",
-    "tokens_approx": 46,
-    "tier": "brief",
-    "source": "alg_transform_list",
-    "metadata": {
-      "family": "transforms",
-      "concept": "list_rule_then_difference",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0043"
-  },
-  {
-    "prompt": "Count how many numbers are both greater than 8 and even in: 10, 9, 2, 13, 23, 22, 4, 5\nAnswer:",
-    "target": " 2",
-    "type": "algorithmic",
-    "tokens_approx": 27,
-    "tier": "short",
-    "source": "alg_filter_count",
-    "metadata": {
-      "family": "filtering",
-      "concept": "count_even_above_threshold",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0044"
-  },
-  {
-    "prompt": "Transform each number using this rule: if it is even, double it; if it is odd, add 3. Then give the largest transformed value from: 3, 7, 11, 6, 2\nAnswer:",
-    "target": " 14",
-    "type": "algorithmic",
-    "tokens_approx": 40,
-    "tier": "brief",
-    "source": "alg_select_transform",
-    "metadata": {
-      "family": "selection",
-      "concept": "largest_after_transform",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0045"
-  },
-  {
-    "prompt": "Sum only the numbers greater than 8 from: 12, 14, 7, 2, 6, 11\nAnswer:",
-    "target": " 37",
-    "type": "algorithmic",
-    "tokens_approx": 19,
-    "tier": "short",
-    "source": "alg_filter_sum",
-    "metadata": {
-      "family": "filtering",
-      "concept": "sum_above_threshold",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0046"
-  },
-  {
-    "prompt": "Sort these numbers in ascending order and give the 4th number: 5, 28, 21, 22, 14\nAnswer:",
-    "target": " 22",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_sort",
-    "metadata": {
-      "family": "sorting",
-      "concept": "sorted_position",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0047"
-  },
-  {
-    "prompt": "Sort these numbers in ascending order and give the 2nd number: 6, 19, 18, 12, 17\nAnswer:",
-    "target": " 12",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_sort",
-    "metadata": {
-      "family": "sorting",
-      "concept": "sorted_position",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0048"
-  },
-  {
-    "prompt": "Transform each number using this rule: if it is even, add 4; if it is odd, double it. Then subtract the first transformed value from the last transformed value for: 4, 2, 6, 9, 5\nAnswer:",
-    "target": " 2",
-    "type": "algorithmic",
-    "tokens_approx": 46,
-    "tier": "brief",
-    "source": "alg_transform_list",
-    "metadata": {
-      "family": "transforms",
-      "concept": "list_rule_then_difference",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0049"
-  },
-  {
-    "prompt": "Rotate this list left by 2 positions and give the 2nd item: gamma, sigma, delta, beta, alpha\nAnswer:",
-    "target": " beta",
-    "type": "algorithmic",
-    "tokens_approx": 23,
-    "tier": "short",
-    "source": "alg_extract_rotate",
-    "metadata": {
-      "family": "extraction",
-      "concept": "rotation_then_extract",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0050"
-  },
-  {
-    "prompt": "Use this mapping A=2, B=3, C=5, D=7. Sum the values for: B, C, D, C, A\nAnswer:",
-    "target": " 22",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_mapping",
-    "metadata": {
-      "family": "mapping",
-      "concept": "symbol_sum",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0051"
-  },
-  {
-    "prompt": "Sum only the numbers greater than 6 from: 14, 16, 12, 13, 9, 5\nAnswer:",
-    "target": " 64",
-    "type": "algorithmic",
-    "tokens_approx": 19,
-    "tier": "short",
-    "source": "alg_filter_sum",
-    "metadata": {
-      "family": "filtering",
-      "concept": "sum_above_threshold",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0052"
-  },
-  {
-    "prompt": "Start with 9. Double. Subtract 4. Add 3. Result:",
-    "target": " 17",
-    "type": "algorithmic",
-    "tokens_approx": 11,
-    "tier": "short",
-    "source": "alg_transform",
-    "metadata": {
-      "family": "transforms",
-      "concept": "running_transform",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0053"
-  },
-  {
-    "prompt": "Sort these numbers in ascending order and give the 3rd number: 26, 14, 4, 19, 25\nAnswer:",
-    "target": " 19",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_sort",
-    "metadata": {
-      "family": "sorting",
-      "concept": "sorted_position",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0054"
-  },
-  {
-    "prompt": "Remove duplicates while keeping first occurrence order: yellow, red, yellow, yellow, blue, black\nHow many items remain?",
-    "target": " 4",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_dedup",
-    "metadata": {
-      "family": "deduplication",
-      "concept": "count_unique_ordered",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0055"
-  },
-  {
-    "prompt": "Use this mapping A=2, B=3, C=5, D=7. Sum the values for: D, A, D, C, C\nAnswer:",
-    "target": " 26",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_mapping",
-    "metadata": {
-      "family": "mapping",
-      "concept": "symbol_sum",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0056"
-  },
-  {
-    "prompt": "What is the word in position 2 of this list: delta, sigma, beta, theta, omega\nAnswer:",
-    "target": " sigma",
-    "type": "algorithmic",
-    "tokens_approx": 20,
-    "tier": "short",
-    "source": "alg_extract",
-    "metadata": {
-      "family": "extraction",
-      "concept": "nth_item",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0057"
-  },
-  {
-    "prompt": "Use this mapping A=2, B=3, C=5, D=7. Sum the values for: C, B, D, C, A\nAnswer:",
-    "target": " 22",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_mapping",
-    "metadata": {
-      "family": "mapping",
-      "concept": "symbol_sum",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0058"
-  },
-  {
-    "prompt": "Is 35 divisible by 5? Answer yes or no.\nAnswer:",
-    "target": " yes",
-    "type": "algorithmic",
-    "tokens_approx": 13,
-    "tier": "short",
-    "source": "alg_divisible",
-    "metadata": {
-      "family": "parity_divisibility",
-      "concept": "divisible_check",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0059"
-  },
-  {
-    "prompt": "Remove duplicate numbers, sort the remaining values in ascending order, and give the 3rd number from: 11, 7, 2, 11, 1, 3, 2\nAnswer:",
-    "target": " 3",
-    "type": "algorithmic",
-    "tokens_approx": 31,
-    "tier": "brief",
-    "source": "alg_sort_dedup",
-    "metadata": {
-      "family": "sorting",
-      "concept": "sort_dedup_position",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0060"
-  },
-  {
-    "prompt": "Add 11 and 17. Then multiply that result by the absolute difference between 7 and 5. Result:",
-    "target": " 56",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_arithmetic2",
-    "metadata": {
-      "family": "arithmetic",
-      "concept": "two_stage_arithmetic",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0061"
-  },
-  {
-    "prompt": "Remove duplicates while keeping first occurrence order: blue, red, black, blue, blue, yellow\nHow many items remain?",
-    "target": " 4",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_dedup",
-    "metadata": {
-      "family": "deduplication",
-      "concept": "count_unique_ordered",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0062"
-  },
-  {
-    "prompt": "Transform each number using this rule: if it is even, double it; if it is odd, add 3. Then give the largest transformed value from: 19, 10, 15, 2, 14\nAnswer:",
-    "target": " 28",
-    "type": "algorithmic",
-    "tokens_approx": 40,
-    "tier": "brief",
-    "source": "alg_select_transform",
-    "metadata": {
-      "family": "selection",
-      "concept": "largest_after_transform",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0063"
-  },
-  {
-    "prompt": "Count how many times \"dog\" appears in: bird stone leaf dog bird dog tree dog leaf\nAnswer:",
-    "target": " 3",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_counting",
-    "metadata": {
-      "family": "counting",
-      "concept": "token_count",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0064"
-  },
-  {
-    "prompt": "Start with 12. Add 10. Then subtract 5. Result:",
-    "target": " 17",
-    "type": "algorithmic",
-    "tokens_approx": 11,
-    "tier": "short",
-    "source": "alg_arithmetic",
-    "metadata": {
-      "family": "arithmetic",
-      "concept": "three_step_update",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0065"
-  },
-  {
-    "prompt": "Count how many times \"blue\" appears in: blue blue cat red stone red bird leaf blue blue blue stone fish blue\nAnswer:",
-    "target": " 6",
-    "type": "algorithmic",
-    "tokens_approx": 28,
-    "tier": "short",
-    "source": "alg_counting",
-    "metadata": {
-      "family": "counting",
-      "concept": "token_count",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0066"
-  },
-  {
-    "prompt": "Count how many numbers are both greater than 8 and even in: 14, 17, 21, 7, 3, 11, 8, 13\nAnswer:",
-    "target": " 1",
-    "type": "algorithmic",
-    "tokens_approx": 27,
-    "tier": "short",
-    "source": "alg_filter_count",
-    "metadata": {
-      "family": "filtering",
-      "concept": "count_even_above_threshold",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0067"
-  },
-  {
-    "prompt": "Take every second word starting from the second item in this list, reverse that smaller list, and return its 2nd item: alpha, kappa, theta, omega, delta, gamma\nAnswer:",
-    "target": " omega",
-    "type": "algorithmic",
-    "tokens_approx": 36,
-    "tier": "brief",
-    "source": "alg_string_rule",
-    "metadata": {
-      "family": "string_transform",
-      "concept": "every_second_reverse",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0068"
-  },
-  {
-    "prompt": "Remove duplicate numbers, sort the remaining values in ascending order, and give the 3rd number from: 7, 1, 7, 19, 2, 12, 2\nAnswer:",
-    "target": " 7",
-    "type": "algorithmic",
-    "tokens_approx": 31,
-    "tier": "brief",
-    "source": "alg_sort_dedup",
-    "metadata": {
-      "family": "sorting",
-      "concept": "sort_dedup_position",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0069"
-  },
-  {
-    "prompt": "Use this mapping A=2, B=3, C=5, D=7. Sum the values for: B, B, C, B, C\nAnswer:",
-    "target": " 19",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_mapping",
-    "metadata": {
-      "family": "mapping",
-      "concept": "symbol_sum",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0070"
-  },
-  {
-    "prompt": "Use this mapping A=2, B=3, C=5, D=7. Sum the values for: A, D, C, B, A\nAnswer:",
-    "target": " 19",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_mapping",
-    "metadata": {
-      "family": "mapping",
-      "concept": "symbol_sum",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0071"
-  },
-  {
-    "prompt": "Count how many numbers are both greater than 8 and even in: 14, 11, 18, 5, 2, 7, 1, 19\nAnswer:",
-    "target": " 2",
-    "type": "algorithmic",
-    "tokens_approx": 27,
-    "tier": "short",
-    "source": "alg_filter_count",
-    "metadata": {
-      "family": "filtering",
-      "concept": "count_even_above_threshold",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0072"
-  },
-  {
-    "prompt": "Count how many times \"dog\" appears in: red dog dog dog fish red tree red dog fish\nAnswer:",
-    "target": " 4",
-    "type": "algorithmic",
-    "tokens_approx": 23,
-    "tier": "short",
-    "source": "alg_counting",
-    "metadata": {
-      "family": "counting",
-      "concept": "token_count",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0073"
-  },
-  {
-    "prompt": "Rotate this list left by 3 positions and give the 4th item: gamma, theta, omega, sigma, alpha\nAnswer:",
-    "target": " theta",
-    "type": "algorithmic",
-    "tokens_approx": 23,
-    "tier": "short",
-    "source": "alg_extract_rotate",
-    "metadata": {
-      "family": "extraction",
-      "concept": "rotation_then_extract",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0074"
-  },
-  {
-    "prompt": "Take every second word starting from the second item in this list, reverse that smaller list, and return its 2nd item: gamma, kappa, sigma, delta, theta, alpha\nAnswer:",
-    "target": " delta",
-    "type": "algorithmic",
-    "tokens_approx": 36,
-    "tier": "brief",
-    "source": "alg_string_rule",
-    "metadata": {
-      "family": "string_transform",
-      "concept": "every_second_reverse",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0075"
-  },
-  {
-    "prompt": "Sum only the numbers greater than 8 from: 13, 11, 4, 16, 7, 3\nAnswer:",
-    "target": " 40",
-    "type": "algorithmic",
-    "tokens_approx": 19,
-    "tier": "short",
-    "source": "alg_filter_sum",
-    "metadata": {
-      "family": "filtering",
-      "concept": "sum_above_threshold",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0076"
-  },
-  {
-    "prompt": "Transform each number using this rule: if it is even, double it; if it is odd, add 3. Then give the largest transformed value from: 3, 14, 4, 11, 17\nAnswer:",
-    "target": " 28",
-    "type": "algorithmic",
-    "tokens_approx": 40,
-    "tier": "brief",
-    "source": "alg_select_transform",
-    "metadata": {
-      "family": "selection",
-      "concept": "largest_after_transform",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0077"
-  },
-  {
-    "prompt": "What is the last letter of the word silver?\nAnswer:",
-    "target": " r",
-    "type": "algorithmic",
-    "tokens_approx": 13,
-    "tier": "short",
-    "source": "alg_last_letter",
-    "metadata": {
-      "family": "string_transform",
-      "concept": "last_letter",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0078"
-  },
-  {
-    "prompt": "Count how many numbers are both greater than 8 and even in: 12, 5, 20, 17, 18, 24, 8, 9\nAnswer:",
-    "target": " 4",
-    "type": "algorithmic",
-    "tokens_approx": 27,
-    "tier": "short",
-    "source": "alg_filter_count",
-    "metadata": {
-      "family": "filtering",
-      "concept": "count_even_above_threshold",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0079"
-  },
-  {
-    "prompt": "Rotate this list left by 1 positions and give the 4th item: omega, sigma, delta, beta, theta\nAnswer:",
-    "target": " theta",
-    "type": "algorithmic",
-    "tokens_approx": 23,
-    "tier": "short",
-    "source": "alg_extract_rotate",
-    "metadata": {
-      "family": "extraction",
-      "concept": "rotation_then_extract",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0080"
-  },
-  {
-    "prompt": "Reverse this word: forest\nAnswer:",
-    "target": " tserof",
-    "type": "algorithmic",
-    "tokens_approx": 6,
-    "tier": "short",
-    "source": "alg_reverse",
-    "metadata": {
-      "family": "string_transform",
-      "concept": "reverse_word",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0081"
-  },
-  {
-    "prompt": "Start with 5. Add 3. Subtract 4. Double. Result:",
-    "target": " 8",
-    "type": "algorithmic",
-    "tokens_approx": 11,
-    "tier": "short",
-    "source": "alg_transform",
-    "metadata": {
-      "family": "transforms",
-      "concept": "running_transform",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0082"
-  },
-  {
-    "prompt": "Count how many times \"dog\" appears in: blue blue sun dog dog dog tree fish leaf cat dog fish cat dog\nAnswer:",
-    "target": " 5",
-    "type": "algorithmic",
-    "tokens_approx": 28,
-    "tier": "short",
-    "source": "alg_counting",
-    "metadata": {
-      "family": "counting",
-      "concept": "token_count",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0083"
-  },
-  {
-    "prompt": "Sum only the numbers greater than 9 from: 11, 5, 4, 15, 16, 14\nAnswer:",
-    "target": " 56",
-    "type": "algorithmic",
-    "tokens_approx": 19,
-    "tier": "short",
-    "source": "alg_filter_sum",
-    "metadata": {
-      "family": "filtering",
-      "concept": "sum_above_threshold",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0084"
-  },
-  {
-    "prompt": "Add 2 and 6. Then multiply that result by the absolute difference between 8 and 16. Result:",
-    "target": " 64",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_arithmetic2",
-    "metadata": {
-      "family": "arithmetic",
-      "concept": "two_stage_arithmetic",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0085"
-  },
-  {
-    "prompt": "Remove duplicates while keeping first occurrence order: black, yellow, red, red, black, blue\nHow many items remain?",
-    "target": " 4",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_dedup",
-    "metadata": {
-      "family": "deduplication",
-      "concept": "count_unique_ordered",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0086"
-  },
-  {
-    "prompt": "For each number, use this rule: if it is even, halve it; if it is odd, add 1. Then sum the results for: 12, 11, 4, 10, 5, 9\nAnswer:",
-    "target": " 41",
-    "type": "algorithmic",
-    "tokens_approx": 39,
-    "tier": "brief",
-    "source": "alg_parity_rule",
-    "metadata": {
-      "family": "parity_divisibility",
-      "concept": "parity_sum_rule",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0087"
-  },
-  {
-    "prompt": "Add 17 and 16. Then multiply that result by the absolute difference between 14 and 9. Result:",
-    "target": " 165",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_arithmetic2",
-    "metadata": {
-      "family": "arithmetic",
-      "concept": "two_stage_arithmetic",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0088"
-  },
-  {
-    "prompt": "Count how many times \"red\" appears in: cat red bird red cat red red red\nAnswer:",
-    "target": " 5",
-    "type": "algorithmic",
-    "tokens_approx": 20,
-    "tier": "short",
-    "source": "alg_counting",
-    "metadata": {
-      "family": "counting",
-      "concept": "token_count",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0089"
-  },
-  {
-    "prompt": "Take every second word starting from the second item in this list, reverse that smaller list, and return its 2nd item: theta, beta, sigma, alpha, gamma, kappa\nAnswer:",
-    "target": " alpha",
-    "type": "algorithmic",
-    "tokens_approx": 36,
-    "tier": "brief",
-    "source": "alg_string_rule",
-    "metadata": {
-      "family": "string_transform",
-      "concept": "every_second_reverse",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0090"
-  },
-  {
-    "prompt": "What is the last letter of the word forest?\nAnswer:",
-    "target": " t",
-    "type": "algorithmic",
-    "tokens_approx": 13,
-    "tier": "short",
-    "source": "alg_last_letter",
-    "metadata": {
-      "family": "string_transform",
-      "concept": "last_letter",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0091"
-  },
-  {
-    "prompt": "Rotate this list left by 3 positions and give the 2nd item: alpha, beta, omega, sigma, delta\nAnswer:",
-    "target": " delta",
-    "type": "algorithmic",
-    "tokens_approx": 23,
-    "tier": "short",
-    "source": "alg_extract_rotate",
-    "metadata": {
-      "family": "extraction",
-      "concept": "rotation_then_extract",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0092"
-  },
-  {
-    "prompt": "Count how many times \"tree\" appears in: tree tree tree bird bird tree cat dog stone\nAnswer:",
-    "target": " 4",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_counting",
-    "metadata": {
-      "family": "counting",
-      "concept": "token_count",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0093"
-  },
-  {
-    "prompt": "Is 91 divisible by 5? Answer yes or no.\nAnswer:",
-    "target": " no",
-    "type": "algorithmic",
-    "tokens_approx": 13,
-    "tier": "short",
-    "source": "alg_divisible",
-    "metadata": {
-      "family": "parity_divisibility",
-      "concept": "divisible_check",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0094"
-  },
-  {
-    "prompt": "Start with 4. Add 3. Subtract 4. Halve. Result:",
-    "target": " 1",
-    "type": "algorithmic",
-    "tokens_approx": 11,
-    "tier": "short",
-    "source": "alg_transform",
-    "metadata": {
-      "family": "transforms",
-      "concept": "running_transform",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0095"
-  },
-  {
-    "prompt": "Start with 31. Add 9. Then subtract 5. Result:",
-    "target": " 35",
-    "type": "algorithmic",
-    "tokens_approx": 11,
-    "tier": "short",
-    "source": "alg_arithmetic",
-    "metadata": {
-      "family": "arithmetic",
-      "concept": "three_step_update",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0096"
-  },
-  {
-    "prompt": "Remove duplicates while keeping first occurrence order: yellow, blue, green, red, red, blue\nHow many items remain?",
-    "target": " 4",
-    "type": "algorithmic",
-    "tokens_approx": 22,
-    "tier": "short",
-    "source": "alg_dedup",
-    "metadata": {
-      "family": "deduplication",
-      "concept": "count_unique_ordered",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0097"
-  },
-  {
-    "prompt": "Start with 9. Double. Add 3. Subtract 4. Result:",
-    "target": " 17",
-    "type": "algorithmic",
-    "tokens_approx": 11,
-    "tier": "short",
-    "source": "alg_transform",
-    "metadata": {
-      "family": "transforms",
-      "concept": "running_transform",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0098"
-  },
-  {
-    "prompt": "Start with 5. Halve. Double. Subtract 4. Result:",
-    "target": " 0",
-    "type": "algorithmic",
-    "tokens_approx": 10,
-    "tier": "short",
-    "source": "alg_transform",
-    "metadata": {
-      "family": "transforms",
-      "concept": "running_transform",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0099"
-  },
-  {
-    "prompt": "Reverse this word: bridge\nAnswer:",
-    "target": " egdirb",
-    "type": "algorithmic",
-    "tokens_approx": 6,
-    "tier": "short",
-    "source": "alg_reverse",
-    "metadata": {
-      "family": "string_transform",
-      "concept": "reverse_word",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0100"
-  },
-  {
-    "prompt": "For each number, use this rule: if it is even, halve it; if it is odd, add 1. Then sum the results for: 1, 8, 6, 4, 13, 7\nAnswer:",
-    "target": " 33",
-    "type": "algorithmic",
-    "tokens_approx": 39,
-    "tier": "brief",
-    "source": "alg_parity_rule",
-    "metadata": {
-      "family": "parity_divisibility",
-      "concept": "parity_sum_rule",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0101"
-  },
-  {
-    "prompt": "For each number, use this rule: if it is even, halve it; if it is odd, add 1. Then sum the results for: 5, 3, 4, 14, 6, 13\nAnswer:",
-    "target": " 36",
-    "type": "algorithmic",
-    "tokens_approx": 39,
-    "tier": "brief",
-    "source": "alg_parity_rule",
-    "metadata": {
-      "family": "parity_divisibility",
-      "concept": "parity_sum_rule",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0102"
-  },
-  {
-    "prompt": "What is the word in position 2 of this list: alpha, beta, delta, gamma, theta\nAnswer:",
-    "target": " beta",
-    "type": "algorithmic",
-    "tokens_approx": 20,
-    "tier": "short",
-    "source": "alg_extract",
-    "metadata": {
-      "family": "extraction",
-      "concept": "nth_item",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0103"
-  },
-  {
-    "prompt": "Is 47 divisible by 4? Answer yes or no.\nAnswer:",
-    "target": " no",
-    "type": "algorithmic",
-    "tokens_approx": 13,
-    "tier": "short",
-    "source": "alg_divisible",
-    "metadata": {
-      "family": "parity_divisibility",
-      "concept": "divisible_check",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0104"
-  },
-  {
-    "prompt": "What is the last letter of the word magnet?\nAnswer:",
-    "target": " t",
-    "type": "algorithmic",
-    "tokens_approx": 13,
-    "tier": "short",
-    "source": "alg_last_letter",
-    "metadata": {
-      "family": "string_transform",
-      "concept": "last_letter",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0105"
-  },
-  {
-    "prompt": "What is the word in position 3 of this list: sigma, delta, gamma, omega, beta\nAnswer:",
-    "target": " gamma",
-    "type": "algorithmic",
-    "tokens_approx": 20,
-    "tier": "short",
-    "source": "alg_extract",
-    "metadata": {
-      "family": "extraction",
-      "concept": "nth_item",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0106"
-  },
-  {
-    "prompt": "Start with 19. Add 4. Then subtract 5. Result:",
-    "target": " 18",
-    "type": "algorithmic",
-    "tokens_approx": 11,
-    "tier": "short",
-    "source": "alg_arithmetic",
-    "metadata": {
-      "family": "arithmetic",
-      "concept": "three_step_update",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0107"
-  },
-  {
-    "prompt": "For each number, use this rule: if it is even, halve it; if it is odd, add 1. Then sum the results for: 11, 5, 1, 6, 4, 10\nAnswer:",
-    "target": " 30",
-    "type": "algorithmic",
-    "tokens_approx": 39,
-    "tier": "brief",
-    "source": "alg_parity_rule",
-    "metadata": {
-      "family": "parity_divisibility",
-      "concept": "parity_sum_rule",
-      "difficulty": "medium"
-    },
-    "id": "alg_seed_0108"
-  },
-  {
-    "prompt": "Is 31 divisible by 4? Answer yes or no.\nAnswer:",
-    "target": " no",
-    "type": "algorithmic",
-    "tokens_approx": 13,
-    "tier": "short",
-    "source": "alg_divisible",
-    "metadata": {
-      "family": "parity_divisibility",
-      "concept": "divisible_check",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0109"
-  },
-  {
-    "prompt": "What is the word in position 2 of this list: beta, theta, alpha, sigma, delta\nAnswer:",
-    "target": " theta",
-    "type": "algorithmic",
-    "tokens_approx": 20,
-    "tier": "short",
-    "source": "alg_extract",
-    "metadata": {
-      "family": "extraction",
-      "concept": "nth_item",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0110"
   },
   {
     "prompt": "Reverse this word: window\nAnswer:",
@@ -1565,25 +179,67 @@
       "concept": "reverse_word",
       "difficulty": "easy"
     },
-    "id": "alg_seed_0111"
+    "id": "alg_seed_0012"
   },
   {
-    "prompt": "Choose the largest number from: 2, 27, 5, 29, 3\nAnswer:",
-    "target": " 29",
+    "prompt": "Take every second word starting from the second item in this list, reverse that smaller list, and return its 2nd item: omega, sigma, kappa, delta, theta, beta\nAnswer:",
+    "target": " delta",
     "type": "algorithmic",
-    "tokens_approx": 14,
-    "tier": "short",
-    "source": "alg_select",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "alg_string_rule",
     "metadata": {
-      "family": "selection",
-      "concept": "largest_value",
-      "difficulty": "easy"
+      "family": "string_transform",
+      "concept": "every_second_reverse",
+      "difficulty": "medium"
     },
-    "id": "alg_seed_0112"
+    "id": "alg_seed_0013"
   },
   {
-    "prompt": "What is the word in position 3 of this list: theta, omega, alpha, sigma, beta\nAnswer:",
+    "prompt": "Take every second word starting from the second item in this list, reverse that smaller list, and return its 2nd item: gamma, omega, delta, alpha, theta, sigma\nAnswer:",
     "target": " alpha",
+    "type": "algorithmic",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "alg_string_rule",
+    "metadata": {
+      "family": "string_transform",
+      "concept": "every_second_reverse",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0014"
+  },
+  {
+    "prompt": "Start with 8. Double. Add 3. Subtract 4. Result:",
+    "target": " 15",
+    "type": "algorithmic",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "alg_transform",
+    "metadata": {
+      "family": "transforms",
+      "concept": "running_transform",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0015"
+  },
+  {
+    "prompt": "Sum only the numbers greater than 6 from: 15, 17, 9, 1, 11, 12\nAnswer:",
+    "target": " 64",
+    "type": "algorithmic",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "alg_filter_sum",
+    "metadata": {
+      "family": "filtering",
+      "concept": "sum_above_threshold",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0016"
+  },
+  {
+    "prompt": "What is the word in position 3 of this list: omega, gamma, sigma, alpha, beta\nAnswer:",
+    "target": " sigma",
     "type": "algorithmic",
     "tokens_approx": 20,
     "tier": "short",
@@ -1593,7 +249,847 @@
       "concept": "nth_item",
       "difficulty": "easy"
     },
-    "id": "alg_seed_0113"
+    "id": "alg_seed_0017"
+  },
+  {
+    "prompt": "Take the first letter of each word and combine them: red, white, green\nAnswer:",
+    "target": " rwg",
+    "type": "algorithmic",
+    "tokens_approx": 18,
+    "tier": "short",
+    "source": "alg_initials",
+    "metadata": {
+      "family": "string_transform",
+      "concept": "first_letters",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0018"
+  },
+  {
+    "prompt": "Use this mapping A=2, B=3, C=5, D=7. Sum the values for: D, C, A, C, D\nAnswer:",
+    "target": " 26",
+    "type": "algorithmic",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "alg_mapping",
+    "metadata": {
+      "family": "mapping",
+      "concept": "symbol_sum",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0019"
+  },
+  {
+    "prompt": "For each number, use this rule: if it is even, halve it; if it is odd, add 1. Then sum the results for: 4, 3, 6, 13, 9, 10\nAnswer:",
+    "target": " 38",
+    "type": "algorithmic",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "alg_parity_rule",
+    "metadata": {
+      "family": "parity_divisibility",
+      "concept": "parity_sum_rule",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0020"
+  },
+  {
+    "prompt": "Remove duplicates while keeping first occurrence order: black, blue, red, black, green, blue\nHow many items remain?",
+    "target": " 4",
+    "type": "algorithmic",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "alg_dedup",
+    "metadata": {
+      "family": "deduplication",
+      "concept": "count_unique_ordered",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0021"
+  },
+  {
+    "prompt": "Add 17 and 4. Then multiply that result by the absolute difference between 6 and 18. Result:",
+    "target": " 252",
+    "type": "algorithmic",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "alg_arithmetic2",
+    "metadata": {
+      "family": "arithmetic",
+      "concept": "two_stage_arithmetic",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0022"
+  },
+  {
+    "prompt": "Count how many numbers are both greater than 8 and even in: 18, 6, 9, 17, 20, 14, 7, 24\nAnswer:",
+    "target": " 4",
+    "type": "algorithmic",
+    "tokens_approx": 27,
+    "tier": "short",
+    "source": "alg_filter_count",
+    "metadata": {
+      "family": "filtering",
+      "concept": "count_even_above_threshold",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0023"
+  },
+  {
+    "prompt": "Rotate this list left by 2 positions and give the 2nd item: delta, sigma, gamma, theta, omega\nAnswer:",
+    "target": " theta",
+    "type": "algorithmic",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "alg_extract_rotate",
+    "metadata": {
+      "family": "extraction",
+      "concept": "rotation_then_extract",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0024"
+  },
+  {
+    "prompt": "Take every second word starting from the second item in this list, reverse that smaller list, and return its 2nd item: beta, gamma, alpha, omega, kappa, theta\nAnswer:",
+    "target": " omega",
+    "type": "algorithmic",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "alg_string_rule",
+    "metadata": {
+      "family": "string_transform",
+      "concept": "every_second_reverse",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0025"
+  },
+  {
+    "prompt": "Remove duplicates while keeping first occurrence order: green, yellow, black, yellow, black, red\nHow many items remain?",
+    "target": " 4",
+    "type": "algorithmic",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "alg_dedup",
+    "metadata": {
+      "family": "deduplication",
+      "concept": "count_unique_ordered",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0026"
+  },
+  {
+    "prompt": "Count how many numbers are both greater than 8 and even in: 12, 14, 23, 15, 2, 4, 20, 13\nAnswer:",
+    "target": " 3",
+    "type": "algorithmic",
+    "tokens_approx": 27,
+    "tier": "short",
+    "source": "alg_filter_count",
+    "metadata": {
+      "family": "filtering",
+      "concept": "count_even_above_threshold",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0027"
+  },
+  {
+    "prompt": "Rotate this list left by 3 positions and give the 3rd item: theta, alpha, beta, omega, sigma\nAnswer:",
+    "target": " theta",
+    "type": "algorithmic",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "alg_extract_rotate",
+    "metadata": {
+      "family": "extraction",
+      "concept": "rotation_then_extract",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0028"
+  },
+  {
+    "prompt": "Choose the largest number from: 16, 5, 29, 36, 7\nAnswer:",
+    "target": " 36",
+    "type": "algorithmic",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "alg_select",
+    "metadata": {
+      "family": "selection",
+      "concept": "largest_value",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0029"
+  },
+  {
+    "prompt": "Take the first letter of each word and combine them: blue, red, black\nAnswer:",
+    "target": " brb",
+    "type": "algorithmic",
+    "tokens_approx": 18,
+    "tier": "short",
+    "source": "alg_initials",
+    "metadata": {
+      "family": "string_transform",
+      "concept": "first_letters",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0030"
+  },
+  {
+    "prompt": "Rotate this list left by 3 positions and give the 3rd item: alpha, sigma, gamma, theta, delta\nAnswer:",
+    "target": " alpha",
+    "type": "algorithmic",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "alg_extract_rotate",
+    "metadata": {
+      "family": "extraction",
+      "concept": "rotation_then_extract",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0031"
+  },
+  {
+    "prompt": "For each number, use this rule: if it is even, halve it; if it is odd, add 1. Then sum the results for: 14, 9, 3, 1, 13, 2\nAnswer:",
+    "target": " 38",
+    "type": "algorithmic",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "alg_parity_rule",
+    "metadata": {
+      "family": "parity_divisibility",
+      "concept": "parity_sum_rule",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0032"
+  },
+  {
+    "prompt": "Transform each number using this rule: if it is even, add 4; if it is odd, double it. Then subtract the first transformed value from the last transformed value for: 2, 10, 11, 4, 8\nAnswer:",
+    "target": " 6",
+    "type": "algorithmic",
+    "tokens_approx": 46,
+    "tier": "brief",
+    "source": "alg_transform_list",
+    "metadata": {
+      "family": "transforms",
+      "concept": "list_rule_then_difference",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0033"
+  },
+  {
+    "prompt": "Count how many times \"sun\" appears in: stone sun stone leaf tree sun sun dog tree\nAnswer:",
+    "target": " 3",
+    "type": "algorithmic",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "alg_counting",
+    "metadata": {
+      "family": "counting",
+      "concept": "token_count",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0034"
+  },
+  {
+    "prompt": "Remove duplicates while keeping first occurrence order: black, red, yellow, black, blue, red\nHow many items remain?",
+    "target": " 4",
+    "type": "algorithmic",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "alg_dedup",
+    "metadata": {
+      "family": "deduplication",
+      "concept": "count_unique_ordered",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0035"
+  },
+  {
+    "prompt": "Transform each number using this rule: if it is even, add 4; if it is odd, double it. Then subtract the first transformed value from the last transformed value for: 6, 5, 3, 8, 7\nAnswer:",
+    "target": " 4",
+    "type": "algorithmic",
+    "tokens_approx": 46,
+    "tier": "brief",
+    "source": "alg_transform_list",
+    "metadata": {
+      "family": "transforms",
+      "concept": "list_rule_then_difference",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0036"
+  },
+  {
+    "prompt": "For each number, use this rule: if it is even, halve it; if it is odd, add 1. Then sum the results for: 5, 10, 11, 9, 1, 12\nAnswer:",
+    "target": " 41",
+    "type": "algorithmic",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "alg_parity_rule",
+    "metadata": {
+      "family": "parity_divisibility",
+      "concept": "parity_sum_rule",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0037"
+  },
+  {
+    "prompt": "Transform each number using this rule: if it is even, double it; if it is odd, add 3. Then give the largest transformed value from: 5, 6, 10, 3, 16\nAnswer:",
+    "target": " 32",
+    "type": "algorithmic",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "alg_select_transform",
+    "metadata": {
+      "family": "selection",
+      "concept": "largest_after_transform",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0038"
+  },
+  {
+    "prompt": "What is the word in position 2 of this list: theta, gamma, omega, delta, beta\nAnswer:",
+    "target": " gamma",
+    "type": "algorithmic",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "alg_extract",
+    "metadata": {
+      "family": "extraction",
+      "concept": "nth_item",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0039"
+  },
+  {
+    "prompt": "Add 15 and 10. Then multiply that result by the absolute difference between 3 and 2. Result:",
+    "target": " 25",
+    "type": "algorithmic",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "alg_arithmetic2",
+    "metadata": {
+      "family": "arithmetic",
+      "concept": "two_stage_arithmetic",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0040"
+  },
+  {
+    "prompt": "Transform each number using this rule: if it is even, double it; if it is odd, add 3. Then give the largest transformed value from: 6, 10, 7, 13, 9\nAnswer:",
+    "target": " 20",
+    "type": "algorithmic",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "alg_select_transform",
+    "metadata": {
+      "family": "selection",
+      "concept": "largest_after_transform",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0041"
+  },
+  {
+    "prompt": "For each number, use this rule: if it is even, halve it; if it is odd, add 1. Then sum the results for: 7, 9, 1, 2, 11, 3\nAnswer:",
+    "target": " 37",
+    "type": "algorithmic",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "alg_parity_rule",
+    "metadata": {
+      "family": "parity_divisibility",
+      "concept": "parity_sum_rule",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0042"
+  },
+  {
+    "prompt": "Count how many times \"cat\" appears in: dog blue tree cat leaf cat bird stone cat dog\nAnswer:",
+    "target": " 3",
+    "type": "algorithmic",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "alg_counting",
+    "metadata": {
+      "family": "counting",
+      "concept": "token_count",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0043"
+  },
+  {
+    "prompt": "Transform each number using this rule: if it is even, add 4; if it is odd, double it. Then subtract the first transformed value from the last transformed value for: 3, 7, 1, 11, 6\nAnswer:",
+    "target": " 4",
+    "type": "algorithmic",
+    "tokens_approx": 46,
+    "tier": "brief",
+    "source": "alg_transform_list",
+    "metadata": {
+      "family": "transforms",
+      "concept": "list_rule_then_difference",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0044"
+  },
+  {
+    "prompt": "Remove duplicates while keeping first occurrence order: black, yellow, red, blue, red, yellow\nHow many items remain?",
+    "target": " 4",
+    "type": "algorithmic",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "alg_dedup",
+    "metadata": {
+      "family": "deduplication",
+      "concept": "count_unique_ordered",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0045"
+  },
+  {
+    "prompt": "Sort these numbers in ascending order and give the 4th number: 27, 26, 28, 8, 1\nAnswer:",
+    "target": " 27",
+    "type": "algorithmic",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "alg_sort",
+    "metadata": {
+      "family": "sorting",
+      "concept": "sorted_position",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0046"
+  },
+  {
+    "prompt": "What is the last letter of the word silver?\nAnswer:",
+    "target": " r",
+    "type": "algorithmic",
+    "tokens_approx": 13,
+    "tier": "short",
+    "source": "alg_last_letter",
+    "metadata": {
+      "family": "string_transform",
+      "concept": "last_letter",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0047"
+  },
+  {
+    "prompt": "Choose the smallest number from: 5, 18, 23, 33, 26\nAnswer:",
+    "target": " 5",
+    "type": "algorithmic",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "alg_select",
+    "metadata": {
+      "family": "selection",
+      "concept": "smallest_value",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0048"
+  },
+  {
+    "prompt": "Remove duplicate numbers, sort the remaining values in ascending order, and give the 2nd number from: 7, 13, 7, 4, 17, 5, 17\nAnswer:",
+    "target": " 5",
+    "type": "algorithmic",
+    "tokens_approx": 31,
+    "tier": "brief",
+    "source": "alg_sort_dedup",
+    "metadata": {
+      "family": "sorting",
+      "concept": "sort_dedup_position",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0049"
+  },
+  {
+    "prompt": "Use this mapping A=2, B=3, C=5, D=7. Sum the values for: D, C, C, A, D\nAnswer:",
+    "target": " 26",
+    "type": "algorithmic",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "alg_mapping",
+    "metadata": {
+      "family": "mapping",
+      "concept": "symbol_sum",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0050"
+  },
+  {
+    "prompt": "Count how many times \"dog\" appears in: bird leaf dog red dog sun sun dog bird dog dog dog stone\nAnswer:",
+    "target": " 6",
+    "type": "algorithmic",
+    "tokens_approx": 27,
+    "tier": "short",
+    "source": "alg_counting",
+    "metadata": {
+      "family": "counting",
+      "concept": "token_count",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0051"
+  },
+  {
+    "prompt": "Sum only the numbers greater than 10 from: 11, 15, 18, 17, 19, 4\nAnswer:",
+    "target": " 80",
+    "type": "algorithmic",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "alg_filter_sum",
+    "metadata": {
+      "family": "filtering",
+      "concept": "sum_above_threshold",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0052"
+  },
+  {
+    "prompt": "Remove duplicate numbers, sort the remaining values in ascending order, and give the 3rd number from: 2, 10, 11, 6, 3, 10, 3\nAnswer:",
+    "target": " 6",
+    "type": "algorithmic",
+    "tokens_approx": 31,
+    "tier": "brief",
+    "source": "alg_sort_dedup",
+    "metadata": {
+      "family": "sorting",
+      "concept": "sort_dedup_position",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0053"
+  },
+  {
+    "prompt": "Sum only the numbers greater than 9 from: 3, 15, 14, 7, 12, 18\nAnswer:",
+    "target": " 59",
+    "type": "algorithmic",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "alg_filter_sum",
+    "metadata": {
+      "family": "filtering",
+      "concept": "sum_above_threshold",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0054"
+  },
+  {
+    "prompt": "Is 41 divisible by 3? Answer yes or no.\nAnswer:",
+    "target": " no",
+    "type": "algorithmic",
+    "tokens_approx": 13,
+    "tier": "short",
+    "source": "alg_divisible",
+    "metadata": {
+      "family": "parity_divisibility",
+      "concept": "divisible_check",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0055"
+  },
+  {
+    "prompt": "Use this mapping A=2, B=3, C=5, D=7. Sum the values for: C, D, D, C, C\nAnswer:",
+    "target": " 29",
+    "type": "algorithmic",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "alg_mapping",
+    "metadata": {
+      "family": "mapping",
+      "concept": "symbol_sum",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0056"
+  },
+  {
+    "prompt": "Transform each number using this rule: if it is even, double it; if it is odd, add 3. Then give the largest transformed value from: 19, 4, 6, 18, 5\nAnswer:",
+    "target": " 36",
+    "type": "algorithmic",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "alg_select_transform",
+    "metadata": {
+      "family": "selection",
+      "concept": "largest_after_transform",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0057"
+  },
+  {
+    "prompt": "Sort these numbers in ascending order and give the 3rd number: 5, 23, 7, 3, 14\nAnswer:",
+    "target": " 7",
+    "type": "algorithmic",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "alg_sort",
+    "metadata": {
+      "family": "sorting",
+      "concept": "sorted_position",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0058"
+  },
+  {
+    "prompt": "Transform each number using this rule: if it is even, double it; if it is odd, add 3. Then give the largest transformed value from: 16, 15, 3, 5, 18\nAnswer:",
+    "target": " 36",
+    "type": "algorithmic",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "alg_select_transform",
+    "metadata": {
+      "family": "selection",
+      "concept": "largest_after_transform",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0059"
+  },
+  {
+    "prompt": "Remove duplicate numbers, sort the remaining values in ascending order, and give the 3rd number from: 13, 19, 18, 1, 13, 16, 13\nAnswer:",
+    "target": " 16",
+    "type": "algorithmic",
+    "tokens_approx": 31,
+    "tier": "brief",
+    "source": "alg_sort_dedup",
+    "metadata": {
+      "family": "sorting",
+      "concept": "sort_dedup_position",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0060"
+  },
+  {
+    "prompt": "Add 3 and 2. Then multiply that result by the absolute difference between 9 and 5. Result:",
+    "target": " 20",
+    "type": "algorithmic",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "alg_arithmetic2",
+    "metadata": {
+      "family": "arithmetic",
+      "concept": "two_stage_arithmetic",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0061"
+  },
+  {
+    "prompt": "Transform each number using this rule: if it is even, add 4; if it is odd, double it. Then subtract the first transformed value from the last transformed value for: 10, 3, 4, 11, 9\nAnswer:",
+    "target": " 4",
+    "type": "algorithmic",
+    "tokens_approx": 46,
+    "tier": "brief",
+    "source": "alg_transform_list",
+    "metadata": {
+      "family": "transforms",
+      "concept": "list_rule_then_difference",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0062"
+  },
+  {
+    "prompt": "Use this mapping A=2, B=3, C=5, D=7. Sum the values for: A, A, B, C, D\nAnswer:",
+    "target": " 19",
+    "type": "algorithmic",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "alg_mapping",
+    "metadata": {
+      "family": "mapping",
+      "concept": "symbol_sum",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0063"
+  },
+  {
+    "prompt": "Start with 7. Halve. Subtract 4. Add 3. Result:",
+    "target": " 2",
+    "type": "algorithmic",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "alg_transform",
+    "metadata": {
+      "family": "transforms",
+      "concept": "running_transform",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0064"
+  },
+  {
+    "prompt": "Add 12 and 2. Then multiply that result by the absolute difference between 15 and 17. Result:",
+    "target": " 28",
+    "type": "algorithmic",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "alg_arithmetic2",
+    "metadata": {
+      "family": "arithmetic",
+      "concept": "two_stage_arithmetic",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0065"
+  },
+  {
+    "prompt": "Is 65 divisible by 4? Answer yes or no.\nAnswer:",
+    "target": " no",
+    "type": "algorithmic",
+    "tokens_approx": 13,
+    "tier": "short",
+    "source": "alg_divisible",
+    "metadata": {
+      "family": "parity_divisibility",
+      "concept": "divisible_check",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0066"
+  },
+  {
+    "prompt": "Start with 39. Add 4. Then subtract 5. Result:",
+    "target": " 38",
+    "type": "algorithmic",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "alg_arithmetic",
+    "metadata": {
+      "family": "arithmetic",
+      "concept": "three_step_update",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0067"
+  },
+  {
+    "prompt": "Reverse this word: forest\nAnswer:",
+    "target": " tserof",
+    "type": "algorithmic",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "alg_reverse",
+    "metadata": {
+      "family": "string_transform",
+      "concept": "reverse_word",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0068"
+  },
+  {
+    "prompt": "Take the first letter of each word and combine them: blue, black, red\nAnswer:",
+    "target": " bbr",
+    "type": "algorithmic",
+    "tokens_approx": 18,
+    "tier": "short",
+    "source": "alg_initials",
+    "metadata": {
+      "family": "string_transform",
+      "concept": "first_letters",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0069"
+  },
+  {
+    "prompt": "Take the first letter of each word and combine them: yellow, orange, black\nAnswer:",
+    "target": " yob",
+    "type": "algorithmic",
+    "tokens_approx": 18,
+    "tier": "short",
+    "source": "alg_initials",
+    "metadata": {
+      "family": "string_transform",
+      "concept": "first_letters",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0070"
+  },
+  {
+    "prompt": "Start with 6. Halve. Double. Add 3. Result:",
+    "target": " 9",
+    "type": "algorithmic",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "alg_transform",
+    "metadata": {
+      "family": "transforms",
+      "concept": "running_transform",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0071"
+  },
+  {
+    "prompt": "What is the word in position 2 of this list: sigma, delta, gamma, theta, beta\nAnswer:",
+    "target": " delta",
+    "type": "algorithmic",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "alg_extract",
+    "metadata": {
+      "family": "extraction",
+      "concept": "nth_item",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0072"
+  },
+  {
+    "prompt": "Choose the smallest number from: 38, 28, 32, 6, 31\nAnswer:",
+    "target": " 6",
+    "type": "algorithmic",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "alg_select",
+    "metadata": {
+      "family": "selection",
+      "concept": "smallest_value",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0073"
+  },
+  {
+    "prompt": "Start with 24. Add 15. Then subtract 10. Result:",
+    "target": " 29",
+    "type": "algorithmic",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "alg_arithmetic",
+    "metadata": {
+      "family": "arithmetic",
+      "concept": "three_step_update",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0074"
+  },
+  {
+    "prompt": "Start with 8. Halve. Add 3. Double. Result:",
+    "target": " 14",
+    "type": "algorithmic",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "alg_transform",
+    "metadata": {
+      "family": "transforms",
+      "concept": "running_transform",
+      "difficulty": "medium"
+    },
+    "id": "alg_seed_0075"
+  },
+  {
+    "prompt": "What is the last letter of the word forest?\nAnswer:",
+    "target": " t",
+    "type": "algorithmic",
+    "tokens_approx": 13,
+    "tier": "short",
+    "source": "alg_last_letter",
+    "metadata": {
+      "family": "string_transform",
+      "concept": "last_letter",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0076"
+  },
+  {
+    "prompt": "Start with 28. Add 5. Then subtract 8. Result:",
+    "target": " 25",
+    "type": "algorithmic",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "alg_arithmetic",
+    "metadata": {
+      "family": "arithmetic",
+      "concept": "three_step_update",
+      "difficulty": "easy"
+    },
+    "id": "alg_seed_0077"
   },
   {
     "prompt": "What is the last letter of the word window?\nAnswer:",
@@ -1607,244 +1103,20 @@
       "concept": "last_letter",
       "difficulty": "easy"
     },
-    "id": "alg_seed_0114"
+    "id": "alg_seed_0078"
   },
   {
-    "prompt": "Reverse this word: planet\nAnswer:",
-    "target": " tenalp",
-    "type": "algorithmic",
-    "tokens_approx": 6,
-    "tier": "short",
-    "source": "alg_reverse",
-    "metadata": {
-      "family": "string_transform",
-      "concept": "reverse_word",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0115"
-  },
-  {
-    "prompt": "What is the word in position 2 of this list: beta, theta, gamma, sigma, delta\nAnswer:",
-    "target": " theta",
-    "type": "algorithmic",
-    "tokens_approx": 20,
-    "tier": "short",
-    "source": "alg_extract",
-    "metadata": {
-      "family": "extraction",
-      "concept": "nth_item",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0116"
-  },
-  {
-    "prompt": "Choose the smallest number from: 15, 3, 31, 38, 37\nAnswer:",
-    "target": " 3",
-    "type": "algorithmic",
-    "tokens_approx": 14,
-    "tier": "short",
-    "source": "alg_select",
-    "metadata": {
-      "family": "selection",
-      "concept": "smallest_value",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0117"
-  },
-  {
-    "prompt": "Choose the largest number from: 15, 36, 10, 30, 37\nAnswer:",
-    "target": " 37",
-    "type": "algorithmic",
-    "tokens_approx": 14,
-    "tier": "short",
-    "source": "alg_select",
-    "metadata": {
-      "family": "selection",
-      "concept": "largest_value",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0118"
-  },
-  {
-    "prompt": "Reverse this word: silver\nAnswer:",
-    "target": " revlis",
-    "type": "algorithmic",
-    "tokens_approx": 6,
-    "tier": "short",
-    "source": "alg_reverse",
-    "metadata": {
-      "family": "string_transform",
-      "concept": "reverse_word",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0119"
-  },
-  {
-    "prompt": "Choose the largest number from: 10, 38, 33, 3, 13\nAnswer:",
-    "target": " 38",
-    "type": "algorithmic",
-    "tokens_approx": 14,
-    "tier": "short",
-    "source": "alg_select",
-    "metadata": {
-      "family": "selection",
-      "concept": "largest_value",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0120"
-  },
-  {
-    "prompt": "Choose the largest number from: 3, 14, 9, 19, 11\nAnswer:",
-    "target": " 19",
-    "type": "algorithmic",
-    "tokens_approx": 14,
-    "tier": "short",
-    "source": "alg_select",
-    "metadata": {
-      "family": "selection",
-      "concept": "largest_value",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0121"
-  },
-  {
-    "prompt": "Choose the largest number from: 28, 23, 36, 39, 1\nAnswer:",
-    "target": " 39",
-    "type": "algorithmic",
-    "tokens_approx": 14,
-    "tier": "short",
-    "source": "alg_select",
-    "metadata": {
-      "family": "selection",
-      "concept": "largest_value",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0122"
-  },
-  {
-    "prompt": "Choose the largest number from: 13, 16, 39, 29, 14\nAnswer:",
-    "target": " 39",
-    "type": "algorithmic",
-    "tokens_approx": 14,
-    "tier": "short",
-    "source": "alg_select",
-    "metadata": {
-      "family": "selection",
-      "concept": "largest_value",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0123"
-  },
-  {
-    "prompt": "What is the last letter of the word bridge?\nAnswer:",
-    "target": " e",
+    "prompt": "Is 65 divisible by 3? Answer yes or no.\nAnswer:",
+    "target": " no",
     "type": "algorithmic",
     "tokens_approx": 13,
     "tier": "short",
-    "source": "alg_last_letter",
+    "source": "alg_divisible",
     "metadata": {
-      "family": "string_transform",
-      "concept": "last_letter",
+      "family": "parity_divisibility",
+      "concept": "divisible_check",
       "difficulty": "easy"
     },
-    "id": "alg_seed_0124"
-  },
-  {
-    "prompt": "Reverse this word: magnet\nAnswer:",
-    "target": " tengam",
-    "type": "algorithmic",
-    "tokens_approx": 6,
-    "tier": "short",
-    "source": "alg_reverse",
-    "metadata": {
-      "family": "string_transform",
-      "concept": "reverse_word",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0125"
-  },
-  {
-    "prompt": "Choose the smallest number from: 39, 28, 34, 10, 3\nAnswer:",
-    "target": " 3",
-    "type": "algorithmic",
-    "tokens_approx": 14,
-    "tier": "short",
-    "source": "alg_select",
-    "metadata": {
-      "family": "selection",
-      "concept": "smallest_value",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0126"
-  },
-  {
-    "prompt": "Choose the smallest number from: 24, 13, 9, 16, 31\nAnswer:",
-    "target": " 9",
-    "type": "algorithmic",
-    "tokens_approx": 14,
-    "tier": "short",
-    "source": "alg_select",
-    "metadata": {
-      "family": "selection",
-      "concept": "smallest_value",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0127"
-  },
-  {
-    "prompt": "Choose the smallest number from: 2, 15, 22, 21, 28\nAnswer:",
-    "target": " 2",
-    "type": "algorithmic",
-    "tokens_approx": 14,
-    "tier": "short",
-    "source": "alg_select",
-    "metadata": {
-      "family": "selection",
-      "concept": "smallest_value",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0128"
-  },
-  {
-    "prompt": "Choose the smallest number from: 15, 17, 28, 16, 8\nAnswer:",
-    "target": " 8",
-    "type": "algorithmic",
-    "tokens_approx": 14,
-    "tier": "short",
-    "source": "alg_select",
-    "metadata": {
-      "family": "selection",
-      "concept": "smallest_value",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0129"
-  },
-  {
-    "prompt": "What is the last letter of the word planet?\nAnswer:",
-    "target": " t",
-    "type": "algorithmic",
-    "tokens_approx": 13,
-    "tier": "short",
-    "source": "alg_last_letter",
-    "metadata": {
-      "family": "string_transform",
-      "concept": "last_letter",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0130"
-  },
-  {
-    "prompt": "Choose the smallest number from: 4, 31, 19, 32, 36\nAnswer:",
-    "target": " 4",
-    "type": "algorithmic",
-    "tokens_approx": 14,
-    "tier": "short",
-    "source": "alg_select",
-    "metadata": {
-      "family": "selection",
-      "concept": "smallest_value",
-      "difficulty": "easy"
-    },
-    "id": "alg_seed_0131"
+    "id": "alg_seed_0079"
   }
 ]

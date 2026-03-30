@@ -108,9 +108,16 @@ def gen_compare_totals(rng: random.Random) -> dict:
 
 
 def gen_discount_price(rng: random.Random) -> dict:
-    price = rng.choice([20, 25, 30, 40, 50, 60, 80])
-    pct = rng.choice([10, 20, 25, 50])
-    final = price - (price * pct // 100)
+    valid_pairs = [
+        (20, 10), (20, 20), (20, 25), (20, 50),
+        (24, 25), (25, 20), (30, 10), (30, 20), (30, 50),
+        (40, 10), (40, 20), (40, 25), (40, 50),
+        (50, 10), (50, 20), (50, 50),
+        (60, 10), (60, 20), (60, 25), (60, 50),
+        (80, 10), (80, 20), (80, 25), (80, 50),
+    ]
+    price, pct = rng.choice(valid_pairs)
+    final = int(price * (100 - pct) / 100)
     prompt = f"An item costs {price} dollars and is discounted by {pct}%. What is the final price?\nAnswer:"
     return wrap_item(prompt, str(final), "percentages", "discount_price", "medium", "rn_percent")
 

@@ -1,0 +1,1802 @@
+[
+  {
+    "prompt": "Fan Death was started in",
+    "target": " Brooklyn",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Fan Death"
+    },
+    "id": "fr_counterfact_0000"
+  },
+  {
+    "prompt": "Eric Maschwitz, who is employed by",
+    "target": " BBC",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Eric Maschwitz"
+    },
+    "id": "fr_counterfact_0001"
+  },
+  {
+    "prompt": "Cadbury was formed in",
+    "target": " Birmingham",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Cadbury"
+    },
+    "id": "fr_counterfact_0002"
+  },
+  {
+    "prompt": "Nikolai Myaskovsky speaks the language",
+    "target": " Russian",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Nikolai Myaskovsky"
+    },
+    "id": "fr_counterfact_0003"
+  },
+  {
+    "prompt": "Adad-apla-iddina, a citizen of",
+    "target": " Babylon",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Adad-apla-iddina"
+    },
+    "id": "fr_counterfact_0004"
+  },
+  {
+    "prompt": "Segundo romance is written in",
+    "target": " Spanish",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Segundo romance"
+    },
+    "id": "fr_counterfact_0005"
+  },
+  {
+    "prompt": "Munich Airport was named for",
+    "target": " Munich",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Munich Airport"
+    },
+    "id": "fr_counterfact_0006"
+  },
+  {
+    "prompt": "Abraham Mateo speaks",
+    "target": " Spanish",
+    "type": "factual_recall",
+    "tokens_approx": 3,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Abraham Mateo"
+    },
+    "id": "fr_counterfact_0007"
+  },
+  {
+    "prompt": "Morris Carnovsky, who works as",
+    "target": " actor",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Morris Carnovsky"
+    },
+    "id": "fr_counterfact_0008"
+  },
+  {
+    "prompt": "Latvia is affiliated with",
+    "target": " NATO",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Latvia"
+    },
+    "id": "fr_counterfact_0009"
+  },
+  {
+    "prompt": "Magnus Felix Ennodius, whose position is that of",
+    "target": " bishop",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Magnus Felix Ennodius"
+    },
+    "id": "fr_counterfact_0010"
+  },
+  {
+    "prompt": "Juan Carlos Garrido writes in",
+    "target": " Spanish",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Juan Carlos Garrido"
+    },
+    "id": "fr_counterfact_0011"
+  },
+  {
+    "prompt": "iWork is developed by",
+    "target": " Apple",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "iWork"
+    },
+    "id": "fr_counterfact_0012"
+  },
+  {
+    "prompt": "Lucien Bonaparte, a native",
+    "target": " French",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Lucien Bonaparte"
+    },
+    "id": "fr_counterfact_0013"
+  },
+  {
+    "prompt": "The occupation of Justin I is",
+    "target": " politician",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Justin I"
+    },
+    "id": "fr_counterfact_0014"
+  },
+  {
+    "prompt": "In New Hampshire, an official language is",
+    "target": " English",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " New Hampshire"
+    },
+    "id": "fr_counterfact_0015"
+  },
+  {
+    "prompt": "Ture Nerman worked in the city of",
+    "target": " Stockholm",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Ture Nerman"
+    },
+    "id": "fr_counterfact_0016"
+  },
+  {
+    "prompt": "IBM Parallel Sysplex is developed by",
+    "target": " IBM",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "IBM Parallel Sysplex"
+    },
+    "id": "fr_counterfact_0017"
+  },
+  {
+    "prompt": "John and Edith Kilbuck took up work in",
+    "target": " Alaska",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "John and Edith Kilbuck"
+    },
+    "id": "fr_counterfact_0018"
+  },
+  {
+    "prompt": "Great Sheffield Flood can be found in",
+    "target": " Sheffield",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Great Sheffield Flood"
+    },
+    "id": "fr_counterfact_0019"
+  },
+  {
+    "prompt": "The domain of activity of Johannes Eugenius B\u00fclow Warming is",
+    "target": " biology",
+    "type": "factual_recall",
+    "tokens_approx": 13,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Johannes Eugenius B\u00fclow Warming"
+    },
+    "id": "fr_counterfact_0020"
+  },
+  {
+    "prompt": "Which position does Anthony Obodai play? They play as",
+    "target": " midfielder",
+    "type": "factual_recall",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Anthony Obodai"
+    },
+    "id": "fr_counterfact_0021"
+  },
+  {
+    "prompt": "Jean-Marcel Jeanneney originates from",
+    "target": " Paris",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Jean-Marcel Jeanneney"
+    },
+    "id": "fr_counterfact_0022"
+  },
+  {
+    "prompt": "asado was created in",
+    "target": " Argentina",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "asado"
+    },
+    "id": "fr_counterfact_0023"
+  },
+  {
+    "prompt": "Autobianchi Y10 is a product of",
+    "target": " Fiat",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Autobianchi Y10"
+    },
+    "id": "fr_counterfact_0024"
+  },
+  {
+    "prompt": "Wizzard, that originated in",
+    "target": " Birmingham",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Wizzard"
+    },
+    "id": "fr_counterfact_0025"
+  },
+  {
+    "prompt": "Porsche 904 is created by",
+    "target": " Porsche",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Porsche 904"
+    },
+    "id": "fr_counterfact_0026"
+  },
+  {
+    "prompt": "Limbdi is located in",
+    "target": " Gujarat",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Limbdi"
+    },
+    "id": "fr_counterfact_0027"
+  },
+  {
+    "prompt": "Yukon Flats National Wildlife Refuge can be found in",
+    "target": " Alaska",
+    "type": "factual_recall",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Yukon Flats National Wildlife Refuge"
+    },
+    "id": "fr_counterfact_0028"
+  },
+  {
+    "prompt": "America's Best Dance Crew was released on",
+    "target": " MTV",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "America's Best Dance Crew"
+    },
+    "id": "fr_counterfact_0029"
+  },
+  {
+    "prompt": "Charlie Banacos is known for performing",
+    "target": " jazz",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Charlie Banacos"
+    },
+    "id": "fr_counterfact_0030"
+  },
+  {
+    "prompt": "Mokhtar Belmokhtar died at",
+    "target": " Libya",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Mokhtar Belmokhtar"
+    },
+    "id": "fr_counterfact_0031"
+  },
+  {
+    "prompt": "Venantius Fortunatus, whose position is that of",
+    "target": " bishop",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Venantius Fortunatus"
+    },
+    "id": "fr_counterfact_0032"
+  },
+  {
+    "prompt": "Konrad Adenauer is a",
+    "target": " mayor",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Konrad Adenauer"
+    },
+    "id": "fr_counterfact_0033"
+  },
+  {
+    "prompt": "James Joyce took up work in",
+    "target": " Paris",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "James Joyce"
+    },
+    "id": "fr_counterfact_0034"
+  },
+  {
+    "prompt": "Fermilab is located in",
+    "target": " Illinois",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Fermilab"
+    },
+    "id": "fr_counterfact_0035"
+  },
+  {
+    "prompt": "The official language of Pomarkku is",
+    "target": " Finnish",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Pomarkku"
+    },
+    "id": "fr_counterfact_0036"
+  },
+  {
+    "prompt": "The genre played by Svensson, Svensson is",
+    "target": " sitcom",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Svensson, Svensson"
+    },
+    "id": "fr_counterfact_0037"
+  },
+  {
+    "prompt": "The Domino Principle, who plays",
+    "target": " thriller",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "The Domino Principle"
+    },
+    "id": "fr_counterfact_0038"
+  },
+  {
+    "prompt": "Manila is a twin city of",
+    "target": " Nice",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Manila"
+    },
+    "id": "fr_counterfact_0039"
+  },
+  {
+    "prompt": "The headquarter of Army of the Guardians of the Islamic Revolution is located in",
+    "target": " Tehran",
+    "type": "factual_recall",
+    "tokens_approx": 18,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Army of the Guardians of the Islamic Revolution"
+    },
+    "id": "fr_counterfact_0040"
+  },
+  {
+    "prompt": "Terenci Moix was originally from",
+    "target": " Barcelona",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Terenci Moix"
+    },
+    "id": "fr_counterfact_0041"
+  },
+  {
+    "prompt": "The law in Kyustendil Province declares the language",
+    "target": " Bulgarian",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Kyustendil Province"
+    },
+    "id": "fr_counterfact_0042"
+  },
+  {
+    "prompt": "What is the twin city of Dubai? It is",
+    "target": " Istanbul",
+    "type": "factual_recall",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Dubai"
+    },
+    "id": "fr_counterfact_0043"
+  },
+  {
+    "prompt": "Bernard Tapie is a native speaker of",
+    "target": " French",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Bernard Tapie"
+    },
+    "id": "fr_counterfact_0044"
+  },
+  {
+    "prompt": "Giovanni Battista Guarini works as",
+    "target": " poet",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Giovanni Battista Guarini"
+    },
+    "id": "fr_counterfact_0045"
+  },
+  {
+    "prompt": "Muhammad Ahmad ibn \u02bfAbdallah follows the religion of",
+    "target": " Islam",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Muhammad Ahmad ibn \u02bfAbdallah"
+    },
+    "id": "fr_counterfact_0046"
+  },
+  {
+    "prompt": "Epiphanius of Salamis is a",
+    "target": " bishop",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Epiphanius of Salamis"
+    },
+    "id": "fr_counterfact_0047"
+  },
+  {
+    "prompt": "Stielers Handatlas, from",
+    "target": " Germany",
+    "type": "factual_recall",
+    "tokens_approx": 3,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Stielers Handatlas"
+    },
+    "id": "fr_counterfact_0048"
+  },
+  {
+    "prompt": "The domain of activity of Leonhard Euler is",
+    "target": " astronomy",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Leonhard Euler"
+    },
+    "id": "fr_counterfact_0049"
+  },
+  {
+    "prompt": "Carlos Zingaro is native to",
+    "target": " Lisbon",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Carlos Zingaro"
+    },
+    "id": "fr_counterfact_0050"
+  },
+  {
+    "prompt": "Jason Puncheon, who plays the position",
+    "target": " midfielder",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Jason Puncheon"
+    },
+    "id": "fr_counterfact_0051"
+  },
+  {
+    "prompt": "Horizon Records plays",
+    "target": " jazz",
+    "type": "factual_recall",
+    "tokens_approx": 3,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Horizon Records"
+    },
+    "id": "fr_counterfact_0052"
+  },
+  {
+    "prompt": "Apocalypse Meow was created in the country of",
+    "target": " Japan",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Apocalypse Meow"
+    },
+    "id": "fr_counterfact_0053"
+  },
+  {
+    "prompt": "The law in Donetsk Oblast declares the language",
+    "target": " Ukrainian",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Donetsk Oblast"
+    },
+    "id": "fr_counterfact_0054"
+  },
+  {
+    "prompt": "Nyhetsmorgon, that was formulated in",
+    "target": " Sweden",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Nyhetsmorgon"
+    },
+    "id": "fr_counterfact_0055"
+  },
+  {
+    "prompt": "Mac OS X Snow Leopard, a product developed by",
+    "target": " Apple",
+    "type": "factual_recall",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Mac OS X Snow Leopard"
+    },
+    "id": "fr_counterfact_0056"
+  },
+  {
+    "prompt": "The domain of activity of August Kundt is",
+    "target": " physics",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " August Kundt"
+    },
+    "id": "fr_counterfact_0057"
+  },
+  {
+    "prompt": "Bill Bergey plays as",
+    "target": " linebacker",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Bill Bergey"
+    },
+    "id": "fr_counterfact_0058"
+  },
+  {
+    "prompt": "Martin Koolhoven speaks",
+    "target": " Dutch",
+    "type": "factual_recall",
+    "tokens_approx": 3,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Martin Koolhoven"
+    },
+    "id": "fr_counterfact_0059"
+  },
+  {
+    "prompt": "Roch Voisine is a citizen of",
+    "target": " Canada",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Roch Voisine"
+    },
+    "id": "fr_counterfact_0060"
+  },
+  {
+    "prompt": "Xcode, a product created by",
+    "target": " Apple",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Xcode"
+    },
+    "id": "fr_counterfact_0061"
+  },
+  {
+    "prompt": "Mahavira, who holds a citizenship from",
+    "target": " India",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Mahavira"
+    },
+    "id": "fr_counterfact_0062"
+  },
+  {
+    "prompt": "Henry Louis Gates writes in",
+    "target": " English",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Henry Louis Gates"
+    },
+    "id": "fr_counterfact_0063"
+  },
+  {
+    "prompt": "University of Paris III: Sorbonne Nouvelle can be found in",
+    "target": " Paris",
+    "type": "factual_recall",
+    "tokens_approx": 13,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "University of Paris III: Sorbonne Nouvelle"
+    },
+    "id": "fr_counterfact_0064"
+  },
+  {
+    "prompt": "European Project for Ice Coring in Antarctica is located in the continent",
+    "target": " Antarctica",
+    "type": "factual_recall",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "European Project for Ice Coring in Antarctica"
+    },
+    "id": "fr_counterfact_0065"
+  },
+  {
+    "prompt": "Mars Glacier is located in",
+    "target": " Antarctica",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Mars Glacier"
+    },
+    "id": "fr_counterfact_0066"
+  },
+  {
+    "prompt": "The original language of District 13 is",
+    "target": " French",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " District 13"
+    },
+    "id": "fr_counterfact_0067"
+  },
+  {
+    "prompt": "Rob Ford's position is",
+    "target": " councillor",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Rob Ford"
+    },
+    "id": "fr_counterfact_0068"
+  },
+  {
+    "prompt": "prefectural road is located in",
+    "target": " Japan",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "prefectural road"
+    },
+    "id": "fr_counterfact_0069"
+  },
+  {
+    "prompt": "The language used by Antoine Laurent de Jussieu is",
+    "target": " French",
+    "type": "factual_recall",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Antoine Laurent de Jussieu"
+    },
+    "id": "fr_counterfact_0070"
+  },
+  {
+    "prompt": "Brazilian Football Confederation is affiliated with the",
+    "target": " FIFA",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Brazilian Football Confederation"
+    },
+    "id": "fr_counterfact_0071"
+  },
+  {
+    "prompt": "Lambunao, which is located in",
+    "target": " Philippines",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Lambunao"
+    },
+    "id": "fr_counterfact_0072"
+  },
+  {
+    "prompt": "Hilde Marie Kjersem, who is a citizen of",
+    "target": " Norway",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Hilde Marie Kjersem"
+    },
+    "id": "fr_counterfact_0073"
+  },
+  {
+    "prompt": "Panathenaic Stadium is from",
+    "target": " Greece",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Panathenaic Stadium"
+    },
+    "id": "fr_counterfact_0074"
+  },
+  {
+    "prompt": "KMVP-FM is located in",
+    "target": " Arizona",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "KMVP-FM"
+    },
+    "id": "fr_counterfact_0075"
+  },
+  {
+    "prompt": "John Pym died in the city of",
+    "target": " London",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "John Pym"
+    },
+    "id": "fr_counterfact_0076"
+  },
+  {
+    "prompt": "Toyota Sports 800, developed by",
+    "target": " Toyota",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Toyota Sports 800"
+    },
+    "id": "fr_counterfact_0077"
+  },
+  {
+    "prompt": "Guilt Machine, that was formed in",
+    "target": " Netherlands",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Guilt Machine"
+    },
+    "id": "fr_counterfact_0078"
+  },
+  {
+    "prompt": "Hershey Country Club is within",
+    "target": " Pennsylvania",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Hershey Country Club"
+    },
+    "id": "fr_counterfact_0079"
+  },
+  {
+    "prompt": "Vengaboys, formulated in",
+    "target": " Netherlands",
+    "type": "factual_recall",
+    "tokens_approx": 3,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Vengaboys"
+    },
+    "id": "fr_counterfact_0080"
+  },
+  {
+    "prompt": "Anna Louisa Karsch works as",
+    "target": " poet",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Anna Louisa Karsch"
+    },
+    "id": "fr_counterfact_0081"
+  },
+  {
+    "prompt": "Dildar Ali Naseerabadi follows the religion of",
+    "target": " Islam",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Dildar Ali Naseerabadi"
+    },
+    "id": "fr_counterfact_0082"
+  },
+  {
+    "prompt": "Mousa Mohammed Abu Marzook is a part of the",
+    "target": " Hamas",
+    "type": "factual_recall",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Mousa Mohammed Abu Marzook"
+    },
+    "id": "fr_counterfact_0083"
+  },
+  {
+    "prompt": "Mont Saint-Bruno, located in",
+    "target": " Canada",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Mont Saint-Bruno"
+    },
+    "id": "fr_counterfact_0084"
+  },
+  {
+    "prompt": "Keshavan Maslak, who plays",
+    "target": " jazz",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Keshavan Maslak"
+    },
+    "id": "fr_counterfact_0085"
+  },
+  {
+    "prompt": "Dodge 400, produced by",
+    "target": " Dodge",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Dodge 400"
+    },
+    "id": "fr_counterfact_0086"
+  },
+  {
+    "prompt": "The language of Il Gazzettino is",
+    "target": " Italian",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Il Gazzettino"
+    },
+    "id": "fr_counterfact_0087"
+  },
+  {
+    "prompt": "Pecora Escarpment is located in the continent",
+    "target": " Antarctica",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Pecora Escarpment"
+    },
+    "id": "fr_counterfact_0088"
+  },
+  {
+    "prompt": "Ayria from",
+    "target": " Canada",
+    "type": "factual_recall",
+    "tokens_approx": 2,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Ayria"
+    },
+    "id": "fr_counterfact_0089"
+  },
+  {
+    "prompt": "The Garry Moore Show premiered on",
+    "target": " CBS",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "The Garry Moore Show"
+    },
+    "id": "fr_counterfact_0090"
+  },
+  {
+    "prompt": "Mac OS was created by",
+    "target": " Apple",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Mac OS"
+    },
+    "id": "fr_counterfact_0091"
+  },
+  {
+    "prompt": "Ahmed Ouyahia, who is a citizen of",
+    "target": " Algeria",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Ahmed Ouyahia"
+    },
+    "id": "fr_counterfact_0092"
+  },
+  {
+    "prompt": "Cadillac Type 51 is created by",
+    "target": " Cadillac",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Cadillac Type 51"
+    },
+    "id": "fr_counterfact_0093"
+  },
+  {
+    "prompt": "Kiev is a twin city of",
+    "target": " Athens",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Kiev"
+    },
+    "id": "fr_counterfact_0094"
+  },
+  {
+    "prompt": "Henri Berger was native to",
+    "target": " Berlin",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Henri Berger"
+    },
+    "id": "fr_counterfact_0095"
+  },
+  {
+    "prompt": "John Schumann and the Vagabond Crew was formed in",
+    "target": " Adelaide",
+    "type": "factual_recall",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "John Schumann and the Vagabond Crew"
+    },
+    "id": "fr_counterfact_0096"
+  },
+  {
+    "prompt": "Louis-Pierre Baltard spoke the language",
+    "target": " French",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Louis-Pierre Baltard"
+    },
+    "id": "fr_counterfact_0097"
+  },
+  {
+    "prompt": "Sayyid Qutb follows the religion of",
+    "target": " Islam",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Sayyid Qutb"
+    },
+    "id": "fr_counterfact_0098"
+  },
+  {
+    "prompt": "Isaac Cuenca, who plays the position",
+    "target": " midfielder",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Isaac Cuenca"
+    },
+    "id": "fr_counterfact_0099"
+  },
+  {
+    "prompt": "Chris Paul, the",
+    "target": " basketball",
+    "type": "factual_recall",
+    "tokens_approx": 3,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Chris Paul"
+    },
+    "id": "fr_counterfact_0100"
+  },
+  {
+    "prompt": "Fanny Mendelssohn was employed in",
+    "target": " Berlin",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Fanny Mendelssohn"
+    },
+    "id": "fr_counterfact_0101"
+  },
+  {
+    "prompt": "Barcelona is a twin city of",
+    "target": " Shanghai",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Barcelona"
+    },
+    "id": "fr_counterfact_0102"
+  },
+  {
+    "prompt": "Joaquin Mir Trinxet speaks the language",
+    "target": " Spanish",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Joaquin Mir Trinxet"
+    },
+    "id": "fr_counterfact_0103"
+  },
+  {
+    "prompt": "Eurostat, which is located in",
+    "target": " Luxembourg",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Eurostat"
+    },
+    "id": "fr_counterfact_0104"
+  },
+  {
+    "prompt": "Harry Carpenter has the position of",
+    "target": " bishop",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Harry Carpenter"
+    },
+    "id": "fr_counterfact_0105"
+  },
+  {
+    "prompt": "Raymond van Barneveld speaks the language",
+    "target": " Dutch",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Raymond van Barneveld"
+    },
+    "id": "fr_counterfact_0106"
+  },
+  {
+    "prompt": "Pen Mar, which is named after",
+    "target": " Pennsylvania",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Pen Mar"
+    },
+    "id": "fr_counterfact_0107"
+  },
+  {
+    "prompt": "William Worrall Mayo died in",
+    "target": " Rochester",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "William Worrall Mayo"
+    },
+    "id": "fr_counterfact_0108"
+  },
+  {
+    "prompt": "Mediolanum Forum is located in the country of",
+    "target": " Italy",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Mediolanum Forum"
+    },
+    "id": "fr_counterfact_0109"
+  },
+  {
+    "prompt": "The language of Spanish treasure fleet was",
+    "target": " Dutch",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Spanish treasure fleet"
+    },
+    "id": "fr_counterfact_0110"
+  },
+  {
+    "prompt": "Tooth & Nail Records formed in",
+    "target": " California",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Tooth & Nail Records"
+    },
+    "id": "fr_counterfact_0111"
+  },
+  {
+    "prompt": "Tbilisi is a twin city of",
+    "target": " Kiev",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Tbilisi"
+    },
+    "id": "fr_counterfact_0112"
+  },
+  {
+    "prompt": "Anson Funderburgh, performing on the",
+    "target": " guitar",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Anson Funderburgh"
+    },
+    "id": "fr_counterfact_0113"
+  },
+  {
+    "prompt": "The official language of Armenia is",
+    "target": " Armenian",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Armenia"
+    },
+    "id": "fr_counterfact_0114"
+  },
+  {
+    "prompt": "In Togo, an official language is",
+    "target": " French",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Togo"
+    },
+    "id": "fr_counterfact_0115"
+  },
+  {
+    "prompt": "In Ulvila, an official language is",
+    "target": " Finnish",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Ulvila"
+    },
+    "id": "fr_counterfact_0116"
+  },
+  {
+    "prompt": "Vistula is located in the continent",
+    "target": " Europe",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Vistula"
+    },
+    "id": "fr_counterfact_0117"
+  },
+  {
+    "prompt": "Nez Perce County is within",
+    "target": " Idaho",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Nez Perce County"
+    },
+    "id": "fr_counterfact_0118"
+  },
+  {
+    "prompt": "San Francisco is a twin city of",
+    "target": " Paris",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "San Francisco"
+    },
+    "id": "fr_counterfact_0119"
+  },
+  {
+    "prompt": "Masada is known for performing",
+    "target": " jazz",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Masada"
+    },
+    "id": "fr_counterfact_0120"
+  },
+  {
+    "prompt": "Maria Callas performs",
+    "target": " opera",
+    "type": "factual_recall",
+    "tokens_approx": 3,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Maria Callas"
+    },
+    "id": "fr_counterfact_0121"
+  },
+  {
+    "prompt": "King Kong Escapes, that originated in",
+    "target": " Japan",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "King Kong Escapes"
+    },
+    "id": "fr_counterfact_0122"
+  },
+  {
+    "prompt": "Wang Lequan's profession is a",
+    "target": " politician",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Wang Lequan"
+    },
+    "id": "fr_counterfact_0123"
+  },
+  {
+    "prompt": "bpost, in",
+    "target": " Belgium",
+    "type": "factual_recall",
+    "tokens_approx": 2,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "bpost"
+    },
+    "id": "fr_counterfact_0124"
+  },
+  {
+    "prompt": "Doro Merande's occupation is",
+    "target": " actor",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Doro Merande"
+    },
+    "id": "fr_counterfact_0125"
+  },
+  {
+    "prompt": "Ron Affif is known for performing",
+    "target": " jazz",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Ron Affif"
+    },
+    "id": "fr_counterfact_0126"
+  },
+  {
+    "prompt": "Brendan Croker was originally from",
+    "target": " Bradford",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Brendan Croker"
+    },
+    "id": "fr_counterfact_0127"
+  },
+  {
+    "prompt": "Johann Aegidius Bach has a citizenship from",
+    "target": " Germany",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Johann Aegidius Bach"
+    },
+    "id": "fr_counterfact_0128"
+  },
+  {
+    "prompt": "Pennsylvania Route 94, in",
+    "target": " Pennsylvania",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Pennsylvania Route 94"
+    },
+    "id": "fr_counterfact_0129"
+  },
+  {
+    "prompt": "The location of Albany City Hall is",
+    "target": " Albany",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Albany City Hall"
+    },
+    "id": "fr_counterfact_0130"
+  },
+  {
+    "prompt": "Henry Jacob Bigelow worked in",
+    "target": " Boston",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Henry Jacob Bigelow"
+    },
+    "id": "fr_counterfact_0131"
+  },
+  {
+    "prompt": "Joe Namath plays",
+    "target": " football",
+    "type": "factual_recall",
+    "tokens_approx": 3,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Joe Namath"
+    },
+    "id": "fr_counterfact_0132"
+  },
+  {
+    "prompt": "Sega Smash Pack was a product of",
+    "target": " Sega",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Sega Smash Pack"
+    },
+    "id": "fr_counterfact_0133"
+  },
+  {
+    "prompt": "Victoria and Albert Museum, which is named after",
+    "target": " Victoria",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Victoria and Albert Museum"
+    },
+    "id": "fr_counterfact_0134"
+  },
+  {
+    "prompt": "Nicolai Abildgaard's occupation is",
+    "target": " architect",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Nicolai Abildgaard"
+    },
+    "id": "fr_counterfact_0135"
+  },
+  {
+    "prompt": "Gaetano Rossi worked in",
+    "target": " Venice",
+    "type": "factual_recall",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Gaetano Rossi"
+    },
+    "id": "fr_counterfact_0136"
+  },
+  {
+    "prompt": "Chevrolet Corvette C6, produced by",
+    "target": " Chevrolet",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Chevrolet Corvette C6"
+    },
+    "id": "fr_counterfact_0137"
+  },
+  {
+    "prompt": "Abu Sufyan ibn Harb follows the religion of",
+    "target": " Islam",
+    "type": "factual_recall",
+    "tokens_approx": 10,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Abu Sufyan ibn Harb"
+    },
+    "id": "fr_counterfact_0138"
+  },
+  {
+    "prompt": "Eduard Marxsen worked in the city of",
+    "target": " Hamburg",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Eduard Marxsen"
+    },
+    "id": "fr_counterfact_0139"
+  },
+  {
+    "prompt": "La Paz is a twin city of",
+    "target": " Santiago",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "La Paz"
+    },
+    "id": "fr_counterfact_0140"
+  },
+  {
+    "prompt": "Ceredigion County Council is located in",
+    "target": " Wales",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Ceredigion County Council"
+    },
+    "id": "fr_counterfact_0141"
+  },
+  {
+    "prompt": "The occupation of Michael William Balfe is",
+    "target": " composer",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Michael William Balfe"
+    },
+    "id": "fr_counterfact_0142"
+  },
+  {
+    "prompt": "In Congress Poland, an official language is",
+    "target": " Russian",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Congress Poland"
+    },
+    "id": "fr_counterfact_0143"
+  },
+  {
+    "prompt": "Warren Moon is a professional",
+    "target": " football",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Warren Moon"
+    },
+    "id": "fr_counterfact_0144"
+  },
+  {
+    "prompt": "The occupation of David Yost is",
+    "target": " actor",
+    "type": "factual_recall",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " David Yost"
+    },
+    "id": "fr_counterfact_0145"
+  },
+  {
+    "prompt": "The genre played by Paul McCandless is",
+    "target": " jazz",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Paul McCandless"
+    },
+    "id": "fr_counterfact_0146"
+  },
+  {
+    "prompt": "Mohammad-Taqi Mesbah-Yazdi, a citizen of",
+    "target": " Iran",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Mohammad-Taqi Mesbah-Yazdi"
+    },
+    "id": "fr_counterfact_0147"
+  },
+  {
+    "prompt": "The location of Battle of Bicocca is",
+    "target": " Milan",
+    "type": "factual_recall",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": " Battle of Bicocca"
+    },
+    "id": "fr_counterfact_0148"
+  },
+  {
+    "prompt": "Nina van Pallandt originated from",
+    "target": " Denmark",
+    "type": "factual_recall",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "counterfact",
+    "metadata": {
+      "subject": "Nina van Pallandt"
+    },
+    "id": "fr_counterfact_0149"
+  }
+]

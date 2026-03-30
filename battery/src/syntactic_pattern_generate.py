@@ -115,21 +115,33 @@ def gen_agreement_relative_clause(rng: random.Random) -> dict:
 def gen_correlative_construction(rng: random.Random) -> dict:
     kind = rng.choice(["either_or", "not_only"])
     if kind == "either_or":
-        noun1, noun2 = rng.sample(NATURAL_NOUNS, 2)
-        target = rng.choice([" help", " calm her", " be enough"])
-        prompt = f"Either the {noun1} will help, or the {noun2} will"
+        prompt, target = rng.choice([
+            ("Either the music will help, or the medicine will", " work"),
+            ("Either the rain will stop, or the wind will", " weaken"),
+            ("Either the advice will help, or the company will", " comfort her"),
+            ("Either the rest will help, or the tea will", " calm her"),
+            ("Either the medicine will help, or the sleep will", " be enough"),
+            ("Either the light will return, or the guide will", " continue"),
+        ])
         concept = "either_or_completion"
     else:
-        adj = rng.choice(ADJS)
-        prompt = f"Not only was the lecture long, but it was also surprisingly"
-        target = f" {adj}"
+        prompt, target = rng.choice([
+            ("Not only was the lecture long, but it was also surprisingly", " clear"),
+            ("Not only was the room quiet, but it was also unexpectedly", " warm"),
+            ("Not only was the path steep, but it was also remarkably", " narrow"),
+            ("Not only was the speech brief, but it was also unusually", " careful"),
+            ("Not only was the plan simple, but it was also extremely", " useful"),
+        ])
         concept = "not_only_but_also"
     return wrap_item(prompt, target, "correlative", concept, "medium", "sp_correlative")
 
 
 def gen_conditional_parallel(rng: random.Random) -> dict:
-    action1, action2 = rng.sample(["stay inside", "go outside", "light the fire", "close the gate", "open the windows"], 2)
-    weather1, weather2 = rng.sample(["rains", "snows", "clears", "warms"], 2)
+    action1, action2 = rng.sample([
+        "stay inside", "go outside", "light the fire", "close the gate", "open the windows",
+        "cover the chairs", "move the boxes", "wait by the door", "start the engine",
+    ], 2)
+    weather1, weather2 = rng.sample(["rains", "snows", "clears", "warms", "freezes", "darkens"], 2)
     prompt = f"If it {weather1}, we {action1}; if it {weather2}, we"
     target = f" {action2}"
     return wrap_item(prompt, target, "parallelism", "if_then_parallel", "medium", "sp_conditional")
