@@ -24,7 +24,7 @@ The 11 prompt types test distinct mechanisms:
 
 ## Quick start
 
-Requires Python 3.13+ and [uv](https://docs.astral.sh/uv/).
+Requires Python 3.12.x (project pin: `3.12.8`) and [uv](https://docs.astral.sh/uv/).
 
 **Build a battery from an existing recipe:**
 
@@ -76,12 +76,12 @@ uv run -m battery.src.calibrate \
   --device cuda
 ```
 
-**Analyze a single calibration file in another directory:**
+**Analyze a calibration file directly:**
 
 ```bash
 uv run -m battery.src.calibration_analyze \
-  --battery-dir ~/workspace/data/calibration \
-  --pattern 'calibration_qwen9b.jsonl'
+  --calibration ~/workspace/data/calibration/calibration_qwen9b.jsonl \
+  --candidates battery/data/battery_4/all_candidates.json
 ```
 
 

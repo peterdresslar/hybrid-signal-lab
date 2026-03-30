@@ -6,6 +6,7 @@ This script scans a battery directory for calibration result files, loads every
 
 It is intentionally stdlib-only so it is easy to run anywhere:
 
+    uv run -m battery.src.calibration_analyze --calibration path/to/calibration.jsonl
     uv run -m battery.src.calibration_analyze --battery-dir battery/data/battery_3
 """
 
@@ -51,16 +52,25 @@ def parse_args() -> argparse.Namespace:
         description="Analyze calibration JSONL files in a battery folder."
     )
     parser.add_argument(
-        "--battery-dir",
+        "--calibration",
         type=str,
-        required=True,
-        help="Directory containing calibration JSONL files (for example battery/data/battery_3).",
+        nargs="+",
+        default=None,
+        help="One or more calibration JSONL files to analyze. Alternative to --battery-dir.",
     )
     parser.add_argument(
-        "--pattern",
+        "--battery-dir",
         type=str,
-        default="*.jsonl",
-        help="Glob for calibration files within --battery-dir (default: *.jsonl).",
+        default=None,
+        help="Directory containing calibration JSONL files (for example battery/data/battery_3). "
+             "All *.jsonl files in the directory will be loaded.",
+    )
+    parser.add_argument(
+        "--candidates",
+        type=str,
+        default=None,
+        help="Path to all_candidates.json for enriching output with prompt metadata. "
+             "Auto-detected from --battery-dir when available.",
     )
     parser.add_argument(
         "--json-out",
@@ -777,16 +787,31 @@ def print_report(report_text: str) -> None:
 
 def main() -> None:
     args = parse_args()
-    battery_dir = Path(args.battery_dir).expanduser()
-    if not battery_dir.exists():
-        raise FileNotFoundError(f"Battery directory does not exist: {battery_dir}")
-    if not battery_dir.is_dir():
-        raise NotADirectoryError(f"Battery directory must be a directory: {battery_dir}")
 
-    calibration_paths = sorted(p for p in battery_dir.glob(args.pattern) if p.is_file())
+    if not args.calibration and not args.battery_dir:
+        raise SystemExit("Error: provide either --calibration FILE(s) or --battery-dir DIR.")
+
+    # Resolve calibration file paths
+    if args.calibration:
+        calibration_paths = []
+        for p in args.calibration:
+            path = Path(p).expanduser()
+            if not path.exists():
+                raise FileNotFoundError(f"Calibration file does not exist: {path}")
+            calibration_paths.append(path)
+        calibration_paths.sort()
+        battery_dir = calibration_paths[0].parent
+    else:
+        battery_dir = Path(args.battery_dir).expanduser()
+        if not battery_dir.exists():
+            raise FileNotFoundError(f"Battery directory does not exist: {battery_dir}")
+        if not battery_dir.is_dir():
+            raise NotADirectoryError(f"Battery directory must be a directory: {battery_dir}")
+        calibration_paths = sorted(p for p in battery_dir.glob("*.jsonl") if p.is_file())
+
     if not calibration_paths:
         raise FileNotFoundError(
-            f"No files matched {args.pattern!r} in {battery_dir}"
+            f"No calibration JSONL files found in {battery_dir}"
         )
 
     runs = []
@@ -802,7 +827,12 @@ def main() -> None:
     warnings = build_consistency_warnings(runs)
     overall, by_type, by_tier, by_family, by_concept, by_difficulty = summarize_runs(runs)
     type_deltas = build_type_deltas(by_type)
-    candidate_lookup = load_candidate_lookup(battery_dir)
+    # Resolve candidate metadata: explicit --candidates, or auto-detect in battery_dir
+    if args.candidates:
+        candidates_path = Path(args.candidates).expanduser()
+        candidate_lookup = load_candidate_lookup(candidates_path.parent)
+    else:
+        candidate_lookup = load_candidate_lookup(battery_dir)
     item_rows = build_item_comparison_rows(runs, candidate_lookup)
     report_text = build_report_text(
         battery_dir=battery_dir,
