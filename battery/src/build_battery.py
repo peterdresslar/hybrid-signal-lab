@@ -1536,21 +1536,55 @@ def generate_domain_knowledge(n: int = 60, seed: int = 51) -> list[dict]:
             f"Could not find {filename} in {_sources_dir} or {_data_dir}"
         )
 
-    wikipedia_items = _load_json_data("wikipedia_domain_items.json")
-    long_items = _load_json_data("long_domain_items.json")
+    def _load_optional_json_data(filename: str) -> list[dict]:
+        try:
+            return _load_json_data(filename)
+        except FileNotFoundError:
+            return []
+
+    pool_items = _load_optional_json_data("domain_knowledge_pool.json")
+    wikipedia_items = _load_optional_json_data("wikipedia_domain_items.json")
+    long_items = _load_optional_json_data("long_domain_items.json")
 
     def _normalize_domain_item(item: dict, fallback_source: str) -> dict:
-        """Preserve optional metadata/source from JSON-backed domain items."""
+        """Adapt source-pool domain items into battery-native records."""
         normalized = dict(item)
-        normalized["source"] = normalized.get("source", fallback_source)
-        normalized["metadata"] = normalized.get("metadata", {})
+
+        prompt = str(normalized.get("prompt", "")).strip()
+        target = str(normalized.get("target", ""))
+        if not prompt or not target:
+            raise ValueError(f"Invalid domain item missing prompt/target: {item!r}")
+
+        # Preserve hyphenated clozes like "Dunning-" -> "Kruger", but otherwise
+        # normalize targets to include a leading space for tokenizer alignment.
+        if not target.startswith(" ") and not prompt.endswith(("-", "/", "(")):
+            target = " " + target.strip()
+        normalized["prompt"] = prompt
+        normalized["target"] = target
+
+        source = str(normalized.get("source", fallback_source) or fallback_source)
+        normalized["source"] = source
+
+        metadata = dict(normalized.get("metadata", {}) or {})
+        if "word_count" in normalized and "word_count" not in metadata:
+            metadata["word_count"] = normalized["word_count"]
+        if "approx_tokens" in normalized and "approx_tokens" not in metadata:
+            metadata["approx_tokens_source"] = normalized["approx_tokens"]
+        if "title" in normalized and "title" not in metadata:
+            metadata["title"] = normalized["title"]
+        normalized["metadata"] = metadata
+
+        if "approx_tokens" in normalized and "tokens_approx" not in normalized:
+            normalized["tokens_approx"] = int(normalized["approx_tokens"])
         return normalized
 
     # JSON-backed domain items live in:
+    #   battery/data/sources/domain_knowledge_pool.json
     #   battery/data/sources/wikipedia_domain_items.json
     #   battery/data/sources/long_domain_items.json
     all_items = (
         [_normalize_domain_item(item, "curated_domain") for item in domain_items]
+        + [_normalize_domain_item(item, "gen-wikipedia-random-battery4") for item in pool_items]
         + [_normalize_domain_item(item, "gen-wikipedia-random") for item in wikipedia_items]
         + [_normalize_domain_item(item, "gen-wikipedia-random-long") for item in long_items]
     )
@@ -1560,7 +1594,7 @@ def generate_domain_knowledge(n: int = 60, seed: int = 51) -> list[dict]:
     selected = all_items[:n]
 
     for i, item in enumerate(selected):
-        tok_count = approx_tokens(item["prompt"])
+        tok_count = int(item.get("tokens_approx") or approx_tokens(item["prompt"]))
         item.update({
             "id": make_id("dk", item.get("source", "curated"), i),
             "type": "domain_knowledge",
@@ -1787,6 +1821,20 @@ def default_long_range_retrieval_pool_path() -> str | None:
     return None
 
 
+def default_syntactic_pattern_pool_path() -> str | None:
+    """Return the default external syntactic_pattern pool path when present."""
+    root = Path(__file__).resolve().parents[1]
+    candidates = [
+        root / "data" / "sources" / "syntactic_pattern_seed.json",
+        root / "data" / "syntactic_pattern_seed.json",
+        root / "data" / "battery_4" / "syntactic_pattern_seed.json",
+    ]
+    for path in candidates:
+        if path.exists():
+            return str(path)
+    return None
+
+
 def load_external_type_pool(pool_path: str, type_name: str, n: int, seed: int) -> list[dict]:
     """Load a pre-generated item pool for one type and sample n items."""
     with open(pool_path) as f:
@@ -1815,6 +1863,7 @@ def build_type(
     reasoning_numerical_pool_path: str | None = None,
     reasoning_tracking_pool_path: str | None = None,
     long_range_retrieval_pool_path: str | None = None,
+    syntactic_pattern_pool_path: str | None = None,
 ) -> list[dict]:
     """Build items for a single type."""
 
@@ -1847,6 +1896,12 @@ def build_type(
         n = default_n if n_override is None else n_override
         print(f"Loading external long_range_retrieval pool for {type_name} (n={n}) from {long_range_retrieval_pool_path}...")
         return load_external_type_pool(long_range_retrieval_pool_path, type_name, n=n, seed=seed)
+
+    if type_name == "syntactic_pattern" and syntactic_pattern_pool_path:
+        _, default_n = GENERATED_TYPES[type_name]
+        n = default_n if n_override is None else n_override
+        print(f"Loading external syntactic_pattern pool for {type_name} (n={n}) from {syntactic_pattern_pool_path}...")
+        return load_external_type_pool(syntactic_pattern_pool_path, type_name, n=n, seed=seed)
 
     if type_name in GENERATED_TYPES:
         gen_fn, n = GENERATED_TYPES[type_name]
@@ -1934,6 +1989,8 @@ def main():
                         help="Optional JSON pool for reasoning_tracking items")
     parser.add_argument("--long-range-retrieval-pool", type=str, default=None,
                         help="Optional JSON pool for long_range_retrieval items")
+    parser.add_argument("--syntactic-pattern-pool", type=str, default=None,
+                        help="Optional JSON pool for syntactic_pattern items")
     parser.add_argument("--no-datasets", action="store_true",
                         help="Skip HuggingFace dataset downloads (generators only)")
     parser.add_argument("--types", type=str, nargs="*", default=None,
@@ -1968,6 +2025,7 @@ def main():
     reasoning_numerical_pool_path = args.reasoning_numerical_pool or default_reasoning_numerical_pool_path()
     reasoning_tracking_pool_path = args.reasoning_tracking_pool or default_reasoning_tracking_pool_path()
     long_range_retrieval_pool_path = args.long_range_retrieval_pool or default_long_range_retrieval_pool_path()
+    syntactic_pattern_pool_path = args.syntactic_pattern_pool or default_syntactic_pattern_pool_path()
 
     if args.recipe:
         manifest["recipe"] = str(args.recipe)
@@ -1981,6 +2039,8 @@ def main():
         manifest["reasoning_tracking_pool"] = str(reasoning_tracking_pool_path)
     if long_range_retrieval_pool_path:
         manifest["long_range_retrieval_pool"] = str(long_range_retrieval_pool_path)
+    if syntactic_pattern_pool_path:
+        manifest["syntactic_pattern_pool"] = str(syntactic_pattern_pool_path)
 
     for type_name in type_names:
         try:
@@ -1997,6 +2057,7 @@ def main():
                 reasoning_numerical_pool_path=reasoning_numerical_pool_path,
                 reasoning_tracking_pool_path=reasoning_tracking_pool_path,
                 long_range_retrieval_pool_path=long_range_retrieval_pool_path,
+                syntactic_pattern_pool_path=syntactic_pattern_pool_path,
             )
             items = deduplicate(items)
         except Exception as e:
