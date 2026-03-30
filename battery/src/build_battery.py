@@ -10,6 +10,7 @@ Sources:
   - LAMBADA (HuggingFace) for cultural_memorized
   - Programmatic generators for all other types
   - Curated Wikipedia-derived domain knowledge pools loaded from JSON
+  - Optional externally generated code-comprehension pool
 
 Output: JSON battery file compatible with signal_lab.py / sweep.py
 """
@@ -1538,13 +1539,78 @@ DATASET_TYPES = {
 }
 
 
+def load_recipe(recipe_path: str | None) -> dict[str, int]:
+    """Load optional per-type count overrides from a JSON recipe."""
+    if recipe_path is None:
+        return {}
+
+    with open(recipe_path) as f:
+        data = json.load(f)
+
+    if "types" in data:
+        data = data["types"]
+
+    recipe: dict[str, int] = {}
+    for type_name, value in data.items():
+        if isinstance(value, dict):
+            count = value.get("count")
+        else:
+            count = value
+
+        if not isinstance(count, int) or count < 0:
+            raise ValueError(f"Invalid recipe count for {type_name}: {count!r}")
+
+        recipe[type_name] = count
+
+    return recipe
+
+
+def default_code_pool_path() -> str | None:
+    """Return the default external code pool path when present."""
+    root = Path(__file__).resolve().parents[1]
+    candidates = [
+        root / "data" / "sources" / "code_comprehension_seed.json",
+        root / "data" / "code_comprehension_seed.json",
+        root / "data" / "battery_4" / "code_comprehension_seed.json",
+    ]
+    for path in candidates:
+        if path.exists():
+            return str(path)
+    return None
+
+
+def load_external_type_pool(pool_path: str, type_name: str, n: int, seed: int) -> list[dict]:
+    """Load a pre-generated item pool for one type and sample n items."""
+    with open(pool_path) as f:
+        items = json.load(f)
+
+    if not isinstance(items, list):
+        raise ValueError(f"External pool must be a JSON list: {pool_path}")
+
+    filtered = [item for item in items if item.get("type") == type_name]
+    if not filtered:
+        raise ValueError(f"No items of type '{type_name}' found in external pool: {pool_path}")
+
+    filtered = deduplicate(filtered)
+    rng = random.Random(seed)
+    rng.shuffle(filtered)
+    return filtered[:n]
+
+
 def build_type(
     type_name: str,
     cache_dir: str = None,
     seed: int = 42,
     n_override: int | None = None,
+    code_pool_path: str | None = None,
 ) -> list[dict]:
     """Build items for a single type."""
+
+    if type_name == "code_comprehension" and code_pool_path:
+        _, default_n = GENERATED_TYPES[type_name]
+        n = default_n if n_override is None else n_override
+        print(f"Loading external code pool for {type_name} (n={n}) from {code_pool_path}...")
+        return load_external_type_pool(code_pool_path, type_name, n=n, seed=seed)
 
     if type_name in GENERATED_TYPES:
         gen_fn, n = GENERATED_TYPES[type_name]
@@ -1620,6 +1686,10 @@ def main():
     parser.add_argument("--cache-dir", type=str, default=None,
                         help="HuggingFace cache directory for datasets")
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--recipe", type=str, default=None,
+                        help="Optional JSON recipe with per-type prompt counts")
+    parser.add_argument("--code-pool", type=str, default=None,
+                        help="Optional JSON pool for code_comprehension items")
     parser.add_argument("--no-datasets", action="store_true",
                         help="Skip HuggingFace dataset downloads (generators only)")
     parser.add_argument("--types", type=str, nargs="*", default=None,
@@ -1648,14 +1718,25 @@ def main():
     manifest = {"types": {}, "seed": args.seed, "smoke": args.smoke}
     all_items = []
     n_override = 1 if args.smoke else None
+    recipe_overrides = load_recipe(args.recipe)
+    code_pool_path = args.code_pool or default_code_pool_path()
+
+    if args.recipe:
+        manifest["recipe"] = str(args.recipe)
+    if code_pool_path:
+        manifest["code_pool"] = str(code_pool_path)
 
     for type_name in type_names:
         try:
+            type_n_override = n_override
+            if type_n_override is None:
+                type_n_override = recipe_overrides.get(type_name)
             items = build_type(
                 type_name,
                 cache_dir=args.cache_dir,
                 seed=args.seed,
-                n_override=n_override,
+                n_override=type_n_override,
+                code_pool_path=code_pool_path,
             )
             items = deduplicate(items)
         except Exception as e:
