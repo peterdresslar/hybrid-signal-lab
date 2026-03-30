@@ -46,27 +46,9 @@ uv run -m battery.src.build_battery \
 
 Note: `code_comprehension` reseeding requires an `OPENROUTER_KEY` environment variable. `domain_knowledge` is intentionally excluded from reseeding since its pool is curated from Wikipedia rather than procedurally generated. `structural_copying` is generated inline during the build.
 
-**Run calibration** against a model to measure baseline target-token probabilities:
+The battery pipeline has three steps. Calibration and analysis outputs live in a data directory of your choosing, separate from the battery build artifacts.
 
-```bash
-uv run -m battery.src.calibrate \
-  --battery battery/data/battery_4/all_candidates.json \
-  --model Qwen/Qwen3.5-2B-Base \
-  --output battery/data/battery_4/calibration_qwen2b.jsonl
-```
-
-Add `--output-attentions` and `--output-hidden-states` for richer diagnostic output.
-
-**Analyze calibration results:**
-
-```bash
-uv run -m battery.src.calibration_analyze \
-  --battery-dir battery/data/battery_4
-```
-
-This produces summaries broken down by type, tier, family, concept, and difficulty where those metadata fields are present.
-
-**Typical CUDA / cluster calibration run:**
+**Step 1: Calibrate** — run prompts through a model and record baseline target-token statistics:
 
 ```bash
 uv run -m battery.src.calibrate \
@@ -76,13 +58,28 @@ uv run -m battery.src.calibrate \
   --device cuda
 ```
 
-**Analyze a calibration file directly:**
+Add `--output-attentions` and `--output-hidden-states` for richer diagnostic output.
+
+**Step 2: Analyze** — summarize calibration results by type, tier, family, concept, and difficulty:
 
 ```bash
 uv run -m battery.src.calibration_analyze \
   --calibration ~/workspace/data/calibration/calibration_qwen9b.jsonl \
   --candidates battery/data/battery_4/all_candidates.json
 ```
+
+Analysis files are written next to the calibration JSONL by default. Use `--output-dir` to override, or `--battery-dir` to scan an entire directory of calibration files at once.
+
+**Step 3: Annotate** — assign train/test splits informed by calibration statistics (not yet implemented):
+
+```bash
+uv run -m battery.src.annotate_battery \
+  --calibration ~/workspace/data/calibration/calibration_qwen9b.jsonl \
+  --candidates battery/data/battery_4/all_candidates.json \
+  --output ~/workspace/data/calibration/training_manifest.json
+```
+
+The training manifest maps prompt IDs to splits without mutating the battery itself.
 
 
 ## Project structure

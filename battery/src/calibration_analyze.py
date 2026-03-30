@@ -850,7 +850,13 @@ def main() -> None:
     print_report(report_text)
 
     if not args.no_write_files:
-        output_dir = Path(args.output_dir).expanduser() if args.output_dir else battery_dir
+        if args.output_dir:
+            output_dir = Path(args.output_dir).expanduser()
+        elif args.calibration:
+            # Default to same directory as the first calibration file
+            output_dir = calibration_paths[0].parent
+        else:
+            output_dir = battery_dir
         written = write_analysis_files(
             output_dir=output_dir,
             prefix=args.prefix,
@@ -873,7 +879,7 @@ def main() -> None:
 
     if args.json_out:
         report = {
-            "battery_dir": str(battery_dir),
+            "source_dir": str(battery_dir),
             "files": [
                 {
                     "file": run["file"],
