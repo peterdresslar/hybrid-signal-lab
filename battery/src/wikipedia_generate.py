@@ -281,19 +281,34 @@ def generate_items(
     attempts = 0
     max_total_attempts = num_prompts * max_attempts_per_prompt
 
+    # Exponential backoff for Wikipedia rate limiting
+    wiki_delay = 2.0  # starting delay between Wikipedia requests
+    WIKI_DELAY_MIN = 2.0
+    WIKI_DELAY_MAX = 120.0
+    WIKI_BACKOFF_FACTOR = 1.5
+    wiki_consecutive_fails = 0
+
     while len(items) < num_prompts and attempts < max_total_attempts:
         attempts += 1
         print(f"[{len(items) + 1}/{num_prompts}] Attempt {attempts}...", end=" ")
         sys.stdout.flush()
 
-        # Unconditional rate limiting to respect Wikipedia API limits
-        time.sleep(1.2)
+        # Rate limiting with exponential backoff
+        if wiki_delay > WIKI_DELAY_MIN:
+            print(f"(waiting {wiki_delay:.1f}s)", end=" ")
+        time.sleep(wiki_delay)
 
         # 1. Fetch random article
         summary = fetch_random_article_summary()
         if not summary:
-            print("skip (fetch failed)")
+            wiki_consecutive_fails += 1
+            wiki_delay = min(wiki_delay * WIKI_BACKOFF_FACTOR, WIKI_DELAY_MAX)
+            print(f"skip (fetch failed, backoff → {wiki_delay:.1f}s)")
             continue
+
+        # Successful fetch — ease back toward minimum
+        wiki_consecutive_fails = 0
+        wiki_delay = max(wiki_delay * 0.8, WIKI_DELAY_MIN)
 
         title = summary["title"]
         print(f"'{title}'", end=" ")
@@ -307,11 +322,11 @@ def generate_items(
         accepted, reason = filter_article(title, summary["extract"], api_key, model)
         if not accepted:
             print(f"skip (filter: {reason})")
-            time.sleep(0.3)
             continue
         print(f"[filter: {reason}]", end=" ")
 
         # 4. Fetch full article text for better context
+        time.sleep(wiki_delay)  # rate limit the second Wikipedia call too
         full_text = fetch_full_article_text(title)
         if not full_text or len(full_text) < 500:
             # Fall back to summary extract
