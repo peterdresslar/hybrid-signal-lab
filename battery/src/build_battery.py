@@ -1773,6 +1773,20 @@ def default_reasoning_tracking_pool_path() -> str | None:
     return None
 
 
+def default_long_range_retrieval_pool_path() -> str | None:
+    """Return the default external long_range_retrieval pool path when present."""
+    root = Path(__file__).resolve().parents[1]
+    candidates = [
+        root / "data" / "sources" / "long_range_retrieval_seed.json",
+        root / "data" / "long_range_retrieval_seed.json",
+        root / "data" / "battery_4" / "long_range_retrieval_seed.json",
+    ]
+    for path in candidates:
+        if path.exists():
+            return str(path)
+    return None
+
+
 def load_external_type_pool(pool_path: str, type_name: str, n: int, seed: int) -> list[dict]:
     """Load a pre-generated item pool for one type and sample n items."""
     with open(pool_path) as f:
@@ -1800,6 +1814,7 @@ def build_type(
     algorithmic_pool_path: str | None = None,
     reasoning_numerical_pool_path: str | None = None,
     reasoning_tracking_pool_path: str | None = None,
+    long_range_retrieval_pool_path: str | None = None,
 ) -> list[dict]:
     """Build items for a single type."""
 
@@ -1826,6 +1841,12 @@ def build_type(
         n = default_n if n_override is None else n_override
         print(f"Loading external reasoning_tracking pool for {type_name} (n={n}) from {reasoning_tracking_pool_path}...")
         return load_external_type_pool(reasoning_tracking_pool_path, type_name, n=n, seed=seed)
+
+    if type_name == "long_range_retrieval" and long_range_retrieval_pool_path:
+        _, default_n = GENERATED_TYPES[type_name]
+        n = default_n if n_override is None else n_override
+        print(f"Loading external long_range_retrieval pool for {type_name} (n={n}) from {long_range_retrieval_pool_path}...")
+        return load_external_type_pool(long_range_retrieval_pool_path, type_name, n=n, seed=seed)
 
     if type_name in GENERATED_TYPES:
         gen_fn, n = GENERATED_TYPES[type_name]
@@ -1911,6 +1932,8 @@ def main():
                         help="Optional JSON pool for reasoning_numerical items")
     parser.add_argument("--reasoning-tracking-pool", type=str, default=None,
                         help="Optional JSON pool for reasoning_tracking items")
+    parser.add_argument("--long-range-retrieval-pool", type=str, default=None,
+                        help="Optional JSON pool for long_range_retrieval items")
     parser.add_argument("--no-datasets", action="store_true",
                         help="Skip HuggingFace dataset downloads (generators only)")
     parser.add_argument("--types", type=str, nargs="*", default=None,
@@ -1944,6 +1967,7 @@ def main():
     algorithmic_pool_path = args.algorithmic_pool or default_algorithmic_pool_path()
     reasoning_numerical_pool_path = args.reasoning_numerical_pool or default_reasoning_numerical_pool_path()
     reasoning_tracking_pool_path = args.reasoning_tracking_pool or default_reasoning_tracking_pool_path()
+    long_range_retrieval_pool_path = args.long_range_retrieval_pool or default_long_range_retrieval_pool_path()
 
     if args.recipe:
         manifest["recipe"] = str(args.recipe)
@@ -1955,6 +1979,8 @@ def main():
         manifest["reasoning_numerical_pool"] = str(reasoning_numerical_pool_path)
     if reasoning_tracking_pool_path:
         manifest["reasoning_tracking_pool"] = str(reasoning_tracking_pool_path)
+    if long_range_retrieval_pool_path:
+        manifest["long_range_retrieval_pool"] = str(long_range_retrieval_pool_path)
 
     for type_name in type_names:
         try:
@@ -1970,6 +1996,7 @@ def main():
                 algorithmic_pool_path=algorithmic_pool_path,
                 reasoning_numerical_pool_path=reasoning_numerical_pool_path,
                 reasoning_tracking_pool_path=reasoning_tracking_pool_path,
+                long_range_retrieval_pool_path=long_range_retrieval_pool_path,
             )
             items = deduplicate(items)
         except Exception as e:
