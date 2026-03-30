@@ -3,7 +3,7 @@ name = "hybrid-signal-lab"
 version = "0.1.0"
 description = "Hybrid Signal Lab: probing and analysis for LLM hybrid-model interventions"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12,<3.13"
 dependencies = [
     "numpy",
     "transformers>=5.4.0",
@@ -12,6 +12,7 @@ dependencies = [
     "dotenv>=0.9.9",
     "datasets>=4.8.2",
     "matplotlib>=3.10.8",
+    "flash-linear-attention>=0.4.2",
 ]
 
 [build-system]
@@ -20,4 +21,3 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["signal_lab", "model"]
-

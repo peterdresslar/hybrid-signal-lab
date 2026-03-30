@@ -14,7 +14,7 @@ See `docs/project_notes.md` for the latest information on the projectʻs directi
 
 ### Setup
 
-Requires Python ≥ 3.13. Install with [uv](https://docs.astral.sh/uv/):
+Requires Python 3.12.x (pinned locally to `3.12.8`). Install with [uv](https://docs.astral.sh/uv/):
 
 ```bash
 uv sync
