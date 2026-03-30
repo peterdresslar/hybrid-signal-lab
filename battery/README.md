@@ -66,6 +66,24 @@ uv run -m battery.src.calibration_analyze \
 
 This produces summaries broken down by type, tier, family, concept, and difficulty where those metadata fields are present.
 
+**Typical CUDA / cluster calibration run:**
+
+```bash
+uv run -m battery.src.calibrate \
+  --battery battery/data/battery_4/all_candidates.json \
+  --model Qwen/Qwen3.5-9B-Base \
+  --output ~/workspace/data/calibration/calibration_qwen9b.jsonl \
+  --device cuda
+```
+
+**Analyze a single calibration file in another directory:**
+
+```bash
+uv run -m battery.src.calibration_analyze \
+  --battery-dir ~/workspace/data/calibration \
+  --pattern 'calibration_qwen9b.jsonl'
+```
+
 
 ## Project structure
 
