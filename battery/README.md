@@ -1,6 +1,6 @@
 # Battery
 
-A prompt battery for evaluating inference-time interventions on language models. The battery provides ~1,000 cloze-style prompts spanning 11 mechanism types, designed to measure how gain vector interventions affect next-token prediction across qualitatively different tasks.
+A prompt battery for evaluating inference-time interventions on language models. The battery provides 1,070 cloze-style prompts spanning 11 mechanism types, designed to measure how gain vector interventions affect next-token prediction across qualitatively different tasks.
 
 While this module could function as a standalone prompt generation and calibration toolkit, it was built as part of [Hybrid Signal Lab](../README.md) — a research project on inference-time intervention in hybrid linear attention models, developed as a CAS capstone at Arizona State University (advisor: Prof. Bryan Daniels). The battery serves as the primary input to `signal_lab`'s gain profile sweep experiments.
 
@@ -70,16 +70,18 @@ uv run -m battery.src.calibration_analyze \
 
 Analysis files are written next to the calibration JSONL by default. Use `--output-dir` to override, or `--battery-dir` to scan an entire directory of calibration files at once.
 
-**Step 3: Annotate** — assign train/test splits informed by calibration statistics (not yet implemented):
+**Step 3: Annotate** — assign train/test splits informed by cross-model calibration statistics:
 
 ```bash
 uv run -m battery.src.annotate_battery \
-  --calibration ~/workspace/data/calibration/calibration_qwen9b.jsonl \
+  --analysis-dir ~/workspace/data/calibration/b4 \
   --candidates battery/data/battery_4/all_candidates.json \
-  --output ~/workspace/data/calibration/training_manifest.json
+  --output battery/data/battery_4/annotation_manifest.json
 ```
 
-The training manifest maps prompt IDs to splits without mutating the battery itself.
+The annotation script reads per-model `analysis_item_cross_model.csv` files produced by Step 2, merges them, and classifies each prompt as `eligible` or `too_hard` based on whether any model assigns the target token a probability above `--hard-threshold` (default 0.01). All eligible items enter a deterministic stratified train/test split (default 80/20 per type). Prompts where no model can engage with the target are assigned to `other` and excluded from the split.
+
+The output manifest maps prompt IDs to `train_prompt`, `test_prompt`, or `other` without mutating the battery itself. Each item also carries informational sub-labels (`eligible_easy`, `eligible_model_separating`, `eligible_sweet_spot`) and cross-model probability statistics for downstream analysis.
 
 
 ## Project structure
@@ -93,7 +95,8 @@ battery/
 ├── src/
 │   ├── build_battery.py      # Main builder: assembles prompts from pools + generators
 │   ├── calibrate.py          # Runs prompts through a model, records target-token stats
-│   ├── calibration_analyze.py
+│   ├── calibration_analyze.py # Summarizes calibration JSONL by type, tier, family
+│   ├── annotate_battery.py   # Assigns train/test splits from cross-model calibration
 │   ├── wikipedia_generate.py # Two-stage pipeline: Wikipedia API → LLM filter → cloze generation
 │   ├── algorithmic_generate.py
 │   ├── code_generate.py
