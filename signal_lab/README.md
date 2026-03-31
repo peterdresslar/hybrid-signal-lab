@@ -41,7 +41,7 @@ The main subtrees are:
 
 ## Setup
 
-Requires Python `>=3.13` and is intended to be used with `uv`.
+Requires Python `3.12.x` (project pin: `3.12.8`) and is intended to be used with `uv`.
 
 ```bash
 uv sync

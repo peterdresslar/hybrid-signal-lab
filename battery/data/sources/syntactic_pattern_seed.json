@@ -1,0 +1,1414 @@
+[
+  {
+    "prompt": "She said that the answer was",
+    "target": " correct",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_comp",
+    "metadata": {
+      "family": "complement_clause",
+      "concept": "that_clause_completion",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0000"
+  },
+  {
+    "prompt": "He said, \"Bring me the",
+    "target": " map.\"",
+    "type": "syntactic_pattern",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "sp_quote",
+    "metadata": {
+      "family": "punctuation",
+      "concept": "quote_closure",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0001"
+  },
+  {
+    "prompt": "Either the light will return, or the guide will",
+    "target": " continue",
+    "type": "syntactic_pattern",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "sp_correlative",
+    "metadata": {
+      "family": "correlative",
+      "concept": "either_or_completion",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0002"
+  },
+  {
+    "prompt": "She asked, \"Did you lock the",
+    "target": " door?\"",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_quote",
+    "metadata": {
+      "family": "punctuation",
+      "concept": "quote_closure",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0003"
+  },
+  {
+    "prompt": "The cats that the students admired",
+    "target": " run",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_agreement_rc",
+    "metadata": {
+      "family": "agreement",
+      "concept": "agreement_relative_clause",
+      "difficulty": "hard",
+      "subject_number": "plural",
+      "distance": 4
+    },
+    "id": "sp_seed_0004"
+  },
+  {
+    "prompt": "Either the medicine will help, or the sleep will",
+    "target": " be enough",
+    "type": "syntactic_pattern",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "sp_correlative",
+    "metadata": {
+      "family": "correlative",
+      "concept": "either_or_completion",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0005"
+  },
+  {
+    "prompt": "Not only was the room quiet, but it was also unexpectedly",
+    "target": " warm",
+    "type": "syntactic_pattern",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "sp_correlative",
+    "metadata": {
+      "family": "correlative",
+      "concept": "not_only_but_also",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0006"
+  },
+  {
+    "prompt": "The shelf displayed flowers, apples, and",
+    "target": " books",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_list",
+    "metadata": {
+      "family": "list_syntax",
+      "concept": "coordinated_np_list",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0007"
+  },
+  {
+    "prompt": "The note read, \"Meet at the",
+    "target": " gate.\"",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_quote",
+    "metadata": {
+      "family": "punctuation",
+      "concept": "quote_closure",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0008"
+  },
+  {
+    "prompt": "If it rains, we close the gate; if it darkens, we",
+    "target": " cover the chairs",
+    "type": "syntactic_pattern",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "sp_conditional",
+    "metadata": {
+      "family": "parallelism",
+      "concept": "if_then_parallel",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0009"
+  },
+  {
+    "prompt": "First we leave, then we work, and finally we",
+    "target": " wait",
+    "type": "syntactic_pattern",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "sp_series",
+    "metadata": {
+      "family": "parallelism",
+      "concept": "series_continuation",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0010"
+  },
+  {
+    "prompt": "If it freezes, we stay inside; if it rains, we",
+    "target": " wait by the door",
+    "type": "syntactic_pattern",
+    "tokens_approx": 13,
+    "tier": "short",
+    "source": "sp_conditional",
+    "metadata": {
+      "family": "parallelism",
+      "concept": "if_then_parallel",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0011"
+  },
+  {
+    "prompt": "The more you practice, the better it",
+    "target": " becomes",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_comparative",
+    "metadata": {
+      "family": "correlative",
+      "concept": "the_more_the_more",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0012"
+  },
+  {
+    "prompt": "The drivers that the artists admired",
+    "target": " speak",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_agreement_rc",
+    "metadata": {
+      "family": "agreement",
+      "concept": "agreement_relative_clause",
+      "difficulty": "hard",
+      "subject_number": "plural",
+      "distance": 4
+    },
+    "id": "sp_seed_0013"
+  },
+  {
+    "prompt": "The signal was weak, yet the radio",
+    "target": " worked",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_coord",
+    "metadata": {
+      "family": "coordination",
+      "concept": "yet_clause_completion",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0014"
+  },
+  {
+    "prompt": "The driver from the northern village",
+    "target": " runs",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_agreement",
+    "metadata": {
+      "family": "agreement",
+      "concept": "agreement_with_intervener",
+      "difficulty": "medium",
+      "subject_number": "singular",
+      "distance": 4
+    },
+    "id": "sp_seed_0015"
+  },
+  {
+    "prompt": "Her only plan -",
+    "target": " to leave quietly",
+    "type": "syntactic_pattern",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "sp_colon_dash",
+    "metadata": {
+      "family": "punctuation",
+      "concept": "dash_infinitive_continuation",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0016"
+  },
+  {
+    "prompt": "The scientists that the workers admired",
+    "target": " walk",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_agreement_rc",
+    "metadata": {
+      "family": "agreement",
+      "concept": "agreement_relative_clause",
+      "difficulty": "hard",
+      "subject_number": "plural",
+      "distance": 4
+    },
+    "id": "sp_seed_0017"
+  },
+  {
+    "prompt": "First we sleep, then we wait, and finally we",
+    "target": " leave",
+    "type": "syntactic_pattern",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "sp_series",
+    "metadata": {
+      "family": "parallelism",
+      "concept": "series_continuation",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0018"
+  },
+  {
+    "prompt": "The reporter interviewed the painter with the",
+    "target": " microphone",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_attachment",
+    "metadata": {
+      "family": "attachment",
+      "concept": "pp_attachment_continuation",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0019"
+  },
+  {
+    "prompt": "The path was steep, yet the hikers",
+    "target": " continued",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_coord",
+    "metadata": {
+      "family": "coordination",
+      "concept": "yet_clause_completion",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0020"
+  },
+  {
+    "prompt": "Because the lantern was broken, the guide",
+    "target": " waited",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_clause",
+    "metadata": {
+      "family": "clause_completion",
+      "concept": "because_main_clause",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0021"
+  },
+  {
+    "prompt": "Each guest checked",
+    "target": " their seat",
+    "type": "syntactic_pattern",
+    "tokens_approx": 3,
+    "tier": "short",
+    "source": "sp_pronoun",
+    "metadata": {
+      "family": "agreement",
+      "concept": "distributive_pronoun_completion",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0022"
+  },
+  {
+    "prompt": "If it darkens, we start the engine; if it clears, we",
+    "target": " close the gate",
+    "type": "syntactic_pattern",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "sp_conditional",
+    "metadata": {
+      "family": "parallelism",
+      "concept": "if_then_parallel",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0023"
+  },
+  {
+    "prompt": "If it snows, we close the gate; if it warms, we",
+    "target": " cover the chairs",
+    "type": "syntactic_pattern",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "sp_conditional",
+    "metadata": {
+      "family": "parallelism",
+      "concept": "if_then_parallel",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0024"
+  },
+  {
+    "prompt": "The cart carried books, papers, and",
+    "target": " flowers",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_list",
+    "metadata": {
+      "family": "list_syntax",
+      "concept": "coordinated_np_list",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0025"
+  },
+  {
+    "prompt": "Not only was the plan simple, but it was also extremely",
+    "target": " useful",
+    "type": "syntactic_pattern",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "sp_correlative",
+    "metadata": {
+      "family": "correlative",
+      "concept": "not_only_but_also",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0026"
+  },
+  {
+    "prompt": "The cart carried papers, books, and",
+    "target": " maps",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_list",
+    "metadata": {
+      "family": "list_syntax",
+      "concept": "coordinated_np_list",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0027"
+  },
+  {
+    "prompt": "Although the road was narrow, the cart",
+    "target": " passed",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_clause",
+    "metadata": {
+      "family": "clause_completion",
+      "concept": "although_main_clause",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0028"
+  },
+  {
+    "prompt": "She whispered, \"Please close the",
+    "target": " door.\"",
+    "type": "syntactic_pattern",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "sp_quote",
+    "metadata": {
+      "family": "punctuation",
+      "concept": "quote_closure",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0029"
+  },
+  {
+    "prompt": "Each worker returned to",
+    "target": " their station",
+    "type": "syntactic_pattern",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "sp_pronoun",
+    "metadata": {
+      "family": "agreement",
+      "concept": "distributive_pronoun_completion",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0030"
+  },
+  {
+    "prompt": "The missing page [tucked inside the folder",
+    "target": " ]",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_bracket",
+    "metadata": {
+      "family": "punctuation",
+      "concept": "bracket_closure",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0031"
+  },
+  {
+    "prompt": "The warning was clear, but the crowd",
+    "target": " hesitated",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_coord",
+    "metadata": {
+      "family": "coordination",
+      "concept": "but_clause_completion",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0032"
+  },
+  {
+    "prompt": "First we watch, then we wait, and finally we",
+    "target": " work",
+    "type": "syntactic_pattern",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "sp_series",
+    "metadata": {
+      "family": "parallelism",
+      "concept": "series_continuation",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0033"
+  },
+  {
+    "prompt": "She carried only three things:",
+    "target": " a map, a lantern, and a key",
+    "type": "syntactic_pattern",
+    "tokens_approx": 6,
+    "tier": "short",
+    "source": "sp_colon_dash",
+    "metadata": {
+      "family": "punctuation",
+      "concept": "colon_list_continuation",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0034"
+  },
+  {
+    "prompt": "The teacher explained that the test was",
+    "target": " over",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_comp",
+    "metadata": {
+      "family": "complement_clause",
+      "concept": "that_clause_completion",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0035"
+  },
+  {
+    "prompt": "He called out, \"Wait by the",
+    "target": " stairs.\"",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_quote",
+    "metadata": {
+      "family": "punctuation",
+      "concept": "quote_closure",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0036"
+  },
+  {
+    "prompt": "First we wait, then we listen, and finally we",
+    "target": " drink",
+    "type": "syntactic_pattern",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "sp_series",
+    "metadata": {
+      "family": "parallelism",
+      "concept": "series_continuation",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0037"
+  },
+  {
+    "prompt": "The shelf displayed lamps, books, and",
+    "target": " flowers",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_list",
+    "metadata": {
+      "family": "list_syntax",
+      "concept": "coordinated_np_list",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0038"
+  },
+  {
+    "prompt": "The child greeted the teacher with a",
+    "target": " smile",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_attachment",
+    "metadata": {
+      "family": "attachment",
+      "concept": "pp_attachment_continuation",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0039"
+  },
+  {
+    "prompt": "The report ended with one recommendation:",
+    "target": " close the gate",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_colon_dash",
+    "metadata": {
+      "family": "punctuation",
+      "concept": "colon_clause_continuation",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0040"
+  },
+  {
+    "prompt": "First we rest, then we eat, and finally we",
+    "target": " wait",
+    "type": "syntactic_pattern",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "sp_series",
+    "metadata": {
+      "family": "parallelism",
+      "concept": "series_continuation",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0041"
+  },
+  {
+    "prompt": "If it clears, we stay inside; if it darkens, we",
+    "target": " go outside",
+    "type": "syntactic_pattern",
+    "tokens_approx": 13,
+    "tier": "short",
+    "source": "sp_conditional",
+    "metadata": {
+      "family": "parallelism",
+      "concept": "if_then_parallel",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0042"
+  },
+  {
+    "prompt": "Every visitor picked up",
+    "target": " their badge",
+    "type": "syntactic_pattern",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "sp_pronoun",
+    "metadata": {
+      "family": "agreement",
+      "concept": "distributive_pronoun_completion",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0043"
+  },
+  {
+    "prompt": "There was only one real problem -",
+    "target": " the door was locked",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_colon_dash",
+    "metadata": {
+      "family": "punctuation",
+      "concept": "dash_clause_continuation",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0044"
+  },
+  {
+    "prompt": "Not only was the speech brief, but it was also unusually",
+    "target": " careful",
+    "type": "syntactic_pattern",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "sp_correlative",
+    "metadata": {
+      "family": "correlative",
+      "concept": "not_only_but_also",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0045"
+  },
+  {
+    "prompt": "First we work, then we watch, and finally we",
+    "target": " eat",
+    "type": "syntactic_pattern",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "sp_series",
+    "metadata": {
+      "family": "parallelism",
+      "concept": "series_continuation",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0046"
+  },
+  {
+    "prompt": "Either the advice will help, or the company will",
+    "target": " comfort her",
+    "type": "syntactic_pattern",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "sp_correlative",
+    "metadata": {
+      "family": "correlative",
+      "concept": "either_or_completion",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0047"
+  },
+  {
+    "prompt": "The child beside the broken windows",
+    "target": " runs",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_agreement",
+    "metadata": {
+      "family": "agreement",
+      "concept": "agreement_with_intervener",
+      "difficulty": "medium",
+      "subject_number": "singular",
+      "distance": 4
+    },
+    "id": "sp_seed_0048"
+  },
+  {
+    "prompt": "The dog that the students admired",
+    "target": " runs",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_agreement_rc",
+    "metadata": {
+      "family": "agreement",
+      "concept": "agreement_relative_clause",
+      "difficulty": "hard",
+      "subject_number": "singular",
+      "distance": 4
+    },
+    "id": "sp_seed_0049"
+  },
+  {
+    "prompt": "While the guests were arriving, the host",
+    "target": " smiled",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_clause",
+    "metadata": {
+      "family": "clause_completion",
+      "concept": "while_main_clause",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0050"
+  },
+  {
+    "prompt": "They believed that the map was",
+    "target": " accurate",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_comp",
+    "metadata": {
+      "family": "complement_clause",
+      "concept": "that_clause_completion",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0051"
+  },
+  {
+    "prompt": "Before the market opened, the merchants",
+    "target": " arrived",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_clause",
+    "metadata": {
+      "family": "clause_completion",
+      "concept": "before_main_clause",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0052"
+  },
+  {
+    "prompt": "The student approached the speaker with a",
+    "target": " question",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_attachment",
+    "metadata": {
+      "family": "attachment",
+      "concept": "pp_attachment_continuation",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0053"
+  },
+  {
+    "prompt": "The cart carried tools, flowers, and",
+    "target": " apples",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_list",
+    "metadata": {
+      "family": "list_syntax",
+      "concept": "coordinated_np_list",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0054"
+  },
+  {
+    "prompt": "She noticed that the room was",
+    "target": " empty",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_comp",
+    "metadata": {
+      "family": "complement_clause",
+      "concept": "that_clause_completion",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0055"
+  },
+  {
+    "prompt": "The painters that the workers admired",
+    "target": " run",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_agreement_rc",
+    "metadata": {
+      "family": "agreement",
+      "concept": "agreement_relative_clause",
+      "difficulty": "hard",
+      "subject_number": "plural",
+      "distance": 4
+    },
+    "id": "sp_seed_0056"
+  },
+  {
+    "prompt": "Either the rest will help, or the tea will",
+    "target": " calm her",
+    "type": "syntactic_pattern",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "sp_correlative",
+    "metadata": {
+      "family": "correlative",
+      "concept": "either_or_completion",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0057"
+  },
+  {
+    "prompt": "The smaller key (found beneath the desk",
+    "target": " )",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_bracket",
+    "metadata": {
+      "family": "punctuation",
+      "concept": "bracket_closure",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0058"
+  },
+  {
+    "prompt": "The cat that the visitors admired",
+    "target": " walks",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_agreement_rc",
+    "metadata": {
+      "family": "agreement",
+      "concept": "agreement_relative_clause",
+      "difficulty": "hard",
+      "subject_number": "singular",
+      "distance": 4
+    },
+    "id": "sp_seed_0059"
+  },
+  {
+    "prompt": "The cart carried books, tools, and",
+    "target": " apples",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_list",
+    "metadata": {
+      "family": "list_syntax",
+      "concept": "coordinated_np_list",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0060"
+  },
+  {
+    "prompt": "Every student handed in",
+    "target": " their paper",
+    "type": "syntactic_pattern",
+    "tokens_approx": 5,
+    "tier": "short",
+    "source": "sp_pronoun",
+    "metadata": {
+      "family": "agreement",
+      "concept": "distributive_pronoun_completion",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0061"
+  },
+  {
+    "prompt": "The guide followed the visitor with the",
+    "target": " lantern",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_attachment",
+    "metadata": {
+      "family": "attachment",
+      "concept": "pp_attachment_continuation",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0062"
+  },
+  {
+    "prompt": "If it snows, we start the engine; if it darkens, we",
+    "target": " wait by the door",
+    "type": "syntactic_pattern",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "sp_conditional",
+    "metadata": {
+      "family": "parallelism",
+      "concept": "if_then_parallel",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0063"
+  },
+  {
+    "prompt": "If it darkens, we stay inside; if it clears, we",
+    "target": " start the engine",
+    "type": "syntactic_pattern",
+    "tokens_approx": 13,
+    "tier": "short",
+    "source": "sp_conditional",
+    "metadata": {
+      "family": "parallelism",
+      "concept": "if_then_parallel",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0064"
+  },
+  {
+    "prompt": "The children by the narrow staircase",
+    "target": " wait",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_agreement",
+    "metadata": {
+      "family": "agreement",
+      "concept": "agreement_with_intervener",
+      "difficulty": "medium",
+      "subject_number": "plural",
+      "distance": 4
+    },
+    "id": "sp_seed_0065"
+  },
+  {
+    "prompt": "The cat that the artists admired",
+    "target": " runs",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_agreement_rc",
+    "metadata": {
+      "family": "agreement",
+      "concept": "agreement_relative_clause",
+      "difficulty": "hard",
+      "subject_number": "singular",
+      "distance": 4
+    },
+    "id": "sp_seed_0066"
+  },
+  {
+    "prompt": "The bag contained lamps, flowers, and",
+    "target": " apples",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_list",
+    "metadata": {
+      "family": "list_syntax",
+      "concept": "coordinated_np_list",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0067"
+  },
+  {
+    "prompt": "If it warms, we light the fire; if it clears, we",
+    "target": " open the windows",
+    "type": "syntactic_pattern",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "sp_conditional",
+    "metadata": {
+      "family": "parallelism",
+      "concept": "if_then_parallel",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0068"
+  },
+  {
+    "prompt": "The cat under the heavy curtains",
+    "target": " walks",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_agreement",
+    "metadata": {
+      "family": "agreement",
+      "concept": "agreement_with_intervener",
+      "difficulty": "medium",
+      "subject_number": "singular",
+      "distance": 4
+    },
+    "id": "sp_seed_0069"
+  },
+  {
+    "prompt": "He had one clear goal -",
+    "target": " to finish early",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_colon_dash",
+    "metadata": {
+      "family": "punctuation",
+      "concept": "dash_infinitive_continuation",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0070"
+  },
+  {
+    "prompt": "If it freezes, we wait by the door; if it darkens, we",
+    "target": " open the windows",
+    "type": "syntactic_pattern",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "sp_conditional",
+    "metadata": {
+      "family": "parallelism",
+      "concept": "if_then_parallel",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0071"
+  },
+  {
+    "prompt": "The painters near the old barns",
+    "target": " walk",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_agreement",
+    "metadata": {
+      "family": "agreement",
+      "concept": "agreement_with_intervener",
+      "difficulty": "medium",
+      "subject_number": "plural",
+      "distance": 4
+    },
+    "id": "sp_seed_0072"
+  },
+  {
+    "prompt": "If it clears, we go outside; if it darkens, we",
+    "target": " light the fire",
+    "type": "syntactic_pattern",
+    "tokens_approx": 13,
+    "tier": "short",
+    "source": "sp_conditional",
+    "metadata": {
+      "family": "parallelism",
+      "concept": "if_then_parallel",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0073"
+  },
+  {
+    "prompt": "First we wait, then we watch, and finally we",
+    "target": " rest",
+    "type": "syntactic_pattern",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "sp_series",
+    "metadata": {
+      "family": "parallelism",
+      "concept": "series_continuation",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0074"
+  },
+  {
+    "prompt": "The drivers that the workers admired",
+    "target": " run",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_agreement_rc",
+    "metadata": {
+      "family": "agreement",
+      "concept": "agreement_relative_clause",
+      "difficulty": "hard",
+      "subject_number": "plural",
+      "distance": 4
+    },
+    "id": "sp_seed_0075"
+  },
+  {
+    "prompt": "The sign warned, \"Do not cross the",
+    "target": " line.\"",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_quote",
+    "metadata": {
+      "family": "punctuation",
+      "concept": "quote_closure",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0076"
+  },
+  {
+    "prompt": "The shelf displayed papers, apples, and",
+    "target": " flowers",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_list",
+    "metadata": {
+      "family": "list_syntax",
+      "concept": "coordinated_np_list",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0077"
+  },
+  {
+    "prompt": "The meeting time (listed near the entrance",
+    "target": " )",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_bracket",
+    "metadata": {
+      "family": "punctuation",
+      "concept": "bracket_closure",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0078"
+  },
+  {
+    "prompt": "The rain stopped, and the children",
+    "target": " cheered",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_coord",
+    "metadata": {
+      "family": "coordination",
+      "concept": "and_clause_completion",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0079"
+  },
+  {
+    "prompt": "Her final answer [written on the board",
+    "target": " ]",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_bracket",
+    "metadata": {
+      "family": "punctuation",
+      "concept": "bracket_closure",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0080"
+  },
+  {
+    "prompt": "The guard watched the traveler with the",
+    "target": " telescope",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_attachment",
+    "metadata": {
+      "family": "attachment",
+      "concept": "pp_attachment_continuation",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0081"
+  },
+  {
+    "prompt": "The shelf displayed flowers, tools, and",
+    "target": " books",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_list",
+    "metadata": {
+      "family": "list_syntax",
+      "concept": "coordinated_np_list",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0082"
+  },
+  {
+    "prompt": "When the signal changed, the driver",
+    "target": " slowed",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_clause",
+    "metadata": {
+      "family": "clause_completion",
+      "concept": "when_main_clause",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0083"
+  },
+  {
+    "prompt": "Not only was the path steep, but it was also remarkably",
+    "target": " narrow",
+    "type": "syntactic_pattern",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "sp_correlative",
+    "metadata": {
+      "family": "correlative",
+      "concept": "not_only_but_also",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0084"
+  },
+  {
+    "prompt": "The shelf displayed books, lamps, and",
+    "target": " papers",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_list",
+    "metadata": {
+      "family": "list_syntax",
+      "concept": "coordinated_np_list",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0085"
+  },
+  {
+    "prompt": "The door was heavy, but the porter",
+    "target": " pushed",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_coord",
+    "metadata": {
+      "family": "coordination",
+      "concept": "but_clause_completion",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0086"
+  },
+  {
+    "prompt": "We knew that the signal was",
+    "target": " late",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_comp",
+    "metadata": {
+      "family": "complement_clause",
+      "concept": "that_clause_completion",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0087"
+  },
+  {
+    "prompt": "They discovered that the path was",
+    "target": " blocked",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_comp",
+    "metadata": {
+      "family": "complement_clause",
+      "concept": "that_clause_completion",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0088"
+  },
+  {
+    "prompt": "The final note [left by the window",
+    "target": " ]",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_bracket",
+    "metadata": {
+      "family": "punctuation",
+      "concept": "bracket_closure",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0089"
+  },
+  {
+    "prompt": "Not only was the lecture long, but it was also surprisingly",
+    "target": " clear",
+    "type": "syntactic_pattern",
+    "tokens_approx": 14,
+    "tier": "short",
+    "source": "sp_correlative",
+    "metadata": {
+      "family": "correlative",
+      "concept": "not_only_but_also",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0090"
+  },
+  {
+    "prompt": "The oldest tool (kept in the attic",
+    "target": " )",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_bracket",
+    "metadata": {
+      "family": "punctuation",
+      "concept": "bracket_closure",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0091"
+  },
+  {
+    "prompt": "After the bell rang, the students",
+    "target": " entered",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_clause",
+    "metadata": {
+      "family": "clause_completion",
+      "concept": "after_main_clause",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0092"
+  },
+  {
+    "prompt": "He opened the window, and the room",
+    "target": " cooled",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_coord",
+    "metadata": {
+      "family": "coordination",
+      "concept": "and_clause_completion",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0093"
+  },
+  {
+    "prompt": "Either the rain will stop, or the wind will",
+    "target": " weaken",
+    "type": "syntactic_pattern",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "sp_correlative",
+    "metadata": {
+      "family": "correlative",
+      "concept": "either_or_completion",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0094"
+  },
+  {
+    "prompt": "She wanted to leave early, but she",
+    "target": " stayed",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_coord",
+    "metadata": {
+      "family": "coordination",
+      "concept": "but_clause_completion",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0095"
+  },
+  {
+    "prompt": "He realized that the gate was",
+    "target": " locked",
+    "type": "syntactic_pattern",
+    "tokens_approx": 7,
+    "tier": "short",
+    "source": "sp_comp",
+    "metadata": {
+      "family": "complement_clause",
+      "concept": "that_clause_completion",
+      "difficulty": "easy"
+    },
+    "id": "sp_seed_0096"
+  },
+  {
+    "prompt": "Unless the rain stops soon, the workers",
+    "target": " will leave",
+    "type": "syntactic_pattern",
+    "tokens_approx": 9,
+    "tier": "short",
+    "source": "sp_clause",
+    "metadata": {
+      "family": "clause_completion",
+      "concept": "unless_main_clause",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0097"
+  },
+  {
+    "prompt": "Either the music will help, or the medicine will",
+    "target": " work",
+    "type": "syntactic_pattern",
+    "tokens_approx": 11,
+    "tier": "short",
+    "source": "sp_correlative",
+    "metadata": {
+      "family": "correlative",
+      "concept": "either_or_completion",
+      "difficulty": "medium"
+    },
+    "id": "sp_seed_0098"
+  }
+]

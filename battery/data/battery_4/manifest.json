@@ -1,0 +1,101 @@
+{
+  "types": {
+    "structural_copying": {
+      "file": "structural_copying.json",
+      "count": 100,
+      "tiers": {
+        "short": 100
+      }
+    },
+    "reasoning_numerical": {
+      "file": "reasoning_numerical.json",
+      "count": 90,
+      "tiers": {
+        "short": 72,
+        "brief": 18
+      }
+    },
+    "reasoning_tracking": {
+      "file": "reasoning_tracking.json",
+      "count": 90,
+      "tiers": {
+        "brief": 71,
+        "short": 19
+      }
+    },
+    "algorithmic": {
+      "file": "algorithmic.json",
+      "count": 80,
+      "tiers": {
+        "brief": 18,
+        "short": 62
+      }
+    },
+    "syntactic_pattern": {
+      "file": "syntactic_pattern.json",
+      "count": 100,
+      "tiers": {
+        "short": 100
+      }
+    },
+    "long_range_retrieval": {
+      "file": "long_range_retrieval.json",
+      "count": 80,
+      "tiers": {
+        "med": 62,
+        "long": 18
+      }
+    },
+    "domain_knowledge": {
+      "file": "domain_knowledge.json",
+      "count": 120,
+      "tiers": {
+        "long": 50,
+        "short": 10,
+        "med": 60
+      }
+    },
+    "code_comprehension": {
+      "file": "code_comprehension.json",
+      "count": 100,
+      "tiers": {
+        "brief": 48,
+        "short": 52
+      }
+    },
+    "factual_recall": {
+      "file": "factual_recall.json",
+      "count": 150,
+      "tiers": {
+        "short": 150
+      }
+    },
+    "factual_retrieval": {
+      "file": "factual_retrieval.json",
+      "count": 80,
+      "tiers": {
+        "short": 69,
+        "brief": 11
+      }
+    },
+    "cultural_memorized": {
+      "file": "cultural_memorized.json",
+      "count": 80,
+      "tiers": {
+        "med": 20,
+        "brief": 50,
+        "short": 10
+      }
+    }
+  },
+  "seed": 42,
+  "smoke": false,
+  "recipe": "battery/data/recipes/battery_4_recipe.json",
+  "code_pool": "/Users/peterdresslar/Workspace/hybrid-signal-lab/battery/data/sources/code_comprehension_seed.json",
+  "algorithmic_pool": "/Users/peterdresslar/Workspace/hybrid-signal-lab/battery/data/sources/algorithmic_seed.json",
+  "reasoning_numerical_pool": "/Users/peterdresslar/Workspace/hybrid-signal-lab/battery/data/sources/reasoning_numerical_seed.json",
+  "reasoning_tracking_pool": "/Users/peterdresslar/Workspace/hybrid-signal-lab/battery/data/sources/reasoning_tracking_seed.json",
+  "long_range_retrieval_pool": "/Users/peterdresslar/Workspace/hybrid-signal-lab/battery/data/sources/long_range_retrieval_seed.json",
+  "syntactic_pattern_pool": "/Users/peterdresslar/Workspace/hybrid-signal-lab/battery/data/sources/syntactic_pattern_seed.json",
+  "total": 1070
+}

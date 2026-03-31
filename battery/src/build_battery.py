@@ -10,6 +10,7 @@ Sources:
   - LAMBADA (HuggingFace) for cultural_memorized
   - Programmatic generators for all other types
   - Curated Wikipedia-derived domain knowledge pools loaded from JSON
+  - Optional externally generated code-comprehension pool
 
 Output: JSON battery file compatible with signal_lab.py / sweep.py
 """
@@ -18,6 +19,8 @@ import argparse
 import json
 import random
 import hashlib
+import subprocess
+import sys
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
@@ -295,18 +298,35 @@ def generate_structural_copying(n: int = 60, seed: int = 45) -> list[dict]:
     """
     rng = random.Random(seed)
     items = []
+    seen_prompts = set()
+
+    family_targets = {
+        "alpha_seq": max(1, n // 9),
+        "num_seq": max(1, n // 9),
+        "schema_blocks": max(1, n // 9),
+        "word_lists": max(1, n // 9),
+        "paired_delimiters": max(1, n // 9),
+        "tabular_rows": max(1, n // 9),
+        "mirrored_patterns": max(1, n // 9),
+        "alternating_pairs": max(1, n // 9),
+        "indent_blocks": max(1, n // 9),
+    }
+
+    def add_item(item: dict):
+        if item["prompt"] in seen_prompts:
+            return
+        seen_prompts.add(item["prompt"])
+        items.append(item)
 
     # Type 1: Alphabetic list continuation
-    for i in range(n // 4):
+    for _ in range(family_targets["alpha_seq"]):
         start = rng.randint(0, 20)
         length = rng.randint(3, 8)
         letters = [chr(ord('A') + (start + j) % 26) for j in range(length)]
         next_letter = chr(ord('A') + (start + length) % 26)
-
-        sep = rng.choice([", ", " ", " - ", "; "])
+        sep = rng.choice([", ", " ", " - ", "; ", " | "])
         prompt = sep.join(letters) + sep
-
-        items.append({
+        add_item({
             "prompt": prompt,
             "target": " " + next_letter,
             "type": "structural_copying",
@@ -315,18 +335,15 @@ def generate_structural_copying(n: int = 60, seed: int = 45) -> list[dict]:
         })
 
     # Type 2: Number list continuation
-    for i in range(n // 4):
-        # Arithmetic sequences
+    for _ in range(family_targets["num_seq"]):
         start = rng.randint(1, 50)
-        step = rng.choice([1, 2, 3, 5, 10])
+        step = rng.choice([1, 2, 3, 4, 5, 10])
         length = rng.randint(3, 7)
         nums = [str(start + j * step) for j in range(length)]
         target_num = str(start + length * step)
-
-        sep = rng.choice([", ", " ", "; "])
+        sep = rng.choice([", ", " ", "; ", " | "])
         prompt = sep.join(nums) + sep
-
-        items.append({
+        add_item({
             "prompt": prompt,
             "target": " " + target_num,
             "type": "structural_copying",
@@ -334,64 +351,382 @@ def generate_structural_copying(n: int = 60, seed: int = 45) -> list[dict]:
             "metadata": {"pattern": "arithmetic", "start": start, "step": step}
         })
 
-    # Type 3: Repeated structure copying
-    structures = [
-        ("Name: {name}\nAge: {age}\nCity: {city}\n\nName: {name2}\nAge: {age2}\nCity:",
-         lambda rng: {
-             "name": rng.choice(["Alice", "Bob", "Carol", "Dave", "Eve"]),
-             "age": str(rng.randint(20, 60)),
-             "city": rng.choice(["London", "Paris", "Tokyo", "Berlin", "Cairo"]),
-             "name2": rng.choice(["Frank", "Grace", "Hank", "Iris", "Jack"]),
-             "age2": str(rng.randint(20, 60)),
-         },
-         lambda vals: " " + rng.choice(["London", "Paris", "Tokyo", "Berlin", "Cairo", "Rome", "Delhi"])),
-
-        ("Item: apple, Color: red\nItem: banana, Color: yellow\nItem: grass, Color:",
-         lambda rng: {},
-         lambda vals: " green"),
-
-        ("Q: What is 2+2? A: 4\nQ: What is 3+3? A: 6\nQ: What is 5+5? A:",
-         lambda rng: {},
-         lambda vals: " 10"),
+    # Type 3: Structured schema copying
+    schema_templates = [
+        (
+            "Name: {name}\nAge: {age}\nCity: {city}\n\nName: {name2}\nAge: {age2}\nCity:",
+            lambda rng: {
+                "name": rng.choice(["Alice", "Bob", "Carol", "Dave", "Eve", "Mina", "Omar"]),
+                "age": str(rng.randint(20, 60)),
+                "city": rng.choice(["London", "Paris", "Tokyo", "Berlin", "Cairo", "Rome", "Delhi", "Lima"]),
+                "name2": rng.choice(["Frank", "Grace", "Hank", "Iris", "Jack", "Nora", "Paul"]),
+                "age2": str(rng.randint(20, 60)),
+            },
+            lambda vals: " " + rng.choice(["London", "Paris", "Tokyo", "Berlin", "Cairo", "Rome", "Delhi", "Lima"]),
+            "person_card",
+        ),
+        (
+            "Item: {i1}, Color: {c1}\nItem: {i2}, Color: {c2}\nItem: {i3}, Color:",
+            lambda rng: {
+                "i1": rng.choice(["apple", "banana", "grass", "sky", "snow", "coal", "orange"]),
+                "c1": rng.choice(["red", "yellow", "green", "blue", "white", "black", "orange"]),
+                "i2": rng.choice(["banana", "grass", "sky", "snow", "coal", "orange", "rose"]),
+                "c2": rng.choice(["yellow", "green", "blue", "white", "black", "orange", "red"]),
+                "i3": rng.choice(["grass", "sky", "snow", "coal", "orange", "rose", "leaf"]),
+            },
+            lambda vals: " " + rng.choice(["green", "blue", "white", "black", "orange", "red"]),
+            "label_value",
+        ),
+        (
+            "Q: What is {a1}+{b1}? A: {s1}\nQ: What is {a2}+{b2}? A: {s2}\nQ: What is {a3}+{b3}? A:",
+            lambda rng: {
+                "a1": 2, "b1": 2, "s1": 4,
+                "a2": 3, "b2": 3, "s2": 6,
+                "a3": rng.choice([4, 5, 6, 7]), "b3": rng.choice([4, 5, 6, 7]),
+            },
+            lambda vals: " " + str(int(vals["a3"]) + int(vals["b3"])),
+            "qa_pair",
+        ),
+        (
+            "Planet={p1}; Moon={m1}\nPlanet={p2}; Moon={m2}\nPlanet={p3}; Moon:",
+            lambda rng: {
+                "p1": "Earth", "m1": "Moon",
+                "p2": "Mars", "m2": rng.choice(["Phobos", "Deimos"]),
+                "p3": "Jupiter",
+            },
+            lambda vals: " " + rng.choice(["Europa", "Io", "Ganymede"]),
+            "semicolon_schema",
+        ),
+        (
+            "Key={k1} Value={v1}\nKey={k2} Value={v2}\nKey={k3} Value:",
+            lambda rng: {
+                "k1": rng.choice(["alpha", "beta", "gamma", "delta"]),
+                "v1": rng.randint(2, 9),
+                "k2": rng.choice(["beta", "gamma", "delta", "epsilon"]),
+                "v2": rng.randint(2, 9),
+                "k3": rng.choice(["gamma", "delta", "epsilon", "zeta"]),
+            },
+            lambda vals: " " + str(rng.randint(2, 9)),
+            "key_value_block",
+        ),
     ]
 
-    for i in range(n // 4):
-        template, val_fn, target_fn = rng.choice(structures)
+    for _ in range(family_targets["schema_blocks"]):
+        template, val_fn, target_fn, pattern = rng.choice(schema_templates)
         vals = val_fn(rng)
         prompt = template.format(**vals) if vals else template
         target = target_fn(vals)
-
-        items.append({
+        add_item({
             "prompt": prompt,
             "target": target,
             "type": "structural_copying",
             "source": "gen_struct",
-            "metadata": {"pattern": "structure_copy"}
+            "metadata": {"pattern": pattern}
         })
 
     # Type 4: Word list pattern copying
     word_categories = {
-        "animals": ["cat", "dog", "bird", "fish", "horse", "lion", "bear", "wolf", "deer", "frog"],
-        "colors": ["red", "blue", "green", "yellow", "purple", "orange", "pink", "black", "white", "brown"],
-        "fruits": ["apple", "banana", "cherry", "date", "elderberry", "fig", "grape", "kiwi", "lemon", "mango"],
-        "countries": ["France", "Japan", "Brazil", "Egypt", "India", "Canada", "Italy", "Spain", "China", "Kenya"],
+        "animals": ["cat", "dog", "bird", "fish", "horse", "lion", "bear", "wolf", "deer", "frog", "goat", "otter"],
+        "colors": ["red", "blue", "green", "yellow", "purple", "orange", "pink", "black", "white", "brown", "silver", "gold"],
+        "fruits": ["apple", "banana", "cherry", "date", "elderberry", "fig", "grape", "kiwi", "lemon", "mango", "papaya", "plum"],
+        "countries": ["France", "Japan", "Brazil", "Egypt", "India", "Canada", "Italy", "Spain", "China", "Kenya", "Peru", "Norway"],
+        "tools": ["hammer", "saw", "drill", "wrench", "pliers", "chisel", "mallet", "rake", "shovel", "ladder"],
     }
 
-    for i in range(n - len(items)):
+    for _ in range(family_targets["word_lists"]):
         cat = rng.choice(list(word_categories.keys()))
-        words = rng.sample(word_categories[cat], min(5, len(word_categories[cat])))
+        list_len = rng.randint(4, 6)
+        words = rng.sample(word_categories[cat], min(list_len, len(word_categories[cat])))
         target_word = rng.choice([w for w in word_categories[cat] if w not in words])
-
-        # Present as a list with one more to complete
-        prompt = f"List of {cat}: " + ", ".join(words) + ","
-
-        items.append({
+        prefix = rng.choice([f"List of {cat}: ", f"{cat.title()} = ", f"{cat.title()} -> "])
+        prompt = prefix + ", ".join(words) + ","
+        add_item({
             "prompt": prompt,
             "target": " " + target_word,
             "type": "structural_copying",
             "source": "gen_word_list",
             "metadata": {"pattern": "category_list", "category": cat}
         })
+
+    # Type 5: Delimiter / closure continuation
+    delimiter_pairs = [
+        ("(", ")"),
+        ("[", "]"),
+        ("{", "}"),
+        ("<", ">"),
+    ]
+    for _ in range(family_targets["paired_delimiters"]):
+        left, right = rng.choice(delimiter_pairs)
+        reps = rng.randint(2, 5)
+        inner = rng.choice(["abc", "123", "xy", "k9", "m4", "pq"])
+        pieces = [f"{left}{inner}{right}" for _ in range(reps)]
+        sep = rng.choice([" ", "  ", " | ", " ; "])
+        prompt = sep.join(pieces) + sep + f"{left}{inner}"
+        add_item({
+            "prompt": prompt,
+            "target": right,
+            "type": "structural_copying",
+            "source": "gen_delim",
+            "metadata": {"pattern": "paired_delimiter", "left": left, "right": right}
+        })
+
+    # Type 6: Tabular / row continuation
+    for _ in range(family_targets["tabular_rows"]):
+        row_type = rng.choice(["csv", "kv", "pipe", "tsv"])
+        if row_type == "csv":
+            names = rng.sample(["Ada", "Bo", "Cy", "Di", "Eli", "Fay"], 3)
+            scores = rng.sample(range(70, 99), 3)
+            prompt = f"id,name,score\n1,{names[0]},{scores[0]}\n2,{names[1]},{scores[1]}\n3,{names[2]},"
+            target = " " + str(scores[2])
+        elif row_type == "kv":
+            keys = rng.sample(["alpha", "beta", "gamma", "delta", "epsilon"], 3)
+            vals = rng.sample(range(2, 12), 3)
+            prompt = f"key={keys[0]} value={vals[0]}\nkey={keys[1]} value={vals[1]}\nkey={keys[2]} value="
+            target = " " + str(vals[2])
+        elif row_type == "tsv":
+            codes = rng.sample(["AX", "BY", "CZ", "DU", "EV"], 3)
+            vals = rng.sample(range(10, 30), 3)
+            prompt = f"code\tcount\n{codes[0]}\t{vals[0]}\n{codes[1]}\t{vals[1]}\n{codes[2]}\t"
+            target = " " + str(vals[2])
+        else:
+            labels = rng.sample(["A", "B", "C", "D", "E"], 3)
+            nums = rng.sample(range(1, 9), 3)
+            cols = rng.sample(["red", "blue", "green", "yellow", "white"], 3)
+            prompt = f"{labels[0]} | {nums[0]} | {cols[0]}\n{labels[1]} | {nums[1]} | {cols[1]}\n{labels[2]} | {nums[2]} |"
+            target = " " + cols[2]
+        add_item({
+            "prompt": prompt,
+            "target": target,
+            "type": "structural_copying",
+            "source": "gen_table",
+            "metadata": {"pattern": "tabular_row", "row_type": row_type}
+        })
+
+    # Type 7: Mirrored / repeated symbol patterns
+    mirrored_tokens = ["ab", "xy", "12", "pq"]
+    for _ in range(family_targets["mirrored_patterns"]):
+        token = rng.choice(mirrored_tokens)
+        sep = rng.choice(["-", ":", "|"])
+        max_rep = rng.randint(3, 5)
+        left = [token * k for k in range(1, max_rep + 1)]
+        right = [token * k for k in range(max_rep, 0, -1)]
+        body = left + right[:-1]
+        prompt = sep.join(body) + sep
+        target = right[-1]
+        add_item({
+            "prompt": prompt,
+            "target": " " + target,
+            "type": "structural_copying",
+            "source": "gen_mirror",
+            "metadata": {"pattern": "mirrored_repetition", "token": token, "max_rep": max_rep}
+        })
+
+    # Type 8: Alternating pair patterns
+    for _ in range(family_targets["alternating_pairs"]):
+        a = rng.choice(["A", "B", "X", "Y", "cat", "red"])
+        b = rng.choice(["1", "2", "Z", "Q", "dog", "blue"])
+        while a == b:
+            b = rng.choice(["1", "2", "Z", "Q", "dog", "blue"])
+        reps = rng.randint(3, 6)
+        seq = [a if i % 2 == 0 else b for i in range(reps)]
+        prompt = rng.choice([" ".join(seq), ", ".join(seq), " | ".join(seq)]) + rng.choice([" ", ", ", " | "])
+        target = b if reps % 2 == 0 else a
+        add_item({
+            "prompt": prompt,
+            "target": " " + target,
+            "type": "structural_copying",
+            "source": "gen_alt",
+            "metadata": {"pattern": "alternating_pair", "a": a, "b": b}
+        })
+
+    # Type 9: Indentation / block continuation
+    for _ in range(family_targets["indent_blocks"]):
+        style = rng.choice(["bullet", "kv_indent", "outline"])
+        if style == "bullet":
+            heading = rng.choice(["Tasks", "Steps", "Parts", "Items"])
+            vals = rng.sample(["alpha", "beta", "gamma", "delta", "epsilon"], 3)
+            prompt = f"{heading}:\n  - {vals[0]}\n  - {vals[1]}\n  -"
+            target = " " + vals[2]
+        elif style == "kv_indent":
+            key = rng.choice(["name", "city", "color", "item"])
+            vals = rng.sample(["Ada", "Paris", "blue", "map", "Rome", "green"], 3)
+            prompt = f"record:\n  {key}: {vals[0]}\n  {key}: {vals[1]}\n  {key}:"
+            target = " " + vals[2]
+        else:
+            vals = rng.sample(["Plan", "Build", "Test", "Review", "Ship"], 3)
+            prompt = f"I.\t{vals[0]}\nII.\t{vals[1]}\nIII.\t"
+            target = " " + vals[2]
+        add_item({
+            "prompt": prompt,
+            "target": target,
+            "type": "structural_copying",
+            "source": "gen_indent",
+            "metadata": {"pattern": "indented_block", "style": style}
+        })
+
+    # Fill any remainder with a weighted mix favoring more structured families
+    filler_families = [
+        "schema_blocks", "paired_delimiters", "tabular_rows", "mirrored_patterns",
+        "word_lists", "alternating_pairs", "indent_blocks", "alpha_seq", "num_seq",
+    ]
+    attempts = 0
+    while len(items) < n and attempts < n * 20:
+        attempts += 1
+        filler = rng.choice(filler_families)
+        if filler == "schema_blocks":
+            template, val_fn, target_fn, pattern = rng.choice(schema_templates)
+            vals = val_fn(rng)
+            prompt = template.format(**vals) if vals else template
+            target = target_fn(vals)
+            add_item({
+                "prompt": prompt,
+                "target": target,
+                "type": "structural_copying",
+                "source": "gen_struct",
+                "metadata": {"pattern": pattern}
+            })
+        elif filler == "paired_delimiters":
+            left, right = rng.choice(delimiter_pairs)
+            inner = rng.choice(["abc", "123", "xy", "k9", "m4", "pq"])
+            reps = rng.randint(2, 5)
+            pieces = [f"{left}{inner}{right}" for _ in range(reps)]
+            sep = rng.choice([" ", "  ", " | ", " ; "])
+            prompt = sep.join(pieces) + sep + f"{left}{inner}"
+            add_item({
+                "prompt": prompt,
+                "target": right,
+                "type": "structural_copying",
+                "source": "gen_delim",
+                "metadata": {"pattern": "paired_delimiter", "left": left, "right": right}
+            })
+        elif filler == "tabular_rows":
+            row_type = rng.choice(["csv", "kv", "pipe", "tsv"])
+            if row_type == "csv":
+                names = rng.sample(["Ada", "Bo", "Cy", "Di", "Eli", "Fay"], 3)
+                scores = rng.sample(range(70, 99), 3)
+                prompt = f"id,name,score\n1,{names[0]},{scores[0]}\n2,{names[1]},{scores[1]}\n3,{names[2]},"
+                target = " " + str(scores[2])
+            elif row_type == "kv":
+                keys = rng.sample(["alpha", "beta", "gamma", "delta", "epsilon"], 3)
+                vals = rng.sample(range(2, 12), 3)
+                prompt = f"key={keys[0]} value={vals[0]}\nkey={keys[1]} value={vals[1]}\nkey={keys[2]} value="
+                target = " " + str(vals[2])
+            elif row_type == "tsv":
+                codes = rng.sample(["AX", "BY", "CZ", "DU", "EV"], 3)
+                vals = rng.sample(range(10, 30), 3)
+                prompt = f"code\tcount\n{codes[0]}\t{vals[0]}\n{codes[1]}\t{vals[1]}\n{codes[2]}\t"
+                target = " " + str(vals[2])
+            else:
+                labels = rng.sample(["A", "B", "C", "D", "E"], 3)
+                nums = rng.sample(range(1, 9), 3)
+                cols = rng.sample(["red", "blue", "green", "yellow", "white"], 3)
+                prompt = f"{labels[0]} | {nums[0]} | {cols[0]}\n{labels[1]} | {nums[1]} | {cols[1]}\n{labels[2]} | {nums[2]} |"
+                target = " " + cols[2]
+            add_item({
+                "prompt": prompt,
+                "target": target,
+                "type": "structural_copying",
+                "source": "gen_table",
+                "metadata": {"pattern": "tabular_row", "row_type": row_type}
+            })
+        elif filler == "mirrored_patterns":
+            token = rng.choice(mirrored_tokens)
+            sep = rng.choice(["-", ":", "|"])
+            max_rep = rng.randint(3, 5)
+            left = [token * k for k in range(1, max_rep + 1)]
+            right = [token * k for k in range(max_rep, 0, -1)]
+            body = left + right[:-1]
+            prompt = sep.join(body) + sep
+            target = right[-1]
+            add_item({
+                "prompt": prompt,
+                "target": " " + target,
+                "type": "structural_copying",
+                "source": "gen_mirror",
+                "metadata": {"pattern": "mirrored_repetition", "token": token, "max_rep": max_rep}
+            })
+        elif filler == "alternating_pairs":
+            a = rng.choice(["A", "B", "X", "Y", "cat", "red"])
+            b = rng.choice(["1", "2", "Z", "Q", "dog", "blue"])
+            while a == b:
+                b = rng.choice(["1", "2", "Z", "Q", "dog", "blue"])
+            reps = rng.randint(3, 6)
+            seq = [a if i % 2 == 0 else b for i in range(reps)]
+            prompt = rng.choice([" ".join(seq), ", ".join(seq), " | ".join(seq)]) + rng.choice([" ", ", ", " | "])
+            target = b if reps % 2 == 0 else a
+            add_item({
+                "prompt": prompt,
+                "target": " " + target,
+                "type": "structural_copying",
+                "source": "gen_alt",
+                "metadata": {"pattern": "alternating_pair", "a": a, "b": b}
+            })
+        elif filler == "indent_blocks":
+            style = rng.choice(["bullet", "kv_indent", "outline"])
+            if style == "bullet":
+                heading = rng.choice(["Tasks", "Steps", "Parts", "Items"])
+                vals = rng.sample(["alpha", "beta", "gamma", "delta", "epsilon"], 3)
+                prompt = f"{heading}:\n  - {vals[0]}\n  - {vals[1]}\n  -"
+                target = " " + vals[2]
+            elif style == "kv_indent":
+                key = rng.choice(["name", "city", "color", "item"])
+                vals = rng.sample(["Ada", "Paris", "blue", "map", "Rome", "green"], 3)
+                prompt = f"record:\n  {key}: {vals[0]}\n  {key}: {vals[1]}\n  {key}:"
+                target = " " + vals[2]
+            else:
+                vals = rng.sample(["Plan", "Build", "Test", "Review", "Ship"], 3)
+                prompt = f"I.\t{vals[0]}\nII.\t{vals[1]}\nIII.\t"
+                target = " " + vals[2]
+            add_item({
+                "prompt": prompt,
+                "target": target,
+                "type": "structural_copying",
+                "source": "gen_indent",
+                "metadata": {"pattern": "indented_block", "style": style}
+            })
+        elif filler == "alpha_seq":
+            start = rng.randint(0, 20)
+            length = rng.randint(3, 8)
+            letters = [chr(ord('A') + (start + j) % 26) for j in range(length)]
+            next_letter = chr(ord('A') + (start + length) % 26)
+            sep = rng.choice([", ", " ", " - ", "; ", " | "])
+            prompt = sep.join(letters) + sep
+            add_item({
+                "prompt": prompt,
+                "target": " " + next_letter,
+                "type": "structural_copying",
+                "source": "gen_alpha_seq",
+                "metadata": {"pattern": "alpha_continuation"}
+            })
+        elif filler == "num_seq":
+            start = rng.randint(1, 50)
+            step = rng.choice([1, 2, 3, 4, 5, 10])
+            length = rng.randint(3, 7)
+            nums = [str(start + j * step) for j in range(length)]
+            target_num = str(start + length * step)
+            sep = rng.choice([", ", " ", "; ", " | "])
+            prompt = sep.join(nums) + sep
+            add_item({
+                "prompt": prompt,
+                "target": " " + target_num,
+                "type": "structural_copying",
+                "source": "gen_num_seq",
+                "metadata": {"pattern": "arithmetic", "start": start, "step": step}
+            })
+        else:
+            cat = rng.choice(list(word_categories.keys()))
+            list_len = rng.randint(4, 6)
+            words = rng.sample(word_categories[cat], min(list_len, len(word_categories[cat])))
+            target_word = rng.choice([w for w in word_categories[cat] if w not in words])
+            prefix = rng.choice([f"List of {cat}: ", f"{cat.title()} = ", f"{cat.title()} -> "])
+            prompt = prefix + ", ".join(words) + ","
+            add_item({
+                "prompt": prompt,
+                "target": " " + target_word,
+                "type": "structural_copying",
+                "source": "gen_word_list",
+                "metadata": {"pattern": "category_list", "category": cat}
+            })
 
     for i, item in enumerate(items[:n]):
         tok_count = approx_tokens(item["prompt"])
@@ -1383,21 +1718,55 @@ def generate_domain_knowledge(n: int = 60, seed: int = 51) -> list[dict]:
             f"Could not find {filename} in {_sources_dir} or {_data_dir}"
         )
 
-    wikipedia_items = _load_json_data("wikipedia_domain_items.json")
-    long_items = _load_json_data("long_domain_items.json")
+    def _load_optional_json_data(filename: str) -> list[dict]:
+        try:
+            return _load_json_data(filename)
+        except FileNotFoundError:
+            return []
+
+    pool_items = _load_optional_json_data("domain_knowledge_pool.json")
+    wikipedia_items = _load_optional_json_data("wikipedia_domain_items.json")
+    long_items = _load_optional_json_data("long_domain_items.json")
 
     def _normalize_domain_item(item: dict, fallback_source: str) -> dict:
-        """Preserve optional metadata/source from JSON-backed domain items."""
+        """Adapt source-pool domain items into battery-native records."""
         normalized = dict(item)
-        normalized["source"] = normalized.get("source", fallback_source)
-        normalized["metadata"] = normalized.get("metadata", {})
+
+        prompt = str(normalized.get("prompt", "")).strip()
+        target = str(normalized.get("target", ""))
+        if not prompt or not target:
+            raise ValueError(f"Invalid domain item missing prompt/target: {item!r}")
+
+        # Preserve hyphenated clozes like "Dunning-" -> "Kruger", but otherwise
+        # normalize targets to include a leading space for tokenizer alignment.
+        if not target.startswith(" ") and not prompt.endswith(("-", "/", "(")):
+            target = " " + target.strip()
+        normalized["prompt"] = prompt
+        normalized["target"] = target
+
+        source = str(normalized.get("source", fallback_source) or fallback_source)
+        normalized["source"] = source
+
+        metadata = dict(normalized.get("metadata", {}) or {})
+        if "word_count" in normalized and "word_count" not in metadata:
+            metadata["word_count"] = normalized["word_count"]
+        if "approx_tokens" in normalized and "approx_tokens" not in metadata:
+            metadata["approx_tokens_source"] = normalized["approx_tokens"]
+        if "title" in normalized and "title" not in metadata:
+            metadata["title"] = normalized["title"]
+        normalized["metadata"] = metadata
+
+        if "approx_tokens" in normalized and "tokens_approx" not in normalized:
+            normalized["tokens_approx"] = int(normalized["approx_tokens"])
         return normalized
 
     # JSON-backed domain items live in:
+    #   battery/data/sources/domain_knowledge_pool.json
     #   battery/data/sources/wikipedia_domain_items.json
     #   battery/data/sources/long_domain_items.json
     all_items = (
         [_normalize_domain_item(item, "curated_domain") for item in domain_items]
+        + [_normalize_domain_item(item, "gen-wikipedia-random-battery4") for item in pool_items]
         + [_normalize_domain_item(item, "gen-wikipedia-random") for item in wikipedia_items]
         + [_normalize_domain_item(item, "gen-wikipedia-random-long") for item in long_items]
     )
@@ -1407,7 +1776,7 @@ def generate_domain_knowledge(n: int = 60, seed: int = 51) -> list[dict]:
     selected = all_items[:n]
 
     for i, item in enumerate(selected):
-        tok_count = approx_tokens(item["prompt"])
+        tok_count = int(item.get("tokens_approx") or approx_tokens(item["prompt"]))
         item.update({
             "id": make_id("dk", item.get("source", "curated"), i),
             "type": "domain_knowledge",
@@ -1538,13 +1907,225 @@ DATASET_TYPES = {
 }
 
 
+def load_recipe(recipe_path: str | None) -> dict[str, int]:
+    """Load optional per-type count overrides from a JSON recipe."""
+    if recipe_path is None:
+        return {}
+
+    with open(recipe_path) as f:
+        data = json.load(f)
+
+    if "types" in data:
+        data = data["types"]
+
+    recipe: dict[str, int] = {}
+    for type_name, value in data.items():
+        if isinstance(value, dict):
+            count = value.get("count")
+        else:
+            count = value
+
+        if not isinstance(count, int) or count < 0:
+            raise ValueError(f"Invalid recipe count for {type_name}: {count!r}")
+
+        recipe[type_name] = count
+
+    return recipe
+
+
+def default_code_pool_path() -> str | None:
+    """Return the default external code pool path when present."""
+    root = Path(__file__).resolve().parents[1]
+    candidates = [
+        root / "data" / "sources" / "code_comprehension_seed.json",
+        root / "data" / "code_comprehension_seed.json",
+        root / "data" / "battery_4" / "code_comprehension_seed.json",
+    ]
+    for path in candidates:
+        if path.exists():
+            return str(path)
+    return None
+
+
+def default_algorithmic_pool_path() -> str | None:
+    """Return the default external algorithmic pool path when present."""
+    root = Path(__file__).resolve().parents[1]
+    candidates = [
+        root / "data" / "sources" / "algorithmic_seed.json",
+        root / "data" / "algorithmic_seed.json",
+        root / "data" / "battery_4" / "algorithmic_seed.json",
+    ]
+    for path in candidates:
+        if path.exists():
+            return str(path)
+    return None
+
+
+def default_reasoning_numerical_pool_path() -> str | None:
+    """Return the default external reasoning_numerical pool path when present."""
+    root = Path(__file__).resolve().parents[1]
+    candidates = [
+        root / "data" / "sources" / "reasoning_numerical_seed.json",
+        root / "data" / "reasoning_numerical_seed.json",
+        root / "data" / "battery_4" / "reasoning_numerical_seed.json",
+    ]
+    for path in candidates:
+        if path.exists():
+            return str(path)
+    return None
+
+
+def default_reasoning_tracking_pool_path() -> str | None:
+    """Return the default external reasoning_tracking pool path when present."""
+    root = Path(__file__).resolve().parents[1]
+    candidates = [
+        root / "data" / "sources" / "reasoning_tracking_seed.json",
+        root / "data" / "reasoning_tracking_seed.json",
+        root / "data" / "battery_4" / "reasoning_tracking_seed.json",
+    ]
+    for path in candidates:
+        if path.exists():
+            return str(path)
+    return None
+
+
+def default_long_range_retrieval_pool_path() -> str | None:
+    """Return the default external long_range_retrieval pool path when present."""
+    root = Path(__file__).resolve().parents[1]
+    candidates = [
+        root / "data" / "sources" / "long_range_retrieval_seed.json",
+        root / "data" / "long_range_retrieval_seed.json",
+        root / "data" / "battery_4" / "long_range_retrieval_seed.json",
+    ]
+    for path in candidates:
+        if path.exists():
+            return str(path)
+    return None
+
+
+def default_syntactic_pattern_pool_path() -> str | None:
+    """Return the default external syntactic_pattern pool path when present."""
+    root = Path(__file__).resolve().parents[1]
+    candidates = [
+        root / "data" / "sources" / "syntactic_pattern_seed.json",
+        root / "data" / "syntactic_pattern_seed.json",
+        root / "data" / "battery_4" / "syntactic_pattern_seed.json",
+    ]
+    for path in candidates:
+        if path.exists():
+            return str(path)
+    return None
+
+
+def canonical_seed_output_paths() -> dict[str, str]:
+    """Return canonical output paths for externally generated seed files."""
+    root = Path(__file__).resolve().parents[1]
+    sources = root / "data" / "sources"
+    return {
+        "code_comprehension": str(sources / "code_comprehension_seed.json"),
+        "algorithmic": str(sources / "algorithmic_seed.json"),
+        "reasoning_numerical": str(sources / "reasoning_numerical_seed.json"),
+        "reasoning_tracking": str(sources / "reasoning_tracking_seed.json"),
+        "long_range_retrieval": str(sources / "long_range_retrieval_seed.json"),
+        "syntactic_pattern": str(sources / "syntactic_pattern_seed.json"),
+    }
+
+
+def reseed(recipe_overrides: dict[str, int] | None = None, seed: int = 42) -> None:
+    """Regenerate canonical external seed files for procedural generator types.
+
+    This intentionally skips:
+    - domain_knowledge: backed by Wikipedia/domain JSON pools
+    - structural_copying: generated inline in build_battery.py
+    """
+    recipe_overrides = recipe_overrides or {}
+    outputs = canonical_seed_output_paths()
+    root = Path(__file__).resolve().parents[1]
+
+    seed_generators = {
+        "code_comprehension": ("battery.src.code_generate", outputs["code_comprehension"], GENERATED_TYPES["code_comprehension"][1], ["--python-bin", sys.executable]),
+        "algorithmic": ("battery.src.algorithmic_generate", outputs["algorithmic"], GENERATED_TYPES["algorithmic"][1], []),
+        "reasoning_numerical": ("battery.src.reasoning_numerical_generate", outputs["reasoning_numerical"], GENERATED_TYPES["reasoning_numerical"][1], []),
+        "reasoning_tracking": ("battery.src.reasoning_tracking_generate", outputs["reasoning_tracking"], GENERATED_TYPES["reasoning_tracking"][1], []),
+        "long_range_retrieval": ("battery.src.long_range_retrieval_generate", outputs["long_range_retrieval"], GENERATED_TYPES["long_range_retrieval"][1], []),
+        "syntactic_pattern": ("battery.src.syntactic_pattern_generate", outputs["syntactic_pattern"], GENERATED_TYPES["syntactic_pattern"][1], []),
+    }
+
+    for type_name, (module_name, output_path, default_count, extra_args) in seed_generators.items():
+        count = recipe_overrides.get(type_name, default_count)
+        Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+        cmd = [sys.executable, "-m", module_name, output_path, str(count), "--seed", str(seed)] + extra_args
+        print(f"Reseeding {type_name} -> {output_path} (n={count})")
+        subprocess.run(cmd, cwd=root, check=True)
+
+
+def load_external_type_pool(pool_path: str, type_name: str, n: int, seed: int) -> list[dict]:
+    """Load a pre-generated item pool for one type and sample n items."""
+    with open(pool_path) as f:
+        items = json.load(f)
+
+    if not isinstance(items, list):
+        raise ValueError(f"External pool must be a JSON list: {pool_path}")
+
+    filtered = [item for item in items if item.get("type") == type_name]
+    if not filtered:
+        raise ValueError(f"No items of type '{type_name}' found in external pool: {pool_path}")
+
+    filtered = deduplicate(filtered)
+    rng = random.Random(seed)
+    rng.shuffle(filtered)
+    return filtered[:n]
+
+
 def build_type(
     type_name: str,
     cache_dir: str = None,
     seed: int = 42,
     n_override: int | None = None,
+    code_pool_path: str | None = None,
+    algorithmic_pool_path: str | None = None,
+    reasoning_numerical_pool_path: str | None = None,
+    reasoning_tracking_pool_path: str | None = None,
+    long_range_retrieval_pool_path: str | None = None,
+    syntactic_pattern_pool_path: str | None = None,
 ) -> list[dict]:
     """Build items for a single type."""
+
+    if type_name == "code_comprehension" and code_pool_path:
+        _, default_n = GENERATED_TYPES[type_name]
+        n = default_n if n_override is None else n_override
+        print(f"Loading external code pool for {type_name} (n={n}) from {code_pool_path}...")
+        return load_external_type_pool(code_pool_path, type_name, n=n, seed=seed)
+
+    if type_name == "algorithmic" and algorithmic_pool_path:
+        _, default_n = GENERATED_TYPES[type_name]
+        n = default_n if n_override is None else n_override
+        print(f"Loading external algorithmic pool for {type_name} (n={n}) from {algorithmic_pool_path}...")
+        return load_external_type_pool(algorithmic_pool_path, type_name, n=n, seed=seed)
+
+    if type_name == "reasoning_numerical" and reasoning_numerical_pool_path:
+        _, default_n = GENERATED_TYPES[type_name]
+        n = default_n if n_override is None else n_override
+        print(f"Loading external reasoning_numerical pool for {type_name} (n={n}) from {reasoning_numerical_pool_path}...")
+        return load_external_type_pool(reasoning_numerical_pool_path, type_name, n=n, seed=seed)
+
+    if type_name == "reasoning_tracking" and reasoning_tracking_pool_path:
+        _, default_n = GENERATED_TYPES[type_name]
+        n = default_n if n_override is None else n_override
+        print(f"Loading external reasoning_tracking pool for {type_name} (n={n}) from {reasoning_tracking_pool_path}...")
+        return load_external_type_pool(reasoning_tracking_pool_path, type_name, n=n, seed=seed)
+
+    if type_name == "long_range_retrieval" and long_range_retrieval_pool_path:
+        _, default_n = GENERATED_TYPES[type_name]
+        n = default_n if n_override is None else n_override
+        print(f"Loading external long_range_retrieval pool for {type_name} (n={n}) from {long_range_retrieval_pool_path}...")
+        return load_external_type_pool(long_range_retrieval_pool_path, type_name, n=n, seed=seed)
+
+    if type_name == "syntactic_pattern" and syntactic_pattern_pool_path:
+        _, default_n = GENERATED_TYPES[type_name]
+        n = default_n if n_override is None else n_override
+        print(f"Loading external syntactic_pattern pool for {type_name} (n={n}) from {syntactic_pattern_pool_path}...")
+        return load_external_type_pool(syntactic_pattern_pool_path, type_name, n=n, seed=seed)
 
     if type_name in GENERATED_TYPES:
         gen_fn, n = GENERATED_TYPES[type_name]
@@ -1620,6 +2201,22 @@ def main():
     parser.add_argument("--cache-dir", type=str, default=None,
                         help="HuggingFace cache directory for datasets")
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--recipe", type=str, default=None,
+                        help="Optional JSON recipe with per-type prompt counts")
+    parser.add_argument("--code-pool", type=str, default=None,
+                        help="Optional JSON pool for code_comprehension items")
+    parser.add_argument("--algorithmic-pool", type=str, default=None,
+                        help="Optional JSON pool for algorithmic items")
+    parser.add_argument("--reasoning-numerical-pool", type=str, default=None,
+                        help="Optional JSON pool for reasoning_numerical items")
+    parser.add_argument("--reasoning-tracking-pool", type=str, default=None,
+                        help="Optional JSON pool for reasoning_tracking items")
+    parser.add_argument("--long-range-retrieval-pool", type=str, default=None,
+                        help="Optional JSON pool for long_range_retrieval items")
+    parser.add_argument("--syntactic-pattern-pool", type=str, default=None,
+                        help="Optional JSON pool for syntactic_pattern items")
+    parser.add_argument("--reseed", action="store_true",
+                        help="Regenerate canonical external seed files, then exit")
     parser.add_argument("--no-datasets", action="store_true",
                         help="Skip HuggingFace dataset downloads (generators only)")
     parser.add_argument("--types", type=str, nargs="*", default=None,
@@ -1648,14 +2245,48 @@ def main():
     manifest = {"types": {}, "seed": args.seed, "smoke": args.smoke}
     all_items = []
     n_override = 1 if args.smoke else None
+    recipe_overrides = load_recipe(args.recipe)
+    if args.reseed:
+        reseed(recipe_overrides=recipe_overrides, seed=args.seed)
+        return
+    code_pool_path = args.code_pool or default_code_pool_path()
+    algorithmic_pool_path = args.algorithmic_pool or default_algorithmic_pool_path()
+    reasoning_numerical_pool_path = args.reasoning_numerical_pool or default_reasoning_numerical_pool_path()
+    reasoning_tracking_pool_path = args.reasoning_tracking_pool or default_reasoning_tracking_pool_path()
+    long_range_retrieval_pool_path = args.long_range_retrieval_pool or default_long_range_retrieval_pool_path()
+    syntactic_pattern_pool_path = args.syntactic_pattern_pool or default_syntactic_pattern_pool_path()
+
+    if args.recipe:
+        manifest["recipe"] = str(args.recipe)
+    if code_pool_path:
+        manifest["code_pool"] = str(code_pool_path)
+    if algorithmic_pool_path:
+        manifest["algorithmic_pool"] = str(algorithmic_pool_path)
+    if reasoning_numerical_pool_path:
+        manifest["reasoning_numerical_pool"] = str(reasoning_numerical_pool_path)
+    if reasoning_tracking_pool_path:
+        manifest["reasoning_tracking_pool"] = str(reasoning_tracking_pool_path)
+    if long_range_retrieval_pool_path:
+        manifest["long_range_retrieval_pool"] = str(long_range_retrieval_pool_path)
+    if syntactic_pattern_pool_path:
+        manifest["syntactic_pattern_pool"] = str(syntactic_pattern_pool_path)
 
     for type_name in type_names:
         try:
+            type_n_override = n_override
+            if type_n_override is None:
+                type_n_override = recipe_overrides.get(type_name)
             items = build_type(
                 type_name,
                 cache_dir=args.cache_dir,
                 seed=args.seed,
-                n_override=n_override,
+                n_override=type_n_override,
+                code_pool_path=code_pool_path,
+                algorithmic_pool_path=algorithmic_pool_path,
+                reasoning_numerical_pool_path=reasoning_numerical_pool_path,
+                reasoning_tracking_pool_path=reasoning_tracking_pool_path,
+                long_range_retrieval_pool_path=long_range_retrieval_pool_path,
+                syntactic_pattern_pool_path=syntactic_pattern_pool_path,
             )
             items = deduplicate(items)
         except Exception as e:

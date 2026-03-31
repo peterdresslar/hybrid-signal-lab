@@ -6,6 +6,7 @@ This script scans a battery directory for calibration result files, loads every
 
 It is intentionally stdlib-only so it is easy to run anywhere:
 
+    uv run -m battery.src.calibration_analyze --calibration path/to/calibration.jsonl
     uv run -m battery.src.calibration_analyze --battery-dir battery/data/battery_3
 """
 
@@ -51,16 +52,25 @@ def parse_args() -> argparse.Namespace:
         description="Analyze calibration JSONL files in a battery folder."
     )
     parser.add_argument(
-        "--battery-dir",
+        "--calibration",
         type=str,
-        required=True,
-        help="Directory containing calibration JSONL files (for example battery/data/battery_3).",
+        nargs="+",
+        default=None,
+        help="One or more calibration JSONL files to analyze. Alternative to --battery-dir.",
     )
     parser.add_argument(
-        "--pattern",
+        "--battery-dir",
         type=str,
-        default="*.jsonl",
-        help="Glob for calibration files within --battery-dir (default: *.jsonl).",
+        default=None,
+        help="Directory containing calibration JSONL files (for example battery/data/battery_3). "
+             "All *.jsonl files in the directory will be loaded.",
+    )
+    parser.add_argument(
+        "--candidates",
+        type=str,
+        default=None,
+        help="Path to all_candidates.json for enriching output with prompt metadata. "
+             "Auto-detected from --battery-dir when available.",
     )
     parser.add_argument(
         "--json-out",
@@ -197,10 +207,13 @@ def render_table(headers: list[str], rows: list[list[str]]) -> str:
 
 def summarize_runs(
     runs: list[dict[str, Any]],
-) -> tuple[list[SummaryRow], list[SummaryRow], list[SummaryRow]]:
+) -> tuple[list[SummaryRow], list[SummaryRow], list[SummaryRow], list[SummaryRow], list[SummaryRow], list[SummaryRow]]:
     overall: list[SummaryRow] = []
     by_type: list[SummaryRow] = []
     by_tier: list[SummaryRow] = []
+    by_family: list[SummaryRow] = []
+    by_concept: list[SummaryRow] = []
+    by_difficulty: list[SummaryRow] = []
 
     for run in runs:
         model = run["model"]
@@ -208,11 +221,23 @@ def summarize_runs(
         overall.append(summarize_records(group="__overall__", model=model, records=records))
         by_type.extend(group_records(model, records, "type"))
         by_tier.extend(group_records(model, records, "tier"))
+        family_records = [record for record in records if record.get("family") is not None]
+        concept_records = [record for record in records if record.get("concept") is not None]
+        difficulty_records = [record for record in records if record.get("difficulty") is not None]
+        if family_records:
+            by_family.extend(group_records(model, family_records, "family"))
+        if concept_records:
+            by_concept.extend(group_records(model, concept_records, "concept"))
+        if difficulty_records:
+            by_difficulty.extend(group_records(model, difficulty_records, "difficulty"))
 
     overall.sort(key=lambda row: row.model)
     by_type.sort(key=lambda row: (row.group, row.model))
     by_tier.sort(key=lambda row: (row.group, row.model))
-    return overall, by_type, by_tier
+    by_family.sort(key=lambda row: (row.group, row.model))
+    by_concept.sort(key=lambda row: (row.group, row.model))
+    by_difficulty.sort(key=lambda row: (row.group, row.model))
+    return overall, by_type, by_tier, by_family, by_concept, by_difficulty
 
 
 def collect_run_metadata(path: Path, records: list[dict[str, Any]]) -> dict[str, Any]:
@@ -360,6 +385,13 @@ def build_item_comparison_rows(
             by_id[item_id]["id"] = item_id
             by_id[item_id]["type"] = record.get("type")
             by_id[item_id]["tier"] = record.get("tier")
+            by_id[item_id]["family"] = record.get("family")
+            by_id[item_id]["concept"] = record.get("concept")
+            by_id[item_id]["difficulty"] = record.get("difficulty")
+            by_id[item_id]["source"] = record.get("source", by_id[item_id].get("source"))
+            by_id[item_id]["target_num_tokens"] = record.get("target_num_tokens")
+            by_id[item_id]["target_starts_with_space"] = record.get("target_starts_with_space")
+            by_id[item_id]["target_first_token_str"] = record.get("target_first_token_str")
 
             candidate = candidate_lookup.get(item_id, {})
             if candidate:
@@ -439,6 +471,9 @@ def build_report_text(
     overall: list[SummaryRow],
     by_type: list[SummaryRow],
     by_tier: list[SummaryRow],
+    by_family: list[SummaryRow],
+    by_concept: list[SummaryRow],
+    by_difficulty: list[SummaryRow],
     type_deltas: list[dict[str, Any]],
 ) -> str:
     parts = [f"Battery directory: {battery_dir}", f"Calibration files: {len(runs)}", ""]
@@ -542,6 +577,32 @@ def build_report_text(
     )
     parts.append("")
 
+    if by_family:
+        parts.append("Family Summary By Model")
+        parts.append(
+            render_table(
+                [
+                    "family", "model", "n", "mean_p", "median_p", "mean_rank", "median_rank",
+                    "%r1", "%r<=5", "%r<=10", "%p<0.05", "%mid", "%p>0.85", "mean_H", "mean_s",
+                ],
+                rows_for_summary(by_family, include_group=True),
+            )
+        )
+        parts.append("")
+
+    if by_difficulty:
+        parts.append("Difficulty Summary By Model")
+        parts.append(
+            render_table(
+                [
+                    "difficulty", "model", "n", "mean_p", "median_p", "mean_rank", "median_rank",
+                    "%r1", "%r<=5", "%r<=10", "%p<0.05", "%mid", "%p>0.85", "mean_H", "mean_s",
+                ],
+                rows_for_summary(by_difficulty, include_group=True),
+            )
+        )
+        parts.append("")
+
     if type_deltas:
         delta_rows = [
             [
@@ -590,6 +651,9 @@ def write_analysis_files(
     overall: list[SummaryRow],
     by_type: list[SummaryRow],
     by_tier: list[SummaryRow],
+    by_family: list[SummaryRow],
+    by_concept: list[SummaryRow],
+    by_difficulty: list[SummaryRow],
     type_deltas: list[dict[str, Any]],
     item_rows: list[dict[str, Any]],
 ) -> list[Path]:
@@ -628,6 +692,21 @@ def write_analysis_files(
     write_csv(by_tier_path, summary_rows_to_dicts(by_tier), list(asdict(by_tier[0]).keys()))
     written.append(by_tier_path)
 
+    if by_family:
+        by_family_path = output_dir / f"{prefix}_family_summary.csv"
+        write_csv(by_family_path, summary_rows_to_dicts(by_family), list(asdict(by_family[0]).keys()))
+        written.append(by_family_path)
+
+    if by_concept:
+        by_concept_path = output_dir / f"{prefix}_concept_summary.csv"
+        write_csv(by_concept_path, summary_rows_to_dicts(by_concept), list(asdict(by_concept[0]).keys()))
+        written.append(by_concept_path)
+
+    if by_difficulty:
+        by_difficulty_path = output_dir / f"{prefix}_difficulty_summary.csv"
+        write_csv(by_difficulty_path, summary_rows_to_dicts(by_difficulty), list(asdict(by_difficulty[0]).keys()))
+        written.append(by_difficulty_path)
+
     deltas_path = output_dir / f"{prefix}_type_deltas.csv"
     rounded_type_deltas = [round_report_row(row) for row in type_deltas]
     write_csv(
@@ -647,8 +726,14 @@ def write_analysis_files(
             "id",
             "type",
             "tier",
+            "family",
+            "concept",
+            "difficulty",
             "source",
             "target",
+            "target_num_tokens",
+            "target_starts_with_space",
+            "target_first_token_str",
             "tokens_approx",
             "prompt",
             "metadata_json",
@@ -702,16 +787,31 @@ def print_report(report_text: str) -> None:
 
 def main() -> None:
     args = parse_args()
-    battery_dir = Path(args.battery_dir).expanduser()
-    if not battery_dir.exists():
-        raise FileNotFoundError(f"Battery directory does not exist: {battery_dir}")
-    if not battery_dir.is_dir():
-        raise NotADirectoryError(f"Battery directory must be a directory: {battery_dir}")
 
-    calibration_paths = sorted(p for p in battery_dir.glob(args.pattern) if p.is_file())
+    if not args.calibration and not args.battery_dir:
+        raise SystemExit("Error: provide either --calibration FILE(s) or --battery-dir DIR.")
+
+    # Resolve calibration file paths
+    if args.calibration:
+        calibration_paths = []
+        for p in args.calibration:
+            path = Path(p).expanduser()
+            if not path.exists():
+                raise FileNotFoundError(f"Calibration file does not exist: {path}")
+            calibration_paths.append(path)
+        calibration_paths.sort()
+        battery_dir = calibration_paths[0].parent
+    else:
+        battery_dir = Path(args.battery_dir).expanduser()
+        if not battery_dir.exists():
+            raise FileNotFoundError(f"Battery directory does not exist: {battery_dir}")
+        if not battery_dir.is_dir():
+            raise NotADirectoryError(f"Battery directory must be a directory: {battery_dir}")
+        calibration_paths = sorted(p for p in battery_dir.glob("*.jsonl") if p.is_file())
+
     if not calibration_paths:
         raise FileNotFoundError(
-            f"No files matched {args.pattern!r} in {battery_dir}"
+            f"No calibration JSONL files found in {battery_dir}"
         )
 
     runs = []
@@ -725,9 +825,14 @@ def main() -> None:
         raise ValueError(f"No non-empty calibration files found in {battery_dir}")
 
     warnings = build_consistency_warnings(runs)
-    overall, by_type, by_tier = summarize_runs(runs)
+    overall, by_type, by_tier, by_family, by_concept, by_difficulty = summarize_runs(runs)
     type_deltas = build_type_deltas(by_type)
-    candidate_lookup = load_candidate_lookup(battery_dir)
+    # Resolve candidate metadata: explicit --candidates, or auto-detect in battery_dir
+    if args.candidates:
+        candidates_path = Path(args.candidates).expanduser()
+        candidate_lookup = load_candidate_lookup(candidates_path.parent)
+    else:
+        candidate_lookup = load_candidate_lookup(battery_dir)
     item_rows = build_item_comparison_rows(runs, candidate_lookup)
     report_text = build_report_text(
         battery_dir=battery_dir,
@@ -736,13 +841,22 @@ def main() -> None:
         overall=overall,
         by_type=by_type,
         by_tier=by_tier,
+        by_family=by_family,
+        by_concept=by_concept,
+        by_difficulty=by_difficulty,
         type_deltas=type_deltas,
     )
 
     print_report(report_text)
 
     if not args.no_write_files:
-        output_dir = Path(args.output_dir).expanduser() if args.output_dir else battery_dir
+        if args.output_dir:
+            output_dir = Path(args.output_dir).expanduser()
+        elif args.calibration:
+            # Default to same directory as the first calibration file
+            output_dir = calibration_paths[0].parent
+        else:
+            output_dir = battery_dir
         written = write_analysis_files(
             output_dir=output_dir,
             prefix=args.prefix,
@@ -752,6 +866,9 @@ def main() -> None:
             overall=overall,
             by_type=by_type,
             by_tier=by_tier,
+            by_family=by_family,
+            by_concept=by_concept,
+            by_difficulty=by_difficulty,
             type_deltas=type_deltas,
             item_rows=item_rows,
         )
@@ -762,7 +879,7 @@ def main() -> None:
 
     if args.json_out:
         report = {
-            "battery_dir": str(battery_dir),
+            "source_dir": str(battery_dir),
             "files": [
                 {
                     "file": run["file"],
@@ -778,6 +895,9 @@ def main() -> None:
             "overall": [round_report_row(asdict(row)) for row in overall],
             "by_type": [round_report_row(asdict(row)) for row in by_type],
             "by_tier": [round_report_row(asdict(row)) for row in by_tier],
+            "by_family": [round_report_row(asdict(row)) for row in by_family],
+            "by_concept": [round_report_row(asdict(row)) for row in by_concept],
+            "by_difficulty": [round_report_row(asdict(row)) for row in by_difficulty],
             "type_deltas": [round_report_row(row) for row in type_deltas],
             "item_cross_model": item_rows,
         }

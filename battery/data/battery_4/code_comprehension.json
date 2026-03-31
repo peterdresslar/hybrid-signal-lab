@@ -1,0 +1,1402 @@
+[
+  {
+    "prompt": "```python\nn = 10\nres = 0\nwhile n > 0:\n    if n % 3 == 0:\n        res += n * 2\n    else:\n        res += 1\n    n -= 2\nprint(res)\n```\nOutput:",
+    "target": " 16",
+    "type": "code_comprehension",
+    "tokens_approx": 41,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "loops",
+      "concept": "conditional updates in while loop",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0063"
+  },
+  {
+    "prompt": "```python\ndata = {'a': 10, 'b': 20}\ndata['a'] += data.pop('b')\ndata['c'] = data.get('a') * 2\nprint(sum(data.values()))\n```\nOutput:",
+    "target": " 90",
+    "type": "code_comprehension",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "dicts",
+      "concept": "mutate a dictionary twice and print a derived total",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0133"
+  },
+  {
+    "prompt": "```python\nx = 5\ndef f(x):\n    x = x * 2 if x > 2 else x + 10\n    if x > 8:\n        x = x - 5\n    return x\nprint(f(3))\n```\nOutput:",
+    "target": " 6",
+    "type": "code_comprehension",
+    "tokens_approx": 42,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "shadowing",
+      "concept": "variable_reassignment_branching",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0109"
+  },
+  {
+    "prompt": "```python\ndef calc(x, y):\n    return x * 2 - y\n\na = calc(5, 3)\nb = calc(2, 4)\nprint(a + b)\n```\nOutput:",
+    "target": " 7",
+    "type": "code_comprehension",
+    "tokens_approx": 29,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "functions",
+      "concept": "reusing function with different arguments",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0134"
+  },
+  {
+    "prompt": "```python\ndata = {'apples': 12, 'oranges': 8}\ntotal = data['apples'] + data['oranges']\nprint(total)\n```\nOutput:",
+    "target": " 20",
+    "type": "code_comprehension",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "dicts",
+      "concept": "dictionary_arithmetic",
+      "difficulty": "easy"
+    },
+    "id": "cc_seed_0075"
+  },
+  {
+    "prompt": "```python\nd = {'a': 10, 'b': 20}\nx = 5\nif x * 2 == 10:\n    d['a'] = d.get('c', 5) + d['b']\nelse:\n    d['b'] = 0\nprint(d['a'] + d['b'])\n```\nOutput:",
+    "target": " 45",
+    "type": "code_comprehension",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "branch_mutation",
+      "concept": "conditional_dict_update",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0061"
+  },
+  {
+    "prompt": "```python\nn = 10\nx = 0\nwhile n > 0:\n    if n % 3 == 0:\n        x += n\n    else:\n        x += 1\n    n -= 2\nprint(x)\n```\nOutput:",
+    "target": " 10",
+    "type": "code_comprehension",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "loops",
+      "concept": "conditional_running_sum",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0130"
+  },
+  {
+    "prompt": "```python\ndef double(x): return x * 2\n\nvals = [1, 2, 3]\nres = [double(v) + 1 for v in vals if double(v) > 3]\nprint(res)\n```\nOutput:",
+    "target": " [5, 7]",
+    "type": "code_comprehension",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "functions",
+      "concept": "helper function in list comprehension",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0039"
+  },
+  {
+    "prompt": "```python\nx = 1\ny = 15\nwhile y > 0:\n    if y % 3 == 0:\n        x *= 2\n    else:\n        x += 1\n    y -= 4\nprint(x)\n```\nOutput:",
+    "target": " 8",
+    "type": "code_comprehension",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "loops",
+      "concept": "conditional update",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0040"
+  },
+  {
+    "prompt": "```python\ndata = [x for x in range(10) if x % 2 == 0]\nres = [a + b for a in data for b in data if a < b and (a + b) % 3 == 0]\nprint(len(res))\n```\nOutput:",
+    "target": " 3",
+    "type": "code_comprehension",
+    "tokens_approx": 54,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "comprehensions",
+      "concept": "nested list comprehension with filtering",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0038"
+  },
+  {
+    "prompt": "```python\nx = 10\ny = 5\nres = \"A\" if x < y else \"B\"\nif x % 2 == 0 and y % 2 != 0:\n    res += \"C\"\nelse:\n    res += \"D\"\nprint(res)\n```\nOutput:",
+    "target": " BC",
+    "type": "code_comprehension",
+    "tokens_approx": 49,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "booleans",
+      "concept": "conditional branching",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0065"
+  },
+  {
+    "prompt": "```python\ndef f(x):\n    return x * 2 if x % 2 == 0 else x + 1\n\nres = [f(i) for i in range(5) if f(i) > 2]\nprint(res)\n```\nOutput:",
+    "target": " [4, 4, 8]",
+    "type": "code_comprehension",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "comprehensions",
+      "concept": "conditional list comprehension with helper function",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0085"
+  },
+  {
+    "prompt": "```python\nnums = [1, 5, 2, 8, 3, 10]\ntotal = 0\nfor x in nums:\n    if x % 2 == 0 and x > 5:\n        total += x * 2\n    elif x < 4:\n        total += 1\nprint(total)\n```\nOutput:",
+    "target": " 39",
+    "type": "code_comprehension",
+    "tokens_approx": 53,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "loops",
+      "concept": "conditional_accumulation",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0000"
+  },
+  {
+    "prompt": "```python\ndata = [10, 25, 40, 55, 70, 85]\nrev = data[::-1]\nval = rev[1] + rev[-1]\nprint(val)\n```\nOutput:",
+    "target": " 80",
+    "type": "code_comprehension",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "indexing",
+      "concept": "reverse indexing and slicing",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0141"
+  },
+  {
+    "prompt": "```python\ndef f(x):\n    return x * 2 if x % 2 == 0 else x + 1\n\ndata = [1, 2, 3, 4]\nres = [f(v) for v in data if f(v) > 2]\nprint(res)\n```\nOutput:",
+    "target": " [4, 4, 8]",
+    "type": "code_comprehension",
+    "tokens_approx": 48,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "comprehensions",
+      "concept": "nested_function_call_in_comprehension",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0095"
+  },
+  {
+    "prompt": "```python\ntext = '  \\n  hello world  \\t'\nresult = text.strip()\nprint(result)\n```\nOutput:",
+    "target": " hello world",
+    "type": "code_comprehension",
+    "tokens_approx": 18,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "strings",
+      "concept": "strip whitespace",
+      "difficulty": "easy"
+    },
+    "id": "cc_seed_0032"
+  },
+  {
+    "prompt": "```python\ndata = 'alpha-beta:gamma_delta'\nparts = data.replace(':', '-').replace('_', '-').split('-')\nprint(parts[2])\n```\nOutput:",
+    "target": " gamma",
+    "type": "code_comprehension",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "strings",
+      "concept": "string splitting and replacement",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0131"
+  },
+  {
+    "prompt": "```python\ndata = [15, 2, 8]\ndata.append(5)\ndata.append(1)\ndata.sort()\nprint(data[2])\n```\nOutput:",
+    "target": " 5",
+    "type": "code_comprehension",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "order_effects",
+      "concept": "list_mutation_and_sorting",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0018"
+  },
+  {
+    "prompt": "```python\nx = 4\ndef calc(x):\n    x = x * 2\n    if x > 5:\n        x = x - 3\n    return x\nx = calc(x)\nprint(x)\n```\nOutput:",
+    "target": " 5",
+    "type": "code_comprehension",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "shadowing",
+      "concept": "variable_reassignment_in_scope",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0083"
+  },
+  {
+    "prompt": "```python\nnums = [1, 2, 3, 4]\nfor i in range(len(nums)):\n    if nums[i] % 2 == 0:\n        nums[i] *= 10\n    else:\n        nums.append(nums[i] + 5)\nprint(nums[5])\n```\nOutput:",
+    "target": " 8",
+    "type": "code_comprehension",
+    "tokens_approx": 35,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "lists",
+      "concept": "mutation during iteration",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0030"
+  },
+  {
+    "prompt": "```python\nx = 15\ny = 20\nz = 10\nresult = x < y and x > z\nprint(result)\n```\nOutput:",
+    "target": " True",
+    "type": "code_comprehension",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "booleans",
+      "concept": "comparison_and_logical_operators",
+      "difficulty": "easy"
+    },
+    "id": "cc_seed_0119"
+  },
+  {
+    "prompt": "```python\nx = 10\ny = 20\nz = 15\nresult = \"A\"\nif x < y and z > x:\n    if y - z < 4:\n        result = \"B\"\n    else:\n        result = \"C\"\nelse:\n    result = \"D\"\nprint(result)\n```\nOutput:",
+    "target": " C",
+    "type": "code_comprehension",
+    "tokens_approx": 53,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "booleans",
+      "concept": "nested conditional branching",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0132"
+  },
+  {
+    "prompt": "```python\ndata = [\n    {'id': 10, 'meta': {'tag': 'A'}},\n    {'id': 20, 'meta': {'tag': 'B'}},\n    {'id': 30, 'meta': {'tag': 'C'}}\n]\nresult = data[1]['meta']['tag']\nprint(result)\n```\nOutput:",
+    "target": " B",
+    "type": "code_comprehension",
+    "tokens_approx": 33,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "nested_structures",
+      "concept": "list_of_dicts_indexing",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0072"
+  },
+  {
+    "prompt": "```python\nx = 5\ndef process(y):\n    global x\n    x = 10\n    return y + x\n\nresult = process(x)\nprint(result)\n```\nOutput:",
+    "target": " 15",
+    "type": "code_comprehension",
+    "tokens_approx": 27,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "shadowing",
+      "concept": "global reassignment during parameter evaluation",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0123"
+  },
+  {
+    "prompt": "```python\ndata = {'a': [10, 20], 'b': [30, 40], 'c': [50, 60]}\nkey = 'b'\nidx = 1\nresult = data[key][idx]\nprint(result)\n```\nOutput:",
+    "target": " 40",
+    "type": "code_comprehension",
+    "tokens_approx": 31,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "nested_structures",
+      "concept": "nested_list_dict_lookup",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0128"
+  },
+  {
+    "prompt": "```python\nx = 5\ndef f(y):\n    global x\n    x = 10\n    return y + x\n\nres = f(x)\nprint(res + x)\n```\nOutput:",
+    "target": " 25",
+    "type": "code_comprehension",
+    "tokens_approx": 29,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "shadowing",
+      "concept": "global reassignment during function evaluation",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0136"
+  },
+  {
+    "prompt": "```python\ndata = {'a': 10, 'b': 20, 'c': 30}\ndata['a'] = data.pop('c') + 5\ndata.update({'b': data['b'] // 2, 'd': 15})\nprint(sum(data.values()))\n```\nOutput:",
+    "target": " 60",
+    "type": "code_comprehension",
+    "tokens_approx": 29,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "dicts",
+      "concept": "mutation and pop",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0003"
+  },
+  {
+    "prompt": "```python\ntotal = 0\nfor i in range(1, 10, 2):\n    if i % 3 == 0:\n        total += i * 2\n    else:\n        total += i\nprint(total)\n```\nOutput:",
+    "target": " 37",
+    "type": "code_comprehension",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "loops",
+      "concept": "range with step and conditional accumulator",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0053"
+  },
+  {
+    "prompt": "```python\ndata = [x for x in range(10) if x % 2 == 0]\nresult = [y * 2 for y in data if y > 2]\nprint(len(result))\n```\nOutput:",
+    "target": " 3",
+    "type": "code_comprehension",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "comprehensions",
+      "concept": "nested_list_transform",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0127"
+  },
+  {
+    "prompt": "```python\na = [1, [2, 3], 4]\nb = a\nc = list(a)\na[1][1] = 9\nb[0] = 7\nc[1][0] = 5\nprint(a[1][0])\n```\nOutput:",
+    "target": " 5",
+    "type": "code_comprehension",
+    "tokens_approx": 32,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "aliasing",
+      "concept": "nested_list_mutation",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0092"
+  },
+  {
+    "prompt": "```python\nvals = [10, 5, 20, 3, 15]\nres = 0\nfor x in vals:\n    if x > 8 and x % 2 == 0:\n        res += x\nprint(res)\n```\nOutput:",
+    "target": " 30",
+    "type": "code_comprehension",
+    "tokens_approx": 40,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "loops",
+      "concept": "conditional accumulation",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0060"
+  },
+  {
+    "prompt": "```python\nnums = [1, 2, 3, 4, 5]\nfor i in range(len(nums)):\n    if nums[i] % 2 == 0:\n        nums[i] *= 10\n    else:\n        nums[i] += 5\nprint(nums[3])\n```\nOutput:",
+    "target": " 40",
+    "type": "code_comprehension",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "lists",
+      "concept": "list mutation with conditional logic",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0067"
+  },
+  {
+    "prompt": "```python\ndata = [1, 2]\nfor x in range(3, 6):\n    if sum(data) % x == 0:\n        data.append(x * 2)\n    else:\n        data.append(x + 1)\nprint(data)\n```\nOutput:",
+    "target": " [1, 2, 6, 5, 6]",
+    "type": "code_comprehension",
+    "tokens_approx": 33,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "branch_mutation",
+      "concept": "conditional_list_append_accumulation",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0042"
+  },
+  {
+    "prompt": "```python\nval = 1\nfor i in range(1, 10, 2):\n    if i % 3 == 0:\n        val *= i\n    else:\n        val += i\nprint(val)\n```\nOutput:",
+    "target": " 162",
+    "type": "code_comprehension",
+    "tokens_approx": 33,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "loops",
+      "concept": "range with step and conditional modification",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0146"
+  },
+  {
+    "prompt": "```python\nn = 1\ncount = 0\nwhile n < 20:\n    if n % 3 == 0:\n        count += n\n    else:\n        count += 1\n    n *= 2\nprint(count)\n```\nOutput:",
+    "target": " 5",
+    "type": "code_comprehension",
+    "tokens_approx": 39,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "loops",
+      "concept": "conditional_loop_update",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0137"
+  },
+  {
+    "prompt": "```python\ndata = [15, 2, 8]\ndata.append(5)\ndata.sort()\nresult = data[1] * data[-1]\nprint(result)\n```\nOutput:",
+    "target": " 75",
+    "type": "code_comprehension",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "order_effects",
+      "concept": "list_mutation_and_indexing",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0110"
+  },
+  {
+    "prompt": "```python\nx = 5\ndef f(x):\n    x = x * 2\n    if x > 10:\n        x = 0\n    else:\n        x = x + 3\n    return x\nprint(f(4))\n```\nOutput:",
+    "target": " 11",
+    "type": "code_comprehension",
+    "tokens_approx": 37,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "shadowing",
+      "concept": "variable_overwrite_in_branch",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0118"
+  },
+  {
+    "prompt": "```python\ndata = {'a': [10, 20], 'b': [30, 40, 50]}\ndata['a'].append(25)\nx = data['a'][1] + data['b'][-1]\nprint(x)\n```\nOutput:",
+    "target": " 70",
+    "type": "code_comprehension",
+    "tokens_approx": 24,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "dicts",
+      "concept": "nested_list_access",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0086"
+  },
+  {
+    "prompt": "```python\na = 15\nb = 22\nres = a * 2 if a > b else b // 2\nif res > 10:\n    print(res + 5)\nelse:\n    print(res - 5)\n```\nOutput:",
+    "target": " 16",
+    "type": "code_comprehension",
+    "tokens_approx": 42,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "booleans",
+      "concept": "conditional_arithmetic_branching",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0116"
+  },
+  {
+    "prompt": "```python\ndata = [\n    {'id': 10, 'meta': {'tags': ['a', 'b']}},\n    {'id': 20, 'meta': {'tags': ['c', 'd']}},\n    {'id': 30, 'meta': {'tags': ['e', 'f']}}\n]\nprint(data[1]['meta']['tags'][0])\n```\nOutput:",
+    "target": " c",
+    "type": "code_comprehension",
+    "tokens_approx": 33,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "nested_structures",
+      "concept": "nested_dict_list_indexing",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0066"
+  },
+  {
+    "prompt": "```python\ndata = [15, 2, 8, 10]\ndata.append(5)\ndata[1] = 20\ndata.sort()\nprint(data[len(data)//2])\n```\nOutput:",
+    "target": " 10",
+    "type": "code_comprehension",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "lists",
+      "concept": "sort_after_mutation",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0081"
+  },
+  {
+    "prompt": "```python\ndef double_add(x, y):\n    return (x + y) * 2\n\nresult = double_add(5, 3)\nprint(result)\n```\nOutput:",
+    "target": " 16",
+    "type": "code_comprehension",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "functions",
+      "concept": "function definition and return value",
+      "difficulty": "easy"
+    },
+    "id": "cc_seed_0101"
+  },
+  {
+    "prompt": "```python\ndata = [10, 25, 40, 55, 70, 85]\nrev = data[::-1]\nidx = (len(rev) // 2) - 1\nprint(rev[idx])\n```\nOutput:",
+    "target": " 55",
+    "type": "code_comprehension",
+    "tokens_approx": 28,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "indexing",
+      "concept": "reverse_and_index",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0091"
+  },
+  {
+    "prompt": "```python\ndata = (10, 20, 30, 40, 50)\nshifted = tuple(x + 5 for x in data[1:4])\nprint(shifted[1])\n```\nOutput:",
+    "target": " 35",
+    "type": "code_comprehension",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "indexing",
+      "concept": "tuple slicing and transformation",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0016"
+  },
+  {
+    "prompt": "```python\ndata = [[1, 2], [3, 4], [5, 6]]\nref = data[1]\nref[0] = 7\ndata[2] = ref\ndata[1][1] = 9\nprint(data[2][1])\n```\nOutput:",
+    "target": " 9",
+    "type": "code_comprehension",
+    "tokens_approx": 31,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "nested_structures",
+      "concept": "nested_list_mutation_and_aliasing",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0104"
+  },
+  {
+    "prompt": "```python\na = [10, 20, 30]\nb = 25\nres = 0\nif len(a) > 2 and b in a:\n    res = sum(a)\nelif b > a[1] or b < a[0]:\n    res = b * 2\nelse:\n    res = b // 2\nprint(res)\n```\nOutput:",
+    "target": " 50",
+    "type": "code_comprehension",
+    "tokens_approx": 58,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "booleans",
+      "concept": "compound_conditionals",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0088"
+  },
+  {
+    "prompt": "```python\ntext = 'red-green-blue-yellow'\nparts = text.split('-')\nresult = parts[2][::-1]\nprint(result)\n```\nOutput:",
+    "target": " eulb",
+    "type": "code_comprehension",
+    "tokens_approx": 16,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "strings",
+      "concept": "split_indexing_slicing",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0049"
+  },
+  {
+    "prompt": "```python\ndata = [x for x in range(20) if x % 2 == 0]\nres = [a + b for i, a in enumerate(data) for b in data[i:i+2] if a * b > 50]\nprint(len(res))\n```\nOutput:",
+    "target": " 11",
+    "type": "code_comprehension",
+    "tokens_approx": 48,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "comprehensions",
+      "concept": "nested list comprehension with slicing and filtering",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0145"
+  },
+  {
+    "prompt": "```python\ndata = [10, 20, 30]\ndata.extend([40, 50])\ndata.reverse()\nprint(data[0])\n```\nOutput:",
+    "target": " 50",
+    "type": "code_comprehension",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "order_effects",
+      "concept": "list_extend_reverse_indexing",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0098"
+  },
+  {
+    "prompt": "```python\ntext = 'alpha,beta;gamma.delta'\nparts = text.replace(';', ',').replace('.', ',').split(',')\nprint(parts[2])\n```\nOutput:",
+    "target": " gamma",
+    "type": "code_comprehension",
+    "tokens_approx": 15,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "strings",
+      "concept": "split and replace",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0064"
+  },
+  {
+    "prompt": "```python\nnums = [1, 2, 3, 4]\nnums.insert(1, 10)\nnums.pop(3)\nnums[2] = nums[0] + nums[1]\nprint(nums[2])\n```\nOutput:",
+    "target": " 11",
+    "type": "code_comprehension",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "lists",
+      "concept": "list mutation and indexing",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0122"
+  },
+  {
+    "prompt": "```python\nx = 15\ny = 20\nz = 5\nif x > y or x % z == 0:\n    res = x // z\nelse:\n    res = y // z\nif res > 2 and y < 30:\n    res += 1\nprint(res)\n```\nOutput:",
+    "target": " 4",
+    "type": "code_comprehension",
+    "tokens_approx": 58,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "booleans",
+      "concept": "conditional_branching",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0096"
+  },
+  {
+    "prompt": "```python\ndata = 'alpha-beta-gamma-delta'\nparts = data.split('-')\nresult = parts[2][::-1]\nprint(result)\n```\nOutput:",
+    "target": " ammag",
+    "type": "code_comprehension",
+    "tokens_approx": 16,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "strings",
+      "concept": "split_indexing_reversal",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0076"
+  },
+  {
+    "prompt": "```python\ndata = [1, 5, 2, 8, 3, 5, 4, 5]\ntarget = 5\ncount = 0\nfor x in data:\n    if x == target:\n        count += 1\n    elif x > target:\n        count -= 1\nprint(count)\n```\nOutput:",
+    "target": " 2",
+    "type": "code_comprehension",
+    "tokens_approx": 49,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "loops",
+      "concept": "conditional_iteration_counting",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0036"
+  },
+  {
+    "prompt": "```python\na = 'hello'\nb = 'world'\nc = a + b\nprint(c[4:8])\n```\nOutput:",
+    "target": " owor",
+    "type": "code_comprehension",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "strings",
+      "concept": "concatenation_and_slicing",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0115"
+  },
+  {
+    "prompt": "```python\ndata = {'a': 10, 'b': 20}\ndata['a'] += data['b']\ndata['c'] = data.pop('b') + 5\nprint(data['a'] + data['c'])\n```\nOutput:",
+    "target": " 55",
+    "type": "code_comprehension",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "dicts",
+      "concept": "mutate dictionary twice",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0004"
+  },
+  {
+    "prompt": "```python\na = 'hello'\nb = 'world'\nc = (a + b)[3:8]\nprint(c)\n```\nOutput:",
+    "target": " lowor",
+    "type": "code_comprehension",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "strings",
+      "concept": "slice_after_concatenation",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0017"
+  },
+  {
+    "prompt": "```python\ndef f(x):\n    return x * 2 if x % 2 == 0 else x + 1\n\ndata = [1, 2, 3, 4]\nres = [f(v) for v in data if f(v) > 3]\nprint(res)\n```\nOutput:",
+    "target": " [4, 4, 8]",
+    "type": "code_comprehension",
+    "tokens_approx": 48,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "comprehensions",
+      "concept": "comprehension with helper function and filter",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0025"
+  },
+  {
+    "prompt": "```python\ndata = {\n    'a': [10, 20, 30],\n    'b': [40, 50, 60],\n    'c': [70, 80, 90]\n}\nkey = 'b'\nindex = data[key][1] - 49\nprint(data['c'][index])\n```\nOutput:",
+    "target": " 80",
+    "type": "code_comprehension",
+    "tokens_approx": 36,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "nested_structures",
+      "concept": "dict_list_indexing",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0069"
+  },
+  {
+    "prompt": "```python\nnums = [10, 20, 30, 40]\ntotal = 0\nfor n in nums:\n    total += n\nprint(total)\n```\nOutput:",
+    "target": " 100",
+    "type": "code_comprehension",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "lists",
+      "concept": "sum_list",
+      "difficulty": "easy"
+    },
+    "id": "cc_seed_0051"
+  },
+  {
+    "prompt": "```python\nitems = ['apple', 'banana', 'cherry', 'date']\nresult = items[2]\nprint(result)\n```\nOutput:",
+    "target": " cherry",
+    "type": "code_comprehension",
+    "tokens_approx": 16,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "indexing",
+      "concept": "list indexing",
+      "difficulty": "easy"
+    },
+    "id": "cc_seed_0002"
+  },
+  {
+    "prompt": "```python\ndata = {'a': 1, 'b': 2}\nupdate = {'b': 3, 'c': 4}\ndata.update(update)\nprint(data['b'])\n```\nOutput:",
+    "target": " 3",
+    "type": "code_comprehension",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "dicts",
+      "concept": "dict_update",
+      "difficulty": "easy"
+    },
+    "id": "cc_seed_0052"
+  },
+  {
+    "prompt": "```python\ndata = {'a': 10, 'b': 20}\ndata['c'] = data.get('a') + 5\ndata['a'] = data['b'] * 2\ntotal = sum(data.values())\nprint(total)\n```\nOutput:",
+    "target": " 75",
+    "type": "code_comprehension",
+    "tokens_approx": 29,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "dicts",
+      "concept": "mutation_and_sum",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0014"
+  },
+  {
+    "prompt": "```python\ndata = [42, 7, 19, 3, 58, 21]\ndata.sort(reverse=True)\nres = data[2] + data[-1]\nprint(res)\n```\nOutput:",
+    "target": " 24",
+    "type": "code_comprehension",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "lists",
+      "concept": "sort and index",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0138"
+  },
+  {
+    "prompt": "```python\ndata = [1, 5, 2, 8, 3, 5, 4, 5, 6]\ntarget = 5\ncount = 0\nfor x in data:\n    if x == target:\n        count += 1\nprint(count)\n```\nOutput:",
+    "target": " 3",
+    "type": "code_comprehension",
+    "tokens_approx": 41,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "loops",
+      "concept": "list_iteration_counting",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0041"
+  },
+  {
+    "prompt": "```python\ndef f(x):\n    return x * 2 if x % 2 == 0 else x + 1\n\ndata = [1, 2, 3, 4]\nres = [f(v) for v in [f(i) for i in data]]\nprint(res)\n```\nOutput:",
+    "target": " [4, 8, 8, 16]",
+    "type": "code_comprehension",
+    "tokens_approx": 48,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "comprehensions",
+      "concept": "nested-function-comprehension",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0149"
+  },
+  {
+    "prompt": "```python\nx = 5\ndef f(y):\n    global x\n    res = x + y\n    x = 10\n    return res\n\nprint(f(x) + x)\n```\nOutput:",
+    "target": " 20",
+    "type": "code_comprehension",
+    "tokens_approx": 29,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "shadowing",
+      "concept": "global reassignment after local use",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0074"
+  },
+  {
+    "prompt": "```python\na = 10\nb = 5\nc = 2\nresult = (a > b) and (b < c or a == 10)\nprint(result)\n```\nOutput:",
+    "target": " True",
+    "type": "code_comprehension",
+    "tokens_approx": 33,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "booleans",
+      "concept": "boolean logic evaluation",
+      "difficulty": "easy"
+    },
+    "id": "cc_seed_0082"
+  },
+  {
+    "prompt": "```python\ntext = \"apple-banana-cherry-date\"\nparts = text.split(\"-\")\nresult = parts[2][::-1]\nprint(result)\n```\nOutput:",
+    "target": " yrrehc",
+    "type": "code_comprehension",
+    "tokens_approx": 16,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "strings",
+      "concept": "splitting and indexing",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0135"
+  },
+  {
+    "prompt": "```python\nx = 5\ndef f(y):\n    global x\n    x = 10\n    return y + x\n\nval = f(x)\nprint(val + x)\n```\nOutput:",
+    "target": " 25",
+    "type": "code_comprehension",
+    "tokens_approx": 29,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "shadowing",
+      "concept": "global-reassignment-side-effect",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0078"
+  },
+  {
+    "prompt": "```python\ndata = [10, 25, 40, 55, 70, 85]\nresult = data[::-1]\nprint(result[2])\n```\nOutput:",
+    "target": " 55",
+    "type": "code_comprehension",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "indexing",
+      "concept": "reverse_slice_index",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0031"
+  },
+  {
+    "prompt": "```python\ndata = [10, 20]\ndata.append(30)\ndata.append(40)\nprint(len(data))\n```\nOutput:",
+    "target": " 4",
+    "type": "code_comprehension",
+    "tokens_approx": 13,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "lists",
+      "concept": "list_append_length",
+      "difficulty": "easy"
+    },
+    "id": "cc_seed_0102"
+  },
+  {
+    "prompt": "```python\nx = 10\ny = 5\nz = x * 2 if x < y else y ** 2\nres = z + 10 if z % 5 == 0 else z - 10\nprint(res)\n```\nOutput:",
+    "target": " 35",
+    "type": "code_comprehension",
+    "tokens_approx": 49,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "booleans",
+      "concept": "conditional_arithmetic",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0021"
+  },
+  {
+    "prompt": "```python\ndata = [x * 2 if x % 2 == 0 else x * 3 for x in range(10) if x > 3]\nres = [v for v in data if v % 4 == 0]\nprint(res[1])\n```\nOutput:",
+    "target": " 12",
+    "type": "code_comprehension",
+    "tokens_approx": 52,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "comprehensions",
+      "concept": "nested conditional list comprehension",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0009"
+  },
+  {
+    "prompt": "```python\ndata = [10, 20, 30]\nx = sum(data)\nif x > 50:\n    data.pop(1)\n    data.insert(0, x)\nelse:\n    data[2] = x\nprint(data[1])\n```\nOutput:",
+    "target": " 10",
+    "type": "code_comprehension",
+    "tokens_approx": 29,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "branch_mutation",
+      "concept": "list_modification_in_branch",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0034"
+  },
+  {
+    "prompt": "```python\ndata = [x * 2 for x in range(10) if x % 3 == 0]\nres = [v for i, v in enumerate(data) if i % 2 != 0]\nprint(res[0])\n```\nOutput:",
+    "target": " 6",
+    "type": "code_comprehension",
+    "tokens_approx": 42,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "comprehensions",
+      "concept": "nested list comprehension logic with filtering",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0143"
+  },
+  {
+    "prompt": "```python\ndata = [10, 25, 30, 45, 50]\nrev = data[::-1]\nval = rev[1] + rev[-1]\nprint(val)\n```\nOutput:",
+    "target": " 55",
+    "type": "code_comprehension",
+    "tokens_approx": 24,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "indexing",
+      "concept": "reverse_indexing_math",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0111"
+  },
+  {
+    "prompt": "```python\ndata = [15, 2, 8, 22, 5, 12]\ndata.sort(reverse=True)\nres = data[3] + data[-1]\nprint(res)\n```\nOutput:",
+    "target": " 10",
+    "type": "code_comprehension",
+    "tokens_approx": 23,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "lists",
+      "concept": "sorting and indexing",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0047"
+  },
+  {
+    "prompt": "```python\ndata = [x * 2 if x % 2 == 0 else x * 3 for x in range(10) if x > 2]\nresults = [v for v in data if v % 4 == 0]\nprint(results[1])\n```\nOutput:",
+    "target": " 12",
+    "type": "code_comprehension",
+    "tokens_approx": 52,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "comprehensions",
+      "concept": "conditional_transformation_and_filtering",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0124"
+  },
+  {
+    "prompt": "```python\na = [10, 20, 30]\nb = a\nc = list(a)\na[1] = 99\nb.append(c[1])\nprint(b)\n```\nOutput:",
+    "target": " [10, 99, 30, 20]",
+    "type": "code_comprehension",
+    "tokens_approx": 24,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "aliasing",
+      "concept": "list reference vs copy mutation",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0094"
+  },
+  {
+    "prompt": "```python\nn = 1\nfor i in range(1, 5):\n    if i % 2 == 0:\n        n *= i\n    else:\n        n += i\nprint(n)\n```\nOutput:",
+    "target": " 28",
+    "type": "code_comprehension",
+    "tokens_approx": 32,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "loops",
+      "concept": "range loop with conditional updates",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0106"
+  },
+  {
+    "prompt": "```python\ndata = {'a': [10, 20], 'b': [30, 40, 50]}\ndata['a'].append(data['b'][1])\nres = data['a'][-1] + data['b'][0]\nprint(res)\n```\nOutput:",
+    "target": " 70",
+    "type": "code_comprehension",
+    "tokens_approx": 24,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "dicts",
+      "concept": "nested list access and modification",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0120"
+  },
+  {
+    "prompt": "```python\ndata = \"alpha:beta:gamma:delta\"\ntokens = data.split(\":\")\nresult = tokens[-2][1]\nprint(result)\n```\nOutput:",
+    "target": " a",
+    "type": "code_comprehension",
+    "tokens_approx": 16,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "strings",
+      "concept": "split and indexing",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0100"
+  },
+  {
+    "prompt": "```python\ndef greet(val, factor=2):\n    return val * factor\n\na = greet(5)\nb = greet(3, 4)\nprint(a + b)\n```\nOutput:",
+    "target": " 22",
+    "type": "code_comprehension",
+    "tokens_approx": 26,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "functions",
+      "concept": "default_arguments",
+      "difficulty": "easy"
+    },
+    "id": "cc_seed_0112"
+  },
+  {
+    "prompt": "```python\ndata = [15, 2, 8, 1, 9]\ndata.append(5)\ndata[0] = 4\ndata.sort()\nprint(data[len(data)//2])\n```\nOutput:",
+    "target": " 5",
+    "type": "code_comprehension",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "lists",
+      "concept": "mutation_sorting_indexing",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0087"
+  },
+  {
+    "prompt": "```python\ndata = [15, 2, 8, 1]\ndata.append(data[0] // 3)\ndata[1] = 10\ndata.sort()\nprint(data[len(data)//2])\n```\nOutput:",
+    "target": " 8",
+    "type": "code_comprehension",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "lists",
+      "concept": "mutation and sorting",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0099"
+  },
+  {
+    "prompt": "```python\ndata = [10, 20, 30, 40, 50, 60]\nresult = data[::-1]\nprint(result[1] + result[-1])\n```\nOutput:",
+    "target": " 60",
+    "type": "code_comprehension",
+    "tokens_approx": 22,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "indexing",
+      "concept": "reverse slicing and index access",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0117"
+  },
+  {
+    "prompt": "```python\ntext = 'banana'\ntarget = 'a'\ncount = 0\nfor char in text:\n    if char == target:\n        count += 1\nprint(count)\n```\nOutput:",
+    "target": " 3",
+    "type": "code_comprehension",
+    "tokens_approx": 31,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "strings",
+      "concept": "character counting",
+      "difficulty": "easy"
+    },
+    "id": "cc_seed_0029"
+  },
+  {
+    "prompt": "```python\nd = {'a': 10, 'b': 20}\nx = 15\nif x * 2 > d['b']:\n    d['c'] = d.get('a', 0) + 5\n    d['a'] += d['c']\nelse:\n    d['a'] = 0\nprint(d['a'] + d.get('c', 0))\n```\nOutput:",
+    "target": " 40",
+    "type": "code_comprehension",
+    "tokens_approx": 45,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "branch_mutation",
+      "concept": "conditional_dict_update_and_sum",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0084"
+  },
+  {
+    "prompt": "```python\ndata = {'apples': 12, 'oranges': 5}\ntotal = data['apples'] - data['oranges']\nprint(total)\n```\nOutput:",
+    "target": " 7",
+    "type": "code_comprehension",
+    "tokens_approx": 19,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "dicts",
+      "concept": "derived_value_subtraction",
+      "difficulty": "easy"
+    },
+    "id": "cc_seed_0105"
+  },
+  {
+    "prompt": "```python\na = [1, [2, 3], 4]\nb = a\nc = list(a)\na[1][0] = 99\nb[0] = 10\nc[1][1] = 7\nprint(a[1])\n```\nOutput:",
+    "target": " [99, 7]",
+    "type": "code_comprehension",
+    "tokens_approx": 32,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "aliasing",
+      "concept": "shallow_copy_vs_reference",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0142"
+  },
+  {
+    "prompt": "```python\ndata = {'apples': 12, 'oranges': 8}\ntotal = data['apples'] + data.get('oranges', 0)\nprint(total)\n```\nOutput:",
+    "target": " 20",
+    "type": "code_comprehension",
+    "tokens_approx": 20,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "dicts",
+      "concept": "dictionary_access_and_arithmetic",
+      "difficulty": "easy"
+    },
+    "id": "cc_seed_0090"
+  },
+  {
+    "prompt": "```python\ndata = [x for x in range(100) if x % 3 == 0]\nresult = [y for y in data if str(y).endswith('1')]\nprint(len(result))\n```\nOutput:",
+    "target": " 3",
+    "type": "code_comprehension",
+    "tokens_approx": 33,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "comprehensions",
+      "concept": "nested filtering",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0024"
+  },
+  {
+    "prompt": "```python\nx = 10\nfor x in range(3):\n    x = x * 2\n    y = x\nprint(x + y)\n```\nOutput:",
+    "target": " 8",
+    "type": "code_comprehension",
+    "tokens_approx": 27,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "shadowing",
+      "concept": "loop_variable_persistence",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0073"
+  },
+  {
+    "prompt": "```python\ndata = [10, 20]\nfor x in range(5, 15, 2):\n    if x % 3 == 0:\n        data.append(x * 2)\n    elif x > 10:\n        data.insert(0, x)\n    else:\n        data = data + [x]\nprint(data)\n```\nOutput:",
+    "target": " [13, 11, 10, 20, 5, 7, 18]",
+    "type": "code_comprehension",
+    "tokens_approx": 45,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "branch_mutation",
+      "concept": "conditional_list_modification",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0046"
+  },
+  {
+    "prompt": "```python\ntext = 'pythonic'\nresult = text[2:5]\nprint(result)\n```\nOutput:",
+    "target": " tho",
+    "type": "code_comprehension",
+    "tokens_approx": 13,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "strings",
+      "concept": "slicing",
+      "difficulty": "easy"
+    },
+    "id": "cc_seed_0079"
+  },
+  {
+    "prompt": "```python\na = [10, 20, 30]\nb = a\nif len(a) > 2:\n    b.append(b.pop(0))\n    a[0] = a[0] + 5\nelse:\n    a = [100]\nprint(a[1])\n```\nOutput:",
+    "target": " 30",
+    "type": "code_comprehension",
+    "tokens_approx": 33,
+    "tier": "brief",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "branch_mutation",
+      "concept": "list_aliasing_and_mutation",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0080"
+  },
+  {
+    "prompt": "```python\ntext = 'red-green-blue-yellow'\nparts = text.split('-')\nresult = parts[-2][::-1]\nprint(result)\n```\nOutput:",
+    "target": " eulb",
+    "type": "code_comprehension",
+    "tokens_approx": 16,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "strings",
+      "concept": "split indexing and slicing",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0037"
+  },
+  {
+    "prompt": "```python\na = [1, 2, 3]\nb = a\nc = list(a)\na[1] = 9\nb.append(c[1])\nprint(b)\n```\nOutput:",
+    "target": " [1, 9, 3, 2]",
+    "type": "code_comprehension",
+    "tokens_approx": 24,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "aliasing",
+      "concept": "list_mutation_reference",
+      "difficulty": "hard"
+    },
+    "id": "cc_seed_0147"
+  },
+  {
+    "prompt": "```python\ntext = 'alpha-beta-gamma-delta'\nparts = text.split('-')\nresult = parts[2][::-1]\nprint(result)\n```\nOutput:",
+    "target": " ammag",
+    "type": "code_comprehension",
+    "tokens_approx": 16,
+    "tier": "short",
+    "source": "seed_codegen",
+    "metadata": {
+      "family": "strings",
+      "concept": "split and slice",
+      "difficulty": "medium"
+    },
+    "id": "cc_seed_0010"
+  }
+]
