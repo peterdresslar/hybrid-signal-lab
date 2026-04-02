@@ -6,7 +6,7 @@ from typing import Any
 
 import torch
 
-from model.backend import ModelBackend
+from model.backend import InterventionMode, ModelBackend
 
 OLMO_MODELS: dict[str, str] = {
     "OLMO": "allenai/Olmo-Hybrid-7B",
@@ -18,18 +18,34 @@ class OlmoBackend(ModelBackend):
 
     Full-attention layers are identified at runtime by the presence of a
     ``self_attn`` submodule (linear-attention blocks use ``linear_attn``
-    instead). Hooks target the full decoder layer — not ``self_attn``
-    directly — because the post-attention RMSNorm would absorb
-    sub-module-level scaling.
+    instead). The softmax layers are post-norm: the attention branch is
+    ``N_att(Attn(x))`` before the residual add. Since ``RMSNorm(g * x) =
+    RMSNorm(x)``, attention-only scaling must hook ``post_attention_layernorm``
+    so the intervention lands on ``a_tilde = N_att(Attn(x))``.
     """
 
     def get_attention_layer_indices(self) -> list[int]:
-        return [
-            i for i, layer in enumerate(self.model.model.layers) if hasattr(layer, "self_attn")
-        ]
+        return [i for i, layer in enumerate(self.get_decoder_layers()) if hasattr(layer, "self_attn")]
 
-    def get_hook_module(self, layer_idx: int) -> torch.nn.Module:
-        return self.model.model.layers[layer_idx]
+    @property
+    def default_intervention_mode(self) -> InterventionMode:
+        return InterventionMode.BLOCK_OUTPUT
+
+    def get_hook_module(
+        self,
+        layer_idx: int,
+        mode: InterventionMode,
+    ) -> torch.nn.Module:
+        layer = self.get_decoder_layer(layer_idx)
+        if mode == InterventionMode.BLOCK_OUTPUT:
+            return layer
+
+        module = getattr(layer, "post_attention_layernorm", None)
+        if not isinstance(module, torch.nn.Module):
+            raise ValueError(
+                f"Layer {layer_idx} in model '{self.model_name}' has no post_attention_layernorm module."
+            )
+        return module
 
     def process_attention_entropy(self, outputs) -> dict[str, Any]:
         result: dict[str, Any] = {

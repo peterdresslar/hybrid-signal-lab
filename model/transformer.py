@@ -6,7 +6,7 @@ from typing import Any
 
 import torch
 
-from model.backend import ModelBackend
+from model.backend import InterventionMode, ModelBackend
 
 
 class TransformerBackend(ModelBackend):
@@ -14,7 +14,8 @@ class TransformerBackend(ModelBackend):
 
     Unlike the hybrid backends, this hooks each layer's attention submodule
     directly so the gain profile scales the attention branch rather than the
-    whole decoder block.
+    whole decoder block. This remains the generic fallback; architecture-
+    specific backends should be preferred where available.
     """
 
     def get_attention_layer_indices(self) -> list[int]:
@@ -24,15 +25,18 @@ class TransformerBackend(ModelBackend):
             if self.get_layer_attention_module(layer) is not None
         ]
 
-    def get_hook_module(self, layer_idx: int) -> torch.nn.Module:
-        layers = self.get_decoder_layers()
-        try:
-            layer = layers[layer_idx]
-        except IndexError as exc:
-            raise IndexError(
-                f"Attention layer index {layer_idx} is out of range for model '{self.model_name}'."
-            ) from exc
+    @property
+    def default_intervention_mode(self) -> InterventionMode:
+        return InterventionMode.ATTENTION_CONTRIBUTION
 
+    def get_hook_module(
+        self,
+        layer_idx: int,
+        mode: InterventionMode,
+    ) -> torch.nn.Module:
+        layer = self.get_decoder_layer(layer_idx)
+        if mode == InterventionMode.BLOCK_OUTPUT:
+            return layer
         module = self.get_layer_attention_module(layer)
         if module is None:
             raise ValueError(

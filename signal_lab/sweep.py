@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from signal_lab.signal_lab import resolve_prompt, resolve_device, resolve_prompt_collection
+from model.backend import InterventionMode, VALID_INTERVENTION_MODES
 from model.g_profile import build_attention_scales_from_spec, printable_scales
 from model.prompt import Prompt
 from model import VALID_MODEL_KEYS
@@ -222,6 +223,17 @@ def main():
     parser.add_argument("--prompt-ids", type=str, default=None, help="Comma-separated prompt ids within --prompt-battery.")
     parser.add_argument("--prompt-tiers", type=str, default=None, help="Comma-separated tiers to select from --prompt-battery.")
     parser.add_argument("--prompt-types", type=str, default=None, help="Comma-separated types to select from --prompt-battery.")
+    parser.add_argument(
+        "--gain-mode",
+        type=str,
+        default=InterventionMode.BACKEND_DEFAULT.value,
+        choices=sorted(VALID_INTERVENTION_MODES),
+        help=(
+            "Where to apply per-layer gain scaling: backend_default preserves legacy backend "
+            "semantics, block_output scales the full decoder block output, and "
+            "attention_contribution scales only the attention branch contribution."
+        ),
+    )
     
     args = parser.parse_args()
     configure_data_dir(args.data_dir)
@@ -302,6 +314,7 @@ def main():
     metadata["model_key"] = model_key
     metadata["run_name"] = args.run_name
     metadata["attention_targeting"] = attention_targeting
+    metadata["gain_intervention_mode"] = args.gain_mode
     metadata["available_attention_layer_indices"] = available_attention_layers
     metadata["target_attention_layer_indices"] = target_attention_layers
     metadata["attention_layer_indices"] = target_attention_layers
@@ -347,6 +360,7 @@ def main():
                     return_raw_logits=True,
                     return_verbose=args.verbose,
                     target_attention_layer_indices=target_attention_layers,
+                    intervention_mode=args.gain_mode,
                 )
                 baseline_logits = baseline_result.pop("_raw_logits")
             except Exception as e:
@@ -383,6 +397,7 @@ def main():
                                 baseline_logits=baseline_logits,
                                 return_verbose=args.verbose,
                                 target_attention_layer_indices=target_attention_layers,
+                                intervention_mode=args.gain_mode,
                             )
                     except Exception as e:
                         err = {
@@ -409,6 +424,7 @@ def main():
                                 target_str,
                                 g_scales,
                                 target_attention_layer_indices=target_attention_layers,
+                                intervention_mode=args.gain_mode,
                             )
                         except Exception as e:
                             err = {
@@ -443,6 +459,7 @@ def main():
                         "g_spec": g_run["g_spec"],
                         "g_attention_scales": res["g_attention_scales"],
                         "attention_targeting": attention_targeting,
+                        "gain_intervention_mode": res["intervention_mode"],
                         "attention_layer_indices": res["attention_layer_indices"],
                         "rep": res["rep"],
                         "target_text": res.get("target_text"),
