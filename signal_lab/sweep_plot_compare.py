@@ -149,7 +149,11 @@ def infer_labels(files_rows: list[dict[str, str]]) -> tuple[str, str]:
 def to_float(value: str | None) -> float:
     if value is None or value == "":
         return math.nan
-    return float(value)
+    try:
+        numeric = float(value)
+    except (TypeError, ValueError):
+        return math.nan
+    return numeric if math.isfinite(numeric) else math.nan
 
 
 def clean_filename(text: str) -> str:

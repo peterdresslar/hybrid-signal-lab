@@ -369,9 +369,12 @@ def main():
     with open(meta_file, "w") as f_meta:
         json.dump(metadata, f_meta, indent=2)
 
-    print(f"Will run {len(prompts_to_run)} prompts over {len(g_runs)} g configurations ({args.repetitions} repetitions).")
+    print(
+        f"Will run {len(prompts_to_run)} prompts over {len(g_runs)} "
+        f"g configurations ({args.repetitions} repetitions)."
+    )
     total_runs = len(prompts_to_run) * len(g_runs) * args.repetitions
-    print(f"Total runs: {total_runs}")
+    print(f"Total passes: {total_runs}")
     attempted_runs = 0
     completed_runs = 0
     sweep_start_time = time.time()
@@ -444,7 +447,7 @@ def main():
                         f_err.write(json.dumps(err) + "\n")
                         f_err.flush()
                         print(
-                            f"  [{current_run} of {total_runs}] [ERROR] "
+                            f"  [{current_run} of {total_runs} passes] [ERROR] "
                             f"Rep {rep+1} g={printable} failed: {e}"
                         )
                         continue
@@ -471,7 +474,7 @@ def main():
                             f_err.write(json.dumps(err) + "\n")
                             f_err.flush()
                             print(
-                                f"  [{current_run} of {total_runs}] [ERROR] "
+                                f"  [{current_run} of {total_runs} passes] [ERROR] "
                                 f"Rep {rep+1} g={printable} target scoring failed: {e}"
                             )
                             continue
@@ -517,7 +520,7 @@ def main():
                         f_verb.flush()
 
                     print(
-                        f"  [{current_run} of {total_runs}] [Rep {rep+1}] "
+                        f"  [{current_run} of {total_runs} passes] [Rep {rep+1}] "
                         f"g_profile={g_run['name']} scales={printable} | "
                         f"Time: {res['elapsed_time']:.2f}s | Final Ent: {res['final_entropy_bits']:.2f} bits | "
                         f"Target Rank: {res.get('target_rank')} | "
@@ -535,7 +538,7 @@ def main():
     print(f"\nSweep complete! Saved results to directory: {out_dir}")
     print(f"Run time: {elapsed_s:.2f}s")
     print(f"Planned runs: {total_runs}")
-    print(f"Completed runs: {completed_runs}")
+    print(f"Completed passes: {completed_runs}")
 
 if __name__ == "__main__":
     main()
