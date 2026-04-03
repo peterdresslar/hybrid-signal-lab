@@ -113,11 +113,23 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_DPI,
         help=f"Output DPI for PNGs (default: {DEFAULT_DPI}).",
     )
-    parser.add_argument(
+    intervention_group = parser.add_mutually_exclusive_group()
+    intervention_group.add_argument(
         "--intervention-folders",
+        dest="intervention_folders",
         action="store_true",
-        help="Write per-g_profile intervention folders under the plots directory.",
+        help=(
+            "Write intervention-folder plot bundles (interventions/, baseline/, "
+            "best_interventions/). Enabled by default."
+        ),
     )
+    intervention_group.add_argument(
+        "--no-intervention-folders",
+        dest="intervention_folders",
+        action="store_false",
+        help="Disable intervention-folder plot bundles.",
+    )
+    parser.set_defaults(intervention_folders=True)
     parser.add_argument(
         "--best-interventions-top-n",
         type=int,
