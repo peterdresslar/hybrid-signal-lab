@@ -1,9 +1,10 @@
 ## Signal Lab
 
 `signal_lab` is the current probing and analysis package for this repository.
-It runs hybrid LLMs under baseline and gain-vector interventions, records
-prompt-level response metrics, and generates summaries and plots for both
-single-model and cross-model comparisons.
+It runs hybrid LLMs and full-softmax control models under baseline and
+gain-vector interventions, records prompt-level response metrics, and
+generates summaries and plots for both single-model and cross-model
+comparisons.
 
 The broader `colony` concept is future work. For the current iteration, the
 main implemented loop is:
@@ -78,6 +79,18 @@ uv run -m signal_lab.signal_lab --device cuda ...
 Use `signal_lab.signal_lab` when you want one prompt, one model, and one gain
 specification.
 
+Gain is now applied in one of three intervention modes:
+
+- `backend_default`: preserve each backend's legacy behavior
+- `block_output`: scale the full decoder-layer output
+- `attention_contribution`: scale only the attention branch contribution at the
+  point where it enters the residual stream
+
+For the current hybrid backends, `backend_default` resolves to `block_output`
+for `Qwen3.5` hybrid and `OLMo-Hybrid` so older runs remain reproducible. For
+raw Hugging Face transformer control models, `backend_default` resolves to
+`attention_contribution`.
+
 ### Simplest Example
 
 ```bash
@@ -85,7 +98,8 @@ uv run -m signal_lab.signal_lab \
   --prompt "The color with the shortest wavelength is" \
   --model-key 0_8B \
   --g-function constant \
-  --g 1.0
+  --g 1.0 \
+  --gain-mode backend_default
 ```
 
 This writes a full JSON summary under `[DATA_DIR]/outputs/signal_lab/probes/`.
@@ -98,7 +112,8 @@ uv run -m signal_lab.signal_lab \
   --prompt-id alg_gen_arithmetic_0000 \
   --model-key 2B \
   --g-function constant \
-  --g 1.25
+  --g 1.25 \
+  --gain-mode attention_contribution
 ```
 
 ### Prompt Filtered By Type/Tier
@@ -126,6 +141,7 @@ uv run -m signal_lab.signal_lab \
 - `--g`: shortcut for constant profiles
 - `--g-vector`: comma-separated control points for `control_points`
 - `--g-params-json`: extra parameters for non-constant functions
+- `--gain-mode`: `backend_default`, `block_output`, or `attention_contribution`
 - `--device`: `auto`, `cuda`, `mps`, or `cpu`
 - `--output-path`: optional override for the summary JSON location
 - `--data-dir`: optional override for `[DATA_DIR]`
@@ -142,13 +158,33 @@ Cartridges now also encode how gain profiles are targeted onto attention layers:
 - control-model cartridges ending in `_hybrid_mimic` target every 4th layer to
   mimic the hybrid cadence on transformer-only models
 
+Independently of cartridge attention targeting, sweeps also accept
+`--gain-mode` to choose *where* the selected gain is applied inside each
+decoder block:
+
+- `backend_default`: preserve each backend's legacy semantics
+- `block_output`: scale the full decoder-layer output
+- `attention_contribution`: scale only the attention residual contribution
+
+For the hybrid backends this means:
+
+- `Qwen3.5` hybrid: `attention_contribution` hooks `self_attn`
+- `OLMo-Hybrid`: `attention_contribution` hooks `post_attention_layernorm`
+
+For full-softmax control models loaded via raw HF ids, `TransformerBackend`
+uses architecture-aware defaults:
+
+- `Qwen3`: attention contribution is taken at `self_attn`
+- `OLMo3`: attention contribution is taken at `post_attention_layernorm`
+
 ### Cartridge-Based Sweep
 
 ```bash
 uv run -m signal_lab.sweep \
   --cartridge uniform_check_lite \
   --run-name uniform_check_lite_demo \
-  --model-key 0_8B
+  --model-key 0_8B \
+  --gain-mode backend_default
 ```
 
 ### Battery-Backed Sweep
@@ -174,7 +210,8 @@ uv run -m signal_lab.sweep \
   --prompt-types algorithmic \
   --prompt-tiers short \
   --model-key Qwen/Qwen2.5-0.5B \
-  --device cuda
+  --device cuda \
+  --gain-mode attention_contribution
 ```
 
 For a sparse control run that mimics the hybrid every-4th-layer cadence, swap
@@ -233,6 +270,7 @@ Each model run directory contains:
 For control sweeps, `_meta.json` also records:
 
 - `attention_targeting`
+- `gain_intervention_mode`
 - `available_attention_layer_indices`
 - `target_attention_layer_indices`
 
