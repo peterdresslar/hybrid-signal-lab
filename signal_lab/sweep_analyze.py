@@ -97,9 +97,10 @@ def to_float(value: Any) -> float:
     if value in {None, ""}:
         return math.nan
     try:
-        return float(value)
+        numeric = float(value)
     except (TypeError, ValueError):
         return math.nan
+    return numeric if math.isfinite(numeric) else math.nan
 
 
 def flatten_numeric_values(value: Any) -> list[float]:
@@ -172,15 +173,18 @@ def resolve_run_dir(path_str: str) -> Path:
 
 
 def mean(values: list[float]) -> float:
-    return statistics.fmean(values) if values else math.nan
+    clean = [value for value in values if math.isfinite(value)]
+    return statistics.fmean(clean) if clean else math.nan
 
 
 def median(values: list[float]) -> float:
-    return statistics.median(values) if values else math.nan
+    clean = [value for value in values if math.isfinite(value)]
+    return statistics.median(clean) if clean else math.nan
 
 
 def stdev(values: list[float]) -> float:
-    return statistics.stdev(values) if len(values) >= 2 else math.nan
+    clean = [value for value in values if math.isfinite(value)]
+    return statistics.stdev(clean) if len(clean) >= 2 else math.nan
 
 
 def percentile(values: list[float], q: float) -> float:
@@ -208,6 +212,16 @@ def pct(numerator: int, denominator: int) -> float:
     if denominator == 0:
         return math.nan
     return 100.0 * numerator / denominator
+
+
+def finite_desc_sort_key(value: Any) -> tuple[bool, float]:
+    numeric = to_float(value)
+    return (math.isfinite(numeric), numeric if math.isfinite(numeric) else -math.inf)
+
+
+def finite_asc_sort_key(value: Any) -> tuple[bool, float]:
+    numeric = to_float(value)
+    return (not math.isfinite(numeric), numeric if math.isfinite(numeric) else math.inf)
 
 
 def round_report_value(value: Any) -> Any:
@@ -421,20 +435,20 @@ def build_joined_rows(
         g_scales = record.get("g_attention_scales")
         row["g_family"] = classify_g_family(g_profile, g_scales if isinstance(g_scales, list) else None)
 
-        baseline_prob = float(baseline.get("target_prob", math.nan))
-        baseline_rank = float(baseline.get("target_rank", math.nan))
-        baseline_avg_logprob = float(baseline.get("target_avg_logprob", math.nan))
-        baseline_geo_mean_prob = float(baseline.get("target_geo_mean_prob", math.nan))
-        baseline_entropy = float(baseline.get("final_entropy_bits", math.nan))
+        baseline_prob = to_float(baseline.get("target_prob", math.nan))
+        baseline_rank = to_float(baseline.get("target_rank", math.nan))
+        baseline_avg_logprob = to_float(baseline.get("target_avg_logprob", math.nan))
+        baseline_geo_mean_prob = to_float(baseline.get("target_geo_mean_prob", math.nan))
+        baseline_entropy = to_float(baseline.get("final_entropy_bits", math.nan))
         verbose_metrics = compute_verbose_baseline_metrics(
             (verbose_baseline_lookup or {}).get((prompt_id, rep))
         )
 
-        target_prob = float(record.get("target_prob", math.nan))
-        target_rank = float(record.get("target_rank", math.nan))
-        target_avg_logprob = float(record.get("target_avg_logprob", math.nan))
-        target_geo_mean_prob = float(record.get("target_geo_mean_prob", math.nan))
-        target_entropy = float(record.get("final_entropy_bits", math.nan))
+        target_prob = to_float(record.get("target_prob", math.nan))
+        target_rank = to_float(record.get("target_rank", math.nan))
+        target_avg_logprob = to_float(record.get("target_avg_logprob", math.nan))
+        target_geo_mean_prob = to_float(record.get("target_geo_mean_prob", math.nan))
+        target_entropy = to_float(record.get("final_entropy_bits", math.nan))
 
         row["baseline_target_prob"] = baseline_prob
         row["baseline_target_rank"] = baseline_rank
@@ -469,13 +483,13 @@ def summarize_delta_rows(
     summary_rows: list[dict[str, Any]] = []
     for key in sorted(grouped):
         group_rows = grouped[key]
-        delta_p = [float(row["delta_target_prob"]) for row in group_rows]
-        delta_rank = [float(row["delta_target_rank"]) for row in group_rows]
-        delta_entropy = [float(row["delta_final_entropy_bits"]) for row in group_rows]
-        delta_avg_logprob = [float(row["delta_target_avg_logprob"]) for row in group_rows]
-        delta_geo_mean_prob = [float(row["delta_target_geo_mean_prob"]) for row in group_rows]
-        target_probs = [float(row["target_prob"]) for row in group_rows]
-        baseline_probs = [float(row["baseline_target_prob"]) for row in group_rows]
+        delta_p = [to_float(row.get("delta_target_prob")) for row in group_rows]
+        delta_rank = [to_float(row.get("delta_target_rank")) for row in group_rows]
+        delta_entropy = [to_float(row.get("delta_final_entropy_bits")) for row in group_rows]
+        delta_avg_logprob = [to_float(row.get("delta_target_avg_logprob")) for row in group_rows]
+        delta_geo_mean_prob = [to_float(row.get("delta_target_geo_mean_prob")) for row in group_rows]
+        target_probs = [to_float(row.get("target_prob")) for row in group_rows]
+        baseline_probs = [to_float(row.get("baseline_target_prob")) for row in group_rows]
 
         summary: dict[str, Any] = {
             field: value for field, value in zip(group_fields, key, strict=False)
@@ -512,7 +526,7 @@ def build_best_profile_by_type(rows: list[dict[str, Any]]) -> list[dict[str, Any
 
     result: list[dict[str, Any]] = []
     for prompt_type, entries in sorted(grouped.items()):
-        best = max(entries, key=lambda row: float(row["mean_delta_target_prob"]))
+        best = max(entries, key=lambda row: finite_desc_sort_key(row.get("mean_delta_target_prob")))
         result.append(
             round_report_row(
                 {
@@ -561,11 +575,11 @@ def build_overall_profile_summary(
 
     summary_rows: list[dict[str, Any]] = []
     for g_profile, profile_rows in sorted(grouped.items()):
-        delta_p = [float(row["delta_target_prob"]) for row in profile_rows]
-        delta_rank = [float(row["delta_target_rank"]) for row in profile_rows]
-        delta_entropy = [float(row["delta_final_entropy_bits"]) for row in profile_rows]
-        delta_avg_logprob = [float(row["delta_target_avg_logprob"]) for row in profile_rows]
-        delta_geo_mean_prob = [float(row["delta_target_geo_mean_prob"]) for row in profile_rows]
+        delta_p = [to_float(row.get("delta_target_prob")) for row in profile_rows]
+        delta_rank = [to_float(row.get("delta_target_rank")) for row in profile_rows]
+        delta_entropy = [to_float(row.get("delta_final_entropy_bits")) for row in profile_rows]
+        delta_avg_logprob = [to_float(row.get("delta_target_avg_logprob")) for row in profile_rows]
+        delta_geo_mean_prob = [to_float(row.get("delta_target_geo_mean_prob")) for row in profile_rows]
         positive_delta_p = [value for value in delta_p if value > 0]
         negative_delta_p = [value for value in delta_p if value < 0]
         positive_count = len(positive_delta_p)
@@ -575,22 +589,22 @@ def build_overall_profile_summary(
         type_rows = type_rows_by_profile.get(g_profile, [])
         best_type_row = max(
             type_rows,
-            key=lambda row: to_float(row.get("mean_delta_target_prob", -math.inf)),
+            key=lambda row: finite_desc_sort_key(row.get("mean_delta_target_prob")),
             default=None,
         )
         worst_type_row = min(
             type_rows,
-            key=lambda row: to_float(row.get("mean_delta_target_prob", math.inf)),
+            key=lambda row: finite_asc_sort_key(row.get("mean_delta_target_prob")),
             default=None,
         )
 
         best_type_mean = (
-            float(best_type_row["mean_delta_target_prob"])
+            to_float(best_type_row.get("mean_delta_target_prob"))
             if best_type_row is not None
             else math.nan
         )
         worst_type_mean = (
-            float(worst_type_row["mean_delta_target_prob"])
+            to_float(worst_type_row.get("mean_delta_target_prob"))
             if worst_type_row is not None
             else math.nan
         )
@@ -643,7 +657,7 @@ def build_overall_profile_summary(
                 "best_type": best_type_row.get("type", "") if best_type_row is not None else "",
                 "best_type_mean_delta_target_prob": best_type_mean,
                 "best_type_pct_delta_target_prob_positive": (
-                    float(best_type_row.get("pct_delta_target_prob_positive", math.nan))
+                    to_float(best_type_row.get("pct_delta_target_prob_positive", math.nan))
                     if best_type_row is not None
                     else math.nan
                 ),
@@ -651,7 +665,7 @@ def build_overall_profile_summary(
                 "worst_type": worst_type_row.get("type", "") if worst_type_row is not None else "",
                 "worst_type_mean_delta_target_prob": worst_type_mean,
                 "worst_type_pct_delta_target_prob_positive": (
-                    float(worst_type_row.get("pct_delta_target_prob_positive", math.nan))
+                    to_float(worst_type_row.get("pct_delta_target_prob_positive", math.nan))
                     if worst_type_row is not None
                     else math.nan
                 ),
@@ -702,8 +716,8 @@ def build_prompt_winners(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
     winners: list[dict[str, Any]] = []
     for (prompt_id, rep), entries in sorted(grouped.items()):
-        best = max(entries, key=lambda row: float(row["delta_target_prob"]))
-        worst = min(entries, key=lambda row: float(row["delta_target_prob"]))
+        best = max(entries, key=lambda row: finite_desc_sort_key(row.get("delta_target_prob")))
+        worst = min(entries, key=lambda row: finite_asc_sort_key(row.get("delta_target_prob")))
         winners.append(
             round_report_row(
                 {
