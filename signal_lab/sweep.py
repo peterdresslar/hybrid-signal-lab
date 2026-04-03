@@ -109,7 +109,32 @@ def _prompts_from_battery(cartridge: dict[str, Any]) -> list[Prompt]:
     )
 
 
+def _cap_prompts_per_type(
+    prompts: list[Prompt],
+    *,
+    max_prompts_per_type: int | None,
+) -> list[Prompt]:
+    """Keep at most N prompts for each prompt type, preserving input order."""
+    if max_prompts_per_type is None:
+        return prompts
+    if max_prompts_per_type <= 0:
+        raise ValueError("max_prompts_per_type must be a positive integer.")
+
+    kept_counts: dict[str, int] = {}
+    selected: list[Prompt] = []
+    for prompt in prompts:
+        type_key = prompt.type or "__untyped__"
+        current = kept_counts.get(type_key, 0)
+        if current >= max_prompts_per_type:
+            continue
+        selected.append(prompt)
+        kept_counts[type_key] = current + 1
+    return selected
+
+
 def get_prompts_from_cartridge(cartridge: dict[str, Any]) -> list[Prompt]:
+    max_prompts_per_type = cartridge.get("max_prompts_per_type")
+
     if cartridge.get("prompt"):
         prompt_obj = Prompt.from_text(
             cartridge["prompt"],
@@ -128,7 +153,10 @@ def get_prompts_from_cartridge(cartridge: dict[str, Any]) -> list[Prompt]:
                 continue
             deduped_prompts.append(prompt)
             seen_ids.add(prompt.id)
-        return deduped_prompts
+        return _cap_prompts_per_type(
+            deduped_prompts,
+            max_prompts_per_type=max_prompts_per_type,
+        )
 
     if cartridge.get("prompt_id"):
         return [resolve_prompt(cartridge["prompt_id"])]
@@ -145,7 +173,10 @@ def get_prompts_from_cartridge(cartridge: dict[str, Any]) -> list[Prompt]:
                 continue
             deduped_prompts.append(prompt)
             seen_ids.add(prompt.id)
-        return deduped_prompts
+        return _cap_prompts_per_type(
+            deduped_prompts,
+            max_prompts_per_type=max_prompts_per_type,
+        )
 
     raise ValueError(
         "Cartridge must define one of: 'prompt', 'prompt_battery', "
@@ -329,6 +360,7 @@ def main():
             "prompt_ids",
             "prompt_tiers",
             "prompt_types",
+            "max_prompts_per_type",
             "target",
             "attention_targeting",
         ]
