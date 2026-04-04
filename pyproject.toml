@@ -1,6 +1,6 @@
 [project]
 name = "hybrid-signal-lab"
-version = "0.1.0"
+version = "0.2.2"
 description = "Hybrid Signal Lab: probing and analysis for LLM hybrid-model interventions"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
