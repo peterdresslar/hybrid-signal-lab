@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import os
 from abc import ABC, abstractmethod
+from enum import StrEnum
 from typing import Any
 
 import torch
@@ -90,6 +91,43 @@ def attention_scaler_hook(scale: float):
             return output
 
     return hook_fn
+
+
+class InterventionMode(StrEnum):
+    """Where gain is applied in the decoder block.
+
+    Unified target equation for softmax-attention layers:
+
+    ``h_i^l = h_i^{l-1} + g^l * a_tilde_i^l + f_tilde_i^l``
+
+    ``a_tilde`` is the attention contribution exactly where it enters the
+    residual stream, which is architecture-dependent because normalization can
+    sit either before attention or between attention and the residual add.
+    """
+
+    BLOCK_OUTPUT = "block_output"
+    ATTENTION_CONTRIBUTION = "attention_contribution"
+    BACKEND_DEFAULT = "backend_default"
+
+
+VALID_INTERVENTION_MODES = tuple(mode.value for mode in InterventionMode)
+
+
+def normalize_intervention_mode(
+    mode: str | InterventionMode | None,
+) -> InterventionMode:
+    """Validate and normalize a requested intervention mode."""
+    if isinstance(mode, InterventionMode):
+        return mode
+
+    normalized = (mode or InterventionMode.BACKEND_DEFAULT.value).strip().lower()
+    try:
+        return InterventionMode(normalized)
+    except ValueError as exc:
+        valid = ", ".join(sorted(VALID_INTERVENTION_MODES))
+        raise ValueError(
+            f"Unknown intervention_mode '{normalized}'. Expected one of: {valid}."
+        ) from exc
 
 
 class ModelBackend(ABC):
@@ -207,6 +245,16 @@ class ModelBackend(ABC):
             "Tried common HF paths: model.layers, model.decoder.layers, transformer.h, gpt_neox.layers."
         )
 
+    def get_decoder_layer(self, layer_idx: int) -> Any:
+        """Return a single decoder layer by absolute index."""
+        layers = self.get_decoder_layers()
+        try:
+            return layers[layer_idx]
+        except IndexError as exc:
+            raise IndexError(
+                f"Decoder layer index {layer_idx} is out of range for model '{self.model_name}'."
+            ) from exc
+
     def get_layer_attention_module(self, layer: Any) -> torch.nn.Module | None:
         """Return a layer's attention module when one can be identified."""
         for attr_name in ("self_attn", "attn", "attention"):
@@ -215,13 +263,32 @@ class ModelBackend(ABC):
                 return module
         return None
 
+    @property
+    def default_intervention_mode(self) -> InterventionMode:
+        """Legacy/default intervention semantics for this backend."""
+        return InterventionMode.BLOCK_OUTPUT
+
+    def resolve_intervention_mode(
+        self,
+        mode: str | InterventionMode | None,
+    ) -> InterventionMode:
+        """Resolve ``backend_default`` into the backend's concrete legacy mode."""
+        normalized = normalize_intervention_mode(mode)
+        if normalized == InterventionMode.BACKEND_DEFAULT:
+            return self.default_intervention_mode
+        return normalized
+
     @abstractmethod
     def get_attention_layer_indices(self) -> list[int]:
         """Return the layer indices whose attention contribution is gain-scaled."""
 
     @abstractmethod
-    def get_hook_module(self, layer_idx: int) -> torch.nn.Module:
-        """Return the module to attach the scaling hook to for *layer_idx*."""
+    def get_hook_module(
+        self,
+        layer_idx: int,
+        mode: InterventionMode,
+    ) -> torch.nn.Module:
+        """Return the module representing the requested intervention boundary."""
 
     @abstractmethod
     def process_attention_entropy(self, outputs) -> dict[str, Any]:

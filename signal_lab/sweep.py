@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from signal_lab.signal_lab import resolve_prompt, resolve_device, resolve_prompt_collection
+from model.backend import InterventionMode, VALID_INTERVENTION_MODES
 from model.g_profile import build_attention_scales_from_spec, printable_scales
 from model.prompt import Prompt
 from model import VALID_MODEL_KEYS
@@ -108,7 +109,32 @@ def _prompts_from_battery(cartridge: dict[str, Any]) -> list[Prompt]:
     )
 
 
+def _cap_prompts_per_type(
+    prompts: list[Prompt],
+    *,
+    max_prompts_per_type: int | None,
+) -> list[Prompt]:
+    """Keep at most N prompts for each prompt type, preserving input order."""
+    if max_prompts_per_type is None:
+        return prompts
+    if max_prompts_per_type <= 0:
+        raise ValueError("max_prompts_per_type must be a positive integer.")
+
+    kept_counts: dict[str, int] = {}
+    selected: list[Prompt] = []
+    for prompt in prompts:
+        type_key = prompt.type or "__untyped__"
+        current = kept_counts.get(type_key, 0)
+        if current >= max_prompts_per_type:
+            continue
+        selected.append(prompt)
+        kept_counts[type_key] = current + 1
+    return selected
+
+
 def get_prompts_from_cartridge(cartridge: dict[str, Any]) -> list[Prompt]:
+    max_prompts_per_type = cartridge.get("max_prompts_per_type")
+
     if cartridge.get("prompt"):
         prompt_obj = Prompt.from_text(
             cartridge["prompt"],
@@ -127,7 +153,10 @@ def get_prompts_from_cartridge(cartridge: dict[str, Any]) -> list[Prompt]:
                 continue
             deduped_prompts.append(prompt)
             seen_ids.add(prompt.id)
-        return deduped_prompts
+        return _cap_prompts_per_type(
+            deduped_prompts,
+            max_prompts_per_type=max_prompts_per_type,
+        )
 
     if cartridge.get("prompt_id"):
         return [resolve_prompt(cartridge["prompt_id"])]
@@ -144,7 +173,10 @@ def get_prompts_from_cartridge(cartridge: dict[str, Any]) -> list[Prompt]:
                 continue
             deduped_prompts.append(prompt)
             seen_ids.add(prompt.id)
-        return deduped_prompts
+        return _cap_prompts_per_type(
+            deduped_prompts,
+            max_prompts_per_type=max_prompts_per_type,
+        )
 
     raise ValueError(
         "Cartridge must define one of: 'prompt', 'prompt_battery', "
@@ -222,6 +254,17 @@ def main():
     parser.add_argument("--prompt-ids", type=str, default=None, help="Comma-separated prompt ids within --prompt-battery.")
     parser.add_argument("--prompt-tiers", type=str, default=None, help="Comma-separated tiers to select from --prompt-battery.")
     parser.add_argument("--prompt-types", type=str, default=None, help="Comma-separated types to select from --prompt-battery.")
+    parser.add_argument(
+        "--gain-mode",
+        type=str,
+        default=InterventionMode.BACKEND_DEFAULT.value,
+        choices=sorted(VALID_INTERVENTION_MODES),
+        help=(
+            "Where to apply per-layer gain scaling: backend_default preserves legacy backend "
+            "semantics, block_output scales the full decoder block output, and "
+            "attention_contribution scales only the attention branch contribution."
+        ),
+    )
     
     args = parser.parse_args()
     configure_data_dir(args.data_dir)
@@ -302,6 +345,7 @@ def main():
     metadata["model_key"] = model_key
     metadata["run_name"] = args.run_name
     metadata["attention_targeting"] = attention_targeting
+    metadata["gain_intervention_mode"] = args.gain_mode
     metadata["available_attention_layer_indices"] = available_attention_layers
     metadata["target_attention_layer_indices"] = target_attention_layers
     metadata["attention_layer_indices"] = target_attention_layers
@@ -316,6 +360,7 @@ def main():
             "prompt_ids",
             "prompt_tiers",
             "prompt_types",
+            "max_prompts_per_type",
             "target",
             "attention_targeting",
         ]
@@ -324,9 +369,12 @@ def main():
     with open(meta_file, "w") as f_meta:
         json.dump(metadata, f_meta, indent=2)
 
-    print(f"Will run {len(prompts_to_run)} prompts over {len(g_runs)} g configurations ({args.repetitions} repetitions).")
+    print(
+        f"Will run {len(prompts_to_run)} prompts over {len(g_runs)} "
+        f"g configurations ({args.repetitions} repetitions)."
+    )
     total_runs = len(prompts_to_run) * len(g_runs) * args.repetitions
-    print(f"Total runs: {total_runs}")
+    print(f"Total passes: {total_runs}")
     attempted_runs = 0
     completed_runs = 0
     sweep_start_time = time.time()
@@ -347,6 +395,7 @@ def main():
                     return_raw_logits=True,
                     return_verbose=args.verbose,
                     target_attention_layer_indices=target_attention_layers,
+                    intervention_mode=args.gain_mode,
                 )
                 baseline_logits = baseline_result.pop("_raw_logits")
             except Exception as e:
@@ -383,6 +432,7 @@ def main():
                                 baseline_logits=baseline_logits,
                                 return_verbose=args.verbose,
                                 target_attention_layer_indices=target_attention_layers,
+                                intervention_mode=args.gain_mode,
                             )
                     except Exception as e:
                         err = {
@@ -397,7 +447,7 @@ def main():
                         f_err.write(json.dumps(err) + "\n")
                         f_err.flush()
                         print(
-                            f"  [{current_run} of {total_runs}] [ERROR] "
+                            f"  [{current_run} of {total_runs} passes] [ERROR] "
                             f"Rep {rep+1} g={printable} failed: {e}"
                         )
                         continue
@@ -409,6 +459,7 @@ def main():
                                 target_str,
                                 g_scales,
                                 target_attention_layer_indices=target_attention_layers,
+                                intervention_mode=args.gain_mode,
                             )
                         except Exception as e:
                             err = {
@@ -423,7 +474,7 @@ def main():
                             f_err.write(json.dumps(err) + "\n")
                             f_err.flush()
                             print(
-                                f"  [{current_run} of {total_runs}] [ERROR] "
+                                f"  [{current_run} of {total_runs} passes] [ERROR] "
                                 f"Rep {rep+1} g={printable} target scoring failed: {e}"
                             )
                             continue
@@ -443,6 +494,7 @@ def main():
                         "g_spec": g_run["g_spec"],
                         "g_attention_scales": res["g_attention_scales"],
                         "attention_targeting": attention_targeting,
+                        "gain_intervention_mode": res["intervention_mode"],
                         "attention_layer_indices": res["attention_layer_indices"],
                         "rep": res["rep"],
                         "target_text": res.get("target_text"),
@@ -468,7 +520,7 @@ def main():
                         f_verb.flush()
 
                     print(
-                        f"  [{current_run} of {total_runs}] [Rep {rep+1}] "
+                        f"  [{current_run} of {total_runs} passes] [Rep {rep+1}] "
                         f"g_profile={g_run['name']} scales={printable} | "
                         f"Time: {res['elapsed_time']:.2f}s | Final Ent: {res['final_entropy_bits']:.2f} bits | "
                         f"Target Rank: {res.get('target_rank')} | "
@@ -486,7 +538,7 @@ def main():
     print(f"\nSweep complete! Saved results to directory: {out_dir}")
     print(f"Run time: {elapsed_s:.2f}s")
     print(f"Planned runs: {total_runs}")
-    print(f"Completed runs: {completed_runs}")
+    print(f"Completed passes: {completed_runs}")
 
 if __name__ == "__main__":
     main()

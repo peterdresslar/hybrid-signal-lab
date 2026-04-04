@@ -9,7 +9,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-from model.backend import ModelBackend, attention_scaler_hook
+from model.backend import InterventionMode, ModelBackend, attention_scaler_hook
 from model.g_profile import printable_scales
 from model import create_backend
 
@@ -57,6 +57,19 @@ class Agent:
             else self.get_attention_layer_indices()
         )
 
+    def _register_gain_hooks(
+        self,
+        attn_layers: list[int],
+        scales: np.ndarray,
+        intervention_mode: str | InterventionMode | None,
+    ) -> tuple[list[Any], InterventionMode]:
+        resolved_mode = self.backend.resolve_intervention_mode(intervention_mode)
+        hooks = []
+        for idx, scale in zip(attn_layers, scales.tolist()):
+            module = self.backend.get_hook_module(idx, resolved_mode)
+            hooks.append(module.register_forward_hook(attention_scaler_hook(scale)))
+        return hooks, resolved_mode
+
     def run_pass(
         self,
         prompt: str,
@@ -68,6 +81,7 @@ class Agent:
         return_raw_logits: bool = False,
         return_verbose: bool = False,
         target_attention_layer_indices: list[int] | None = None,
+        intervention_mode: str | InterventionMode = InterventionMode.BACKEND_DEFAULT,
     ) -> dict[str, Any]:
         """Run a single forward pass with gain-scaled attention hooks."""
         start_time = time.perf_counter()
@@ -81,11 +95,11 @@ class Agent:
                 f"attention layer count ({len(attn_layers)})."
             )
 
-        hooks = []
-        for idx, scale in zip(attn_layers, scales.tolist()):
-            module = self.backend.get_hook_module(idx)
-            handle = module.register_forward_hook(attention_scaler_hook(scale))
-            hooks.append(handle)
+        hooks, resolved_mode = self._register_gain_hooks(
+            attn_layers,
+            scales,
+            intervention_mode,
+        )
 
         with torch.no_grad():
             outputs = self.model(
@@ -138,6 +152,7 @@ class Agent:
             "model_type": getattr(self.model.config, "model_type", None),
             "g_attention_scales": printable_scales(scales),
             "attention_layer_indices": attn_layers,
+            "intervention_mode": resolved_mode.value,
             "target_token": target_token,
             "target_rank": target_rank,
             "target_prob": target_prob,
@@ -166,6 +181,7 @@ class Agent:
         g_attention_scales: np.ndarray | list[float],
         *,
         target_attention_layer_indices: list[int] | None = None,
+        intervention_mode: str | InterventionMode = InterventionMode.BACKEND_DEFAULT,
     ) -> dict[str, Any] | None:
         """Score an entire target continuation token-by-token (teacher forcing)."""
         prompt_ids = self.tokenizer.encode(prompt, add_special_tokens=False)
@@ -186,11 +202,11 @@ class Agent:
                 f"attention layer count ({len(attn_layers)})."
             )
 
-        hooks = []
-        for idx, scale in zip(attn_layers, scales.tolist()):
-            module = self.backend.get_hook_module(idx)
-            handle = module.register_forward_hook(attention_scaler_hook(scale))
-            hooks.append(handle)
+        hooks, resolved_mode = self._register_gain_hooks(
+            attn_layers,
+            scales,
+            intervention_mode,
+        )
 
         with torch.no_grad():
             outputs = self.model(input_ids=input_ids)
@@ -221,6 +237,7 @@ class Agent:
 
         return {
             "target_text": target_text,
+            "intervention_mode": resolved_mode.value,
             "target_num_tokens": len(target_ids),
             "target_token_ids": target_ids,
             "target_tokens": [self.tokenizer.decode(tid) for tid in target_ids],

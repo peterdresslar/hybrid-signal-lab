@@ -6,7 +6,7 @@ from typing import Any
 
 import torch
 
-from model.backend import ModelBackend
+from model.backend import InterventionMode, ModelBackend
 
 QWEN_MODELS: dict[str, str] = {
     "0_8B": "Qwen/Qwen3.5-0.8B-Base",
@@ -23,17 +23,35 @@ QWEN_MODELS: dict[str, str] = {
 class QwenBackend(ModelBackend):
     """Model backend for the Qwen3.5 hybrid family.
 
-    Attention layers appear at every 4th position (layers 3, 7, 11, ...).
-    Hooks are registered on the full decoder layer so the scaling
-    propagates through the residual stream.
+    Pre-norm architecture on softmax layers: the attention branch is
+    ``Attn(N_in(x))`` and enters the residual stream directly. That means
+    attention-only scaling should hook ``self_attn`` so the intervention lands
+    on ``a_tilde = Attn(N_in(x))``.
     """
 
     def get_attention_layer_indices(self) -> list[int]:
-        n_layers = len(self.model.model.layers)
+        n_layers = len(self.get_decoder_layers())
         return [i for i in range(n_layers) if (i + 1) % 4 == 0]
 
-    def get_hook_module(self, layer_idx: int) -> torch.nn.Module:
-        return self.model.model.layers[layer_idx]
+    @property
+    def default_intervention_mode(self) -> InterventionMode:
+        return InterventionMode.BLOCK_OUTPUT
+
+    def get_hook_module(
+        self,
+        layer_idx: int,
+        mode: InterventionMode,
+    ) -> torch.nn.Module:
+        layer = self.get_decoder_layer(layer_idx)
+        if mode == InterventionMode.BLOCK_OUTPUT:
+            return layer
+
+        module = self.get_layer_attention_module(layer)
+        if module is None:
+            raise ValueError(
+                f"Layer {layer_idx} in model '{self.model_name}' has no recognized attention module."
+            )
+        return module
 
     def process_attention_entropy(self, outputs) -> dict[str, Any]:
         result: dict[str, Any] = {

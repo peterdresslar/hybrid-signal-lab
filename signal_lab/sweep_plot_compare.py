@@ -87,11 +87,23 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_DPI,
         help=f"Output DPI for PNGs (default: {DEFAULT_DPI}).",
     )
-    parser.add_argument(
+    intervention_group = parser.add_mutually_exclusive_group()
+    intervention_group.add_argument(
         "--intervention-folders",
+        dest="intervention_folders",
         action="store_true",
-        help="Write per-g_profile comparison folders under the plots directory.",
+        help=(
+            "Write intervention-folder comparison bundles (interventions/, "
+            "best_interventions/, biggest_model_disagreements/). Enabled by default."
+        ),
     )
+    intervention_group.add_argument(
+        "--no-intervention-folders",
+        dest="intervention_folders",
+        action="store_false",
+        help="Disable intervention-folder comparison bundles.",
+    )
+    parser.set_defaults(intervention_folders=True)
     parser.add_argument(
         "--best-interventions-top-n",
         type=int,
@@ -149,7 +161,11 @@ def infer_labels(files_rows: list[dict[str, str]]) -> tuple[str, str]:
 def to_float(value: str | None) -> float:
     if value is None or value == "":
         return math.nan
-    return float(value)
+    try:
+        numeric = float(value)
+    except (TypeError, ValueError):
+        return math.nan
+    return numeric if math.isfinite(numeric) else math.nan
 
 
 def clean_filename(text: str) -> str:

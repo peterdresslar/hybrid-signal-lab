@@ -15,6 +15,7 @@ from model.g_profile import (
     build_attention_scales_from_spec,
 )
 from model import VALID_MODEL_KEYS
+from model.backend import InterventionMode, VALID_INTERVENTION_MODES
 from signal_lab.agent import Agent
 from signal_lab.paths import (
     DATA_DIR_ENV_VAR,
@@ -294,6 +295,7 @@ def run_model(
     device: str | None = None,
     g_spec: dict[str, Any] | None = None,
     output_path: str | None = None,
+    gain_mode: str | InterventionMode = InterventionMode.BACKEND_DEFAULT,
 ) -> Path:
     """One-shot convenience runner used by the CLI."""
     runtime_device = resolve_device(device)
@@ -310,6 +312,7 @@ def run_model(
         g_scales,
         prompt_id=prompt.id,
         return_verbose=True,
+        intervention_mode=gain_mode,
     )
 
     summary["model"] = agent.backend.model_name
@@ -328,7 +331,8 @@ def run_model(
     print(f"Elapsed time: {summary['elapsed_time']:.3f}s")
     print(
         "Top prediction "
-        f"(g_function={resolved_g_spec.get('g_function')}, "
+        f"(gain_mode={summary['intervention_mode']}, "
+        f"g_function={resolved_g_spec.get('g_function')}, "
         f"scales={summary['g_attention_scales']}): "
         f"index {summary['top_k_indices'][0]} logit {summary['top_k_logits'][0]:.3f}"
     )
@@ -405,6 +409,17 @@ def main() -> None:
         "--output-path", type=str, default=None,
         help="Optional path for the JSON summary output. Defaults under data/outputs/signal_lab/probes/.",
     )
+    parser.add_argument(
+        "--gain-mode",
+        type=str,
+        default=InterventionMode.BACKEND_DEFAULT.value,
+        choices=sorted(VALID_INTERVENTION_MODES),
+        help=(
+            "Where to apply per-layer gain scaling: backend_default preserves legacy backend "
+            "semantics, block_output scales the full decoder block output, and "
+            "attention_contribution scales only the attention branch contribution."
+        ),
+    )
     args = parser.parse_args()
     configure_data_dir(args.data_dir)
 
@@ -455,6 +470,7 @@ def main() -> None:
         device=args.device,
         g_spec=g_spec,
         output_path=args.output_path,
+        gain_mode=args.gain_mode,
     )
 
 
