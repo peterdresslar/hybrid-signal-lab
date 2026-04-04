@@ -101,6 +101,7 @@ def build_sweep_plot_analyze_cmd(
     prefix: str,
     x_metric: str,
     x_metrics: list[str] | None,
+    contrast_profiles: list[str] | None,
     intervention_folders: bool,
     best_interventions_top_n: int,
     plot_dpi: int,
@@ -131,6 +132,9 @@ def build_sweep_plot_analyze_cmd(
         cmd.extend(x_metrics)
     else:
         cmd.extend(["--x-metric", x_metric])
+    if contrast_profiles:
+        cmd.append("--contrast-profiles")
+        cmd.extend(contrast_profiles)
     if intervention_folders:
         cmd.append("--intervention-folders")
     return cmd
@@ -299,6 +303,15 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Optional batch of x-axis metrics for sweep_plot_analyze.",
     )
+    parser.add_argument(
+        "--contrast-profiles",
+        nargs="+",
+        default=None,
+        help=(
+            "Optional extra g_profiles to include in restricted plot families "
+            "for sweep_plot_analyze."
+        ),
+    )
     intervention_group = parser.add_mutually_exclusive_group()
     intervention_group.add_argument(
         "--intervention-folders",
@@ -414,6 +427,7 @@ def main() -> None:
                 prefix=args.prefix,
                 x_metric=args.x_metric,
                 x_metrics=args.x_metrics,
+                contrast_profiles=args.contrast_profiles,
                 intervention_folders=args.intervention_folders,
                 best_interventions_top_n=args.best_interventions_top_n,
                 plot_dpi=args.plot_dpi,

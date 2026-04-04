@@ -25,6 +25,19 @@ import numpy as np
 DEFAULT_PREFIX = "analysis"
 DEFAULT_DPI = 220
 DEFAULT_MIN_FAMILY_POINTS = 50
+DEFAULT_BASELINE_FOLDER_METRICS = [
+    "baseline_final_entropy_bits",
+    "baseline_attn_entropy_mean",
+    "baseline_top1_top2_logit_margin",
+]
+DEFAULT_INTERVENTION_BY_TYPE_METRICS = [
+    "baseline_target_prob",
+    "baseline_attn_entropy_mean",
+    "tokens_approx",
+]
+DEFAULT_INTERVENTION_ALL_METRICS = [
+    "baseline_target_prob",
+]
 FAMILY_ORDER = [
     "baseline",
     "constant",
@@ -135,6 +148,15 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=12,
         help="How many top interventions to include in plots/best_interventions (default: 12).",
+    )
+    parser.add_argument(
+        "--contrast-profiles",
+        nargs="+",
+        default=None,
+        help=(
+            "Optional additional g_profiles to include in restricted plot families "
+            "(for example PCA intervention plots and per-profile head-correlation heatmaps)."
+        ),
     )
     return parser.parse_args()
 
@@ -467,6 +489,10 @@ def recommended_x_metrics(rows: list[dict[str, Any]], primary_metric: str) -> li
     ]
 
 
+def available_metrics(rows: list[dict[str, Any]], metrics: list[str]) -> list[str]:
+    return [metric for metric in metrics if metric_has_finite_values(rows, metric)]
+
+
 def add_zero_line(ax: Any) -> None:
     ax.axhline(0.0, color="0.65", linewidth=0.9, linestyle="--", zorder=0)
 
@@ -709,10 +735,6 @@ def write_baseline_folder(
     folder.mkdir(parents=True, exist_ok=True)
     written_plots: list[str] = []
     for x_metric in x_metrics:
-        all_path = folder / f"scatter_baseline_target_prob_all__x-{clean_filename(x_metric)}.png"
-        plot_baseline_prob_all(baseline_rows, model_label, x_metric, all_path, type_colors, top_n, dpi)
-        written_plots.append(str(all_path))
-
         by_type_path = folder / f"scatter_baseline_target_prob_by_type__x-{clean_filename(x_metric)}.png"
         plot_baseline_prob_by_type(rows, model_label, x_metric, by_type_path, family_colors, top_n, dpi)
         written_plots.append(str(by_type_path))
@@ -862,7 +884,8 @@ def write_intervention_folder(
     rows: list[dict[str, Any]],
     model_label: str,
     g_profile: str,
-    x_metrics: list[str],
+    by_type_metrics: list[str],
+    all_metrics: list[str],
     parent_dir: Path,
     type_colors: dict[str, Any],
     top_n: int,
@@ -875,11 +898,12 @@ def write_intervention_folder(
     folder = parent_dir / clean_filename(g_profile)
     folder.mkdir(parents=True, exist_ok=True)
     written_plots: list[str] = []
-    for x_metric in x_metrics:
+    for x_metric in by_type_metrics:
         by_type_path = folder / f"scatter_delta_target_prob_by_type__x-{clean_filename(x_metric)}.png"
         plot_intervention_by_type(clean_rows, model_label, g_profile, x_metric, by_type_path, top_n, dpi)
         written_plots.append(str(by_type_path))
 
+    for x_metric in all_metrics:
         all_path = folder / f"scatter_delta_target_prob_all__x-{clean_filename(x_metric)}.png"
         plot_intervention_all(clean_rows, model_label, g_profile, x_metric, all_path, type_colors, top_n, dpi)
         written_plots.append(str(all_path))
@@ -1059,15 +1083,18 @@ def write_pca_intervention_folder(
     output_dir: Path,
     prefix: str,
     dpi: int,
+    profiles_to_plot: list[str],
 ) -> list[str]:
     """Write one PCA-delta plot per gain profile into a subdirectory."""
     points = pca_data.get("points", [])
     if not points:
         return []
 
-    profiles = sorted(
-        {str(row["g_profile"]) for row in rows if str(row.get("g_profile", "")) != "baseline"}
-    )
+    profiles = [
+        profile
+        for profile in unique_in_order(profiles_to_plot)
+        if profile != "baseline"
+    ]
     if not profiles:
         return []
 
@@ -1242,6 +1269,7 @@ def write_head_correlation_plots(
     output_dir: Path,
     prefix: str,
     dpi: int,
+    profiles_to_plot: list[str],
 ) -> list[str]:
     """Write per-profile heatmaps and scout-heads aggregate from head correlation JSON."""
     profiles = head_corr_data.get("profiles", [])
@@ -1265,8 +1293,16 @@ def write_head_correlation_plots(
 
     written: list[str] = []
 
+    requested_profiles = {
+        profile
+        for profile in profiles_to_plot
+        if profile and profile != "baseline"
+    }
+
     for p in profiles:
         g_profile = p["g_profile"]
+        if requested_profiles and g_profile not in requested_profiles:
+            continue
         plot_path = heatmap_dir / f"{clean_filename(prefix)}_head_corr__{clean_filename(g_profile)}.png"
         plot_head_correlation_heatmap(
             corr_matrix=p["correlation_matrix"],
@@ -1360,6 +1396,16 @@ def main() -> None:
     family_colors = build_color_map(ordered_families, "tab20")
     type_colors = build_color_map(ordered_types, "tab10")
     intervention_summaries = summarize_interventions(rows)
+    top_intervention_profiles = [
+        str(row["g_profile"])
+        for row in intervention_summaries[: max(args.best_interventions_top_n, 0)]
+    ]
+    contrast_profiles = [
+        profile
+        for profile in (args.contrast_profiles or [])
+        if any(str(row.get("g_profile", "")) == profile for row in rows)
+    ]
+    restricted_profiles = unique_in_order(top_intervention_profiles + contrast_profiles)
     selected_x_metrics = args.x_metrics or [args.x_metric]
     selected_x_metrics = [
         metric for metric in unique_in_order(selected_x_metrics) if metric_has_finite_values(rows, metric)
@@ -1370,27 +1416,9 @@ def main() -> None:
     written_paths: list[str] = []
 
     for x_metric in selected_x_metrics:
-        all_path = output_dir / f"{clean_filename(prefix)}_scatter_delta_target_prob_all__x-{clean_filename(x_metric)}.png"
-        plot_delta_all(rows, model_label, x_metric, all_path, family_colors, args.label_top_n, args.dpi)
-        written_paths.append(str(all_path))
-
         by_type_path = output_dir / f"{clean_filename(prefix)}_scatter_delta_target_prob_by_type__x-{clean_filename(x_metric)}.png"
         plot_delta_by_type(rows, model_label, x_metric, by_type_path, family_colors, args.label_top_n, args.dpi)
         written_paths.append(str(by_type_path))
-
-        by_family_path = output_dir / f"{clean_filename(prefix)}_scatter_delta_target_prob_by_family__x-{clean_filename(x_metric)}.png"
-        plot_delta_by_family(
-            rows,
-            model_label,
-            x_metric,
-            by_family_path,
-            type_colors,
-            args.min_family_points,
-            args.label_top_n,
-            args.dpi,
-        )
-        if by_family_path.exists():
-            written_paths.append(str(by_family_path))
 
     baseline_path = output_dir / f"{clean_filename(prefix)}_scatter_baseline_target_prob_vs_delta_target_prob_by_type.png"
     plot_baseline_vs_delta_by_type(rows, model_label, baseline_path, family_colors, args.label_top_n, args.dpi)
@@ -1413,6 +1441,7 @@ def main() -> None:
             output_dir=output_dir,
             prefix=prefix,
             dpi=args.dpi,
+            profiles_to_plot=restricted_profiles,
         )
         written_paths.extend(pca_intervention_paths)
     else:
@@ -1431,6 +1460,7 @@ def main() -> None:
             output_dir=output_dir,
             prefix=prefix,
             dpi=args.dpi,
+            profiles_to_plot=restricted_profiles,
         )
         written_paths.extend(head_corr_plots)
     else:
@@ -1441,15 +1471,15 @@ def main() -> None:
     if args.intervention_folders:
         interventions_dir = output_dir / "interventions"
         best_dir = output_dir / "best_interventions"
-        raw_x_metrics = args.x_metrics or recommended_x_metrics(rows, args.x_metric)
-        x_metrics = [metric for metric in raw_x_metrics if metric_has_finite_values(rows, metric)]
-        baseline_x_metrics = [
-            metric
-            for metric in x_metrics
-            if metric != "baseline_target_prob" and metric_has_finite_values(rows, metric)
-        ]
+        baseline_x_metrics = available_metrics(rows, DEFAULT_BASELINE_FOLDER_METRICS)
         if not baseline_x_metrics:
-            baseline_x_metrics = ["tokens_approx"]
+            baseline_x_metrics = available_metrics(rows, ["baseline_final_entropy_bits"])
+
+        intervention_by_type_metrics = available_metrics(rows, DEFAULT_INTERVENTION_BY_TYPE_METRICS)
+        if not intervention_by_type_metrics:
+            intervention_by_type_metrics = available_metrics(rows, ["baseline_target_prob"])
+
+        intervention_all_metrics = available_metrics(rows, DEFAULT_INTERVENTION_ALL_METRICS)
 
         intervention_rows: list[dict[str, Any]] = []
         for summary in intervention_summaries:
@@ -1458,7 +1488,8 @@ def main() -> None:
                     rows=rows,
                     model_label=model_label,
                     g_profile=str(summary["g_profile"]),
-                    x_metrics=x_metrics,
+                    by_type_metrics=intervention_by_type_metrics,
+                    all_metrics=intervention_all_metrics,
                     parent_dir=interventions_dir,
                     type_colors=type_colors,
                     top_n=args.label_top_n,
@@ -1498,7 +1529,8 @@ def main() -> None:
             {
                 "model": model_label,
                 "intervention_count": len(intervention_rows),
-                "x_metrics": x_metrics,
+                "by_type_metrics": intervention_by_type_metrics,
+                "all_metrics": intervention_all_metrics,
                 "interventions": [
                     {
                         "g_profile": row["g_profile"],
