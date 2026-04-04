@@ -18,6 +18,47 @@ main implemented loop is:
 Shared model backends and prompt structures live in the top-level `model`
 package.
 
+## Intervention Modes
+
+Gain intervention applies a multiplicative scalar *g* to modulate the
+attention sublayer at each softmax attention layer during inference. The
+central design question is *where* in the decoder block to apply that scalar.
+Signal Lab supports two explicit modes, plus a backward-compatible default:
+
+**`block_output`** scales the entire decoder block output — attention, feed-forward,
+and residual stream together: `g · (h + a + f)`. This was the original
+implementation. It is a blunt instrument: because the gain multiplies the
+residual and feed-forward pathways alongside the attention output, it conflates
+the attention contribution with other information flows. Empirically, effects
+under block_output mode are modest — the best overall mean delta_p for 9B is
++0.01, and the productive gain range collapses above ~1.5.
+
+**`attention_contribution`** scales only the attention sublayer output at the
+residual add point: `h + g · a + f`. This isolates the causal pathway the
+intervention is intended to modulate. The hook target depends on the model's
+normalization topology: for pre-norm architectures (Qwen 3.5), gain is applied
+at `self_attn`; for post-norm architectures (OLMo Hybrid), gain must be applied
+after the post-attention RMSNorm (`post_attention_layernorm`), because RMSNorm
+is scale-invariant and would erase the gain if applied before it.
+
+The distinction between these modes is not just operational — it is the primary
+axis of experimental comparison in the current data. Under attention_contribution
+mode, 9B shows 5–6× higher overall mean delta_p, a productive gain range
+extending to ~2.75, and dramatically stronger type-level effects (e.g.,
+code_comprehension +0.45, reasoning_numerical +0.37 under the best profile).
+The mode × architecture interaction is also significant: OLMO's post-norm
+topology constrains the attention contribution's magnitude relative to the
+residual, so attention_contribution mode has less leverage on OLMO than on the
+pre-norm Qwen models.
+
+**`backend_default`** preserves each backend's legacy behavior for reproducibility.
+For hybrid backends this resolves to `block_output`; for raw HF transformer
+control models it resolves to `attention_contribution`.
+
+See `docs/data_manifests.md` for the detailed file-level reference to
+intervention data, and `data/intervention_modes/DATA_GUIDE.md` for the full
+experimental context comparing the two modes.
+
 Generated Signal Lab artifacts now default under `[DATA_DIR]/outputs/signal_lab/`.
 You can point `[DATA_DIR]` somewhere else with `--data-dir` or the `DATA_DIR`
 environment variable.
@@ -75,6 +116,8 @@ uv run -m signal_lab.signal_lab --device cuda ...
 ```
 
 ## Single Prompt Probing
+
+**Important:** The nature of the intervention is critical to the experimentation being performed in `signal_lab`. It generally will make sense to understand the differences and to explicitly set an intervention mode before running even the simplest of passes.
 
 Use `signal_lab.signal_lab` when you want one prompt, one model, and one gain
 specification.
@@ -361,14 +404,29 @@ uv run -m signal_lab.sweep_analyze \
 
 ### Main Analysis Artifacts
 
-- `analysis_report.txt`
-- `analysis_joined_long.csv`
-- `analysis_type_gain_summary.csv`
-- `analysis_type_family_summary.csv`
-- `analysis_best_profile_by_type.csv`
-- `analysis_prompt_winners.csv`
-- `analysis_type_gain_matrix_delta_p.csv`
-- `analysis_type_family_matrix_delta_p.csv`
+CSVs and text:
+
+- `analysis_report.txt` — human-readable summary; start here
+- `analysis_joined_long.csv` — core long-format table (one row per prompt × profile)
+- `analysis_overall_profile_summary.csv` — profile-level aggregates
+- `analysis_type_gain_summary.csv` — type × profile detail
+- `analysis_type_gain_matrix_delta_p.csv` — type × profile pivot (heatmap-ready)
+- `analysis_type_family_summary.csv` — type × family aggregates
+- `analysis_type_family_matrix_delta_p.csv` — type × family pivot
+- `analysis_best_profile_by_type.csv` — best profile per task type
+- `analysis_prompt_winners.csv` — per-prompt best/worst profiles
+- `analysis_tier_gain_summary.csv` — tier × profile aggregates
+- `analysis_type_tier_gain_summary.csv` — type × tier × profile
+- `analysis_scout_head_rankings.csv` — attention heads ranked by intervention-benefit correlation
+- `analysis_completion.csv`, `analysis_warnings.csv`, `analysis_files.csv`
+
+JSON:
+
+- `analysis_baseline_attn_pca.json` — PCA of baseline attention entropy vectors
+- `analysis_head_correlations.json` — full per-head correlation data
+
+For a detailed description of every file and plot (including what each is useful
+for), see `docs/data_manifests.md`.
 
 ## Comparing Two Analyzed Runs
 
@@ -439,6 +497,18 @@ scatter variants for richer prompt discriminators such as baseline entropy,
 baseline target geo-mean probability, baseline top-1 vs top-2 logit margin,
 and mean attention entropy.
 
+The default x-metrics for intervention folders have been slimmed to reduce
+redundancy. The 7 available x-metrics cluster into groups that produce
+near-identical scatter shapes (see `docs/data_manifests.md` for details). The
+recommended defaults are:
+
+- **by_type views:** `baseline_target_prob` (headroom), `baseline_attn_entropy_mean` (attention-specific), optionally `tokens_approx` (prompt length)
+- **single _all view:** `baseline_target_prob` (compact headroom summary)
+
+Head correlation heatmaps and PCA intervention plots are restricted by default
+to the top-N profiles from `best_interventions/`. The underlying JSON data for
+both is always generated, so any profile can be plotted on demand.
+
 ### Multi-Metric Batch Example
 
 ```bash
@@ -450,9 +520,11 @@ uv run -m signal_lab.sweep_plot_analyze \
 
 This produces:
 
-- `plots/baseline/`
-- `plots/interventions/<g_profile>/`
-- `plots/best_interventions/`
+- `plots/baseline/` — baseline characterization scatters (by_type only)
+- `plots/interventions/<g_profile>/` — per-profile intervention scatters (slimmed)
+- `plots/best_interventions/` — index of top-ranked profiles
+- `plots/head_correlations/` — per-head heatmaps (top-N profiles only)
+- `plots/pca_interventions/` — PCA delta scatters (top-N profiles only)
 
 ### Useful Plot Flags
 
@@ -545,3 +617,6 @@ uv run -m signal_lab.sweep_plot_compare \
   inspection cheap.
 - For current project framing, `signal_lab` is the implemented measurement and
   intervention layer; `colony` is the future collective-signal layer.
+- For a complete file-level reference to analysis and plot outputs (including
+  what each file is useful for and the rationale for the slimmed plot defaults),
+  see `docs/data_manifests.md`.
