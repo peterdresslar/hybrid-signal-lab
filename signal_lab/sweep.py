@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import subprocess
 import time
 import traceback
 import numpy as np
@@ -48,6 +49,44 @@ def _parse_csv_strings(raw_value: str | None) -> list[str] | None:
         return None
     values = [piece.strip() for piece in raw_value.split(",") if piece.strip()]
     return values or None
+
+
+def _run_git(args: list[str]) -> str | None:
+    try:
+        completed = subprocess.run(
+            ["git", *args],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        return None
+    value = completed.stdout.strip()
+    return value or None
+
+
+def resolve_repo_version_metadata() -> dict[str, Any]:
+    """Return Git-derived version metadata for the current repository state."""
+    commit = _run_git(["rev-parse", "HEAD"])
+    short_commit = _run_git(["rev-parse", "--short", "HEAD"])
+    branch = _run_git(["rev-parse", "--abbrev-ref", "HEAD"])
+    exact_tag = _run_git(["describe", "--tags", "--exact-match"])
+    describe = _run_git(["describe", "--tags", "--always", "--dirty"])
+    status_porcelain = _run_git(["status", "--porcelain"])
+
+    dirty = None
+    if status_porcelain is not None:
+        dirty = bool(status_porcelain)
+
+    return {
+        "repo_version": exact_tag or describe,
+        "repo_exact_tag": exact_tag,
+        "repo_describe": describe,
+        "repo_commit": commit,
+        "repo_commit_short": short_commit,
+        "repo_branch": branch,
+        "repo_dirty": dirty,
+    }
 
 
 def resolve_target_attention_layers(
@@ -310,6 +349,7 @@ def main():
         "device": runtime_device,
         "config": agent.backend.config_summary,
     }
+    metadata.update(resolve_repo_version_metadata())
     with open(meta_file, "w") as f_meta:
         json.dump(metadata, f_meta, indent=2)
     print(f"Saved metadata to {meta_file}")
