@@ -284,7 +284,7 @@ CARTRIDGES = {
     "attention_pilot": {
         "description": "Wide-range shape-family survey for attention_contribution mode. "
         "3x deviation from baseline, 2x profile density vs kitchen_sink. "
-        "Use with --gain-mode attention_contribution.",
+        "Use with --intervention-strategy attention_contribution.",
         "g_specs": [
             # --- uniform scalars: original + 3x-wide ---
             _constant(1.0, name="baseline"),
@@ -364,7 +364,7 @@ CARTRIDGES = {
         "description": "Wide-range shape-family survey for attention_contribution mode. "
         "3x deviation from baseline, 2x profile density vs kitchen_sink. "
         "Capped to roughly 5 prompts per prompt type for pilot-sized runs. "
-        "Use with --gain-mode attention_contribution.",
+        "Use with --intervention-strategy attention_contribution.",
         "g_specs": [
             # --- uniform scalars: original + 3x-wide ---
             _constant(1.0, name="baseline"),
@@ -446,7 +446,7 @@ CARTRIDGES = {
         "All 58 attention_pilot profiles plus ~58 new profiles exploring "
         "deeper edges family, single-position spikes/valleys, nonlinear ramps, "
         "bowl/tent shapes, shifted-up patterns, and high-amplitude stress tests. "
-        "Use with --gain-mode attention_contribution.",
+        "Use with --intervention-strategy attention_contribution.",
         "g_specs": [
             # ===== ORIGINAL attention_pilot profiles (58) =====
             # --- uniform scalars: original + 3x-wide ---
@@ -596,7 +596,7 @@ CARTRIDGES = {
         "Profiles selected from pilot_wide results: productive constant range "
         "(1.1-3.0), winning shaped families (tent, bowl, plateau, shifted, edges), "
         "position-specific spikes, and contrast profiles. "
-        "Use with --gain-mode attention_contribution.",
+        "Use with --intervention-strategy attention_contribution.",
         "g_specs": [
             # ===== CONSTANTS: dense coverage of productive range =====
             _constant(1.0, name="baseline"),

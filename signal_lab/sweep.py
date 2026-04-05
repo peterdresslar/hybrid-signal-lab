@@ -27,6 +27,7 @@ from signal_lab.sweep_cartridges import (
     ATTENTION_TARGETING_ALL_LAYERS,
     ATTENTION_TARGETING_EVERY_4TH,
     ATTENTION_TARGETING_NATIVE,
+    VALID_ATTENTION_TARGETING,
     get_cartridge,
     list_cartridges,
 )
@@ -109,6 +110,29 @@ def resolve_target_attention_layers(
             f"{available_attention_layers}."
         )
     return selected
+
+
+def resolve_attention_targeting_override(
+    *,
+    cartridge_attention_targeting: str,
+    target_attention_layers: str | None,
+    mimic_hybrid: bool,
+) -> str:
+    if mimic_hybrid:
+        if target_attention_layers is not None:
+            raise ValueError("Use either --target-attention-layers or --mimic-hybrid, not both.")
+        return ATTENTION_TARGETING_EVERY_4TH
+
+    if target_attention_layers is None:
+        return cartridge_attention_targeting
+
+    if target_attention_layers not in VALID_ATTENTION_TARGETING:
+        valid = ", ".join(sorted(VALID_ATTENTION_TARGETING))
+        raise ValueError(
+            f"Unknown --target-attention-layers value '{target_attention_layers}'. "
+            f"Expected one of: {valid}."
+        )
+    return target_attention_layers
 
 
 def _prompts_from_tiers(prompt_tiers: list[str]) -> list[Prompt]:
@@ -294,14 +318,35 @@ def main():
     parser.add_argument("--prompt-tiers", type=str, default=None, help="Comma-separated tiers to select from --prompt-battery.")
     parser.add_argument("--prompt-types", type=str, default=None, help="Comma-separated types to select from --prompt-battery.")
     parser.add_argument(
+        "--intervention-strategy",
         "--gain-mode",
+        dest="intervention_strategy",
         type=str,
         default=InterventionMode.BACKEND_DEFAULT.value,
         choices=sorted(VALID_INTERVENTION_MODES),
         help=(
-            "Where to apply per-layer gain scaling: backend_default preserves legacy backend "
+            "Intervention strategy: backend_default preserves legacy backend "
             "semantics, block_output scales the full decoder block output, and "
             "attention_contribution scales only the attention branch contribution."
+        ),
+    )
+    parser.add_argument(
+        "--target-attention-layers",
+        type=str,
+        default=None,
+        choices=sorted(VALID_ATTENTION_TARGETING),
+        help=(
+            "Which attention-bearing blocks to target. "
+            "Defaults to the cartridge's configured targeting, which usually means all "
+            "softmax attention layers for the selected backend."
+        ),
+    )
+    parser.add_argument(
+        "--mimic-hybrid",
+        action="store_true",
+        help=(
+            "Convenience alias for --target-attention-layers every_4th_layer. "
+            "Useful for transformer-only control runs that should mimic the hybrid cadence."
         ),
     )
     
@@ -355,7 +400,11 @@ def main():
     print(f"Saved metadata to {meta_file}")
     
     available_attention_layers = agent.get_attention_layer_indices()
-    attention_targeting = cartridge.get("attention_targeting", ATTENTION_TARGETING_NATIVE)
+    attention_targeting = resolve_attention_targeting_override(
+        cartridge_attention_targeting=cartridge.get("attention_targeting", ATTENTION_TARGETING_NATIVE),
+        target_attention_layers=args.target_attention_layers,
+        mimic_hybrid=args.mimic_hybrid,
+    )
     target_attention_layers = resolve_target_attention_layers(
         available_attention_layers,
         attention_targeting,
@@ -385,7 +434,8 @@ def main():
     metadata["model_key"] = model_key
     metadata["run_name"] = args.run_name
     metadata["attention_targeting"] = attention_targeting
-    metadata["gain_intervention_mode"] = args.gain_mode
+    metadata["intervention_strategy"] = args.intervention_strategy
+    metadata["gain_intervention_mode"] = args.intervention_strategy
     metadata["available_attention_layer_indices"] = available_attention_layers
     metadata["target_attention_layer_indices"] = target_attention_layers
     metadata["attention_layer_indices"] = target_attention_layers
@@ -435,7 +485,7 @@ def main():
                     return_raw_logits=True,
                     return_verbose=args.verbose,
                     target_attention_layer_indices=target_attention_layers,
-                    intervention_mode=args.gain_mode,
+                    intervention_mode=args.intervention_strategy,
                 )
                 baseline_logits = baseline_result.pop("_raw_logits")
             except Exception as e:
@@ -472,7 +522,7 @@ def main():
                                 baseline_logits=baseline_logits,
                                 return_verbose=args.verbose,
                                 target_attention_layer_indices=target_attention_layers,
-                                intervention_mode=args.gain_mode,
+                                intervention_mode=args.intervention_strategy,
                             )
                     except Exception as e:
                         err = {
@@ -499,7 +549,7 @@ def main():
                                 target_str,
                                 g_scales,
                                 target_attention_layer_indices=target_attention_layers,
-                                intervention_mode=args.gain_mode,
+                                intervention_mode=args.intervention_strategy,
                             )
                         except Exception as e:
                             err = {
@@ -534,6 +584,7 @@ def main():
                         "g_spec": g_run["g_spec"],
                         "g_attention_scales": res["g_attention_scales"],
                         "attention_targeting": attention_targeting,
+                        "intervention_strategy": res["intervention_mode"],
                         "gain_intervention_mode": res["intervention_mode"],
                         "attention_layer_indices": res["attention_layer_indices"],
                         "rep": res["rep"],

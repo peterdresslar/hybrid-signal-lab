@@ -18,12 +18,12 @@ main implemented loop is:
 Shared model backends and prompt structures live in the top-level `model`
 package.
 
-## Intervention Modes
+## Intervention Strategies
 
 Gain intervention applies a multiplicative scalar *g* to modulate the
 attention sublayer at each softmax attention layer during inference. The
 central design question is *where* in the decoder block to apply that scalar.
-Signal Lab supports two explicit modes, plus a backward-compatible default:
+Signal Lab supports two explicit intervention strategies, plus a backward-compatible default:
 
 **`block_output`** scales the entire decoder block output — attention, feed-forward,
 and residual stream together: `g · (h + a + f)`. This was the original
@@ -122,7 +122,7 @@ uv run -m signal_lab.signal_lab --device cuda ...
 Use `signal_lab.signal_lab` when you want one prompt, one model, and one gain
 specification.
 
-Gain is now applied in one of three intervention modes:
+Gain is now applied in one of three intervention strategies:
 
 - `backend_default`: preserve each backend's legacy behavior
 - `block_output`: scale the full decoder-layer output
@@ -142,7 +142,7 @@ uv run -m signal_lab.signal_lab \
   --model-key 0_8B \
   --g-function constant \
   --g 1.0 \
-  --gain-mode backend_default
+  --intervention-strategy backend_default
 ```
 
 This writes a full JSON summary under `[DATA_DIR]/outputs/signal_lab/probes/`.
@@ -156,7 +156,7 @@ uv run -m signal_lab.signal_lab \
   --model-key 2B \
   --g-function constant \
   --g 1.25 \
-  --gain-mode attention_contribution
+  --intervention-strategy attention_contribution
 ```
 
 ### Prompt Filtered By Type/Tier
@@ -184,7 +184,9 @@ uv run -m signal_lab.signal_lab \
 - `--g`: shortcut for constant profiles
 - `--g-vector`: comma-separated control points for `control_points`
 - `--g-params-json`: extra parameters for non-constant functions
-- `--gain-mode`: `backend_default`, `block_output`, or `attention_contribution`
+- `--intervention-strategy` / `--gain-mode`: `backend_default`, `block_output`, or `attention_contribution`
+- `--target-attention-layers`: `native_attention_layers`, `all_layers`, or `every_4th_layer`
+- `--mimic-hybrid`: convenience alias for `--target-attention-layers every_4th_layer`
 - `--device`: `auto`, `cuda`, `mps`, or `cpu`
 - `--output-path`: optional override for the summary JSON location
 - `--data-dir`: optional override for `[DATA_DIR]`
@@ -202,7 +204,7 @@ Cartridges now also encode how gain profiles are targeted onto attention layers:
   mimic the hybrid cadence on transformer-only models
 
 Independently of cartridge attention targeting, sweeps also accept
-`--gain-mode` to choose *where* the selected gain is applied inside each
+`--intervention-strategy` to choose *where* the selected gain is applied inside each
 decoder block:
 
 - `backend_default`: preserve each backend's legacy semantics
@@ -227,7 +229,7 @@ uv run -m signal_lab.sweep \
   --cartridge uniform_check_lite \
   --run-name uniform_check_lite_demo \
   --model-key 0_8B \
-  --gain-mode backend_default
+  --intervention-strategy backend_default
 ```
 
 ### Battery-Backed Sweep
@@ -254,12 +256,34 @@ uv run -m signal_lab.sweep \
   --prompt-tiers short \
   --model-key Qwen/Qwen2.5-0.5B \
   --device cuda \
-  --gain-mode attention_contribution
+  --intervention-strategy attention_contribution
 ```
 
 For a sparse control run that mimics the hybrid every-4th-layer cadence, swap
 the cartridge to `kitchen_sink_hybrid_mimic` (or the corresponding
 `fine_grain_kitchen_sink_hybrid_mimic` variant).
+
+You can also override targeting explicitly from the CLI:
+
+```bash
+uv run -m signal_lab.sweep \
+  --cartridge kitchen_sink_all_layers \
+  --run-name qwen25_control_mimic \
+  --prompt-battery bench/battery/data/battery_3 \
+  --prompt-types algorithmic \
+  --prompt-tiers short \
+  --model-key Qwen/Qwen2.5-0.5B \
+  --device cuda \
+  --intervention-strategy attention_contribution \
+  --mimic-hybrid
+```
+
+`--target-attention-layers` defaults to the cartridge's configured targeting. For
+transformer-only controls, that generally means:
+
+- `all_layers`: target every attention block
+- `every_4th_layer`: mimic the hybrid cadence
+- `native_attention_layers`: use the backend default attention-bearing blocks
 
 ### Specific Prompt IDs From A Battery
 
@@ -313,6 +337,7 @@ Each model run directory contains:
 For control sweeps, `_meta.json` also records:
 
 - `attention_targeting`
+- `intervention_strategy`
 - `gain_intervention_mode`
 - `available_attention_layer_indices`
 - `target_attention_layer_indices`
