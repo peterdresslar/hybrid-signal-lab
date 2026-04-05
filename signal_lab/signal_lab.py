@@ -25,6 +25,12 @@ from signal_lab.paths import (
     get_data_dir,
     resolve_input_path,
 )
+from signal_lab.sweep_cartridges import (
+    ATTENTION_TARGETING_ALL_LAYERS,
+    ATTENTION_TARGETING_EVERY_4TH,
+    ATTENTION_TARGETING_NATIVE,
+    VALID_ATTENTION_TARGETING,
+)
 
 dotenv.load_dotenv(".env.development")
 dotenv.load_dotenv(".env")
@@ -289,21 +295,63 @@ def _parse_csv_strings(raw_value: str | None) -> list[str] | None:
     return values or None
 
 
+def resolve_target_attention_layers(
+    available_attention_layers: list[int],
+    attention_targeting: str,
+) -> list[int]:
+    if attention_targeting in {
+        ATTENTION_TARGETING_NATIVE,
+        ATTENTION_TARGETING_ALL_LAYERS,
+    }:
+        selected = list(available_attention_layers)
+    elif attention_targeting == ATTENTION_TARGETING_EVERY_4TH:
+        selected = [layer_idx for layer_idx in available_attention_layers if (layer_idx + 1) % 4 == 0]
+    else:
+        raise ValueError(f"Unknown attention_targeting '{attention_targeting}'.")
+
+    if not selected:
+        raise ValueError(
+            f"attention_targeting='{attention_targeting}' selected no attention layers from "
+            f"{available_attention_layers}."
+        )
+    return selected
+
+
+def resolve_attention_targeting_override(
+    *,
+    target_attention_layers: str | None,
+    mimic_hybrid: bool,
+) -> str:
+    if mimic_hybrid:
+        if target_attention_layers is not None:
+            raise ValueError("Use either --target-attention-layers or --mimic-hybrid, not both.")
+        return ATTENTION_TARGETING_EVERY_4TH
+    return target_attention_layers or ATTENTION_TARGETING_NATIVE
+
+
 def run_model(
     prompt_source: str,
     model_key: str = "0_8B",
     device: str | None = None,
     g_spec: dict[str, Any] | None = None,
     output_path: str | None = None,
-    gain_mode: str | InterventionMode = InterventionMode.BACKEND_DEFAULT,
+    intervention_strategy: str | InterventionMode = InterventionMode.BACKEND_DEFAULT,
+    attention_targeting: str = ATTENTION_TARGETING_NATIVE,
 ) -> Path:
     """One-shot convenience runner used by the CLI."""
     runtime_device = resolve_device(device)
     agent = Agent.from_model_key(model_key, runtime_device)
 
-    attn_layers = agent.get_attention_layer_indices()
+    available_attention_layers = agent.get_attention_layer_indices()
+    target_attention_layers = resolve_target_attention_layers(
+        available_attention_layers,
+        attention_targeting,
+    )
     resolved_g_spec = g_spec or {"g_function": "constant", "g_params": {"value": 1.0}}
-    g_scales = build_attention_scales_from_spec(resolved_g_spec, attention_slots=len(attn_layers))
+    g_scales = build_attention_scales_from_spec(
+        resolved_g_spec,
+        attention_slots=len(target_attention_layers),
+    )
 
     prompt = resolve_prompt(prompt_source)
 
@@ -312,7 +360,8 @@ def run_model(
         g_scales,
         prompt_id=prompt.id,
         return_verbose=True,
-        intervention_mode=gain_mode,
+        target_attention_layer_indices=target_attention_layers,
+        intervention_mode=intervention_strategy,
     )
 
     summary["model"] = agent.backend.model_name
@@ -320,6 +369,10 @@ def run_model(
     summary["device"] = runtime_device
     summary["config"] = agent.backend.config_summary
     summary["g_spec"] = resolved_g_spec
+    summary["attention_targeting"] = attention_targeting
+    summary["available_attention_layer_indices"] = available_attention_layers
+    summary["target_attention_layer_indices"] = target_attention_layers
+    summary["intervention_strategy"] = summary["intervention_mode"]
 
     resolved_output_path = Path(output_path).expanduser() if output_path else default_probe_output_path()
     resolved_output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -331,7 +384,7 @@ def run_model(
     print(f"Elapsed time: {summary['elapsed_time']:.3f}s")
     print(
         "Top prediction "
-        f"(gain_mode={summary['intervention_mode']}, "
+        f"(intervention_strategy={summary['intervention_mode']}, "
         f"g_function={resolved_g_spec.get('g_function')}, "
         f"scales={summary['g_attention_scales']}): "
         f"index {summary['top_k_indices'][0]} logit {summary['top_k_logits'][0]:.3f}"
@@ -410,14 +463,34 @@ def main() -> None:
         help="Optional path for the JSON summary output. Defaults under data/outputs/signal_lab/probes/.",
     )
     parser.add_argument(
+        "--intervention-strategy",
         "--gain-mode",
+        dest="intervention_strategy",
         type=str,
         default=InterventionMode.BACKEND_DEFAULT.value,
         choices=sorted(VALID_INTERVENTION_MODES),
         help=(
-            "Where to apply per-layer gain scaling: backend_default preserves legacy backend "
+            "Intervention strategy: backend_default preserves legacy backend "
             "semantics, block_output scales the full decoder block output, and "
             "attention_contribution scales only the attention branch contribution."
+        ),
+    )
+    parser.add_argument(
+        "--target-attention-layers",
+        type=str,
+        default=None,
+        choices=sorted(VALID_ATTENTION_TARGETING),
+        help=(
+            "Which attention-bearing blocks to target. Default behavior targets all "
+            "softmax attention layers for the selected backend."
+        ),
+    )
+    parser.add_argument(
+        "--mimic-hybrid",
+        action="store_true",
+        help=(
+            "Convenience alias for --target-attention-layers every_4th_layer. "
+            "Useful for transformer-only control probes that should mimic the hybrid cadence."
         ),
     )
     args = parser.parse_args()
@@ -464,13 +537,19 @@ def main() -> None:
             )
         prompt_source = f"{args.prompt_battery}:{prompts[0].id}"
 
+    attention_targeting = resolve_attention_targeting_override(
+        target_attention_layers=args.target_attention_layers,
+        mimic_hybrid=args.mimic_hybrid,
+    )
+
     run_model(
         prompt_source,
         args.model_key,
         device=args.device,
         g_spec=g_spec,
         output_path=args.output_path,
-        gain_mode=args.gain_mode,
+        intervention_strategy=args.intervention_strategy,
+        attention_targeting=attention_targeting,
     )
 
 
