@@ -8,6 +8,12 @@ import torch
 
 from model.backend import InterventionMode, ModelBackend
 
+TRANSFORMER_MODELS: dict[str, str] = {
+    "Q3_30B": "Qwen/Qwen3-30B-A3B-Base",
+    "Q3_8B": "Qwen/Qwen3-8B-Base",
+    "OLMO_3": "allenai/Olmo-3-1025-7B",
+}
+
 
 class TransformerBackend(ModelBackend):
     """Generic backend for transformer-only causal LMs.
