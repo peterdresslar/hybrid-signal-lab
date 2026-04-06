@@ -1,0 +1,92 @@
+{
+  "model_key": "9B",
+  "profiles": [
+    "edges_narrow",
+    "late_boost_4.0",
+    "shifted_ramp_down",
+    "tent_steep"
+  ],
+  "feature_set": "pca+scalar",
+  "n_pca": 10,
+  "n_features": 15,
+  "feature_names": [
+    "pc1",
+    "pc2",
+    "pc3",
+    "pc4",
+    "pc5",
+    "pc6",
+    "pc7",
+    "pc8",
+    "pc9",
+    "pc10",
+    "baseline_attn_entropy_mean",
+    "baseline_final_entropy_bits",
+    "baseline_mean_entropy_bits",
+    "baseline_target_prob",
+    "baseline_top1_top2_logit_margin"
+  ],
+  "n_folds": 5,
+  "hyperparameters": {
+    "lr": 0.1,
+    "n_iter": 2000,
+    "reg": 0.001
+  },
+  "baseline_delta_p": 0.0,
+  "best_fixed_delta_p": 0.1013831775700935,
+  "routed_delta_p": 0.11925233644859815,
+  "oracle_delta_p": 0.15246728971962614,
+  "routing_efficiency": 0.7821503003555231,
+  "overall_accuracy": 0.6177570093457944,
+  "fold_results": [
+    {
+      "fold": 0,
+      "n_test": 214,
+      "accuracy": 0.6448598130841121,
+      "routed_mean_delta_p": 0.10780373831775701,
+      "oracle_mean_delta_p": 0.13369158878504672
+    },
+    {
+      "fold": 1,
+      "n_test": 214,
+      "accuracy": 0.5841121495327103,
+      "routed_mean_delta_p": 0.10621495327102806,
+      "oracle_mean_delta_p": 0.1530373831775701
+    },
+    {
+      "fold": 2,
+      "n_test": 214,
+      "accuracy": 0.6448598130841121,
+      "routed_mean_delta_p": 0.12514018691588785,
+      "oracle_mean_delta_p": 0.1571495327102804
+    },
+    {
+      "fold": 3,
+      "n_test": 214,
+      "accuracy": 0.5934579439252337,
+      "routed_mean_delta_p": 0.13135514018691588,
+      "oracle_mean_delta_p": 0.16747663551401867
+    },
+    {
+      "fold": 4,
+      "n_test": 214,
+      "accuracy": 0.6214953271028038,
+      "routed_mean_delta_p": 0.12574766355140188,
+      "oracle_mean_delta_p": 0.15098130841121496
+    }
+  ],
+  "true_class_distribution": {
+    "edges_narrow": 175,
+    "late_boost_4.0": 105,
+    "shifted_ramp_down": 164,
+    "tent_steep": 179,
+    "off": 447
+  },
+  "predicted_class_distribution": {
+    "edges_narrow": 180,
+    "late_boost_4.0": 72,
+    "shifted_ramp_down": 159,
+    "tent_steep": 104,
+    "off": 555
+  }
+}

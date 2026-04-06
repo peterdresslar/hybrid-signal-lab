@@ -1,0 +1,74 @@
+Profile Selection: OLMO
+============================================================
+
+Data: data/intervention_modes/b4_021_attn_contr
+Prompts: 1070
+Candidate profiles: 77
+
+Reference points:
+  Baseline (no intervention):     0.0000
+  Best fixed profile:             0.0367  (triad_odd)
+  Oracle (all profiles):          0.1118
+
+Top 10 profile sets (4 profiles + off):
+
+  # 1  routed=0.0749  advantage=0.0382  coverage=65%
+        bookend_suppress
+        late_boost_4.0
+        late_high_early_low_3x
+        triad_odd
+
+  # 2  routed=0.0744  advantage=0.0377  coverage=65%
+        bookend_suppress
+        late_boost_4.0
+        late_only_2x
+        triad_odd
+
+  # 3  routed=0.0738  advantage=0.0371  coverage=64%
+        bookend_suppress
+        edges_narrow
+        late_boost_4.0
+        triad_odd
+
+  # 4  routed=0.0737  advantage=0.0370  coverage=66%
+        bookend_suppress
+        bowl
+        late_boost_4.0
+        triad_odd
+
+  # 5  routed=0.0736  advantage=0.0369  coverage=64%
+        bookend_suppress
+        late_boost_4.0
+        pair_quarter
+        triad_odd
+
+  # 6  routed=0.0735  advantage=0.0368  coverage=67%
+        bookend_suppress
+        late_high_early_low_3x
+        spike_p5
+        triad_odd
+
+  # 7  routed=0.0734  advantage=0.0367  coverage=63%
+        bookend_suppress
+        late_high_early_low_3x
+        pair_quarter
+        triad_odd
+
+  # 8  routed=0.0733  advantage=0.0366  coverage=65%
+        bookend_suppress
+        late_boost_4.0
+        late_high_early_low
+        triad_odd
+
+  # 9  routed=0.0732  advantage=0.0365  coverage=62%
+        late_boost_4.0
+        late_high_early_low
+        pair_quarter
+        triad_odd
+
+  #10  routed=0.0731  advantage=0.0364  coverage=65%
+        bookend_suppress
+        bowl
+        late_high_early_low_3x
+        triad_odd
+
