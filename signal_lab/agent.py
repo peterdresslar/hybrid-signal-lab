@@ -264,8 +264,12 @@ class Agent:
     ) -> dict[str, Any]:
         """Generate text autoregressively with gain-scaled attention hooks.
 
-        Uses greedy decoding (temperature=0) by default.  Hooks are
-        registered once and remain active for the entire generation loop.
+        Uses manual token-by-token decoding (full forward pass per step)
+        rather than model.generate(), because hybrid linear-attention
+        models may not support the KV-cache loop that generate() expects
+        when the flash-linear-attention fast path is unavailable.
+
+        Greedy decoding (temperature=0) by default.
 
         Args:
             prompt: input text
@@ -280,8 +284,6 @@ class Agent:
             dict with generated_text, num_tokens_generated, elapsed_time
         """
         start_time = time.perf_counter()
-        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
-        prompt_len = inputs["input_ids"].shape[1]
 
         attn_layers = self._resolve_target_attention_layers(target_attention_layer_indices)
         scales = np.asarray(g_attention_scales, dtype=float)
@@ -291,36 +293,50 @@ class Agent:
                 f"attention layer count ({len(attn_layers)})."
             )
 
-        hooks, resolved_mode = self._register_gain_hooks(
-            attn_layers, scales, intervention_mode,
-        )
+        input_ids = self.tokenizer.encode(prompt, add_special_tokens=False)
+        generated_ids: list[int] = []
+        eos_id = self.tokenizer.eos_token_id
 
-        try:
-            with torch.no_grad():
+        with torch.no_grad():
+            for _ in range(max_new_tokens):
+                all_ids = input_ids + generated_ids
+                ids_tensor = torch.tensor([all_ids], dtype=torch.long, device=self.device)
+
+                # Register hooks fresh each step (cheap, ensures clean state)
+                hooks, resolved_mode = self._register_gain_hooks(
+                    attn_layers, scales, intervention_mode,
+                )
+                try:
+                    outputs = self.model(input_ids=ids_tensor)
+                finally:
+                    for h in hooks:
+                        h.remove()
+
+                next_logits = outputs.logits[0, -1, :].float()
+
                 if temperature <= 0:
-                    output_ids = self.model.generate(
-                        **inputs,
-                        max_new_tokens=max_new_tokens,
-                        do_sample=False,
-                        pad_token_id=self.tokenizer.eos_token_id,
-                    )
+                    next_id = int(next_logits.argmax())
                 else:
-                    output_ids = self.model.generate(
-                        **inputs,
-                        max_new_tokens=max_new_tokens,
-                        do_sample=True,
-                        temperature=temperature,
-                        pad_token_id=self.tokenizer.eos_token_id,
+                    probs = torch.softmax(next_logits / temperature, dim=-1)
+                    next_id = int(torch.multinomial(probs, 1)[0])
+
+                generated_ids.append(next_id)
+
+                if next_id == eos_id:
+                    break
+
+                # Check stop strings on decoded text so far
+                if stop_strings:
+                    text_so_far = self.tokenizer.decode(
+                        generated_ids, skip_special_tokens=True,
                     )
-        finally:
-            for h in hooks:
-                h.remove()
+                    if any(ss in text_so_far for ss in stop_strings):
+                        break
 
         elapsed_time = time.perf_counter() - start_time
-        generated_ids = output_ids[0, prompt_len:]
         generated_text = self.tokenizer.decode(generated_ids, skip_special_tokens=True)
 
-        # Early stop on stop_strings (trim output)
+        # Trim at stop string
         if stop_strings:
             earliest = len(generated_text)
             for ss in stop_strings:
