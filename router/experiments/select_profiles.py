@@ -1,0 +1,300 @@
+"""
+select_profiles.py — Combinatorial search for optimal 4-profile sets.
+
+For each model (9B, OLMO), find the 4 gain profiles that maximize
+oracle-routed mean delta_p at the prompt level. "Oracle-routed" means
+each prompt is assigned whichever of the 4 profiles (or baseline/off)
+gives the best delta_target_prob for that prompt.
+
+The search enumerates all C(N, 4) combinations of non-baseline profiles
+and scores each set. N=77 (78 profiles minus baseline) gives ~1.4M
+combinations per model — feasible on a single core in minutes.
+
+Usage:
+    python -m router.experiments.select_profiles \
+        --model-key 9B \
+        --data-dir data/intervention_modes/b4_021_attn_contr
+
+    python -m router.experiments.select_profiles \
+        --model-key OLMO \
+        --data-dir data/intervention_modes/b4_021_attn_contr
+
+Optional flags:
+    --top-n          Number of top sets to report (default: 20)
+    --min-coverage   Minimum fraction of prompts where at least one
+                     profile in the set beats baseline (default: 0.0)
+    --output-dir     Directory for results (default: <data-dir>/<model-key>/router/)
+"""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import json
+import os
+import sys
+import time
+from itertools import combinations
+from pathlib import Path
+
+import numpy as np
+
+
+def load_delta_matrix(analysis_dir: Path) -> tuple[list[str], list[str], np.ndarray]:
+    """Load the prompt × profile delta_target_prob matrix from analysis_joined_long.csv.
+
+    Returns:
+        prompt_ids: list of unique prompt IDs (length P)
+        profiles:   list of non-baseline profile names (length N)
+        matrix:     P × N array of delta_target_prob values
+    """
+    joined_path = analysis_dir / "analysis_joined_long.csv"
+    if not joined_path.exists():
+        raise FileNotFoundError(f"Missing {joined_path}")
+
+    # First pass: collect all (prompt_id, g_profile, delta_target_prob) triples
+    triples: list[tuple[str, str, float]] = []
+    with open(joined_path, newline="") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            g_profile = row["g_profile"]
+            if g_profile == "baseline":
+                continue
+            try:
+                delta = float(row["delta_target_prob"])
+            except (ValueError, TypeError):
+                continue
+            triples.append((row["prompt_id"], g_profile, delta))
+
+    # Build index maps
+    prompt_set: dict[str, int] = {}
+    profile_set: dict[str, int] = {}
+    for pid, gp, _ in triples:
+        if pid not in prompt_set:
+            prompt_set[pid] = len(prompt_set)
+        if gp not in profile_set:
+            profile_set[gp] = len(profile_set)
+
+    prompt_ids = sorted(prompt_set, key=prompt_set.get)  # type: ignore[arg-type]
+    profiles = sorted(profile_set, key=profile_set.get)  # type: ignore[arg-type]
+
+    # Rebuild clean index maps from sorted lists
+    pid_idx = {pid: i for i, pid in enumerate(prompt_ids)}
+    prof_idx = {gp: j for j, gp in enumerate(profiles)}
+
+    # Fill matrix
+    matrix = np.zeros((len(prompt_ids), len(profiles)), dtype=np.float64)
+    for pid, gp, delta in triples:
+        matrix[pid_idx[pid], prof_idx[gp]] = delta
+
+    return prompt_ids, profiles, matrix
+
+
+def score_profile_set(
+    matrix: np.ndarray,
+    indices: tuple[int, ...],
+) -> tuple[float, float, int]:
+    """Score a candidate set of profile column indices.
+
+    For each prompt, the oracle picks max(0, max(delta_p across selected profiles)).
+    The zero floor represents the "off" option (baseline).
+
+    Returns:
+        mean_routed_delta_p:  mean oracle-routed delta_p across all prompts
+        mean_best_fixed:      mean delta_p of the best single profile in the set
+        coverage:             number of prompts where at least one profile > 0
+    """
+    sub = matrix[:, list(indices)]                  # P × 4
+    per_prompt_best = np.maximum(sub.max(axis=1), 0.0)  # floor at 0 (off)
+    mean_routed = float(per_prompt_best.mean())
+
+    # Best fixed: which single column has highest overall mean (clipped at 0)?
+    col_means = np.maximum(sub, 0.0).mean(axis=0)
+    mean_best_fixed = float(col_means.max())
+
+    coverage = int((sub.max(axis=1) > 0).sum())
+    return mean_routed, mean_best_fixed, coverage
+
+
+def search(
+    matrix: np.ndarray,
+    profiles: list[str],
+    top_n: int = 20,
+    min_coverage: float = 0.0,
+) -> list[dict]:
+    """Enumerate all C(N, 4) profile sets and return the top scoring ones."""
+    n_profiles = matrix.shape[1]
+    n_prompts = matrix.shape[0]
+    min_cov_count = int(min_coverage * n_prompts)
+
+    total_combos = 1
+    for i in range(4):
+        total_combos = total_combos * (n_profiles - i) // (i + 1)
+
+    print(f"Searching {total_combos:,} combinations of 4 from {n_profiles} profiles "
+          f"across {n_prompts} prompts...")
+
+    results: list[tuple[float, float, int, tuple[int, ...]]] = []
+    report_interval = max(total_combos // 20, 1)
+    t0 = time.time()
+
+    for count, combo in enumerate(combinations(range(n_profiles), 4)):
+        if count % report_interval == 0 and count > 0:
+            elapsed = time.time() - t0
+            rate = count / elapsed
+            remaining = (total_combos - count) / rate
+            print(f"  {count:>10,} / {total_combos:,}  "
+                  f"({count/total_combos*100:.0f}%)  "
+                  f"{remaining:.0f}s remaining")
+
+        mean_routed, mean_best_fixed, coverage = score_profile_set(matrix, combo)
+        if coverage < min_cov_count:
+            continue
+        results.append((mean_routed, mean_best_fixed, coverage, combo))
+
+    elapsed = time.time() - t0
+    print(f"Done in {elapsed:.1f}s ({total_combos / elapsed:,.0f} combos/sec)")
+
+    # Sort by oracle-routed mean (descending)
+    results.sort(key=lambda x: -x[0])
+
+    top_results = []
+    for rank, (mean_routed, mean_best_fixed, coverage, combo) in enumerate(results[:top_n], 1):
+        profile_names = [profiles[i] for i in combo]
+        top_results.append({
+            "rank": rank,
+            "profiles": profile_names,
+            "mean_oracle_routed_delta_p": round(mean_routed, 6),
+            "mean_best_fixed_delta_p": round(mean_best_fixed, 6),
+            "routing_advantage": round(mean_routed - mean_best_fixed, 6),
+            "coverage": coverage,
+            "coverage_pct": round(coverage / n_prompts * 100, 1),
+        })
+
+    return top_results
+
+
+def compute_baselines(matrix: np.ndarray, profiles: list[str]) -> dict:
+    """Compute reference points for comparison."""
+    n_prompts = matrix.shape[0]
+
+    # Oracle over ALL profiles (upper bound)
+    all_oracle = float(np.maximum(matrix.max(axis=1), 0.0).mean())
+
+    # Best single fixed profile
+    profile_means = matrix.mean(axis=0)
+    best_fixed_idx = int(profile_means.argmax())
+    best_fixed_mean = float(profile_means[best_fixed_idx])
+
+    # Best single fixed profile (with off option = clipped at 0)
+    clipped_means = np.maximum(matrix, 0.0).mean(axis=0)
+    best_fixed_clipped_idx = int(clipped_means.argmax())
+    best_fixed_clipped_mean = float(clipped_means[best_fixed_clipped_idx])
+
+    return {
+        "oracle_all_78_profiles": round(all_oracle, 6),
+        "best_fixed_profile": profiles[best_fixed_idx],
+        "best_fixed_mean_delta_p": round(best_fixed_mean, 6),
+        "best_fixed_profile_clipped": profiles[best_fixed_clipped_idx],
+        "best_fixed_clipped_mean_delta_p": round(best_fixed_clipped_mean, 6),
+        "n_prompts": n_prompts,
+        "n_profiles": matrix.shape[1],
+    }
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Find optimal 4-profile sets for gain intervention routing."
+    )
+    parser.add_argument(
+        "--model-key", required=True,
+        help="Model subdirectory name (e.g. 9B, OLMO)"
+    )
+    parser.add_argument(
+        "--data-dir", required=True,
+        help="Path to intervention_modes run directory (e.g. data/intervention_modes/b4_021_attn_contr)"
+    )
+    parser.add_argument("--top-n", type=int, default=20, help="Number of top sets to report")
+    parser.add_argument("--min-coverage", type=float, default=0.0,
+                        help="Minimum coverage fraction (0.0–1.0)")
+    parser.add_argument("--output-dir", default=None, help="Output directory for results")
+    args = parser.parse_args()
+
+    data_dir = Path(args.data_dir)
+    analysis_dir = data_dir / args.model_key / "analysis"
+    if not analysis_dir.exists():
+        print(f"Error: analysis directory not found: {analysis_dir}", file=sys.stderr)
+        sys.exit(1)
+
+    output_dir = Path(args.output_dir) if args.output_dir else data_dir / args.model_key / "router"
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    print(f"Loading data for {args.model_key}...")
+    prompt_ids, profiles, matrix = load_delta_matrix(analysis_dir)
+    print(f"  {len(prompt_ids)} prompts × {len(profiles)} profiles")
+
+    baselines = compute_baselines(matrix, profiles)
+    print(f"\nReference points:")
+    print(f"  Oracle (all {baselines['n_profiles']} profiles): "
+          f"{baselines['oracle_all_78_profiles']:.4f}")
+    print(f"  Best fixed profile: {baselines['best_fixed_profile']} "
+          f"({baselines['best_fixed_mean_delta_p']:.4f})")
+    print(f"  Best fixed (clipped): {baselines['best_fixed_profile_clipped']} "
+          f"({baselines['best_fixed_clipped_mean_delta_p']:.4f})")
+    print()
+
+    top_results = search(matrix, profiles, top_n=args.top_n, min_coverage=args.min_coverage)
+
+    # Display results
+    print(f"\nTop {len(top_results)} profile sets by oracle-routed mean delta_p:")
+    print(f"{'rank':>4}  {'routed':>8}  {'best_fix':>8}  {'advantage':>9}  "
+          f"{'cov%':>5}  profiles")
+    print("-" * 90)
+    for r in top_results:
+        print(f"{r['rank']:>4}  {r['mean_oracle_routed_delta_p']:>8.4f}  "
+              f"{r['mean_best_fixed_delta_p']:>8.4f}  {r['routing_advantage']:>9.4f}  "
+              f"{r['coverage_pct']:>5.1f}  {', '.join(r['profiles'])}")
+
+    # Save results
+    output = {
+        "model_key": args.model_key,
+        "data_dir": str(data_dir),
+        "baselines": baselines,
+        "top_sets": top_results,
+    }
+    output_path = output_dir / "profile_selection.json"
+    with open(output_path, "w") as f:
+        json.dump(output, f, indent=2)
+    print(f"\nResults saved to {output_path}")
+
+    # Also save a concise human-readable report
+    report_path = output_dir / "profile_selection_report.txt"
+    with open(report_path, "w") as f:
+        f.write(f"Profile Selection: {args.model_key}\n")
+        f.write(f"{'=' * 60}\n\n")
+        f.write(f"Data: {data_dir}\n")
+        f.write(f"Prompts: {baselines['n_prompts']}\n")
+        f.write(f"Candidate profiles: {baselines['n_profiles']}\n\n")
+
+        f.write(f"Reference points:\n")
+        f.write(f"  Baseline (no intervention):     0.0000\n")
+        f.write(f"  Best fixed profile:             "
+                f"{baselines['best_fixed_clipped_mean_delta_p']:.4f}  "
+                f"({baselines['best_fixed_profile_clipped']})\n")
+        f.write(f"  Oracle (all profiles):          "
+                f"{baselines['oracle_all_78_profiles']:.4f}\n\n")
+
+        f.write(f"Top {len(top_results)} profile sets (4 profiles + off):\n\n")
+        for r in top_results:
+            f.write(f"  #{r['rank']:>2}  routed={r['mean_oracle_routed_delta_p']:.4f}  "
+                    f"advantage={r['routing_advantage']:.4f}  "
+                    f"coverage={r['coverage_pct']:.0f}%\n")
+            for p in r["profiles"]:
+                f.write(f"        {p}\n")
+            f.write("\n")
+
+    print(f"Report saved to {report_path}")
+
+
+if __name__ == "__main__":
+    main()
