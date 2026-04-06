@@ -250,3 +250,91 @@ class Agent:
             "target_first_token_rank": token_ranks[0],
             "target_first_token_prob": token_probs[0],
         }
+
+    def generate(
+        self,
+        prompt: str,
+        g_attention_scales: np.ndarray | list[float],
+        *,
+        max_new_tokens: int = 512,
+        temperature: float = 0.0,
+        stop_strings: list[str] | None = None,
+        target_attention_layer_indices: list[int] | None = None,
+        intervention_mode: str | InterventionMode = InterventionMode.BACKEND_DEFAULT,
+    ) -> dict[str, Any]:
+        """Generate text autoregressively with gain-scaled attention hooks.
+
+        Uses greedy decoding (temperature=0) by default.  Hooks are
+        registered once and remain active for the entire generation loop.
+
+        Args:
+            prompt: input text
+            g_attention_scales: per-attention-layer gain values
+            max_new_tokens: generation budget
+            temperature: sampling temperature (0 = greedy)
+            stop_strings: optional early-stop strings (e.g. ["\\n\\n"])
+            target_attention_layer_indices: override which layers to hook
+            intervention_mode: which hook target to scale
+
+        Returns:
+            dict with generated_text, num_tokens_generated, elapsed_time
+        """
+        start_time = time.perf_counter()
+        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
+        prompt_len = inputs["input_ids"].shape[1]
+
+        attn_layers = self._resolve_target_attention_layers(target_attention_layer_indices)
+        scales = np.asarray(g_attention_scales, dtype=float)
+        if scales.ndim != 1 or scales.size != len(attn_layers):
+            raise ValueError(
+                f"g_attention_scales length ({scales.size}) must equal "
+                f"attention layer count ({len(attn_layers)})."
+            )
+
+        hooks, resolved_mode = self._register_gain_hooks(
+            attn_layers, scales, intervention_mode,
+        )
+
+        try:
+            with torch.no_grad():
+                if temperature <= 0:
+                    output_ids = self.model.generate(
+                        **inputs,
+                        max_new_tokens=max_new_tokens,
+                        do_sample=False,
+                        pad_token_id=self.tokenizer.eos_token_id,
+                    )
+                else:
+                    output_ids = self.model.generate(
+                        **inputs,
+                        max_new_tokens=max_new_tokens,
+                        do_sample=True,
+                        temperature=temperature,
+                        pad_token_id=self.tokenizer.eos_token_id,
+                    )
+        finally:
+            for h in hooks:
+                h.remove()
+
+        elapsed_time = time.perf_counter() - start_time
+        generated_ids = output_ids[0, prompt_len:]
+        generated_text = self.tokenizer.decode(generated_ids, skip_special_tokens=True)
+
+        # Early stop on stop_strings (trim output)
+        if stop_strings:
+            earliest = len(generated_text)
+            for ss in stop_strings:
+                idx = generated_text.find(ss)
+                if 0 <= idx < earliest:
+                    earliest = idx
+            if earliest < len(generated_text):
+                generated_text = generated_text[:earliest]
+
+        return {
+            "prompt": prompt,
+            "generated_text": generated_text,
+            "num_tokens_generated": len(generated_ids),
+            "intervention_mode": resolved_mode.value,
+            "g_attention_scales": printable_scales(scales),
+            "elapsed_time": elapsed_time,
+        }

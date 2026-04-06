@@ -17,6 +17,7 @@ Evaluation approach:
 
 from __future__ import annotations
 
+import random
 import re
 from dataclasses import dataclass, field
 from typing import Any
@@ -86,50 +87,45 @@ def load_copa(split: str = "validation") -> list[ScoringExample]:
 # StoryCloze
 # ---------------------------------------------------------------------------
 
-def load_storycloze(split: str = "2018/val") -> list[ScoringExample]:
-    """Load StoryCloze.
+def load_storycloze(split: str = "test", seed: int = 42) -> list[ScoringExample]:
+    """Load StoryCloze from lecslab/story_cloze on HuggingFace.
 
-    Given a 4-sentence story, choose the correct 5th sentence from two options.
+    Given a multi-sentence story prompt, choose the correct ending from
+    two options (chosen vs. rejected). Publicly accessible, no data-use
+    agreement required.
 
-    NOTE: StoryCloze requires accepting a data use agreement on HuggingFace.
-    If the dataset is not accessible, you can download it manually from
-    https://cs.rochester.edu/nlp/rocstories/ and place it in data/bench/.
+    The dataset has columns: prompt, chosen, rejected.
+    We randomize continuation order per-example (seeded) so position
+    bias doesn't contaminate log-likelihood evaluation.
 
-    ~1871 validation examples.
+    Splits available: train (~1871), validation (~187), test (~1684).
+
+    Args:
+        split: dataset split (default: "test")
+        seed: random seed for continuation order shuffling
     """
-    try:
-        ds = load_dataset("story_cloze", split.split("/")[0], split=split.split("/")[1])
-    except Exception:
-        # Fallback: try the LSDSem version
-        try:
-            ds = load_dataset("LSDSem/story_cloze", split="test")
-        except Exception as e:
-            raise RuntimeError(
-                f"Could not load StoryCloze. You may need to accept the data use "
-                f"agreement on HuggingFace or download manually. Error: {e}"
-            )
+    ds = load_dataset("lecslab/story_cloze", split=split)
 
+    rng = random.Random(seed)
     examples = []
+
     for i, row in enumerate(ds):
-        # Build the 4-sentence context
-        context_sentences = [
-            row["input_sentence_1"],
-            row["input_sentence_2"],
-            row["input_sentence_3"],
-            row["input_sentence_4"],
-        ]
-        context = " ".join(context_sentences)
+        context = row["prompt"].strip()
+        chosen = " " + row["chosen"].strip()
+        rejected = " " + row["rejected"].strip()
 
-        c1 = " " + row["sentence_quiz1"]
-        c2 = " " + row["sentence_quiz2"]
-
-        # answer_right_ending is 1-indexed
-        correct_idx = row["answer_right_ending"] - 1
+        # Randomize order to avoid position bias; track correct index
+        if rng.random() < 0.5:
+            continuations = [chosen, rejected]
+            correct_idx = 0
+        else:
+            continuations = [rejected, chosen]
+            correct_idx = 1
 
         examples.append(ScoringExample(
-            example_id=f"storycloze_{i}",
+            example_id=f"storycloze_{split}_{i}",
             context=context,
-            continuations=[c1, c2],
+            continuations=continuations,
             correct_idx=correct_idx,
         ))
 
