@@ -317,6 +317,30 @@ Useful cartridge families for control-model studies:
 - `kitchen_sink_hybrid_mimic`
 - `fine_grain_kitchen_sink_all_layers`
 - `fine_grain_kitchen_sink_hybrid_mimic`
+- `balanced_kitchen_sink_all_layers`
+- `balanced_kitchen_sink_hybrid_mimic`
+
+Example: run the balanced comprehensive sweep on a transformer-only control
+model while targeting every attention layer:
+
+```bash
+uv run -m signal_lab.sweep \
+  --cartridge balanced_kitchen_sink_all_layers \
+  --model-key Q3_8B \
+  --intervention-strategy attention_contribution \
+  --run-name q3_8b_balanced_all_layers
+```
+
+Example: run the same balanced sweep but sparsify targeting to every 4th layer
+to mimic the hybrid cadence:
+
+```bash
+uv run -m signal_lab.sweep \
+  --cartridge balanced_kitchen_sink_hybrid_mimic \
+  --model-key Q3_8B \
+  --intervention-strategy attention_contribution \
+  --run-name q3_8b_balanced_hybrid_mimic
+```
 
 ### Sweep Outputs
 
