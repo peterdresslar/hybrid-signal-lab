@@ -64,6 +64,51 @@ dotenv.load_dotenv(".env.slurm")
 
 
 # ---------------------------------------------------------------------------
+# Progress reporting
+# ---------------------------------------------------------------------------
+
+class ProgressHeartbeat:
+    """Emit periodic liveness updates during slow benchmark loops."""
+
+    def __init__(self, task_name: str, condition: str, total: int, interval_s: float = 30.0):
+        self.task_name = task_name
+        self.condition = condition
+        self.total = total
+        self.interval_s = interval_s
+        self.start_time = time.time()
+        self.last_ping_time = self.start_time
+
+    def maybe_ping(
+        self,
+        completed: int,
+        *,
+        metric_name: str = "acc",
+        metric_value: float | None = None,
+        force: bool = False,
+    ) -> None:
+        now = time.time()
+        if not force and (now - self.last_ping_time) < self.interval_s:
+            return
+
+        elapsed = now - self.start_time
+        rate = completed / elapsed if elapsed > 0 else 0.0
+        remaining = self.total - completed
+        eta_s = (remaining / rate) if rate > 0 else None
+
+        message = (
+            f"    [{self.task_name}/{self.condition}] "
+            f"{completed}/{self.total} done"
+        )
+        if metric_value is not None:
+            message += f"  {metric_name}={metric_value:.3f}"
+        message += f"  elapsed={elapsed:.1f}s"
+        if eta_s is not None:
+            message += f"  eta={eta_s:.1f}s"
+        print(message)
+        self.last_ping_time = now
+
+
+# ---------------------------------------------------------------------------
 # Scoring helpers
 # ---------------------------------------------------------------------------
 
@@ -456,12 +501,14 @@ def run_scoring_task(
     print(f"\n  [{task_name}] Running baseline...")
     t0 = time.time()
     baseline_records = []
+    baseline_heartbeat = ProgressHeartbeat(task_name, "baseline", len(examples))
     for i, ex in enumerate(examples):
         rec = run_scoring_example_baseline(agent, ex, baseline_scales)
         baseline_records.append(rec)
+        acc_so_far = sum(r["correct"] for r in baseline_records) / len(baseline_records)
         if (i + 1) % 50 == 0:
-            acc_so_far = sum(r["correct"] for r in baseline_records) / len(baseline_records)
             print(f"    {i+1}/{len(examples)}  acc={acc_so_far:.3f}")
+        baseline_heartbeat.maybe_ping(i + 1, metric_value=acc_so_far)
 
     bl_acc = sum(r["correct"] for r in baseline_records) / len(baseline_records)
     results["conditions"]["baseline"] = {
@@ -481,12 +528,14 @@ def run_scoring_task(
         print(f"\n  [{task_name}] Running routed...")
         t0 = time.time()
         routed_records = []
+        routed_heartbeat = ProgressHeartbeat(task_name, "routed", len(examples))
         for i, ex in enumerate(examples):
             rec = run_scoring_example_routed(agent, router, ex, baseline_scales, profile_scales)
             routed_records.append(rec)
+            acc_so_far = sum(r["correct"] for r in routed_records) / len(routed_records)
             if (i + 1) % 50 == 0:
-                acc_so_far = sum(r["correct"] for r in routed_records) / len(routed_records)
                 print(f"    {i+1}/{len(examples)}  acc={acc_so_far:.3f}")
+            routed_heartbeat.maybe_ping(i + 1, metric_value=acc_so_far)
 
         rt_acc = sum(r["correct"] for r in routed_records) / len(routed_records)
         results["conditions"]["routed"] = {
@@ -506,9 +555,14 @@ def run_scoring_task(
             print(f"\n  [{task_name}] Running fixed {pname}...")
             t0 = time.time()
             fixed_records = []
-            for ex in examples:
+            fixed_heartbeat = ProgressHeartbeat(task_name, f"fixed_{pname}", len(examples))
+            for i, ex in enumerate(examples):
                 rec = run_scoring_example_fixed(agent, ex, pname, pscales)
                 fixed_records.append(rec)
+                acc_so_far = sum(r["correct"] for r in fixed_records) / len(fixed_records)
+                if (i + 1) % 50 == 0:
+                    print(f"    {i+1}/{len(examples)}  acc={acc_so_far:.3f}")
+                fixed_heartbeat.maybe_ping(i + 1, metric_value=acc_so_far)
 
             f_acc = sum(r["correct"] for r in fixed_records) / len(fixed_records)
             results["conditions"][f"fixed_{pname}"] = {
@@ -530,12 +584,14 @@ def run_scoring_task(
         print(f"\n  [{task_name}] Running oracle...")
         t0 = time.time()
         oracle_records = []
+        oracle_heartbeat = ProgressHeartbeat(task_name, "oracle", len(examples))
         for i, ex in enumerate(examples):
             rec = run_scoring_example_oracle(agent, ex, baseline_scales, profile_scales)
             oracle_records.append(rec)
+            acc_so_far = sum(r["correct"] for r in oracle_records) / len(oracle_records)
             if (i + 1) % 50 == 0:
-                acc_so_far = sum(r["correct"] for r in oracle_records) / len(oracle_records)
                 print(f"    {i+1}/{len(examples)}  acc={acc_so_far:.3f}")
+            oracle_heartbeat.maybe_ping(i + 1, metric_value=acc_so_far)
 
         or_acc = sum(r["correct"] for r in oracle_records) / len(oracle_records)
         results["conditions"]["oracle"] = {
@@ -578,12 +634,14 @@ def run_generation_task(
     print(f"\n  [{task_name}] Running baseline...")
     t0 = time.time()
     baseline_records = []
+    baseline_heartbeat = ProgressHeartbeat(task_name, "baseline", len(examples))
     for i, ex in enumerate(examples):
         rec = run_generation_example_baseline(agent, ex, baseline_scales, max_new_tokens)
         baseline_records.append(rec)
+        acc_so_far = sum(r["correct"] for r in baseline_records) / len(baseline_records)
         if (i + 1) % 50 == 0:
-            acc_so_far = sum(r["correct"] for r in baseline_records) / len(baseline_records)
             print(f"    {i+1}/{len(examples)}  acc={acc_so_far:.3f}")
+        baseline_heartbeat.maybe_ping(i + 1, metric_value=acc_so_far)
 
     bl_acc = sum(r["correct"] for r in baseline_records) / len(baseline_records)
     results["conditions"]["baseline"] = {
@@ -603,14 +661,16 @@ def run_generation_task(
         print(f"\n  [{task_name}] Running routed...")
         t0 = time.time()
         routed_records = []
+        routed_heartbeat = ProgressHeartbeat(task_name, "routed", len(examples))
         for i, ex in enumerate(examples):
             rec = run_generation_example_routed(
                 agent, router, ex, baseline_scales, profile_scales, max_new_tokens,
             )
             routed_records.append(rec)
+            acc_so_far = sum(r["correct"] for r in routed_records) / len(routed_records)
             if (i + 1) % 50 == 0:
-                acc_so_far = sum(r["correct"] for r in routed_records) / len(routed_records)
                 print(f"    {i+1}/{len(examples)}  acc={acc_so_far:.3f}")
+            routed_heartbeat.maybe_ping(i + 1, metric_value=acc_so_far)
 
         rt_acc = sum(r["correct"] for r in routed_records) / len(routed_records)
         results["conditions"]["routed"] = {
@@ -630,9 +690,14 @@ def run_generation_task(
             print(f"\n  [{task_name}] Running fixed {pname}...")
             t0 = time.time()
             fixed_records = []
-            for ex in examples:
+            fixed_heartbeat = ProgressHeartbeat(task_name, f"fixed_{pname}", len(examples))
+            for i, ex in enumerate(examples):
                 rec = run_generation_example_fixed(agent, ex, pname, pscales, max_new_tokens)
                 fixed_records.append(rec)
+                acc_so_far = sum(r["correct"] for r in fixed_records) / len(fixed_records)
+                if (i + 1) % 50 == 0:
+                    print(f"    {i+1}/{len(examples)}  acc={acc_so_far:.3f}")
+                fixed_heartbeat.maybe_ping(i + 1, metric_value=acc_so_far)
 
             f_acc = sum(r["correct"] for r in fixed_records) / len(fixed_records)
             results["conditions"][f"fixed_{pname}"] = {
@@ -654,14 +719,16 @@ def run_generation_task(
         print(f"\n  [{task_name}] Running oracle...")
         t0 = time.time()
         oracle_records = []
+        oracle_heartbeat = ProgressHeartbeat(task_name, "oracle", len(examples))
         for i, ex in enumerate(examples):
             rec = run_generation_example_oracle(
                 agent, ex, baseline_scales, profile_scales, max_new_tokens,
             )
             oracle_records.append(rec)
+            acc_so_far = sum(r["correct"] for r in oracle_records) / len(oracle_records)
             if (i + 1) % 50 == 0:
-                acc_so_far = sum(r["correct"] for r in oracle_records) / len(oracle_records)
                 print(f"    {i+1}/{len(examples)}  acc={acc_so_far:.3f}")
+            oracle_heartbeat.maybe_ping(i + 1, metric_value=acc_so_far)
 
         or_acc = sum(r["correct"] for r in oracle_records) / len(oracle_records)
         results["conditions"]["oracle"] = {
