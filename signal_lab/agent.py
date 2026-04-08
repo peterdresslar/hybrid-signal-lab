@@ -250,3 +250,107 @@ class Agent:
             "target_first_token_rank": token_ranks[0],
             "target_first_token_prob": token_probs[0],
         }
+
+    def generate(
+        self,
+        prompt: str,
+        g_attention_scales: np.ndarray | list[float],
+        *,
+        max_new_tokens: int = 512,
+        temperature: float = 0.0,
+        stop_strings: list[str] | None = None,
+        target_attention_layer_indices: list[int] | None = None,
+        intervention_mode: str | InterventionMode = InterventionMode.BACKEND_DEFAULT,
+    ) -> dict[str, Any]:
+        """Generate text autoregressively with gain-scaled attention hooks.
+
+        Uses manual token-by-token decoding (full forward pass per step)
+        rather than model.generate(), because hybrid linear-attention
+        models may not support the KV-cache loop that generate() expects
+        when the flash-linear-attention fast path is unavailable.
+
+        Greedy decoding (temperature=0) by default.
+
+        Args:
+            prompt: input text
+            g_attention_scales: per-attention-layer gain values
+            max_new_tokens: generation budget
+            temperature: sampling temperature (0 = greedy)
+            stop_strings: optional early-stop strings (e.g. ["\\n\\n"])
+            target_attention_layer_indices: override which layers to hook
+            intervention_mode: which hook target to scale
+
+        Returns:
+            dict with generated_text, num_tokens_generated, elapsed_time
+        """
+        start_time = time.perf_counter()
+
+        attn_layers = self._resolve_target_attention_layers(target_attention_layer_indices)
+        scales = np.asarray(g_attention_scales, dtype=float)
+        if scales.ndim != 1 or scales.size != len(attn_layers):
+            raise ValueError(
+                f"g_attention_scales length ({scales.size}) must equal "
+                f"attention layer count ({len(attn_layers)})."
+            )
+
+        input_ids = self.tokenizer.encode(prompt, add_special_tokens=False)
+        generated_ids: list[int] = []
+        eos_id = self.tokenizer.eos_token_id
+
+        with torch.no_grad():
+            for _ in range(max_new_tokens):
+                all_ids = input_ids + generated_ids
+                ids_tensor = torch.tensor([all_ids], dtype=torch.long, device=self.device)
+
+                # Register hooks fresh each step (cheap, ensures clean state)
+                hooks, resolved_mode = self._register_gain_hooks(
+                    attn_layers, scales, intervention_mode,
+                )
+                try:
+                    outputs = self.model(input_ids=ids_tensor)
+                finally:
+                    for h in hooks:
+                        h.remove()
+
+                next_logits = outputs.logits[0, -1, :].float()
+
+                if temperature <= 0:
+                    next_id = int(next_logits.argmax())
+                else:
+                    probs = torch.softmax(next_logits / temperature, dim=-1)
+                    next_id = int(torch.multinomial(probs, 1)[0])
+
+                generated_ids.append(next_id)
+
+                if next_id == eos_id:
+                    break
+
+                # Check stop strings on decoded text so far
+                if stop_strings:
+                    text_so_far = self.tokenizer.decode(
+                        generated_ids, skip_special_tokens=True,
+                    )
+                    if any(ss in text_so_far for ss in stop_strings):
+                        break
+
+        elapsed_time = time.perf_counter() - start_time
+        generated_text = self.tokenizer.decode(generated_ids, skip_special_tokens=True)
+
+        # Trim at stop string
+        if stop_strings:
+            earliest = len(generated_text)
+            for ss in stop_strings:
+                idx = generated_text.find(ss)
+                if 0 <= idx < earliest:
+                    earliest = idx
+            if earliest < len(generated_text):
+                generated_text = generated_text[:earliest]
+
+        return {
+            "prompt": prompt,
+            "generated_text": generated_text,
+            "num_tokens_generated": len(generated_ids),
+            "intervention_mode": resolved_mode.value,
+            "g_attention_scales": printable_scales(scales),
+            "elapsed_time": elapsed_time,
+        }
