@@ -1,0 +1,1 @@
+Figure 1. Task-dependent response of Qwen3.5-9B to six representative gain profiles under attention-contribution intervention. Top: gain shape over normalized attention-layer depth. Bottom: mean change in target-token probability (Δp) for each prompt type and profile; rows are ordered by average absolute responsiveness across the six profiles.
