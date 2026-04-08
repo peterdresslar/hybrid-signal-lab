@@ -41,6 +41,7 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
+import dotenv
 
 from signal_lab.agent import Agent
 from model.backend import InterventionMode
@@ -56,6 +57,10 @@ from bench.tasks import (
 )
 from router.router import InterventionRouter
 from router.profiles import get_profile_specs, BASELINE_SPEC
+
+dotenv.load_dotenv(".env.development")
+dotenv.load_dotenv(".env")
+dotenv.load_dotenv(".env.slurm")
 
 
 # ---------------------------------------------------------------------------
