@@ -790,6 +790,30 @@ CARTRIDGES = {
         attention_targeting=ATTENTION_TARGETING_EVERY_4TH,
         description_suffix="Control variant targeting every 4th layer to mimic the hybrid cadence.",
     ),
+    "balanced_kitchen_sink_all_layers": _with_attention_targeting(
+        {
+            "description": "Balanced comprehensive sweep with mean-centered shaped profiles "
+            "and broad constant controls. Intended for full-transformer control runs that "
+            "target every attention layer.",
+            "g_specs": BALANCED_SWEEP_G_SPECS,
+            "prompt_tiers": ["short", "brief", "med", "long", "extended"],
+            "model_key": "0_8B",
+        },
+        attention_targeting=ATTENTION_TARGETING_ALL_LAYERS,
+        description_suffix="Control variant targeting every attention layer.",
+    ),
+    "balanced_kitchen_sink_hybrid_mimic": _with_attention_targeting(
+        {
+            "description": "Balanced comprehensive sweep with mean-centered shaped profiles "
+            "and broad constant controls. Intended for full-transformer control runs that "
+            "mimic the hybrid every-4th-layer cadence.",
+            "g_specs": BALANCED_SWEEP_G_SPECS,
+            "prompt_tiers": ["short", "brief", "med", "long", "extended"],
+            "model_key": "0_8B",
+        },
+        attention_targeting=ATTENTION_TARGETING_EVERY_4TH,
+        description_suffix="Control variant targeting every 4th layer to mimic the hybrid cadence.",
+    ),
 }
 
 
