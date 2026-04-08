@@ -28,6 +28,27 @@ def _control_points(values: list[float], *, name: str) -> dict:
     }
 
 
+def _balanced_control_points(
+    deviations: list[float],
+    *,
+    amplitude: float,
+    name: str,
+) -> dict:
+    if not deviations:
+        raise ValueError("deviations must be non-empty.")
+    mean_dev = sum(float(v) for v in deviations) / len(deviations)
+    if abs(mean_dev) > 1e-9:
+        raise ValueError(
+            f"Balanced profile template '{name}' must have mean 0.0; got {mean_dev:.6f}."
+        )
+    values = [1.0 + amplitude * float(v) for v in deviations]
+    if min(values) < 0.0:
+        raise ValueError(
+            f"Balanced profile '{name}' produced negative gain values: {values}."
+        )
+    return _control_points(values, name=name)
+
+
 def _clone_g_specs(g_specs: list[dict]) -> list[dict]:
     return [dict(spec) for spec in g_specs]
 
@@ -44,6 +65,107 @@ def _with_attention_targeting(
     if description_suffix:
         variant["description"] = f"{base['description']} {description_suffix}".strip()
     return variant
+
+
+BALANCED_SWEEP_G_SPECS = [
+    # ===== CONSTANTS: keep pure dose-response coverage =====
+    _constant(1.0, name="baseline"),
+    _constant(0.4),
+    _constant(0.55),
+    _constant(0.7),
+    _constant(0.85),
+    _constant(0.95),
+    _constant(1.05),
+    _constant(1.15),
+    _constant(1.3),
+    _constant(1.45),
+    _constant(1.6),
+    _constant(1.8),
+    _constant(2.0),
+    _constant(2.3),
+    _constant(2.6),
+    _constant(3.0),
+    # ===== EARLY / LATE CONTRAST (mean-preserving) =====
+    _balanced_control_points([1, 1, 1, -1, -1, -1], amplitude=0.15, name="early_boost_bal_0.15"),
+    _balanced_control_points([1, 1, 1, -1, -1, -1], amplitude=0.3, name="early_boost_bal_0.30"),
+    _balanced_control_points([1, 1, 1, -1, -1, -1], amplitude=0.45, name="early_boost_bal_0.45"),
+    _balanced_control_points([1, 1, 1, -1, -1, -1], amplitude=0.6, name="early_boost_bal_0.60"),
+    _balanced_control_points([-1, -1, -1, 1, 1, 1], amplitude=0.15, name="late_boost_bal_0.15"),
+    _balanced_control_points([-1, -1, -1, 1, 1, 1], amplitude=0.3, name="late_boost_bal_0.30"),
+    _balanced_control_points([-1, -1, -1, 1, 1, 1], amplitude=0.45, name="late_boost_bal_0.45"),
+    _balanced_control_points([-1, -1, -1, 1, 1, 1], amplitude=0.6, name="late_boost_bal_0.60"),
+    # ===== MIDDLE BUMP / VALLEY (mean-preserving) =====
+    _balanced_control_points([-0.5, -0.5, 1, 1, -0.5, -0.5], amplitude=0.2, name="middle_bump_bal_0.20"),
+    _balanced_control_points([-0.5, -0.5, 1, 1, -0.5, -0.5], amplitude=0.35, name="middle_bump_bal_0.35"),
+    _balanced_control_points([-0.5, -0.5, 1, 1, -0.5, -0.5], amplitude=0.5, name="middle_bump_bal_0.50"),
+    _balanced_control_points([-0.5, -0.5, 1, 1, -0.5, -0.5], amplitude=0.65, name="middle_bump_bal_0.65"),
+    _balanced_control_points([0.5, 0.5, -1, -1, 0.5, 0.5], amplitude=0.2, name="middle_valley_bal_0.20"),
+    _balanced_control_points([0.5, 0.5, -1, -1, 0.5, 0.5], amplitude=0.35, name="middle_valley_bal_0.35"),
+    _balanced_control_points([0.5, 0.5, -1, -1, 0.5, 0.5], amplitude=0.5, name="middle_valley_bal_0.50"),
+    _balanced_control_points([0.5, 0.5, -1, -1, 0.5, 0.5], amplitude=0.65, name="middle_valley_bal_0.65"),
+    # ===== EDGES =====
+    _balanced_control_points([0.8, 0.2, -1, -1, 0.2, 0.8], amplitude=0.25, name="edges_bal_0.25"),
+    _balanced_control_points([0.8, 0.2, -1, -1, 0.2, 0.8], amplitude=0.4, name="edges_bal_0.40"),
+    _balanced_control_points([0.8, 0.2, -1, -1, 0.2, 0.8], amplitude=0.55, name="edges_bal_0.55"),
+    _balanced_control_points([0.8, 0.2, -1, -1, 0.2, 0.8], amplitude=0.7, name="edges_bal_0.70"),
+    _balanced_control_points([1, -0.5, -0.5, -0.5, -0.5, 1], amplitude=0.25, name="edges_narrow_bal_0.25"),
+    _balanced_control_points([1, -0.5, -0.5, -0.5, -0.5, 1], amplitude=0.4, name="edges_narrow_bal_0.40"),
+    _balanced_control_points([1, -0.5, -0.5, -0.5, -0.5, 1], amplitude=0.55, name="edges_narrow_bal_0.55"),
+    _balanced_control_points([1, -0.5, -0.5, -0.5, -0.5, 1], amplitude=0.7, name="edges_narrow_bal_0.70"),
+    _balanced_control_points([1, 0.5, -0.5, -0.5, -0.25, -0.25], amplitude=0.25, name="edges_asym_early_bal_0.25"),
+    _balanced_control_points([1, 0.5, -0.5, -0.5, -0.25, -0.25], amplitude=0.45, name="edges_asym_early_bal_0.45"),
+    _balanced_control_points([-0.25, -0.25, -0.5, -0.5, 0.5, 1], amplitude=0.25, name="edges_asym_late_bal_0.25"),
+    _balanced_control_points([-0.25, -0.25, -0.5, -0.5, 0.5, 1], amplitude=0.45, name="edges_asym_late_bal_0.45"),
+    # ===== RAMPS =====
+    _balanced_control_points([-1, -0.6, -0.2, 0.2, 0.6, 1], amplitude=0.2, name="ramp_up_bal_0.20"),
+    _balanced_control_points([-1, -0.6, -0.2, 0.2, 0.6, 1], amplitude=0.35, name="ramp_up_bal_0.35"),
+    _balanced_control_points([-1, -0.6, -0.2, 0.2, 0.6, 1], amplitude=0.5, name="ramp_up_bal_0.50"),
+    _balanced_control_points([1, 0.6, 0.2, -0.2, -0.6, -1], amplitude=0.2, name="ramp_down_bal_0.20"),
+    _balanced_control_points([1, 0.6, 0.2, -0.2, -0.6, -1], amplitude=0.35, name="ramp_down_bal_0.35"),
+    _balanced_control_points([1, 0.6, 0.2, -0.2, -0.6, -1], amplitude=0.5, name="ramp_down_bal_0.50"),
+    # ===== BOWL / TENT / PLATEAU =====
+    _balanced_control_points([1, 0, -1, -1, 0, 1], amplitude=0.25, name="bowl_bal_0.25"),
+    _balanced_control_points([1, 0, -1, -1, 0, 1], amplitude=0.4, name="bowl_bal_0.40"),
+    _balanced_control_points([1, 0, -1, -1, 0, 1], amplitude=0.55, name="bowl_bal_0.55"),
+    _balanced_control_points([-1, 0, 1, 1, 0, -1], amplitude=0.25, name="tent_bal_0.25"),
+    _balanced_control_points([-1, 0, 1, 1, 0, -1], amplitude=0.4, name="tent_bal_0.40"),
+    _balanced_control_points([-1, 0, 1, 1, 0, -1], amplitude=0.55, name="tent_bal_0.55"),
+    _balanced_control_points([-1, 0.5, 0.5, 0.5, 0.5, -1], amplitude=0.25, name="plateau_bal_0.25"),
+    _balanced_control_points([-1, 0.5, 0.5, 0.5, 0.5, -1], amplitude=0.4, name="plateau_bal_0.40"),
+    _balanced_control_points([-1, 0.5, 0.5, 0.5, 0.5, -1], amplitude=0.55, name="plateau_bal_0.55"),
+    # ===== SPIKES =====
+    _balanced_control_points([5, -1, -1, -1, -1, -1], amplitude=0.12, name="spike_p1_bal_0.12"),
+    _balanced_control_points([5, -1, -1, -1, -1, -1], amplitude=0.18, name="spike_p1_bal_0.18"),
+    _balanced_control_points([-1, -1, 5, -1, -1, -1], amplitude=0.12, name="spike_p3_bal_0.12"),
+    _balanced_control_points([-1, -1, 5, -1, -1, -1], amplitude=0.18, name="spike_p3_bal_0.18"),
+    _balanced_control_points([-1, -1, -1, -1, -1, 5], amplitude=0.12, name="spike_p6_bal_0.12"),
+    _balanced_control_points([-1, -1, -1, -1, -1, 5], amplitude=0.18, name="spike_p6_bal_0.18"),
+    # ===== ALTERNATING / PERIODIC =====
+    _balanced_control_points([1, -1, 1, -1, 1, -1], amplitude=0.25, name="triad_odd_bal_0.25"),
+    _balanced_control_points([1, -1, 1, -1, 1, -1], amplitude=0.45, name="triad_odd_bal_0.45"),
+    _balanced_control_points([-1, 1, -1, 1, -1, 1], amplitude=0.25, name="triad_even_bal_0.25"),
+    _balanced_control_points([-1, 1, -1, 1, -1, 1], amplitude=0.45, name="triad_even_bal_0.45"),
+    _balanced_control_points([1, -0.5, -0.5, 1, -0.5, -0.5], amplitude=0.25, name="pair_stride_bal_0.25"),
+    _balanced_control_points([1, -0.5, -0.5, 1, -0.5, -0.5], amplitude=0.45, name="pair_stride_bal_0.45"),
+    _balanced_control_points([-0.5, 1, 1, -0.5, -0.5, -0.5], amplitude=0.25, name="quarter_wave_bal_0.25"),
+    _balanced_control_points([-0.5, 1, 1, -0.5, -0.5, -0.5], amplitude=0.45, name="quarter_wave_bal_0.45"),
+    _balanced_control_points([1, -1, 0.5, -0.5, 0.5, -0.5], amplitude=0.25, name="sawtooth_bal_0.25"),
+    _balanced_control_points([1, -1, 0.5, -0.5, 0.5, -0.5], amplitude=0.45, name="sawtooth_bal_0.45"),
+    _balanced_control_points([-1, 1, -0.5, 0.5, -0.5, 0.5], amplitude=0.25, name="sawtooth_inv_bal_0.25"),
+    _balanced_control_points([-1, 1, -0.5, 0.5, -0.5, 0.5], amplitude=0.45, name="sawtooth_inv_bal_0.45"),
+    # ===== THREE-ZONE / ASYMMETRIC REGION PROBES =====
+    _balanced_control_points([0.5, 0.5, 0.5, 0.5, -1, -1], amplitude=0.3, name="early_mid_high_bal_0.30"),
+    _balanced_control_points([0.5, 0.5, 0.5, 0.5, -1, -1], amplitude=0.5, name="early_mid_high_bal_0.50"),
+    _balanced_control_points([-1, -1, 0.5, 0.5, 0.5, 0.5], amplitude=0.3, name="mid_late_high_bal_0.30"),
+    _balanced_control_points([-1, -1, 0.5, 0.5, 0.5, 0.5], amplitude=0.5, name="mid_late_high_bal_0.50"),
+    _balanced_control_points([0.5, 0.5, -1, -1, 0.5, 0.5], amplitude=0.3, name="early_late_high_bal_0.30"),
+    _balanced_control_points([0.5, 0.5, -1, -1, 0.5, 0.5], amplitude=0.5, name="early_late_high_bal_0.50"),
+    _balanced_control_points([0, 1, 1, 0, -1, -1], amplitude=0.3, name="early_mid_peak_bal_0.30"),
+    _balanced_control_points([0, 1, 1, 0, -1, -1], amplitude=0.5, name="early_mid_peak_bal_0.50"),
+    _balanced_control_points([-1, -1, 0, 1, 1, 0], amplitude=0.3, name="mid_late_peak_bal_0.30"),
+    _balanced_control_points([-1, -1, 0, 1, 1, 0], amplitude=0.5, name="mid_late_peak_bal_0.50"),
+    _balanced_control_points([1, 1, -0.5, -0.5, -0.5, -0.5], amplitude=0.4, name="bookend_high_bal_0.40"),
+]
 
 
 KITCHEN_SINK_G_SPECS = [
@@ -592,103 +714,21 @@ CARTRIDGES = {
         "model_key": "0_8B",
     },
     "attn_kitchen_sink": {
-        "description": "Full battery sweep for attention_contribution mode. "
-        "Profiles selected from pilot_wide results: productive constant range "
-        "(1.1-3.0), winning shaped families (tent, bowl, plateau, shifted, edges), "
-        "position-specific spikes, and contrast profiles. "
-        "Use with --intervention-strategy attention_contribution.",
-        "g_specs": [
-            # ===== CONSTANTS: dense coverage of productive range =====
-            _constant(1.0, name="baseline"),
-            _constant(0.5),
-            _constant(0.75),
-            _constant(1.1),
-            _constant(1.25),
-            _constant(1.35),
-            _constant(1.5),
-            _constant(1.65),
-            _constant(1.75),
-            _constant(1.85),
-            _constant(2.0),
-            _constant(2.25),
-            _constant(2.5),
-            _constant(2.75),
-            _constant(3.0),
-            # ===== EARLY BOOST / SUPPRESS =====
-            _control_points([1.3, 1.3, 1.3, 1.0, 1.0, 1.0], name="early_boost_1.3"),
-            _control_points([1.5, 1.5, 1.5, 1.0, 1.0, 1.0], name="early_boost_1.5"),
-            _control_points([1.9, 1.9, 1.9, 1.0, 1.0, 1.0], name="early_boost_1.9"),
-            _control_points([2.5, 2.5, 2.5, 1.0, 1.0, 1.0], name="early_boost_2.5"),
-            _control_points([3.0, 3.0, 3.0, 1.0, 1.0, 1.0], name="early_boost_3.0"),
-            _control_points([0.7, 0.7, 0.7, 1.0, 1.0, 1.0], name="early_suppress_0.7"),
-            _control_points([0.5, 0.5, 0.5, 1.0, 1.0, 1.0], name="early_suppress_0.5"),
-            _control_points([0.3, 0.3, 0.3, 1.0, 1.0, 1.0], name="early_suppress_0.3"),
-            # ===== LATE BOOST / SUPPRESS =====
-            _control_points([1.0, 1.0, 1.0, 1.3, 1.3, 1.3], name="late_boost_1.3"),
-            _control_points([1.0, 1.0, 1.0, 1.5, 1.5, 1.5], name="late_boost_1.5"),
-            _control_points([1.0, 1.0, 1.0, 1.9, 1.9, 1.9], name="late_boost_1.9"),
-            _control_points([1.0, 1.0, 1.0, 2.0, 2.0, 2.0], name="late_boost_2.0"),
-            _control_points([1.0, 1.0, 1.0, 2.5, 2.5, 2.5], name="late_boost_2.5"),
-            _control_points([1.0, 1.0, 1.0, 3.0, 3.0, 3.0], name="late_boost_3.0"),
-            _control_points([1.0, 1.0, 1.0, 4.0, 4.0, 4.0], name="late_boost_4.0"),
-            _control_points([1.0, 1.0, 1.0, 0.5, 0.5, 0.5], name="late_suppress_0.5"),
-            # ===== MIDDLE BUMP / SUPPRESS =====
-            _control_points([1.0, 1.0, 1.5, 1.5, 1.0, 1.0], name="middle_bump_1.5"),
-            _control_points([1.0, 1.0, 2.0, 2.0, 1.0, 1.0], name="middle_bump_2.0"),
-            _control_points([1.0, 1.0, 2.5, 2.5, 1.0, 1.0], name="middle_bump_2.5"),
-            _control_points([1.0, 1.0, 3.5, 3.5, 1.0, 1.0], name="middle_bump_3.5"),
-            _control_points([0.8, 1.0, 1.5, 1.5, 1.0, 0.8], name="middle_bump_1.5_edges_0.8"),
-            _control_points([0.4, 1.0, 2.5, 2.5, 1.0, 0.4], name="middle_bump_2.5_edges_0.4"),
-            # ===== CROSSOVER =====
-            _control_points([1.5, 1.5, 1.5, 0.5, 0.5, 0.5], name="early_high_late_low"),
-            _control_points([2.5, 2.5, 2.5, 0.0, 0.0, 0.0], name="early_high_late_low_3x"),
-            _control_points([0.5, 0.5, 0.5, 1.5, 1.5, 1.5], name="late_high_early_low"),
-            _control_points([0.0, 0.0, 0.0, 2.5, 2.5, 2.5], name="late_high_early_low_3x"),
-            # ===== RAMPS =====
-            _control_points([0.6, 0.8, 1.0, 1.2, 1.4, 1.6], name="ramp_up"),
-            _control_points([1.6, 1.4, 1.2, 1.0, 0.8, 0.6], name="ramp_down"),
-            _control_points([0.4, 0.7, 1.0, 1.3, 1.6, 1.9], name="ramp_up_wide"),
-            _control_points([1.9, 1.6, 1.3, 1.0, 0.7, 0.4], name="ramp_down_wide"),
-            _control_points([0.8, 1.0, 1.2, 1.5, 1.8, 2.0], name="grow_gentle"),
-            _control_points([2.0, 1.8, 1.5, 1.2, 1.0, 0.8], name="decay_gentle"),
-            # ===== EDGES (OLMO's best family) =====
-            _control_points([1.4, 1.2, 1.0, 1.0, 1.2, 1.4], name="edges_high"),
-            _control_points([2.2, 1.6, 1.0, 1.0, 1.6, 2.2], name="edges_high_3x"),
-            _control_points([3.0, 2.0, 1.0, 1.0, 2.0, 3.0], name="edges_high_5x"),
-            _control_points([0.6, 0.8, 1.0, 1.0, 0.8, 0.6], name="edges_low"),
-            _control_points([3.0, 1.0, 1.0, 1.0, 1.0, 3.0], name="edges_narrow"),
-            _control_points([3.0, 2.0, 1.0, 1.0, 1.0, 1.0], name="edges_asym_early"),
-            _control_points([1.0, 1.0, 1.0, 1.0, 2.0, 3.0], name="edges_asym_late"),
-            # ===== NOVEL SHAPES (pilot_wide winners) =====
-            _control_points([1.0, 1.5, 2.5, 2.5, 1.5, 1.0], name="tent"),
-            _control_points([1.0, 2.0, 4.0, 4.0, 2.0, 1.0], name="tent_steep"),
-            _control_points([2.0, 1.0, 0.5, 0.5, 1.0, 2.0], name="bowl"),
-            _control_points([3.0, 1.0, 0.0, 0.0, 1.0, 3.0], name="bowl_deep"),
-            _control_points([1.0, 2.5, 2.5, 2.5, 2.5, 1.0], name="plateau"),
-            _control_points([2.0, 2.0, 3.0, 3.0, 2.0, 2.0], name="shifted_bump"),
-            _control_points([1.5, 1.75, 2.0, 2.25, 2.5, 2.75], name="shifted_ramp_up"),
-            _control_points([2.75, 2.5, 2.25, 2.0, 1.75, 1.5], name="shifted_ramp_down"),
-            _control_points([2.5, 1.75, 1.25, 1.25, 1.75, 2.5], name="shifted_edges"),
-            _control_points([3.0, 3.0, 3.0, 2.0, 2.0, 2.0], name="flat_2_early_3"),
-            # ===== POSITION-SPECIFIC (spike/valley probes) =====
-            _control_points([3.0, 1.0, 1.0, 1.0, 1.0, 1.0], name="spike_p1"),
-            _control_points([1.0, 1.0, 1.0, 1.0, 3.0, 1.0], name="spike_p5"),
-            _control_points([1.0, 1.0, 1.0, 1.0, 1.0, 3.0], name="spike_p6"),
-            _control_points([0.0, 1.0, 1.0, 1.0, 1.0, 0.0], name="bookend_suppress"),
-            # ===== PATTERNS =====
-            _control_points([1.0, 3.0, 1.0, 1.0, 3.0, 1.0], name="pair_quarter"),
-            _control_points([3.0, 1.0, 3.0, 1.0, 3.0, 1.0], name="triad_odd"),
-            _control_points([1.0, 3.0, 1.0, 3.0, 1.0, 3.0], name="triad_even"),
-            # ===== THREE-ZONE =====
-            _control_points([2.0, 2.0, 2.0, 2.0, 1.0, 1.0], name="early_mid_high"),
-            _control_points([1.0, 1.0, 2.0, 2.0, 2.0, 2.0], name="mid_late_high"),
-            _control_points([2.0, 2.0, 1.0, 1.0, 2.0, 2.0], name="early_late_high"),
-            _control_points([0.5, 1.0, 2.0, 2.0, 1.0, 0.5], name="quarter_wave"),
-            # ===== EXTREME / CONTRAST =====
-            _control_points([2.0, 2.0, 2.0, 0.0, 0.0, 0.0], name="early_only_2x"),
-            _control_points([0.0, 0.0, 0.0, 2.0, 2.0, 2.0], name="late_only_2x"),
-            _control_points([0.0, 0.0, 1.0, 1.0, 0.0, 0.0], name="middle_only"),
-        ],
+        "description": "Comprehensive shared sweep for both attention_contribution and "
+        "block_output interventions. Keeps the original broad constant coverage, but "
+        "replaces most shaped profiles with mean-centered geometries whose average gain "
+        "is exactly 1.0. This reduces the cartridge's bias toward net gain amplification "
+        "while preserving dense shape-family coverage for prompt-level separability.",
+        "g_specs": _clone_g_specs(BALANCED_SWEEP_G_SPECS),
+        "attention_targeting": ATTENTION_TARGETING_NATIVE,
+        "prompt_tiers": ["short", "brief", "med", "long", "extended"],
+        "model_key": "0_8B",
+    },
+    "balanced_kitchen_sink": {
+        "description": "Alias of attn_kitchen_sink: shared comprehensive sweep with "
+        "mean-centered shaped profiles and broad constant controls. Use with either "
+        "--intervention-strategy attention_contribution or --intervention-strategy block_output.",
+        "g_specs": _clone_g_specs(BALANCED_SWEEP_G_SPECS),
         "attention_targeting": ATTENTION_TARGETING_NATIVE,
         "prompt_tiers": ["short", "brief", "med", "long", "extended"],
         "model_key": "0_8B",
