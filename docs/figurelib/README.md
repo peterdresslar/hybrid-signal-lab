@@ -8,16 +8,27 @@ Reusable helpers for generating paper figures from analyzed sweep outputs.
   Shared paths, typography helpers, and small formatting utilities.
 - `constant_gain.py`
   Reusable line-plot generator for constant-gain dose-response figures.
+- `head_entropy_correlations.py`
+  Head-by-head baseline-entropy correlation heatmap generator.
 - `oracle_headroom.py`
   Oracle-headroom distribution figure generator.
+- `pca_baseline_entropy.py`
+  Two-panel PCA scatter generator for baseline attention-entropy structure.
 - `task_dependent_gain.py`
   Representative-profile sparkline + heatmap figure generator.
+- `type_responsiveness.py`
+  Intra-family type-responsiveness figure generator.
 
 The top-level scripts in `docs/` are thin wrappers that call these helpers:
 
 - `make_constant_gain_dose_response_figure.py`
 - `make_constant_gain_dose_response_block_figure.py`
+- `make_head_entropy_correlation_figure.py`
+- `make_head_entropy_shared_vs_specific_figure.py`
+- `make_intra_family_type_responsiveness_figure.py`
 - `make_oracle_headroom_distribution_figure.py`
+- `make_oracle_headroom_distribution_balanced_hybrid_figure.py`
+- `make_pca_baseline_entropy_figure.py`
 - `make_representative_profiles_figure.py`
 
 ## Regenerating current figures
@@ -27,7 +38,12 @@ From the repo root:
 ```bash
 MPLCONFIGDIR=/tmp/mpl python docs/make_constant_gain_dose_response_figure.py
 MPLCONFIGDIR=/tmp/mpl python docs/make_constant_gain_dose_response_block_figure.py
+MPLCONFIGDIR=/tmp/mpl python docs/make_head_entropy_correlation_figure.py
+MPLCONFIGDIR=/tmp/mpl python docs/make_head_entropy_shared_vs_specific_figure.py
+MPLCONFIGDIR=/tmp/mpl python docs/make_intra_family_type_responsiveness_figure.py
 MPLCONFIGDIR=/tmp/mpl python docs/make_oracle_headroom_distribution_figure.py
+MPLCONFIGDIR=/tmp/mpl python docs/make_oracle_headroom_distribution_balanced_hybrid_figure.py
+MPLCONFIGDIR=/tmp/mpl python docs/make_pca_baseline_entropy_figure.py
 MPLCONFIGDIR=/tmp/mpl python docs/make_representative_profiles_figure.py
 ```
 
