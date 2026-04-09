@@ -58,6 +58,7 @@ class InterventionRouter:
         standardization_std: np.ndarray,
         feature_set: str,
         intervention_mode: InterventionMode = InterventionMode.ATTENTION_CONTRIBUTION,
+        decision_threshold: float | None = None,
     ):
         self.model_key = model_key
         self.class_names = class_names
@@ -70,6 +71,7 @@ class InterventionRouter:
         self.standardization_std = standardization_std
         self.feature_set = feature_set
         self.intervention_mode = normalize_intervention_mode(intervention_mode)
+        self.decision_threshold = decision_threshold
 
     @classmethod
     def from_artifacts(cls, model_path: str | Path) -> "InterventionRouter":
@@ -105,6 +107,7 @@ class InterventionRouter:
             standardization_std=np.array(artifacts["standardization_std"], dtype=np.float64),
             feature_set=artifacts["feature_set"],
             intervention_mode=artifacts.get("intervention_mode", InterventionMode.ATTENTION_CONTRIBUTION.value),
+            decision_threshold=artifacts.get("decision_threshold"),
         )
 
     def classify(self, baseline_pass_result: dict) -> dict[str, Any]:
@@ -139,7 +142,29 @@ class InterventionRouter:
 
         predicted_idx = int(np.argmax(probs))
         predicted_name = self.class_names[predicted_idx]
-        confidence = float(probs[predicted_idx])
+
+        # Optional explicit abstention threshold for simple bistate routers.
+        # When present and the router has exactly one intervention class plus "off",
+        # require the intervention-class probability to clear the threshold.
+        if (
+            self.decision_threshold is not None
+            and len(self.class_names) == 2
+            and "off" in self.class_names
+        ):
+            off_idx = self.class_names.index("off")
+            intervention_idx = 1 - off_idx
+            intervention_name = self.class_names[intervention_idx]
+            intervention_prob = float(probs[intervention_idx])
+            if intervention_prob >= self.decision_threshold:
+                predicted_idx = intervention_idx
+                predicted_name = intervention_name
+                confidence = intervention_prob
+            else:
+                predicted_idx = off_idx
+                predicted_name = "off"
+                confidence = float(probs[off_idx])
+        else:
+            confidence = float(probs[predicted_idx])
 
         class_probs = {name: float(p) for name, p in zip(self.class_names, probs)}
 
@@ -162,5 +187,6 @@ class InterventionRouter:
         profiles = [n for n in self.class_names if n != "off"]
         return (
             f"InterventionRouter(model={self.model_key}, "
-            f"profiles={profiles}, features={self.feature_set}, mode={self.intervention_mode.value})"
+            f"profiles={profiles}, features={self.feature_set}, "
+            f"mode={self.intervention_mode.value}, threshold={self.decision_threshold})"
         )

@@ -131,6 +131,17 @@ def build_runtime_feature_matrix(data_dir: Path, model_key: str, records: list[P
 
 
 def evaluate_bistate_router(records: list[PromptRecord], X: np.ndarray, n_folds: int, random_state: int) -> dict:
+    return evaluate_bistate_router_with_threshold(records, X, n_folds, random_state, decision_threshold=0.5)
+
+
+def evaluate_bistate_router_with_threshold(
+    records: list[PromptRecord],
+    X: np.ndarray,
+    n_folds: int,
+    random_state: int,
+    *,
+    decision_threshold: float,
+) -> dict:
     delta = np.array([r.delta_single_profile for r in records], dtype=np.float64)
     oracle_full = np.array([r.oracle_full_delta for r in records], dtype=np.float64)
     y = (delta > 0.0).astype(int)
@@ -148,8 +159,8 @@ def evaluate_bistate_router(records: list[PromptRecord], X: np.ndarray, n_folds:
             ]
         )
         clf.fit(X[train_idx], y[train_idx])
-        fold_pred = clf.predict(X[test_idx])
         fold_prob = clf.predict_proba(X[test_idx])[:, 1]
+        fold_pred = (fold_prob >= decision_threshold).astype(int)
 
         pred_labels[test_idx] = fold_pred
         pred_probs[test_idx] = fold_prob
@@ -238,6 +249,8 @@ def main() -> None:
     )
     parser.add_argument("--n-folds", type=int, default=5)
     parser.add_argument("--random-state", type=int, default=42)
+    parser.add_argument("--decision-threshold", type=float, default=0.5,
+                        help="Probability threshold for intervention-class prediction.")
     parser.add_argument("--output-dir", default=None)
     args = parser.parse_args()
 
@@ -263,7 +276,13 @@ def main() -> None:
     records = load_prompt_records(analysis_dir, constant_profile)
     _, _, explained_variance_ratio = load_pca_points(analysis_dir / "analysis_baseline_attn_pca.json")
     X_runtime, pca_components, pca_mean = build_runtime_feature_matrix(data_dir, args.model_key, records)
-    results = evaluate_bistate_router(records, X_runtime, n_folds=args.n_folds, random_state=args.random_state)
+    results = evaluate_bistate_router_with_threshold(
+        records,
+        X_runtime,
+        n_folds=args.n_folds,
+        random_state=args.random_state,
+        decision_threshold=args.decision_threshold,
+    )
     y = np.array([int(r.delta_single_profile > 0.0) for r in records], dtype=np.int64)
     weights, bias, standardization_mean, standardization_std = fit_full_router_model(X_runtime, y)
 
@@ -278,6 +297,7 @@ def main() -> None:
         },
         "n_folds": args.n_folds,
         "random_state": args.random_state,
+        "decision_threshold": args.decision_threshold,
         **results,
     }
 
@@ -292,6 +312,7 @@ def main() -> None:
         "feature_names": ["pc1", "pc2"],
         "n_pca": 2,
         "intervention_mode": intervention_mode.value,
+        "decision_threshold": args.decision_threshold,
         "standardization_mean": standardization_mean.tolist(),
         "standardization_std": standardization_std.tolist(),
         "weights": weights.tolist(),
@@ -321,6 +342,7 @@ def main() -> None:
             f"PC2 ({explained_variance_ratio[1]:.3%})\n"
         )
         f.write(f"Folds: {args.n_folds}\n\n")
+        f.write(f"Decision threshold: {args.decision_threshold:.2f}\n\n")
         f.write("Class balance:\n")
         f.write(f"  off:       {results['class_balance']['off']}\n")
         f.write(f"  intervene: {results['class_balance']['intervene']}\n")
@@ -349,6 +371,7 @@ def main() -> None:
     print(f"Model: {args.model_key}")
     print(f"Constant profile: {constant_profile}")
     print(f"Intervention mode: {intervention_mode.value}")
+    print(f"Decision threshold: {args.decision_threshold:.2f}")
     print(
         f"Features: PC1 ({explained_variance_ratio[0]:.1%}), "
         f"PC2 ({explained_variance_ratio[1]:.1%})"

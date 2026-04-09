@@ -1,0 +1,35 @@
+Bistate Router Baseline: 9B
+========================================================================
+
+Data dir: data/022-balanced-attention-hybrid
+Analysis dir: data/022-balanced-attention-hybrid/9B/analysis
+Constant profile: constant_2.3
+Features: PC1 (72.653%), PC2 (6.076%)
+Folds: 5
+
+Decision threshold: 0.70
+
+Class balance:
+  off:       617
+  intervene: 453
+  intervene rate: 42.3%
+
+Performance ladder (mean delta_target_prob):
+  Always-off:      0.0000
+  Always-on:       0.0564
+  Bistate router:  0.0704
+  Oracle bistate:  0.0967
+  Oracle full:     0.1378
+
+Router accuracy: 0.779
+Predicted intervene rate: 27.2%
+Router minus always-on: +0.0141
+Capture of oracle bistate: 72.8%
+Capture of oracle full: 51.1%
+
+Per-fold results:
+  Fold 0: acc=0.827 routed=0.0830 always_on=0.0600 oracle_bi=0.1024 oracle_full=0.1436
+  Fold 1: acc=0.748 routed=0.0694 always_on=0.0649 oracle_bi=0.0956 oracle_full=0.1393
+  Fold 2: acc=0.771 routed=0.0602 always_on=0.0464 oracle_bi=0.0899 oracle_full=0.1290
+  Fold 3: acc=0.766 routed=0.0695 always_on=0.0578 oracle_bi=0.0980 oracle_full=0.1382
+  Fold 4: acc=0.785 routed=0.0700 always_on=0.0527 oracle_bi=0.0976 oracle_full=0.1390

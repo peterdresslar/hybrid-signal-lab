@@ -60,5 +60,5 @@ uv run -m bench.run_bench \
     --tasks copa storycloze gsm8k \
     --gsm8k-limit 100 \
     --verbose \
-    --router-model /home/pdressla/workspace/hybrid-signal-lab/router/router-9B-020/router_model.json \
+    --router-model /home/pdressla/workspace/hybrid-signal-lab/router/router-9B-021a/router_model.json \
     --output-dir "$OUTDIR/routed_9B"
