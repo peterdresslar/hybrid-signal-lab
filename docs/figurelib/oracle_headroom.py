@@ -7,7 +7,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
-from .common import configure_matplotlib, prettify_type
+from .common import add_mode_inset, configure_matplotlib, prettify_type
 
 
 def load_oracle_by_type(prompt_winners_path: Path) -> tuple[list[str], dict[str, list[float]]]:
@@ -34,7 +34,10 @@ def load_best_constant_means(type_gain_summary_path: Path) -> dict[str, float]:
         if not row["g_profile"].startswith("constant_"):
             continue
         prompt_type = row["type"]
-        value = float(row["mean_delta_target_prob"])
+        try:
+            value = float(row["mean_delta_target_prob"])
+        except (TypeError, ValueError):
+            continue
         if prompt_type not in best or value > best[prompt_type]:
             best[prompt_type] = value
     return best
@@ -45,6 +48,7 @@ def plot_oracle_headroom_distribution(
     prompt_winners_path: Path,
     type_gain_summary_path: Path,
     output_path: Path,
+    mode_label: str | None = None,
     xlim: tuple[float, float] = (-0.05, 0.85),
     figsize: tuple[float, float] = (10, 5),
 ) -> None:
@@ -97,6 +101,8 @@ def plot_oracle_headroom_distribution(
     ax.grid(axis="x", color="#D9D9D9", linewidth=0.3)
     ax.grid(axis="y", visible=False)
     ax.legend(loc="lower right", frameon=False)
+    if mode_label is not None:
+        add_mode_inset(ax, mode_label)
 
     fig.tight_layout()
     fig.savefig(output_path, dpi=300, bbox_inches="tight", facecolor="white")
@@ -110,6 +116,7 @@ def plot_oracle_headroom_distribution_two_panel(
     olmo_prompt_winners_path: Path,
     olmo_type_gain_summary_path: Path,
     output_path: Path,
+    mode_label: str | None = None,
     xlim: tuple[float, float] = (-0.05, 0.85),
     figsize: tuple[float, float] = (14, 5.6),
 ) -> None:
@@ -182,6 +189,8 @@ def plot_oracle_headroom_distribution_two_panel(
         ax.set_title(title, fontsize=12)
         ax.grid(axis="x", color="#D9D9D9", linewidth=0.3)
         ax.grid(axis="y", visible=False)
+        if mode_label is not None:
+            add_mode_inset(ax, mode_label)
 
     _draw_panel(ax_qwen, qwen_oracle, qwen_constant, "Qwen 3.5 9B", 0)
     _draw_panel(ax_olmo, olmo_oracle, olmo_constant, "Olmo Hybrid 7B", 1)

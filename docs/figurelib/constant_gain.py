@@ -6,7 +6,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 
-from .common import configure_matplotlib, prettify_type, qualitative_11_color_map
+from .common import add_mode_inset, configure_matplotlib, prettify_type, qualitative_11_color_map
 
 
 @dataclass(frozen=True)
@@ -28,7 +28,10 @@ def load_constant_gain_data(path: Path) -> dict[str, list[tuple[float, float]]]:
             continue
         prompt_type = row["type"]
         gain = parse_gain(profile)
-        mean_delta_p = float(row["mean_delta_target_prob"])
+        try:
+            mean_delta_p = float(row["mean_delta_target_prob"])
+        except (TypeError, ValueError):
+            continue
         data.setdefault(prompt_type, []).append((gain, mean_delta_p))
 
     for prompt_type in data:
@@ -51,6 +54,7 @@ def plot_constant_gain_dose_response(
     *,
     panels: list[ConstantGainPanel],
     output_path: Path,
+    mode_label: str | None = None,
     xlim: tuple[float, float],
     ylim: tuple[float, float],
     legend_columns: int = 4,
@@ -91,6 +95,8 @@ def plot_constant_gain_dose_response(
         ax.axhline(0.0, color="black", linestyle="--", linewidth=0.5)
         ax.axvline(1.0, color="#888888", linestyle="--", linewidth=0.5)
         ax.grid(axis="y", color="#D9D9D9", linewidth=0.3)
+        if mode_label is not None:
+            add_mode_inset(ax, mode_label)
 
     axes[0].set_ylabel("Mean Δp (target probability)")
     handles, labels = axes[0].get_legend_handles_labels()

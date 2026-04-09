@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
 
 
 DOCS_ROOT = Path(__file__).resolve().parent.parent
@@ -33,3 +34,21 @@ def qualitative_11_color_map(type_order: list[str]) -> dict[str, str]:
     palette = tab10 + extra
     return {prompt_type: palette[idx] for idx, prompt_type in enumerate(type_order)}
 
+
+def add_mode_inset(ax: Axes, label: str) -> None:
+    ax.text(
+        0.02,
+        0.98,
+        label,
+        transform=ax.transAxes,
+        ha="left",
+        va="top",
+        fontsize=9,
+        bbox={
+            "boxstyle": "square,pad=0.25",
+            "facecolor": "white",
+            "edgecolor": "#BBBBBB",
+            "linewidth": 0.8,
+        },
+        zorder=10,
+    )
