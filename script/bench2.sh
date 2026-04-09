@@ -59,5 +59,6 @@ uv run -m bench.run_bench \
     --model-key 9B \
     --tasks copa storycloze gsm8k \
     --gsm8k-limit 100 \
+    --verbose \
     --baseline-only \
     --output-dir "$OUTDIR/9B"

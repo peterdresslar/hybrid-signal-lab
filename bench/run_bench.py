@@ -108,6 +108,23 @@ class ProgressHeartbeat:
         self.last_ping_time = now
 
 
+def _phase_label(task_name: str, phase: str, completed: int, total: int) -> str:
+    return f"    [{task_name}/{phase}] {completed}/{total}"
+
+
+def _maybe_log_small_task_start(
+    task_name: str,
+    phase: str,
+    idx: int,
+    total: int,
+    *,
+    verbose: bool,
+) -> None:
+    """Emit per-example start logs for very small tasks like GSM8K debug runs."""
+    if verbose and total <= 10:
+        print(f"{_phase_label(task_name, phase, idx + 1, total)} starting...")
+
+
 # ---------------------------------------------------------------------------
 # Scoring helpers
 # ---------------------------------------------------------------------------
@@ -335,8 +352,11 @@ def run_generation_example_baseline(
     baseline_scales: np.ndarray,
     max_new_tokens: int = 512,
     intervention_mode: InterventionMode = InterventionMode.ATTENTION_CONTRIBUTION,
+    verbose: bool = False,
 ) -> dict[str, Any]:
     """Run a single generation example under baseline conditions."""
+    if verbose:
+        print("      baseline generate...")
     result = agent.generate(
         example.prompt,
         baseline_scales,
@@ -364,8 +384,11 @@ def run_generation_example_fixed(
     scales: np.ndarray,
     max_new_tokens: int = 512,
     intervention_mode: InterventionMode = InterventionMode.ATTENTION_CONTRIBUTION,
+    verbose: bool = False,
 ) -> dict[str, Any]:
     """Run a single generation example under a fixed profile."""
+    if verbose:
+        print(f"      fixed generate: {profile_name}")
     result = agent.generate(
         example.prompt,
         scales,
@@ -393,6 +416,7 @@ def run_generation_example_routed(
     baseline_scales: np.ndarray,
     profile_scales: dict[str, np.ndarray],
     max_new_tokens: int = 512,
+    verbose: bool = False,
 ) -> dict[str, Any]:
     """Run a single generation example with routing.
 
@@ -401,6 +425,8 @@ def run_generation_example_routed(
     3. Generate under the selected profile
     """
     # Sensing pass
+    if verbose:
+        print("      routed sensing pass...")
     baseline_result = agent.run_pass(
         example.prompt,
         baseline_scales,
@@ -409,12 +435,19 @@ def run_generation_example_routed(
     )
 
     decision = router.classify(baseline_result)
+    if verbose:
+        print(
+            f"      routed decision: profile={decision['profile_name']} "
+            f"off={decision['is_off']} confidence={decision['confidence']:.3f}"
+        )
 
     if decision["is_off"]:
         scales = baseline_scales
     else:
         scales = profile_scales[decision["profile_name"]]
 
+    if verbose:
+        print("      routed generation pass...")
     result = agent.generate(
         example.prompt,
         scales,
@@ -444,6 +477,7 @@ def run_generation_example_oracle(
     profile_scales: dict[str, np.ndarray],
     max_new_tokens: int = 512,
     intervention_mode: InterventionMode = InterventionMode.ATTENTION_CONTRIBUTION,
+    verbose: bool = False,
 ) -> dict[str, Any]:
     """Run a single generation example under oracle routing.
 
@@ -452,6 +486,8 @@ def run_generation_example_oracle(
     right, returns the baseline result.
     """
     # Baseline first
+    if verbose:
+        print("      oracle baseline generation...")
     bl_result = agent.generate(
         example.prompt,
         baseline_scales,
@@ -476,6 +512,8 @@ def run_generation_example_oracle(
 
     # Try each profile
     for pname, pscales in profile_scales.items():
+        if verbose:
+            print(f"      oracle trying profile: {pname}")
         p_result = agent.generate(
             example.prompt,
             pscales,
@@ -673,6 +711,7 @@ def run_generation_task(
     baseline_only: bool = False,
     max_new_tokens: int = 512,
     output_dir: Path,
+    verbose: bool = False,
 ) -> dict[str, Any]:
     """Run a full generation task (e.g., GSM8K)."""
     n_attn = len(agent.get_attention_layer_indices())
@@ -686,19 +725,24 @@ def run_generation_task(
 
     results = {"task": task_name, "n_examples": len(examples), "conditions": {}}
     all_records = []
+    heartbeat_interval = 10.0 if verbose and len(examples) <= 10 else 30.0
 
     # --- Baseline ---
     print(f"\n  [{task_name}] Running baseline...")
     t0 = time.time()
     baseline_records = []
-    baseline_heartbeat = ProgressHeartbeat(task_name, "baseline", len(examples))
+    baseline_heartbeat = ProgressHeartbeat(
+        task_name, "baseline", len(examples), interval_s=heartbeat_interval
+    )
     for i, ex in enumerate(examples):
+        _maybe_log_small_task_start(task_name, "baseline", i, len(examples), verbose=verbose)
         rec = run_generation_example_baseline(
             agent,
             ex,
             baseline_scales,
             max_new_tokens,
             intervention_mode=router.intervention_mode if router else InterventionMode.ATTENTION_CONTRIBUTION,
+            verbose=verbose,
         )
         baseline_records.append(rec)
         acc_so_far = sum(r["correct"] for r in baseline_records) / len(baseline_records)
@@ -724,10 +768,13 @@ def run_generation_task(
         print(f"\n  [{task_name}] Running routed...")
         t0 = time.time()
         routed_records = []
-        routed_heartbeat = ProgressHeartbeat(task_name, "routed", len(examples))
+        routed_heartbeat = ProgressHeartbeat(
+            task_name, "routed", len(examples), interval_s=heartbeat_interval
+        )
         for i, ex in enumerate(examples):
+            _maybe_log_small_task_start(task_name, "routed", i, len(examples), verbose=verbose)
             rec = run_generation_example_routed(
-                agent, router, ex, baseline_scales, profile_scales, max_new_tokens,
+                agent, router, ex, baseline_scales, profile_scales, max_new_tokens, verbose=verbose,
             )
             routed_records.append(rec)
             acc_so_far = sum(r["correct"] for r in routed_records) / len(routed_records)
@@ -753,8 +800,16 @@ def run_generation_task(
             print(f"\n  [{task_name}] Running fixed {pname}...")
             t0 = time.time()
             fixed_records = []
-            fixed_heartbeat = ProgressHeartbeat(task_name, f"fixed_{pname}", len(examples))
+            fixed_heartbeat = ProgressHeartbeat(
+                task_name,
+                f"fixed_{pname}",
+                len(examples),
+                interval_s=heartbeat_interval,
+            )
             for i, ex in enumerate(examples):
+                _maybe_log_small_task_start(
+                    task_name, f"fixed_{pname}", i, len(examples), verbose=verbose
+                )
                 rec = run_generation_example_fixed(
                     agent,
                     ex,
@@ -762,6 +817,7 @@ def run_generation_task(
                     pscales,
                     max_new_tokens,
                     intervention_mode=router.intervention_mode,
+                    verbose=verbose,
                 )
                 fixed_records.append(rec)
                 acc_so_far = sum(r["correct"] for r in fixed_records) / len(fixed_records)
@@ -789,8 +845,11 @@ def run_generation_task(
         print(f"\n  [{task_name}] Running oracle...")
         t0 = time.time()
         oracle_records = []
-        oracle_heartbeat = ProgressHeartbeat(task_name, "oracle", len(examples))
+        oracle_heartbeat = ProgressHeartbeat(
+            task_name, "oracle", len(examples), interval_s=heartbeat_interval
+        )
         for i, ex in enumerate(examples):
+            _maybe_log_small_task_start(task_name, "oracle", i, len(examples), verbose=verbose)
             rec = run_generation_example_oracle(
                 agent,
                 ex,
@@ -798,6 +857,7 @@ def run_generation_task(
                 profile_scales,
                 max_new_tokens,
                 intervention_mode=router.intervention_mode,
+                verbose=verbose,
             )
             oracle_records.append(rec)
             acc_so_far = sum(r["correct"] for r in oracle_records) / len(oracle_records)
@@ -888,6 +948,8 @@ def main():
                         help="Device (cuda, cuda:0, mps, cpu, auto)")
     parser.add_argument("--gsm8k-limit", type=int, default=None,
                         help="Limit GSM8K examples (for testing)")
+    parser.add_argument("--verbose", action="store_true",
+                        help="Enable extra telemetry for small generation tasks")
     args = parser.parse_args()
 
     # Resolve device
@@ -951,6 +1013,7 @@ def main():
                 router=router, baseline_only=args.baseline_only,
                 max_new_tokens=512,
                 output_dir=output_dir,
+                verbose=args.verbose,
             )
 
         all_results.append(result)

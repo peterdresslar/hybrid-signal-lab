@@ -59,5 +59,6 @@ uv run -m bench.run_bench \
     --model-key OLMO \
     --tasks copa storycloze gsm8k \
     --gsm8k-limit 100 \
+    --verbose \
     --router-model /home/pdressla/workspace/hybrid-signal-lab/router/router-OLMO-020/router_model.json \
     --output-dir "$OUTDIR/routed_OLMO"
