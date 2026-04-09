@@ -23,10 +23,17 @@ The top-level scripts in `docs/` are thin wrappers that call these helpers:
 
 - `make_constant_gain_dose_response_figure.py`
 - `make_constant_gain_dose_response_block_figure.py`
+- `make_constant_gain_dose_response_balanced_attention_figure.py`
+- `make_constant_gain_dose_response_balanced_block_figure.py`
 - `make_head_entropy_correlation_figure.py`
 - `make_head_entropy_shared_vs_specific_figure.py`
 - `make_intra_family_type_responsiveness_figure.py`
+- `make_intra_family_type_responsiveness_balanced_attention_figure.py`
+- `make_intra_family_type_responsiveness_balanced_attention_top8_figure.py`
+- `make_intra_family_type_responsiveness_balanced_block_figure.py`
+- `make_intra_family_type_responsiveness_balanced_block_top8_figure.py`
 - `make_oracle_headroom_distribution_figure.py`
+- `make_oracle_headroom_distribution_balanced_block_hybrid_figure.py`
 - `make_oracle_headroom_distribution_balanced_hybrid_figure.py`
 - `make_pca_baseline_entropy_figure.py`
 - `make_representative_profiles_figure.py`
@@ -38,10 +45,17 @@ From the repo root:
 ```bash
 MPLCONFIGDIR=/tmp/mpl python docs/make_constant_gain_dose_response_figure.py
 MPLCONFIGDIR=/tmp/mpl python docs/make_constant_gain_dose_response_block_figure.py
+MPLCONFIGDIR=/tmp/mpl python docs/make_constant_gain_dose_response_balanced_attention_figure.py
+MPLCONFIGDIR=/tmp/mpl python docs/make_constant_gain_dose_response_balanced_block_figure.py
 MPLCONFIGDIR=/tmp/mpl python docs/make_head_entropy_correlation_figure.py
 MPLCONFIGDIR=/tmp/mpl python docs/make_head_entropy_shared_vs_specific_figure.py
 MPLCONFIGDIR=/tmp/mpl python docs/make_intra_family_type_responsiveness_figure.py
+MPLCONFIGDIR=/tmp/mpl python docs/make_intra_family_type_responsiveness_balanced_attention_figure.py
+MPLCONFIGDIR=/tmp/mpl python docs/make_intra_family_type_responsiveness_balanced_attention_top8_figure.py
+MPLCONFIGDIR=/tmp/mpl python docs/make_intra_family_type_responsiveness_balanced_block_figure.py
+MPLCONFIGDIR=/tmp/mpl python docs/make_intra_family_type_responsiveness_balanced_block_top8_figure.py
 MPLCONFIGDIR=/tmp/mpl python docs/make_oracle_headroom_distribution_figure.py
+MPLCONFIGDIR=/tmp/mpl python docs/make_oracle_headroom_distribution_balanced_block_hybrid_figure.py
 MPLCONFIGDIR=/tmp/mpl python docs/make_oracle_headroom_distribution_balanced_hybrid_figure.py
 MPLCONFIGDIR=/tmp/mpl python docs/make_pca_baseline_entropy_figure.py
 MPLCONFIGDIR=/tmp/mpl python docs/make_representative_profiles_figure.py

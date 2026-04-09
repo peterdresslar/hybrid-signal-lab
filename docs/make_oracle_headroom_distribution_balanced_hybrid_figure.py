@@ -15,6 +15,7 @@ if __name__ == "__main__":
         olmo_prompt_winners_path=base / "OLMO" / "analysis" / "analysis_prompt_winners.csv",
         olmo_type_gain_summary_path=base / "OLMO" / "analysis" / "analysis_type_gain_summary.csv",
         output_path=out_png,
+        mode_label="Attention-Contribution",
         xlim=(-0.05, 0.85),
     )
 
