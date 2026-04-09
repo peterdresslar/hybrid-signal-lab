@@ -41,6 +41,8 @@ router/
 
   experiments/
     select_profiles.py  Combinatorial search for optimal 4-profile sets
+    score_profile_sets.py
+                        Two-stage ranking: oracle shortlist, then CV router scoring
     train_router.py     Train routing classifiers from b4_021 data
     eval_router.py      Cross-validated evaluation of trained routers
 ```
@@ -67,6 +69,15 @@ Each model has 4 intervention profiles chosen for **separability**, not just
 raw effect size. The goal is to maximize routed performance across the full
 prompt distribution, which means choosing profiles that each dominate in
 different regions of the feature space.
+
+In current experiments this is a two-stage process:
+
+1. `select_profiles.py` finds high-value candidate sets by oracle-routed
+   performance, with optional constraints on coverage, class usage, within-set
+   correlation, and number of constant profiles.
+2. `score_profile_sets.py` re-ranks the top candidate sets by actual
+   cross-validated routing performance using the same PCA/scalar baseline
+   features that the deployed router will see.
 
 For Qwen 9B, the b4_021 data shows distinct intervention regimes:
 code/numerical prompts respond to high-edge profiles, reasoning-tracking

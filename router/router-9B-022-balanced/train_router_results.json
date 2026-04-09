@@ -1,0 +1,92 @@
+{
+  "model_key": "9B",
+  "profiles": [
+    "constant_2.6",
+    "edges_narrow_bal_0.55",
+    "late_boost_bal_0.60",
+    "triad_odd_bal_0.45"
+  ],
+  "feature_set": "pca+scalar",
+  "n_pca": 10,
+  "n_features": 15,
+  "feature_names": [
+    "pc1",
+    "pc2",
+    "pc3",
+    "pc4",
+    "pc5",
+    "pc6",
+    "pc7",
+    "pc8",
+    "pc9",
+    "pc10",
+    "baseline_attn_entropy_mean",
+    "baseline_final_entropy_bits",
+    "baseline_mean_entropy_bits",
+    "baseline_target_prob",
+    "baseline_top1_top2_logit_margin"
+  ],
+  "n_folds": 5,
+  "hyperparameters": {
+    "lr": 0.1,
+    "n_iter": 2000,
+    "reg": 0.001
+  },
+  "baseline_delta_p": 0.0,
+  "best_fixed_delta_p": 0.09972897196261692,
+  "routed_delta_p": 0.09826168224299067,
+  "oracle_delta_p": 0.11758878504672897,
+  "routing_efficiency": 0.8356382133206169,
+  "overall_accuracy": 0.616822429906542,
+  "fold_results": [
+    {
+      "fold": 0,
+      "n_test": 214,
+      "accuracy": 0.6261682242990654,
+      "routed_mean_delta_p": 0.08789719626168226,
+      "oracle_mean_delta_p": 0.10785046728971963
+    },
+    {
+      "fold": 1,
+      "n_test": 214,
+      "accuracy": 0.6588785046728972,
+      "routed_mean_delta_p": 0.09481308411214953,
+      "oracle_mean_delta_p": 0.11724299065420561
+    },
+    {
+      "fold": 2,
+      "n_test": 214,
+      "accuracy": 0.6401869158878505,
+      "routed_mean_delta_p": 0.10785046728971961,
+      "oracle_mean_delta_p": 0.12154205607476634
+    },
+    {
+      "fold": 3,
+      "n_test": 214,
+      "accuracy": 0.5887850467289719,
+      "routed_mean_delta_p": 0.10570093457943924,
+      "oracle_mean_delta_p": 0.12733644859813084
+    },
+    {
+      "fold": 4,
+      "n_test": 214,
+      "accuracy": 0.5700934579439252,
+      "routed_mean_delta_p": 0.0950467289719626,
+      "oracle_mean_delta_p": 0.11397196261682244
+    }
+  ],
+  "true_class_distribution": {
+    "constant_2.6": 362,
+    "edges_narrow_bal_0.55": 67,
+    "late_boost_bal_0.60": 141,
+    "triad_odd_bal_0.45": 85,
+    "off": 415
+  },
+  "predicted_class_distribution": {
+    "constant_2.6": 384,
+    "edges_narrow_bal_0.55": 37,
+    "late_boost_bal_0.60": 94,
+    "triad_odd_bal_0.45": 14,
+    "off": 541
+  }
+}

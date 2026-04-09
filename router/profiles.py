@@ -11,25 +11,25 @@ so the router package has no dependency on the sweep infrastructure.
 from __future__ import annotations
 
 # -----------------------------------------------------------------------
-# 9B selected profiles (b4_021, attention_contribution mode)
+# 9B selected profiles (022-balanced-attention-hybrid, attention_contribution mode)
 # -----------------------------------------------------------------------
 
 PROFILES_9B = {
-    "edges_narrow": {
-        "g_function": "control_points",
-        "g_vector": [3.0, 1.0, 1.0, 1.0, 1.0, 3.0],
+    "constant_2.6": {
+        "g_function": "constant",
+        "g_params": {"value": 2.6},
     },
-    "late_boost_4.0": {
+    "edges_narrow_bal_0.55": {
         "g_function": "control_points",
-        "g_vector": [1.0, 1.0, 1.0, 4.0, 4.0, 4.0],
+        "g_vector": [1.55, 0.725, 0.725, 0.725, 0.725, 1.55],
     },
-    "shifted_ramp_down": {
+    "late_boost_bal_0.60": {
         "g_function": "control_points",
-        "g_vector": [2.75, 2.5, 2.25, 2.0, 1.75, 1.5],
+        "g_vector": [0.4, 0.4, 0.4, 1.6, 1.6, 1.6],
     },
-    "tent_steep": {
+    "triad_odd_bal_0.45": {
         "g_function": "control_points",
-        "g_vector": [1.0, 2.0, 4.0, 4.0, 2.0, 1.0],
+        "g_vector": [1.45, 0.55, 1.45, 0.55, 1.45, 0.55],
     },
 }
 
