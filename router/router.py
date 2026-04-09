@@ -19,6 +19,7 @@ from typing import Any
 
 import numpy as np
 
+from model.backend import InterventionMode, normalize_intervention_mode
 from router.sensing import build_feature_vector
 from router.profiles import get_profile_specs, BASELINE_SPEC
 
@@ -56,6 +57,7 @@ class InterventionRouter:
         standardization_mean: np.ndarray,
         standardization_std: np.ndarray,
         feature_set: str,
+        intervention_mode: InterventionMode = InterventionMode.ATTENTION_CONTRIBUTION,
     ):
         self.model_key = model_key
         self.class_names = class_names
@@ -67,6 +69,7 @@ class InterventionRouter:
         self.standardization_mean = standardization_mean
         self.standardization_std = standardization_std
         self.feature_set = feature_set
+        self.intervention_mode = normalize_intervention_mode(intervention_mode)
 
     @classmethod
     def from_artifacts(cls, model_path: str | Path) -> "InterventionRouter":
@@ -83,8 +86,12 @@ class InterventionRouter:
             pca_components = np.array(artifacts["pca_components"], dtype=np.float64)
             pca_mean = np.array(artifacts["pca_mean"], dtype=np.float64)
 
-        # Load profile specs for this model
-        profile_specs = get_profile_specs(model_key)
+        # Load profile specs for this router. Newer artifacts may embed the exact
+        # runtime profile set directly; otherwise fall back to model defaults.
+        if "profile_specs" in artifacts:
+            profile_specs = artifacts["profile_specs"]
+        else:
+            profile_specs = get_profile_specs(model_key)
 
         return cls(
             model_key=model_key,
@@ -97,6 +104,7 @@ class InterventionRouter:
             standardization_mean=np.array(artifacts["standardization_mean"], dtype=np.float64),
             standardization_std=np.array(artifacts["standardization_std"], dtype=np.float64),
             feature_set=artifacts["feature_set"],
+            intervention_mode=artifacts.get("intervention_mode", InterventionMode.ATTENTION_CONTRIBUTION.value),
         )
 
     def classify(self, baseline_pass_result: dict) -> dict[str, Any]:
@@ -154,5 +162,5 @@ class InterventionRouter:
         profiles = [n for n in self.class_names if n != "off"]
         return (
             f"InterventionRouter(model={self.model_key}, "
-            f"profiles={profiles}, features={self.feature_set})"
+            f"profiles={profiles}, features={self.feature_set}, mode={self.intervention_mode.value})"
         )

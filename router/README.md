@@ -40,6 +40,7 @@ router/
   evaluate.py           Evaluation harness: oracle vs routed vs fixed vs baseline
 
   experiments/
+    bistate_router.py  Binary off/on baseline using only PCA PC1/PC2
     select_profiles.py  Combinatorial search for optimal 4-profile sets
     score_profile_sets.py
                         Two-stage ranking: oracle shortlist, then CV router scoring
@@ -125,6 +126,12 @@ Performance is reported as:
 The gap between oracle and routed measures how much routing signal the
 classifier captures. The gap between routed and best-fixed measures the
 practical value of routing over a static intervention.
+
+Before training the full multiclass router, `bistate_router.py` provides a
+scientifically cleaner baseline: route between `off` and a single fixed
+constant profile using only `PC1` and `PC2` from the baseline attention-entropy
+PCA. This measures how much value is available from a simple switch before
+asking whether a richer profile-selection router is justified.
 
 ### Relationship to signal_lab
 
