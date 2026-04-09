@@ -33,6 +33,23 @@ source .venv/bin/activate
 pwd
 hostname
 
+mkdir -p "$HF_HOME" "$HUGGINGFACE_HUB_CACHE" "$TRANSFORMERS_CACHE" "$UV_CACHE_DIR" "$XDG_CACHE_HOME"
+export TRANSFORMERS_VERBOSITY=info
+export HF_HUB_VERBOSITY=debug
+
+echo "=== Hugging Face cache preflight ==="
+echo "HF_HOME=$HF_HOME"
+echo "HUGGINGFACE_HUB_CACHE=$HUGGINGFACE_HUB_CACHE"
+echo "TRANSFORMERS_CACHE=$TRANSFORMERS_CACHE"
+echo "UV_CACHE_DIR=$UV_CACHE_DIR"
+echo "XDG_CACHE_HOME=$XDG_CACHE_HOME"
+echo "-- model cache dirs --"
+ls -ld "$HUGGINGFACE_HUB_CACHE/models--allenai--Olmo-Hybrid-7B" 2>/dev/null || echo "missing: $HUGGINGFACE_HUB_CACHE/models--allenai--Olmo-Hybrid-7B"
+ls -ld "$HUGGINGFACE_HUB_CACHE/models--Qwen--Qwen3.5-9B-Base" 2>/dev/null || echo "missing: $HUGGINGFACE_HUB_CACHE/models--Qwen--Qwen3.5-9B-Base"
+echo "-- lock files under hub cache --"
+find "$HUGGINGFACE_HUB_CACHE" -name '*.lock' -print 2>/dev/null || true
+echo "=== end preflight ==="
+
 uv run -m bench.run_bench \
     --model-key 9B \
     --tasks copa storycloze gsm8k \
