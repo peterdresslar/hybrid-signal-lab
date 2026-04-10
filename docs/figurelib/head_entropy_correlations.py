@@ -44,6 +44,64 @@ def load_delta_by_prompt(joined_path: Path, profile_name: str) -> dict[str, floa
     return deltas
 
 
+def load_oracle_positive_constant_label_by_prompt(
+    joined_path: Path,
+    *,
+    min_delta: float = 0.0,
+) -> dict[str, float]:
+    """Binary label for whether any non-baseline constant profile helps a prompt."""
+    best_delta_by_prompt: dict[str, float] = {}
+    with joined_path.open(newline="") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if row["g_profile"] == "baseline":
+                continue
+            if row["g_function"] != "constant":
+                continue
+            try:
+                delta = float(row["delta_target_prob"])
+            except (TypeError, ValueError):
+                continue
+            prompt_id = row["prompt_id"]
+            best_delta_by_prompt[prompt_id] = max(
+                best_delta_by_prompt.get(prompt_id, float("-inf")),
+                delta,
+            )
+
+    return {
+        prompt_id: float(best_delta > min_delta)
+        for prompt_id, best_delta in best_delta_by_prompt.items()
+    }
+
+
+def load_constant_response_polarity_by_prompt(joined_path: Path) -> dict[str, float]:
+    """Signed label for whether constant-profile intervention helps or hurts on average."""
+    values_by_prompt: dict[str, list[float]] = {}
+    with joined_path.open(newline="") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if row["g_profile"] == "baseline":
+                continue
+            if row["g_function"] != "constant":
+                continue
+            try:
+                delta = float(row["delta_target_prob"])
+            except (TypeError, ValueError):
+                continue
+            values_by_prompt.setdefault(row["prompt_id"], []).append(delta)
+
+    labels: dict[str, float] = {}
+    for prompt_id, values in values_by_prompt.items():
+        mean_delta = float(np.mean(values))
+        if mean_delta > 0:
+            labels[prompt_id] = 1.0
+        elif mean_delta < 0:
+            labels[prompt_id] = -1.0
+        else:
+            labels[prompt_id] = 0.0
+    return labels
+
+
 def _corr_map_from_vectors(
     prompt_ids: list[str],
     vectors: dict[str, np.ndarray],
@@ -494,15 +552,30 @@ def plot_head_entropy_normalization_comparison(
     if len(transformed_sets) == 1:
         axes = np.array([axes])
 
+    def resolve_target_values(target_name: str) -> dict[str, float]:
+        if target_name == "oracle_any_constant_positive":
+            return load_oracle_positive_constant_label_by_prompt(joined_path)
+        if target_name == "constant_response_polarity":
+            return load_constant_response_polarity_by_prompt(joined_path)
+        return load_delta_by_prompt(joined_path, target_name)
+
+    def resolve_title(target_name: str) -> str:
+        if target_name == "oracle_any_constant_positive":
+            return "Any constant oracle Δp > 0"
+        if target_name == "constant_response_polarity":
+            return "Constant-response polarity"
+        return target_name
+
     for row_idx, (row_title, transformed) in enumerate(transformed_sets.items()):
         for col_idx, profile in enumerate(profiles):
             ax = axes[row_idx, col_idx]
-            if transformed is None:
+            if transformed is None and profile in raw_corr_matrices:
                 matrix = raw_corr_matrices[profile]
             else:
-                deltas = load_delta_by_prompt(joined_path, profile)
-                prompt_ids = sorted(set(deltas) & set(transformed))
-                matrix = _corr_map_from_vectors(prompt_ids, transformed, deltas, n_layers)
+                target_values = resolve_target_values(profile)
+                vector_source = entropy_vectors if transformed is None else transformed
+                prompt_ids = sorted(set(target_values) & set(vector_source))
+                matrix = _corr_map_from_vectors(prompt_ids, vector_source, target_values, n_layers)
 
             image = ax.pcolormesh(
                 x_edges,
@@ -523,7 +596,7 @@ def plot_head_entropy_normalization_comparison(
             ax.tick_params(length=0)
 
             if row_idx == 0:
-                ax.set_title(profile, fontsize=11, pad=7)
+                ax.set_title(resolve_title(profile), fontsize=11, pad=7)
             if col_idx == 0:
                 ax.set_ylabel(f"{row_title}\n\nAttention layer index")
             if row_idx == len(transformed_sets) - 1:

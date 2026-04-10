@@ -22,5 +22,5 @@ if __name__ == "__main__":
         correlations_path=analysis / "analysis_head_correlations.json",
         joined_path=analysis / "analysis_joined_long.csv",
         output_path=out_png,
-        profiles=["constant_2.3", "bookend_high_bal_0.40"],
+        profiles=["oracle_any_constant_positive", "constant_response_polarity"],
     )
