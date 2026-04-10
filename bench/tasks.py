@@ -7,20 +7,16 @@ Each task knows how to:
   3. Score model outputs into a final metric
 
 Evaluation approach:
-  - COPA and StoryCloze are log-likelihood tasks: the model scores two
-    candidate continuations and picks the one with higher log-prob.
-    This maps directly to Agent.score_target().
-  - GSM8K is a generation task: the model produces a chain-of-thought
-    answer and we extract the final number. This uses greedy decoding
-    with a few-shot prompt prefix.
+  - All active benchmarks are log-likelihood tasks.
+  - The model scores each candidate continuation and picks the one with
+    higher total log-prob.
+  - This maps directly to Agent.score_target().
 """
 
 from __future__ import annotations
 
 import random
-import re
 from dataclasses import dataclass, field
-from typing import Any
 
 from datasets import load_dataset
 
@@ -35,16 +31,6 @@ class ScoringExample:
     metadata: dict = field(default_factory=dict)
 
 
-@dataclass
-class GenerationExample:
-    """A single generation example (e.g., GSM8K)."""
-    example_id: str
-    prompt: str                  # full prompt including few-shot prefix
-    reference_answer: str        # the correct final answer (e.g., "42")
-    metadata: dict = field(default_factory=dict)
-
-
-# ---------------------------------------------------------------------------
 # COPA
 # ---------------------------------------------------------------------------
 
@@ -133,72 +119,70 @@ def load_storycloze(split: str = "test", seed: int = 42) -> list[ScoringExample]
 
 
 # ---------------------------------------------------------------------------
-# GSM8K
+# ARC-Challenge
 # ---------------------------------------------------------------------------
 
-GSM8K_FEW_SHOT_PREFIX = """Solve the following math problem step by step. After your reasoning, write the final answer as a number on a new line after "#### ".
-
-Question: There are 15 trees in the grove. Grove workers will plant trees in the grove today. After they are done, there will be 21 trees. How many trees did the grove workers plant today?
-Answer: There are 15 trees originally. Then there were 21 trees after some more were planted. So there must have been 21 - 15 = 6.
-#### 6
-
-Question: If there are 3 cars in the parking lot and 2 more cars arrive, how many cars are in the parking lot?
-Answer: There are originally 3 cars. 2 more cars arrive. 3 + 2 = 5.
-#### 5
-
-Question: Leah had 32 chocolates and her sister had 42. If they ate 35, how many pieces do they have left in total?
-Answer: Originally, Leah had 32 chocolates. Her sister had 42. So in total they had 32 + 42 = 74. After eating 35, they had 74 - 35 = 39.
-#### 39
-
-Question: Jason had 20 lollipops. He gave Denny some lollipops. Now Jason has 12 lollipops. How many lollipops did Jason give to Denny?
-Answer: Jason started with 20 lollipops. Then he had 12 after giving some to Denny. So he gave Denny 20 - 12 = 8.
-#### 8
-
-"""
-
-
-def load_gsm8k(split: str = "test", n_examples: int | None = None) -> list[GenerationExample]:
-    """Load GSM8K math problems.
-
-    ~1319 test examples. Each example is a word problem with a
-    chain-of-thought solution ending in "#### <number>".
-
-    Args:
-        split: dataset split (default: "test")
-        n_examples: optional limit on number of examples to load
-    """
-    ds = load_dataset("openai/gsm8k", "main", split=split)
-
+def load_arc_challenge(split: str = "test") -> list[ScoringExample]:
+    """Load ARC-Challenge multiple-choice science questions."""
+    ds = load_dataset("allenai/ai2_arc", "ARC-Challenge", split=split)
     examples = []
+
     for i, row in enumerate(ds):
-        if n_examples is not None and i >= n_examples:
-            break
+        question = row["question"].strip()
+        labels = row["choices"]["label"]
+        choice_texts = row["choices"]["text"]
+        answer_key = row["answerKey"]
 
-        question = row["question"]
-        answer_text = row["answer"]
+        if answer_key not in labels:
+            continue
 
-        # Extract the final numerical answer after ####
-        match = re.search(r"####\s*(.+)", answer_text)
-        reference = match.group(1).strip().replace(",", "") if match else ""
+        continuations = [" " + choice.strip() for choice in choice_texts]
+        correct_idx = labels.index(answer_key)
 
-        prompt = GSM8K_FEW_SHOT_PREFIX + f"Question: {question}\nAnswer:"
-
-        examples.append(GenerationExample(
-            example_id=f"gsm8k_{split}_{i}",
-            prompt=prompt,
-            reference_answer=reference,
-            metadata={"question": question, "full_answer": answer_text},
+        examples.append(ScoringExample(
+            example_id=f"arc_challenge_{split}_{i}",
+            context=f"{question}\nAnswer:",
+            continuations=continuations,
+            correct_idx=correct_idx,
+            metadata={
+                "labels": labels,
+                "answer_key": answer_key,
+            },
         ))
 
     return examples
 
 
-def extract_gsm8k_answer(generated_text: str) -> str | None:
-    """Extract the final numerical answer from a GSM8K generation.
+# ---------------------------------------------------------------------------
+# MMLU
+# ---------------------------------------------------------------------------
 
-    Looks for #### <number> pattern. Returns None if not found.
-    """
-    match = re.search(r"####\s*(-?[\d,]+\.?\d*)", generated_text)
-    if match:
-        return match.group(1).strip().replace(",", "")
-    return None
+def load_mmlu(subset: str, split: str = "test") -> list[ScoringExample]:
+    """Load a single MMLU subset using standard letter-scoring format."""
+    ds = load_dataset("cais/mmlu", subset, split=split)
+    examples = []
+
+    for i, row in enumerate(ds):
+        question = row["question"].strip()
+        choices = [choice.strip() for choice in row["choices"]]
+        answer = int(row["answer"])
+
+        if len(choices) != 4:
+            continue
+        if not 0 <= answer < len(choices):
+            continue
+
+        context_lines = [question]
+        for label, choice in zip(("A", "B", "C", "D"), choices):
+            context_lines.append(f"{label}. {choice}")
+        context_lines.append("Answer:")
+
+        examples.append(ScoringExample(
+            example_id=f"mmlu_{subset}_{split}_{i}",
+            context="\n".join(context_lines),
+            continuations=[" A", " B", " C", " D"],
+            correct_idx=answer,
+            metadata={"subset": subset, "choices": choices},
+        ))
+
+    return examples
