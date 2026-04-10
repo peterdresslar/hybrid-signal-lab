@@ -1,0 +1,80 @@
+Profile Selection: OLMO
+============================================================
+
+Data: data/022-balanced-block-hybrid
+Prompts: 1070
+Candidate profiles: 86
+
+Reference points:
+  Baseline (no intervention):     0.0000
+  Best fixed profile:             0.0505  (constant_1.6)
+  Oracle (all profiles):          0.1396
+
+Objective: separable
+Min coverage: 0.00
+Min profile wins: 0
+Max mean abs corr: None
+Max constants: 1
+
+Top 10 profile sets (4 profiles + off):
+
+  # 1  score=0.1333  routed=0.0964  advantage=0.0460  coverage=61%  entropy=1.00  minwins=147  corr=0.22
+        constant_1.6
+        edges_narrow_bal_0.40
+        late_boost_bal_0.30
+        ramp_up_bal_0.50
+
+  # 2  score=0.1332  routed=0.0964  advantage=0.0460  coverage=60%  entropy=1.00  minwins=143  corr=0.22
+        bowl_bal_0.25
+        constant_1.6
+        late_boost_bal_0.30
+        ramp_up_bal_0.50
+
+  # 3  score=0.1332  routed=0.0966  advantage=0.0461  coverage=60%  entropy=0.99  minwins=126  corr=0.22
+        constant_1.6
+        edges_narrow_bal_0.40
+        late_boost_bal_0.30
+        mid_late_peak_bal_0.50
+
+  # 4  score=0.1329  routed=0.0964  advantage=0.0460  coverage=60%  entropy=0.99  minwins=133  corr=0.23
+        constant_1.6
+        edges_bal_0.25
+        late_boost_bal_0.30
+        ramp_up_bal_0.50
+
+  # 5  score=0.1328  routed=0.0964  advantage=0.0459  coverage=60%  entropy=0.99  minwins=125  corr=0.23
+        bowl_bal_0.25
+        constant_1.6
+        late_boost_bal_0.30
+        mid_late_peak_bal_0.50
+
+  # 6  score=0.1326  routed=0.0963  advantage=0.0458  coverage=60%  entropy=0.99  minwins=134  corr=0.24
+        constant_1.6
+        edges_narrow_bal_0.55
+        late_boost_bal_0.30
+        ramp_up_bal_0.50
+
+  # 7  score=0.1326  routed=0.0963  advantage=0.0458  coverage=59%  entropy=0.99  minwins=125  corr=0.24
+        constant_1.6
+        edges_bal_0.25
+        late_boost_bal_0.30
+        mid_late_peak_bal_0.50
+
+  # 8  score=0.1325  routed=0.0961  advantage=0.0456  coverage=60%  entropy=0.99  minwins=136  corr=0.24
+        constant_1.6
+        early_late_high_bal_0.30
+        late_boost_bal_0.30
+        ramp_up_bal_0.50
+
+  # 9  score=0.1324  routed=0.0963  advantage=0.0458  coverage=59%  entropy=0.99  minwins=127  corr=0.24
+        constant_1.6
+        edges_narrow_bal_0.55
+        late_boost_bal_0.30
+        mid_late_peak_bal_0.50
+
+  #10  score=0.1320  routed=0.0959  advantage=0.0454  coverage=60%  entropy=0.99  minwins=126  corr=0.25
+        constant_1.6
+        late_boost_bal_0.30
+        ramp_up_bal_0.50
+        spike_p1_bal_0.18
+

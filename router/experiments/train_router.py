@@ -39,12 +39,13 @@ from __future__ import annotations
 import argparse
 import csv
 import json
-import os
-import sys
 import time
 from pathlib import Path
 
 import numpy as np
+
+from model.backend import InterventionMode, normalize_intervention_mode
+from signal_lab.sweep_cartridges import BALANCED_SWEEP_G_SPECS
 
 
 # ---------------------------------------------------------------------------
@@ -140,6 +141,18 @@ def load_delta_matrix(analysis_dir: Path, profile_names: list[str]) -> tuple[lis
             matrix[i, j] = data[pid].get(pname, 0.0)
 
     return prompt_ids, matrix
+
+
+def load_profile_specs(profile_names: list[str]) -> dict[str, dict]:
+    """Resolve exact runtime profile specs by name from the balanced sweep vocabulary."""
+    available = {
+        spec["name"]: {k: v for k, v in spec.items() if k != "name"}
+        for spec in BALANCED_SWEEP_G_SPECS
+    }
+    missing = [name for name in profile_names if name not in available]
+    if missing:
+        raise ValueError(f"Missing profile specs for: {missing}")
+    return {name: available[name] for name in profile_names}
 
 
 # ---------------------------------------------------------------------------
@@ -420,6 +433,11 @@ def main():
     parser.add_argument("--lr", type=float, default=0.1)
     parser.add_argument("--n-iter", type=int, default=2000)
     parser.add_argument("--reg", type=float, default=1e-3)
+    parser.add_argument(
+        "--intervention-mode",
+        default="auto",
+        help='Intervention mode for runtime artifact: "attention_contribution", "block_output", or "auto".',
+    )
     parser.add_argument("--output-dir", default=None)
     args = parser.parse_args()
 
@@ -427,11 +445,21 @@ def main():
     analysis_dir = data_dir / args.model_key / "analysis"
     output_dir = Path(args.output_dir) if args.output_dir else data_dir / args.model_key / "router"
     output_dir.mkdir(parents=True, exist_ok=True)
+    if args.intervention_mode == "auto":
+        inferred_mode = (
+            InterventionMode.BLOCK_OUTPUT.value
+            if "block" in str(data_dir).lower()
+            else InterventionMode.ATTENTION_CONTRIBUTION.value
+        )
+    else:
+        inferred_mode = args.intervention_mode
+    intervention_mode = normalize_intervention_mode(inferred_mode)
 
     profile_names = args.profiles
     print(f"Model: {args.model_key}")
     print(f"Profiles: {profile_names}")
     print(f"Feature set: {args.feature_set}")
+    print(f"Intervention mode: {intervention_mode.value}")
     print()
 
     # Load data
@@ -506,6 +534,7 @@ def main():
     save_results = {
         "model_key": args.model_key,
         "profiles": profile_names,
+        "intervention_mode": intervention_mode.value,
         "feature_set": args.feature_set,
         "n_pca": args.n_pca,
         "n_features": X.shape[1],
@@ -544,10 +573,12 @@ def main():
         "feature_set": args.feature_set,
         "feature_names": feature_names,
         "n_pca": args.n_pca,
+        "intervention_mode": intervention_mode.value,
         "standardization_mean": mu.tolist(),
         "standardization_std": std.tolist(),
         "weights": W.tolist(),
         "bias": b.tolist(),
+        "profile_specs": load_profile_specs(profile_names),
     }
     if pca_components is not None:
         model_artifacts["pca_components"] = pca_components.tolist()
