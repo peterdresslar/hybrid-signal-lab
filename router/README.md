@@ -40,7 +40,10 @@ router/
   evaluate.py           Evaluation harness: oracle vs routed vs fixed vs baseline
 
   experiments/
+    bistate_router.py  Binary off/on baseline using only PCA PC1/PC2
     select_profiles.py  Combinatorial search for optimal 4-profile sets
+    score_profile_sets.py
+                        Two-stage ranking: oracle shortlist, then CV router scoring
     train_router.py     Train routing classifiers from b4_021 data
     eval_router.py      Cross-validated evaluation of trained routers
 ```
@@ -67,6 +70,15 @@ Each model has 4 intervention profiles chosen for **separability**, not just
 raw effect size. The goal is to maximize routed performance across the full
 prompt distribution, which means choosing profiles that each dominate in
 different regions of the feature space.
+
+In current experiments this is a two-stage process:
+
+1. `select_profiles.py` finds high-value candidate sets by oracle-routed
+   performance, with optional constraints on coverage, class usage, within-set
+   correlation, and number of constant profiles.
+2. `score_profile_sets.py` re-ranks the top candidate sets by actual
+   cross-validated routing performance using the same PCA/scalar baseline
+   features that the deployed router will see.
 
 For Qwen 9B, the b4_021 data shows distinct intervention regimes:
 code/numerical prompts respond to high-edge profiles, reasoning-tracking
@@ -114,6 +126,12 @@ Performance is reported as:
 The gap between oracle and routed measures how much routing signal the
 classifier captures. The gap between routed and best-fixed measures the
 practical value of routing over a static intervention.
+
+Before training the full multiclass router, `bistate_router.py` provides a
+scientifically cleaner baseline: route between `off` and a single fixed
+constant profile using only `PC1` and `PC2` from the baseline attention-entropy
+PCA. This measures how much value is available from a simple switch before
+asking whether a richer profile-selection router is justified.
 
 ### Relationship to signal_lab
 

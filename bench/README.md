@@ -50,11 +50,22 @@ Example routed run:
 uv run -m bench.run_bench \
   --model-key 9B \
   --tasks copa storycloze gsm8k \
-  --router-model router/router-9B-011/router_model.json \
+  --router-model router/router-9B-020/router_model.json \
   --output-dir data/bench/routed_9B
 ```
 
 The router model JSON should match the model being benchmarked.
+
+Current simple-router artifacts:
+
+- Qwen 9B attention-contribution bistate baseline:
+  `router/router-9B-020/router_model.json`
+- Olmo block-intervention bistate baseline:
+  `router/router-OLMO-020/router_model.json`
+
+`bench.run_bench` now uses the profile set embedded in the router artifact
+itself, so fixed-profile and oracle comparisons stay aligned with the loaded
+router even when it is a simple bistate off/on model.
 
 ## Files
 

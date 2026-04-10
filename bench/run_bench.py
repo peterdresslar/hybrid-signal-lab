@@ -1,35 +1,16 @@
 """
-run_bench.py — Run benchmarks with baseline and routed inference.
+run_bench.py — Run scoring benchmarks with baseline and routed inference.
 
-Evaluates COPA, StoryCloze, and GSM8K under four conditions:
+Evaluates multiple-choice log-likelihood tasks under four conditions:
   1. Baseline (g=1.0, no intervention)
   2. Best fixed profile (single best gain profile applied to all prompts)
   3. Routed (two-pass: baseline → classify → intervene)
-  4. Oracle (for log-likelihood tasks: try all 4 profiles, pick best per-example)
-
-For log-likelihood tasks (COPA, StoryCloze):
-  - Each candidate continuation is scored via Agent.score_target()
-  - The model picks whichever continuation has higher total log-prob
-  - Metric: accuracy (% of examples where correct continuation is chosen)
-
-For generation tasks (GSM8K):
-  - The model generates a chain-of-thought answer via greedy decoding
-  - The final numerical answer is extracted and compared to the reference
-  - Metric: accuracy (% correct)
-
-Usage:
-    python -m bench.run_bench \
-        --model-key 9B \
-        --tasks copa storycloze gsm8k \
-        --router-model data/intervention_modes/b4_021_attn_contr/9B/router/router_model.json \
-        --output-dir data/bench/9B
-
-    For baseline-only (overnight run, no router needed):
-    python -m bench.run_bench \
-        --model-key 9B \
-        --tasks copa storycloze \
-        --baseline-only \
-        --output-dir data/bench/9B
+  4. Oracle (try baseline + all fixed profiles, pick best per-example)
+Supported tasks:
+  - COPA
+  - StoryCloze
+  - ARC-Challenge
+  - MMLU subsets (abstract algebra, college mathematics, college CS)
 """
 
 from __future__ import annotations
@@ -39,6 +20,8 @@ import json
 import time
 from pathlib import Path
 from typing import Any
+import builtins
+from functools import partial
 
 import numpy as np
 import dotenv
@@ -50,17 +33,18 @@ from model.g_profile import build_attention_scales_from_spec
 from bench.tasks import (
     load_copa,
     load_storycloze,
-    load_gsm8k,
-    extract_gsm8k_answer,
+    load_arc_challenge,
+    load_mmlu,
     ScoringExample,
-    GenerationExample,
 )
 from router.router import InterventionRouter
-from router.profiles import get_profile_specs, BASELINE_SPEC
+from router.profiles import BASELINE_SPEC
 
 dotenv.load_dotenv(".env.development")
 dotenv.load_dotenv(".env")
 dotenv.load_dotenv(".env.slurm")
+
+print = partial(builtins.print, flush=True)
 
 
 # ---------------------------------------------------------------------------
@@ -107,7 +91,6 @@ class ProgressHeartbeat:
         print(message)
         self.last_ping_time = now
 
-
 # ---------------------------------------------------------------------------
 # Scoring helpers
 # ---------------------------------------------------------------------------
@@ -135,11 +118,18 @@ def run_scoring_example_baseline(
     agent: Agent,
     example: ScoringExample,
     baseline_scales: np.ndarray,
+    intervention_mode: InterventionMode = InterventionMode.ATTENTION_CONTRIBUTION,
 ) -> dict[str, Any]:
     """Run a single scoring example under baseline conditions."""
     scores = []
     for cont in example.continuations:
-        lp = score_continuation(agent, example.context, cont, baseline_scales)
+        lp = score_continuation(
+            agent,
+            example.context,
+            cont,
+            baseline_scales,
+            intervention_mode=intervention_mode,
+        )
         scores.append(lp)
 
     predicted = int(np.argmax(scores))
@@ -173,7 +163,7 @@ def run_scoring_example_routed(
         example.context,
         baseline_scales,
         return_verbose=True,
-        intervention_mode=InterventionMode.ATTENTION_CONTRIBUTION,
+        intervention_mode=router.intervention_mode,
     )
 
     # Classify
@@ -187,7 +177,13 @@ def run_scoring_example_routed(
 
     scores = []
     for cont in example.continuations:
-        lp = score_continuation(agent, example.context, cont, scales)
+        lp = score_continuation(
+            agent,
+            example.context,
+            cont,
+            scales,
+            intervention_mode=router.intervention_mode,
+        )
         scores.append(lp)
 
     predicted = int(np.argmax(scores))
@@ -210,11 +206,18 @@ def run_scoring_example_fixed(
     example: ScoringExample,
     profile_name: str,
     scales: np.ndarray,
+    intervention_mode: InterventionMode = InterventionMode.ATTENTION_CONTRIBUTION,
 ) -> dict[str, Any]:
     """Run a single scoring example under a fixed profile."""
     scores = []
     for cont in example.continuations:
-        lp = score_continuation(agent, example.context, cont, scales)
+        lp = score_continuation(
+            agent,
+            example.context,
+            cont,
+            scales,
+            intervention_mode=intervention_mode,
+        )
         scores.append(lp)
 
     predicted = int(np.argmax(scores))
@@ -235,6 +238,7 @@ def run_scoring_example_oracle(
     example: ScoringExample,
     baseline_scales: np.ndarray,
     profile_scales: dict[str, np.ndarray],
+    intervention_mode: InterventionMode = InterventionMode.ATTENTION_CONTRIBUTION,
 ) -> dict[str, Any]:
     """Run a single scoring example under oracle routing.
 
@@ -246,14 +250,30 @@ def run_scoring_example_oracle(
     # Baseline
     scores_bl = []
     for cont in example.continuations:
-        scores_bl.append(score_continuation(agent, example.context, cont, baseline_scales))
+        scores_bl.append(
+            score_continuation(
+                agent,
+                example.context,
+                cont,
+                baseline_scales,
+                intervention_mode=intervention_mode,
+            )
+        )
     all_results["baseline"] = scores_bl
 
     # Each profile
     for pname, pscales in profile_scales.items():
         scores_p = []
         for cont in example.continuations:
-            scores_p.append(score_continuation(agent, example.context, cont, pscales))
+            scores_p.append(
+                score_continuation(
+                    agent,
+                    example.context,
+                    cont,
+                    pscales,
+                    intervention_mode=intervention_mode,
+                )
+            )
         all_results[pname] = scores_p
 
     # Pick the condition that gets the highest margin for the correct answer
@@ -286,190 +306,6 @@ def run_scoring_example_oracle(
         "correct_idx": example.correct_idx,
         "correct": correct,
     }
-
-
-# ---------------------------------------------------------------------------
-# Generation helpers (GSM8K)
-# ---------------------------------------------------------------------------
-
-def run_generation_example_baseline(
-    agent: Agent,
-    example: GenerationExample,
-    baseline_scales: np.ndarray,
-    max_new_tokens: int = 512,
-) -> dict[str, Any]:
-    """Run a single generation example under baseline conditions."""
-    result = agent.generate(
-        example.prompt,
-        baseline_scales,
-        max_new_tokens=max_new_tokens,
-        intervention_mode=InterventionMode.ATTENTION_CONTRIBUTION,
-    )
-    predicted = extract_gsm8k_answer(result["generated_text"])
-    correct = predicted is not None and predicted == example.reference_answer
-
-    return {
-        "example_id": example.example_id,
-        "condition": "baseline",
-        "generated_text": result["generated_text"],
-        "predicted_answer": predicted,
-        "reference_answer": example.reference_answer,
-        "correct": correct,
-        "elapsed": result["elapsed_time"],
-    }
-
-
-def run_generation_example_fixed(
-    agent: Agent,
-    example: GenerationExample,
-    profile_name: str,
-    scales: np.ndarray,
-    max_new_tokens: int = 512,
-) -> dict[str, Any]:
-    """Run a single generation example under a fixed profile."""
-    result = agent.generate(
-        example.prompt,
-        scales,
-        max_new_tokens=max_new_tokens,
-        intervention_mode=InterventionMode.ATTENTION_CONTRIBUTION,
-    )
-    predicted = extract_gsm8k_answer(result["generated_text"])
-    correct = predicted is not None and predicted == example.reference_answer
-
-    return {
-        "example_id": example.example_id,
-        "condition": f"fixed_{profile_name}",
-        "generated_text": result["generated_text"],
-        "predicted_answer": predicted,
-        "reference_answer": example.reference_answer,
-        "correct": correct,
-        "elapsed": result["elapsed_time"],
-    }
-
-
-def run_generation_example_routed(
-    agent: Agent,
-    router: InterventionRouter,
-    example: GenerationExample,
-    baseline_scales: np.ndarray,
-    profile_scales: dict[str, np.ndarray],
-    max_new_tokens: int = 512,
-) -> dict[str, Any]:
-    """Run a single generation example with routing.
-
-    1. Baseline sensing pass (verbose) on the prompt
-    2. Router classifies → picks profile or "off"
-    3. Generate under the selected profile
-    """
-    # Sensing pass
-    baseline_result = agent.run_pass(
-        example.prompt,
-        baseline_scales,
-        return_verbose=True,
-        intervention_mode=InterventionMode.ATTENTION_CONTRIBUTION,
-    )
-
-    decision = router.classify(baseline_result)
-
-    if decision["is_off"]:
-        scales = baseline_scales
-    else:
-        scales = profile_scales[decision["profile_name"]]
-
-    result = agent.generate(
-        example.prompt,
-        scales,
-        max_new_tokens=max_new_tokens,
-        intervention_mode=InterventionMode.ATTENTION_CONTRIBUTION,
-    )
-    predicted = extract_gsm8k_answer(result["generated_text"])
-    correct = predicted is not None and predicted == example.reference_answer
-
-    return {
-        "example_id": example.example_id,
-        "condition": "routed",
-        "profile": decision["profile_name"],
-        "confidence": decision["confidence"],
-        "generated_text": result["generated_text"],
-        "predicted_answer": predicted,
-        "reference_answer": example.reference_answer,
-        "correct": correct,
-        "elapsed": result["elapsed_time"],
-    }
-
-
-def run_generation_example_oracle(
-    agent: Agent,
-    example: GenerationExample,
-    baseline_scales: np.ndarray,
-    profile_scales: dict[str, np.ndarray],
-    max_new_tokens: int = 512,
-) -> dict[str, Any]:
-    """Run a single generation example under oracle routing.
-
-    Tries baseline + all profiles. Picks whichever gets the correct answer.
-    If multiple get it right, picks baseline (conservative). If none get it
-    right, returns the baseline result.
-    """
-    # Baseline first
-    bl_result = agent.generate(
-        example.prompt,
-        baseline_scales,
-        max_new_tokens=max_new_tokens,
-        intervention_mode=InterventionMode.ATTENTION_CONTRIBUTION,
-    )
-    bl_predicted = extract_gsm8k_answer(bl_result["generated_text"])
-    bl_correct = bl_predicted is not None and bl_predicted == example.reference_answer
-
-    if bl_correct:
-        # Baseline already correct — oracle picks baseline
-        return {
-            "example_id": example.example_id,
-            "condition": "oracle",
-            "oracle_profile": "baseline",
-            "generated_text": bl_result["generated_text"],
-            "predicted_answer": bl_predicted,
-            "reference_answer": example.reference_answer,
-            "correct": True,
-            "elapsed": bl_result["elapsed_time"],
-        }
-
-    # Try each profile
-    for pname, pscales in profile_scales.items():
-        p_result = agent.generate(
-            example.prompt,
-            pscales,
-            max_new_tokens=max_new_tokens,
-            intervention_mode=InterventionMode.ATTENTION_CONTRIBUTION,
-        )
-        p_predicted = extract_gsm8k_answer(p_result["generated_text"])
-        p_correct = p_predicted is not None and p_predicted == example.reference_answer
-
-        if p_correct:
-            return {
-                "example_id": example.example_id,
-                "condition": "oracle",
-                "oracle_profile": pname,
-                "generated_text": p_result["generated_text"],
-                "predicted_answer": p_predicted,
-                "reference_answer": example.reference_answer,
-                "correct": True,
-                "elapsed": p_result["elapsed_time"],
-            }
-
-    # None got it right — return baseline result
-    return {
-        "example_id": example.example_id,
-        "condition": "oracle",
-        "oracle_profile": "baseline",
-        "generated_text": bl_result["generated_text"],
-        "predicted_answer": bl_predicted,
-        "reference_answer": example.reference_answer,
-        "correct": False,
-        "elapsed": bl_result["elapsed_time"],
-    }
-
-
 # ---------------------------------------------------------------------------
 # Task runners
 # ---------------------------------------------------------------------------
@@ -490,7 +326,7 @@ def run_scoring_task(
     # Build profile scales
     profile_scales = {}
     if router and not baseline_only:
-        specs = get_profile_specs(router.model_key)
+        specs = router.profile_specs
         for pname, pspec in specs.items():
             profile_scales[pname] = build_attention_scales_from_spec(pspec, attention_slots=n_attn)
 
@@ -503,7 +339,12 @@ def run_scoring_task(
     baseline_records = []
     baseline_heartbeat = ProgressHeartbeat(task_name, "baseline", len(examples))
     for i, ex in enumerate(examples):
-        rec = run_scoring_example_baseline(agent, ex, baseline_scales)
+        rec = run_scoring_example_baseline(
+            agent,
+            ex,
+            baseline_scales,
+            intervention_mode=router.intervention_mode if router else InterventionMode.ATTENTION_CONTRIBUTION,
+        )
         baseline_records.append(rec)
         acc_so_far = sum(r["correct"] for r in baseline_records) / len(baseline_records)
         if (i + 1) % 50 == 0:
@@ -557,7 +398,13 @@ def run_scoring_task(
             fixed_records = []
             fixed_heartbeat = ProgressHeartbeat(task_name, f"fixed_{pname}", len(examples))
             for i, ex in enumerate(examples):
-                rec = run_scoring_example_fixed(agent, ex, pname, pscales)
+                rec = run_scoring_example_fixed(
+                    agent,
+                    ex,
+                    pname,
+                    pscales,
+                    intervention_mode=router.intervention_mode,
+                )
                 fixed_records.append(rec)
                 acc_so_far = sum(r["correct"] for r in fixed_records) / len(fixed_records)
                 if (i + 1) % 50 == 0:
@@ -586,143 +433,12 @@ def run_scoring_task(
         oracle_records = []
         oracle_heartbeat = ProgressHeartbeat(task_name, "oracle", len(examples))
         for i, ex in enumerate(examples):
-            rec = run_scoring_example_oracle(agent, ex, baseline_scales, profile_scales)
-            oracle_records.append(rec)
-            acc_so_far = sum(r["correct"] for r in oracle_records) / len(oracle_records)
-            if (i + 1) % 50 == 0:
-                print(f"    {i+1}/{len(examples)}  acc={acc_so_far:.3f}")
-            oracle_heartbeat.maybe_ping(i + 1, metric_value=acc_so_far)
-
-        or_acc = sum(r["correct"] for r in oracle_records) / len(oracle_records)
-        results["conditions"]["oracle"] = {
-            "accuracy": or_acc,
-            "n_correct": sum(r["correct"] for r in oracle_records),
-            "elapsed": time.time() - t0,
-            "oracle_profile_distribution": _count_profiles(oracle_records, key="oracle_profile"),
-        }
-        all_records.extend(oracle_records)
-        print(f"  [{task_name}] Oracle:   {or_acc:.3f} ({time.time()-t0:.1f}s)")
-
-    _save_task_results(results, all_records, task_name, output_dir)
-    return results
-
-
-def run_generation_task(
-    task_name: str,
-    examples: list[GenerationExample],
-    agent: Agent,
-    *,
-    router: InterventionRouter | None = None,
-    baseline_only: bool = False,
-    max_new_tokens: int = 512,
-    output_dir: Path,
-) -> dict[str, Any]:
-    """Run a full generation task (e.g., GSM8K)."""
-    n_attn = len(agent.get_attention_layer_indices())
-    baseline_scales = build_attention_scales_from_spec(BASELINE_SPEC, attention_slots=n_attn)
-
-    profile_scales = {}
-    if router and not baseline_only:
-        specs = get_profile_specs(router.model_key)
-        for pname, pspec in specs.items():
-            profile_scales[pname] = build_attention_scales_from_spec(pspec, attention_slots=n_attn)
-
-    results = {"task": task_name, "n_examples": len(examples), "conditions": {}}
-    all_records = []
-
-    # --- Baseline ---
-    print(f"\n  [{task_name}] Running baseline...")
-    t0 = time.time()
-    baseline_records = []
-    baseline_heartbeat = ProgressHeartbeat(task_name, "baseline", len(examples))
-    for i, ex in enumerate(examples):
-        rec = run_generation_example_baseline(agent, ex, baseline_scales, max_new_tokens)
-        baseline_records.append(rec)
-        acc_so_far = sum(r["correct"] for r in baseline_records) / len(baseline_records)
-        if (i + 1) % 50 == 0:
-            print(f"    {i+1}/{len(examples)}  acc={acc_so_far:.3f}")
-        baseline_heartbeat.maybe_ping(i + 1, metric_value=acc_so_far)
-
-    bl_acc = sum(r["correct"] for r in baseline_records) / len(baseline_records)
-    results["conditions"]["baseline"] = {
-        "accuracy": bl_acc,
-        "n_correct": sum(r["correct"] for r in baseline_records),
-        "elapsed": time.time() - t0,
-    }
-    all_records.extend(baseline_records)
-    print(f"  [{task_name}] Baseline: {bl_acc:.3f} ({time.time()-t0:.1f}s)")
-
-    if baseline_only:
-        _save_task_results(results, all_records, task_name, output_dir)
-        return results
-
-    # --- Routed ---
-    if router:
-        print(f"\n  [{task_name}] Running routed...")
-        t0 = time.time()
-        routed_records = []
-        routed_heartbeat = ProgressHeartbeat(task_name, "routed", len(examples))
-        for i, ex in enumerate(examples):
-            rec = run_generation_example_routed(
-                agent, router, ex, baseline_scales, profile_scales, max_new_tokens,
-            )
-            routed_records.append(rec)
-            acc_so_far = sum(r["correct"] for r in routed_records) / len(routed_records)
-            if (i + 1) % 50 == 0:
-                print(f"    {i+1}/{len(examples)}  acc={acc_so_far:.3f}")
-            routed_heartbeat.maybe_ping(i + 1, metric_value=acc_so_far)
-
-        rt_acc = sum(r["correct"] for r in routed_records) / len(routed_records)
-        results["conditions"]["routed"] = {
-            "accuracy": rt_acc,
-            "n_correct": sum(r["correct"] for r in routed_records),
-            "elapsed": time.time() - t0,
-            "profile_distribution": _count_profiles(routed_records),
-        }
-        all_records.extend(routed_records)
-        print(f"  [{task_name}] Routed:   {rt_acc:.3f} ({time.time()-t0:.1f}s)")
-
-    # --- Best fixed ---
-    if profile_scales:
-        best_fixed_acc = 0.0
-        best_fixed_name = None
-        for pname, pscales in profile_scales.items():
-            print(f"\n  [{task_name}] Running fixed {pname}...")
-            t0 = time.time()
-            fixed_records = []
-            fixed_heartbeat = ProgressHeartbeat(task_name, f"fixed_{pname}", len(examples))
-            for i, ex in enumerate(examples):
-                rec = run_generation_example_fixed(agent, ex, pname, pscales, max_new_tokens)
-                fixed_records.append(rec)
-                acc_so_far = sum(r["correct"] for r in fixed_records) / len(fixed_records)
-                if (i + 1) % 50 == 0:
-                    print(f"    {i+1}/{len(examples)}  acc={acc_so_far:.3f}")
-                fixed_heartbeat.maybe_ping(i + 1, metric_value=acc_so_far)
-
-            f_acc = sum(r["correct"] for r in fixed_records) / len(fixed_records)
-            results["conditions"][f"fixed_{pname}"] = {
-                "accuracy": f_acc,
-                "n_correct": sum(r["correct"] for r in fixed_records),
-                "elapsed": time.time() - t0,
-            }
-            all_records.extend(fixed_records)
-            print(f"  [{task_name}] Fixed {pname}: {f_acc:.3f} ({time.time()-t0:.1f}s)")
-
-            if f_acc > best_fixed_acc:
-                best_fixed_acc = f_acc
-                best_fixed_name = pname
-
-        results["best_fixed"] = {"profile": best_fixed_name, "accuracy": best_fixed_acc}
-
-    # --- Oracle ---
-    if profile_scales:
-        print(f"\n  [{task_name}] Running oracle...")
-        t0 = time.time()
-        oracle_records = []
-        oracle_heartbeat = ProgressHeartbeat(task_name, "oracle", len(examples))
-        for i, ex in enumerate(examples):
-            rec = run_generation_example_oracle(
-                agent, ex, baseline_scales, profile_scales, max_new_tokens,
+            rec = run_scoring_example_oracle(
+                agent,
+                ex,
+                baseline_scales,
+                profile_scales,
+                intervention_mode=router.intervention_mode,
             )
             oracle_records.append(rec)
             acc_so_far = sum(r["correct"] for r in oracle_records) / len(oracle_records)
@@ -742,8 +458,6 @@ def run_generation_task(
 
     _save_task_results(results, all_records, task_name, output_dir)
     return results
-
-
 def _count_profiles(records: list[dict], key: str = "profile") -> dict[str, int]:
     counts: dict[str, int] = {}
     for r in records:
@@ -761,6 +475,16 @@ def _save_task_results(results: dict, records: list[dict], task_name: str, outpu
     with open(output_dir / f"{task_name}_records.jsonl", "w") as f:
         for r in records:
             f.write(json.dumps(r) + "\n")
+
+
+def maybe_limit_examples(
+    examples: list[ScoringExample],
+    limit: int | None,
+) -> list[ScoringExample]:
+    """Optionally truncate a loaded benchmark for diagnostic runs."""
+    if limit is None:
+        return examples
+    return examples[:limit]
 
 
 # ---------------------------------------------------------------------------
@@ -801,7 +525,14 @@ def main():
     parser = argparse.ArgumentParser(description="Run benchmarks.")
     parser.add_argument("--model-key", required=True, help="Model key (9B, OLMO)")
     parser.add_argument("--tasks", nargs="+", default=["copa", "storycloze"],
-                        choices=["copa", "storycloze", "gsm8k"],
+                        choices=[
+                            "copa",
+                            "storycloze",
+                            "arc_challenge",
+                            "mmlu_abstract_algebra",
+                            "mmlu_college_math",
+                            "mmlu_college_cs",
+                        ],
                         help="Which benchmarks to run")
     parser.add_argument("--router-model", default=None,
                         help="Path to router_model.json (omit for baseline-only)")
@@ -811,8 +542,8 @@ def main():
                         help="Output directory for results")
     parser.add_argument("--device", default="auto",
                         help="Device (cuda, cuda:0, mps, cpu, auto)")
-    parser.add_argument("--gsm8k-limit", type=int, default=None,
-                        help="Limit GSM8K examples (for testing)")
+    parser.add_argument("--limit", type=int, default=None,
+                        help="Optional maximum number of examples per task (for diagnostics)")
     args = parser.parse_args()
 
     # Resolve device
@@ -851,7 +582,7 @@ def main():
         print(f"{'=' * 50}")
 
         if task_name == "copa":
-            examples = load_copa("validation")
+            examples = maybe_limit_examples(load_copa("validation"), args.limit)
             print(f"  Loaded {len(examples)} COPA examples")
             result = run_scoring_task(
                 "copa", examples, agent,
@@ -860,7 +591,7 @@ def main():
             )
 
         elif task_name == "storycloze":
-            examples = load_storycloze()
+            examples = maybe_limit_examples(load_storycloze(), args.limit)
             print(f"  Loaded {len(examples)} StoryCloze examples")
             result = run_scoring_task(
                 "storycloze", examples, agent,
@@ -868,13 +599,27 @@ def main():
                 output_dir=output_dir,
             )
 
-        elif task_name == "gsm8k":
-            examples = load_gsm8k("test", n_examples=args.gsm8k_limit)
-            print(f"  Loaded {len(examples)} GSM8K examples")
-            result = run_generation_task(
-                "gsm8k", examples, agent,
+        elif task_name == "arc_challenge":
+            examples = maybe_limit_examples(load_arc_challenge("test"), args.limit)
+            print(f"  Loaded {len(examples)} ARC-Challenge examples")
+            result = run_scoring_task(
+                "arc_challenge", examples, agent,
                 router=router, baseline_only=args.baseline_only,
-                max_new_tokens=512,
+                output_dir=output_dir,
+            )
+
+        elif task_name.startswith("mmlu_"):
+            subset_map = {
+                "mmlu_abstract_algebra": "abstract_algebra",
+                "mmlu_college_math": "college_mathematics",
+                "mmlu_college_cs": "college_computer_science",
+            }
+            subset = subset_map[task_name]
+            examples = maybe_limit_examples(load_mmlu(subset, "test"), args.limit)
+            print(f"  Loaded {len(examples)} {task_name} examples")
+            result = run_scoring_task(
+                task_name, examples, agent,
+                router=router, baseline_only=args.baseline_only,
                 output_dir=output_dir,
             )
 

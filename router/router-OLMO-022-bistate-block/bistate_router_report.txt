@@ -1,0 +1,33 @@
+Bistate Router Baseline: OLMO
+========================================================================
+
+Data dir: data/022-balanced-block-hybrid
+Analysis dir: data/022-balanced-block-hybrid/OLMO/analysis
+Constant profile: constant_0.95
+Features: PC1 (59.368%), PC2 (10.298%)
+Folds: 5
+
+Class balance:
+  off:       886
+  intervene: 184
+  intervene rate: 17.2%
+
+Performance ladder (mean delta_target_prob):
+  Always-off:      0.0000
+  Always-on:       -0.0044
+  Bistate router:  0.0000
+  Oracle bistate:  0.0038
+  Oracle full:     0.1396
+
+Router accuracy: 0.828
+Predicted intervene rate: 0.0%
+Router minus always-on: +0.0044
+Capture of oracle bistate: 0.0%
+Capture of oracle full: 0.0%
+
+Per-fold results:
+  Fold 0: acc=0.827 routed=0.0000 always_on=-0.0054 oracle_bi=0.0034 oracle_full=0.1409
+  Fold 1: acc=0.827 routed=0.0000 always_on=-0.0043 oracle_bi=0.0033 oracle_full=0.1410
+  Fold 2: acc=0.827 routed=0.0000 always_on=-0.0052 oracle_bi=0.0039 oracle_full=0.1466
+  Fold 3: acc=0.827 routed=0.0000 always_on=-0.0047 oracle_bi=0.0038 oracle_full=0.1226
+  Fold 4: acc=0.832 routed=0.0000 always_on=-0.0022 oracle_bi=0.0043 oracle_full=0.1469
