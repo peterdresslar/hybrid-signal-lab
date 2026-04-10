@@ -2,7 +2,7 @@
 
 #SBATCH -G a100:1
 #SBATCH -C a100_80
-#SBATCH -t 0-14:00:00
+#SBATCH -t 0-12:34:56
 #SBATCH -p public
 #SBATCH -q public
 #SBATCH -o slurm.%j.out
