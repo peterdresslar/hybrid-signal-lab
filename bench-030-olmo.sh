@@ -2,8 +2,8 @@
 
 #SBATCH -G a100:1
 #SBATCH -C a100_80
-#SBATCH -t 0-02:00:00
-#SBATCH -p htc
+#SBATCH -t 0-12:34:56
+#SBATCH -p public
 #SBATCH -q public
 #SBATCH -o slurm.%j.out
 #SBATCH -e slurm.%j.err
