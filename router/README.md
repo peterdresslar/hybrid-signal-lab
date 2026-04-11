@@ -1,5 +1,8 @@
 ## Router
 
+**Router is currently under development. While it is not prodution-ready for candidate *selection*, the experiments are
+currently under use for benchmark experimentation. Thus this is versioned, but not fully-functioning, software.**
+
 `router` selects gain intervention profiles for hybrid language models at
 inference time. Given an incoming prompt, it runs a baseline forward pass
 (g=1.0), extracts features from the model's internal state, and routes the

@@ -11,7 +11,19 @@ so the router package has no dependency on the sweep infrastructure.
 from __future__ import annotations
 
 # -----------------------------------------------------------------------
-# 9B selected profiles (022-balanced-attention-hybrid, attention_contribution mode)
+# 9B selected profiles used in 030-bench (022-balanced-attention-hybrid,
+# attention_contribution mode).
+#
+# Provenance note:
+# A symmetric 9B re-selection was later run under the same discipline used for
+# OLMO 030: `select_profiles.py --objective separable --max-constants 1`
+# against `data/022-balanced-attention-hybrid`, with saved artifacts in
+# `router/router-9B-030-reselect/`. The benchmarked set below ranked #14 by the
+# separable objective but was retained because it remained extremely close to
+# the top-ranked set (Δscore = 0.000329) and achieved slightly *higher* selected
+# 4-profile oracle routed Δp (0.117589 vs. 0.116505 for the reselected top-1).
+# This keeps the 030 benchmark provenance intact while documenting the matched
+# selection protocol.
 # -----------------------------------------------------------------------
 
 PROFILES_9B = {
