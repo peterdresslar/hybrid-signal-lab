@@ -12,11 +12,12 @@ under either:
 (or baseline/off) gives the best delta_target_prob.
 
 The candidate pool is discovered directly from valid non-baseline rows in
-`analysis_joined_long.csv`. For the current balanced 022 sweeps this is about
-86–87 usable profiles per model, depending on whether any model/profile rows
-were invalid or missing in the analysis output. That yields about 2.1–2.2M
-4-profile combinations, which remains feasible on a single core in a few
-minutes.
+`analysis_joined_long.csv` from the prior probing sweep associated with the
+model under study. In the balanced hybrid probing runs used for the current
+router selections, this yields about 86–87 usable profiles per model,
+depending on whether any model/profile rows were invalid or missing in the
+analysis output. That corresponds to about 2.1–2.2M 4-profile combinations,
+which remains feasible on a single core in a few minutes.
 
 Usage:
     python -m router.experiments.select_profiles \
