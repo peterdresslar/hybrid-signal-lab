@@ -46,7 +46,11 @@ PROFILES_9B = {
 }
 
 # -----------------------------------------------------------------------
-# OLMO selected profiles (b4_021, attention_contribution mode)
+# Legacy OLMO attention-contribution profiles.
+#
+# These remain as the fallback/default table for historical artifacts that do
+# not embed `profile_specs`, but the current 030 OLMO benchmark/router path uses
+# self-contained block-output artifacts in `router/router-OLMO-030/`.
 # -----------------------------------------------------------------------
 
 PROFILES_OLMO = {

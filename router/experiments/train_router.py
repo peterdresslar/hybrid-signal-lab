@@ -1,9 +1,9 @@
 """
-train_router.py — Train routing classifiers from b4_021 data.
+train_router.py — Train routing classifiers from balanced sweep analysis data.
 
-Given a selected 4-profile set (from select_profiles.py), trains a
-multinomial classifier that predicts which profile (or "off") to apply
-based on features from a baseline forward pass.
+Given a selected 4-profile set (typically from `select_profiles.py`), train a
+multinomial classifier that predicts which profile (or "off") to apply based
+on features from a baseline forward pass.
 
 Feature sources:
   - Per-head attention entropy from baseline (g=1.0) verbose.jsonl
@@ -16,21 +16,25 @@ The classifier is trained with stratified K-fold cross-validation and
 reports accuracy, routed mean delta_p, and confusion between profile
 assignments.
 
-Usage:
+Current 030-style usage:
     python -m router.experiments.train_router \
         --model-key 9B \
-        --data-dir data/intervention_modes/b4_021_attn_contr \
-        --profiles edges_narrow late_boost_4.0 shifted_ramp_down tent_steep
+        --data-dir data/022-balanced-attention-hybrid \
+        --profiles constant_2.6 edges_narrow_bal_0.55 late_boost_bal_0.60 triad_odd_bal_0.45 \
+        --intervention-mode attention_contribution
 
     python -m router.experiments.train_router \
         --model-key OLMO \
-        --data-dir data/intervention_modes/b4_021_attn_contr \
-        --profiles bookend_suppress late_boost_4.0 late_high_early_low_3x triad_odd
+        --data-dir data/022-balanced-block-hybrid \
+        --profiles constant_1.6 edges_narrow_bal_0.40 late_boost_bal_0.30 ramp_up_bal_0.50 \
+        --intervention-mode block_output
 
 Optional flags:
     --n-folds         Number of CV folds (default: 5)
     --n-pca           Number of PCA components to use (default: 10)
     --feature-set     Which features: "pca", "raw", "scalar", "pca+scalar" (default: pca+scalar)
+    --intervention-mode
+                      Runtime intervention mode to embed in the artifact
     --output-dir      Output directory (default: <data-dir>/<model-key>/router/)
 """
 
