@@ -36,5 +36,5 @@ uv run -m bench.run_bench \
   --model-key OLMO \
   --tasks arc_challenge mmlu_abstract_algebra mmlu_college_math mmlu_college_cs \
   --limit 20 \
-  --router-model /home/pdressla/workspace/hybrid-signal-lab/router/router-OLMO-011/router_model.json \
+  --router-model /home/pdressla/workspace/hybrid-signal-lab/router/router-OLMO-030/router_model.json \
   --output-dir "${OUTDIR}/routed_OLMO"

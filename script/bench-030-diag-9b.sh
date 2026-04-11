@@ -36,5 +36,5 @@ uv run -m bench.run_bench \
   --model-key 9B \
   --tasks arc_challenge mmlu_abstract_algebra mmlu_college_math mmlu_college_cs \
   --limit 20 \
-  --router-model /home/pdressla/workspace/hybrid-signal-lab/router/router-9B-011/router_model.json \
+  --router-model /home/pdressla/workspace/hybrid-signal-lab/router/router-9B-030-a/router_model.json \
   --output-dir "${OUTDIR}/routed_9B"

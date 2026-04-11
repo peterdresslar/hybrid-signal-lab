@@ -89,7 +89,7 @@ class InterventionRouter:
             pca_mean = np.array(artifacts["pca_mean"], dtype=np.float64)
 
         # Load profile specs for this router. Newer artifacts may embed the exact
-        # runtime profile set directly; otherwise fall back to model defaults.
+        # runtime profile set directly; otherwise fall back to the current model defaults.
         if "profile_specs" in artifacts:
             profile_specs = artifacts["profile_specs"]
         else:

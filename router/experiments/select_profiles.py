@@ -1,23 +1,32 @@
 """
 select_profiles.py — Combinatorial search for optimal 4-profile sets.
 
-For each model (9B, OLMO), find the 4 gain profiles that maximize
-oracle-routed mean delta_p at the prompt level. "Oracle-routed" means
-each prompt is assigned whichever of the 4 profiles (or baseline/off)
-gives the best delta_target_prob for that prompt.
+For each model, find the 4 gain profiles that maximize prompt-level utility
+under either:
 
-The search enumerates all C(N, 4) combinations of non-baseline profiles
-and scores each set. N=77 (78 profiles minus baseline) gives ~1.4M
-combinations per model — feasible on a single core in minutes.
+- `oracle`: mean oracle-routed delta_p over the selected set
+- `separable`: oracle utility plus tie-break terms favoring broad class usage
+  and lower within-set response correlation
+
+"Oracle-routed" means each prompt is assigned whichever of the 4 profiles
+(or baseline/off) gives the best delta_target_prob.
+
+The candidate pool is discovered directly from valid non-baseline rows in
+`analysis_joined_long.csv` from the prior probing sweep associated with the
+model under study. In the balanced hybrid probing runs used for the current
+router selections, this yields about 86–87 usable profiles per model,
+depending on whether any model/profile rows were invalid or missing in the
+analysis output. That corresponds to about 2.1–2.2M 4-profile combinations,
+which remains feasible on a single core in a few minutes.
 
 Usage:
     python -m router.experiments.select_profiles \
         --model-key 9B \
-        --data-dir data/intervention_modes/b4_021_attn_contr
+        --data-dir data/022-balanced-attention-hybrid
 
     python -m router.experiments.select_profiles \
         --model-key OLMO \
-        --data-dir data/intervention_modes/b4_021_attn_contr
+        --data-dir data/022-balanced-block-hybrid
 
 Optional flags:
     --top-n              Number of top sets to report (default: 20)

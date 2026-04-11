@@ -1,31 +1,40 @@
 ## Router
 
+**Router is currently exploratory research software. The benchmark work in this
+repo uses router artifacts and profile-selection experiments, but routing
+itself is not yet a finished headline contribution. The stable result today is
+that prompt-level profile heterogeneity is real; online policy learning over
+that heterogeneity remains ongoing work.**
+
 `router` selects gain intervention profiles for hybrid language models at
 inference time. Given an incoming prompt, it runs a baseline forward pass
 (g=1.0), extracts features from the model's internal state, and routes the
-prompt to the most advantageous of a small set of pre-selected gain profiles —
-or to no intervention at all.
+prompt to one of a small set of pre-selected gain profiles — or to no
+intervention at all.
 
-The package targets the **attention_contribution** intervention mode
-exclusively. It operates on the same model backends as `signal_lab` but serves
-a different purpose: where `signal_lab` sweeps the full profile × prompt space
-to map the intervention response surface, `router` exploits that map to make
-per-prompt decisions.
+The package now supports both major intervention regimes used in the study:
+
+- `attention_contribution` for the Qwen balanced-attention experiments
+- `block_output` for the OLMO balanced-block experiments
+
+It operates on the same model backends as `signal_lab` but serves a different
+purpose: where `signal_lab` sweeps the full profile × prompt space to map the
+intervention response surface, `router` uses that map to study profile
+selection and prompt-conditional control.
 
 ### Why routing matters
 
-No single gain profile is universally best. The b4_021 attention-contribution
-data shows that optimal intervention varies by prompt: `edges_narrow` yields
-+0.45 delta_p on code comprehension prompts for Qwen 9B but damages
-long-range retrieval. `late_boost_1.5` helps cultural memorization but does
-nothing for numerical reasoning. A fixed profile must compromise; a router can
-specialize.
+No single gain profile is universally best. The balanced 022 sweeps and the
+030 benchmark runs show that optimal intervention varies by prompt, task, and
+architecture. Fixed profiles can help, but prompt-level oracle selection is
+consistently stronger and the winning profile distributions do not collapse to
+a single geometry.
 
-The intervention response also varies by architecture. Qwen 3.5 (pre-norm)
-and OLMo Hybrid (post-norm) have different productive gain ranges, different
-winning profile families, and different attention head signatures predicting
-intervention benefit. The router therefore maintains separate routing logic
-per model.
+The intervention response also varies by architecture. Qwen 3.5 (pre-norm,
+attention-contribution routing) and OLMo Hybrid (post-norm, block-output
+routing) have different productive gain ranges, different winning profile
+families, and different sensing signatures. The router therefore maintains
+separate artifacts per model and intervention mode.
 
 ### Architecture
 
@@ -34,13 +43,12 @@ router/
   README.md
   __init__.py
   sensing.py            Baseline forward pass, feature extraction
-  qwen_router.py        Qwen 3.5 routing: profile selection classifier
-  olmo_router.py        OLMo Hybrid routing: profile selection classifier
   profiles.py           Profile set definitions (4 profiles per model)
-  evaluate.py           Evaluation harness: oracle vs routed vs fixed vs baseline
+  pipeline.py           Runtime helper functions for routed/fixed evaluation
+  router.py             Artifact-backed routing classifier
 
   experiments/
-    bistate_router.py  Binary off/on baseline using only PCA PC1/PC2
+    bistate_router.py   Binary off/on baseline using only PCA PC1/PC2
     select_profiles.py  Combinatorial search for optimal 4-profile sets
     score_profile_sets.py
                         Two-stage ranking: oracle shortlist, then CV router scoring
@@ -66,54 +74,42 @@ router/
 
 ### Profile selection
 
-Each model has 4 intervention profiles chosen for **separability**, not just
-raw effect size. The goal is to maximize routed performance across the full
-prompt distribution, which means choosing profiles that each dominate in
-different regions of the feature space.
+Each model uses a small intervention set chosen for **separability**, not just
+raw effect size. The goal is to maximize prompt-level oracle utility with a set
+whose members dominate in different regions of the response surface.
 
-In current experiments this is a two-stage process:
+In the current 030 study protocol, `select_profiles.py` is run directly under a
+matched separable objective with `--max-constants 1`, and the saved selection
+artifacts are treated as the methodological receipt for each model.
 
-1. `select_profiles.py` finds high-value candidate sets by oracle-routed
-   performance, with optional constraints on coverage, class usage, within-set
-   correlation, and number of constant profiles.
-2. `score_profile_sets.py` re-ranks the top candidate sets by actual
-   cross-validated routing performance using the same PCA/scalar baseline
-   features that the deployed router will see.
+The candidate pool is discovered from valid non-baseline rows in
+`analysis_joined_long.csv`. The nominal balanced sweep library is shared across
+models, but the usable candidate count can differ if some model/profile rows
+are invalid at analysis time. In the current 022 data this yields:
 
-For Qwen 9B, the b4_021 data shows distinct intervention regimes:
-code/numerical prompts respond to high-edge profiles, reasoning-tracking
-prompts respond to early-boost, retrieval/memorization prompts respond to
-gentle late-boost, and ~20% of prompts are better left at baseline. The 4
-profiles are selected to cover these regimes with minimal overlap.
+- Qwen 9B: 87 usable non-baseline profiles
+- OLMO: 86 usable non-baseline profiles
 
-For OLMo Hybrid, intervention effects are smaller but more niche-specific.
-Profile selection focuses on the task × profile pairings where intervention
-produces reliable improvement (code × triad_odd, retrieval × spike_p5,
-structural × bowl, tracking × bookend_suppress).
-
-The profile sets are determined by a combinatorial search over all C(78,4)
-candidate sets, scored by oracle-routed mean delta_p at the prompt level.
+The OLMO count is lower because very-high-gain `constant_3` rows are invalid in
+the joined analysis and therefore drop out of the effective candidate pool.
 
 ### Sensing features
 
 The baseline forward pass provides the features the classifier trains on.
 The primary signal is per-head attention entropy at each softmax attention
-layer — the same data that produces the scout head rankings in `signal_lab`
-analysis. PCA analysis of these vectors shows that PC1 alone (72.7% of
-variance for 9B, 59.4% for OLMO) strongly predicts intervention sensitivity:
-high-PC1 prompts barely respond to any intervention, while low/mid-PC1
-prompts show large, profile-dependent effects.
+layer, paired with scalar output-distribution features such as final entropy,
+margin, and baseline target probability.
 
-The classifier uses a PCA projection of the entropy vector (first 5–10
-components) plus scalar output-distribution features. This keeps the feature
-dimension well below the training set size (1,070 prompts from battery 4).
+The classifier uses a PCA projection of the entropy vector (typically the first
+5–10 components) plus those scalar features. This keeps the feature dimension
+well below the training set size (1,070 prompts in the current balanced battery).
 
 ### Training and evaluation
 
-The routing classifier is trained on b4_021 data: for each of the 1,070
-prompts, we know the delta_p under all 78 profiles. Given the selected
-4-profile set, each prompt's label is the profile (or "off") that maximizes
-delta_p. Training uses cross-validation to estimate generalization.
+The routing classifier is trained on balanced sweep analysis data: for each of
+the 1,070 prompts, we know the delta_p under the valid tested profiles. Given
+the selected 4-profile set, each prompt's label is the profile (or "off") that
+maximizes delta_p. Training uses cross-validation to estimate generalization.
 
 Performance is reported as:
 
@@ -124,8 +120,9 @@ Performance is reported as:
 - **Baseline:** no intervention (delta_p = 0 everywhere)
 
 The gap between oracle and routed measures how much routing signal the
-classifier captures. The gap between routed and best-fixed measures the
-practical value of routing over a static intervention.
+classifier captures. In the current benchmark study this is still exploratory:
+the benchmark contribution comes from fixed-profile effects and prompt-level
+oracle headroom, not from claiming routing is already solved.
 
 Before training the full multiclass router, `bistate_router.py` provides a
 scientifically cleaner baseline: route between `off` and a single fixed
