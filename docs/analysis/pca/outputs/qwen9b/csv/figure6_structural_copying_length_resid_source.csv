@@ -1,0 +1,175 @@
+prompt_id,type,source,winner,prompt,target,tier,tokens_approx,qwen_token_count,char_len,length_resid_pc1,length_resid_pc2,length_resid_pc3,pc1,pc2,pc3
+sc_gen_mirror_0064,structural_copying,gen_mirror,off,12-1212-121212-12121212-1212121212-1212121212-12121212-121212-1212-," 12",short,1,,67,-18.925391,5.705085,2.887333,-12.936349,0.782508,0.081708
+sc_gen_mirror_0069,structural_copying,gen_mirror,off,pq|pqpq|pqpqpq|pqpqpqpq|pqpqpqpqpq|pqpqpqpqpq|pqpqpqpq|pqpqpq|pqpq|," pq",short,1,,67,-12.055349,5.432272,1.309173,-6.297706,-0.806633,0.991606
+sc_gen_mirror_0065,structural_copying,gen_mirror,off,12|1212|121212|12121212|12121212|121212|1212|," 12",short,1,,45,-11.57442,4.975123,1.489795,-5.497676,0.016472,1.015106
+sc_gen_delim_0050,structural_copying,gen_delim,constant_2.6,<123> ; <123> ; <123> ; <123> ; <123> ; <123,>,short,14,,44,-8.070387,4.149855,0.389497,-3.33156,0.162092,1.871022
+sc_gen_mirror_0066,structural_copying,gen_mirror,off,12-1212-121212-121212-1212-," 12",short,1,,27,-9.640468,2.929882,2.39426,-3.316564,0.984315,-0.597572
+sc_gen_delim_0047,structural_copying,gen_delim,constant_2.6,{123} {123} {123} {123} {123} {123,},short,7,,34,-8.671157,3.966042,1.464632,-3.173816,0.159458,0.705912
+sc_gen_mirror_0071,structural_copying,gen_mirror,constant_2.6,ab-abab-ababab-abababab-ababababab-ababababab-abababab-ababab-abab-," ab",short,1,,67,-9.737177,1.001314,1.255403,-3.135786,2.446049,-0.434455
+sc_gen_struct_0026,structural_copying,gen_struct,constant_2.6,"Q: What is 2+2? A: 4
+Q: What is 3+3? A: 6
+Q: What is 5+5? A:"," 10",short,22,,60,-6.744556,2.080557,0.867338,-3.0334,0.42764,0.096366
+sc_gen_delim_0044,structural_copying,gen_delim,late_boost_bal_0.60,(pq) | (pq) | (pq) | (pq) | (pq) | (pq,),short,14,,38,-7.313851,1.680041,1.916512,-2.547768,0.964018,-0.825703
+sc_gen_mirror_0063,structural_copying,gen_mirror,off,12|1212|121212|121212|1212|," 12",short,1,,27,-8.589194,2.89494,1.589771,-2.163929,1.083507,0.197595
+sc_gen_num_seq_0016,structural_copying,gen_num_seq,constant_2.6,"36; 39; 42; 45; 48; 51; 54; "," 57",short,9,,28,-5.840233,3.484934,3.883755,-0.988669,-1.258967,-2.133345
+sc_gen_delim_0042,structural_copying,gen_delim,constant_2.6,<k9> ; <k9> ; <k9> ; <k9> ; <k9,>,short,11,,31,-5.375462,2.767836,1.383949,-0.318226,0.095856,0.19126
+sc_gen_num_seq_0015,structural_copying,gen_num_seq,off,"35, 36, 37, 38, 39, 40, "," 41",short,7,,24,-5.00783,2.874493,3.466115,0.257974,-0.701236,-1.85147
+sc_gen_mirror_0070,structural_copying,gen_mirror,off,pq|pqpq|pqpqpq|pqpqpq|pqpq|," pq",short,1,,27,-5.948981,2.602909,1.052357,0.265263,0.269792,0.235953
+sc_gen_word_list_0096,structural_copying,gen_word_list,off,"List of tools: ladder, chisel, saw, mallet, rake, drill,"," wrench",short,11,,56,-4.441328,1.348894,3.215103,0.616566,0.375908,-2.177392
+sc_gen_num_seq_0019,structural_copying,gen_num_seq,constant_2.6,"15; 16; 17; 18; 19; 20; "," 21",short,7,,24,-4.492261,3.249605,3.995975,0.67541,-1.203135,-2.212443
+sc_gen_word_list_0033,structural_copying,gen_word_list,triad_odd_bal_0.45,"List of tools: hammer, chisel, rake, ladder, mallet, drill,"," pliers",short,11,,59,-4.268233,1.486087,3.384614,0.774039,0.238785,-2.276246
+sc_gen_word_list_0030,structural_copying,gen_word_list,triad_odd_bal_0.45,"Fruits = apple, papaya, banana, lemon, elderberry, grape,"," plum",short,10,,57,-4.366041,1.028077,2.977215,0.894036,0.691422,-2.088661
+sc_gen_struct_0025,structural_copying,gen_struct,off,"Item: snow, Color: black
+Item: sky, Color: green
+Item: rose, Color:"," black",short,14,,67,-3.419281,1.068706,-1.586776,1.562181,1.184659,2.075355
+sc_gen_delim_0045,structural_copying,gen_delim,late_boost_bal_0.60,(123)  (123)  (123)  (123,),short,5,,25,-3.997126,2.008986,1.209803,1.81959,0.31269,-0.043391
+sc_gen_delim_0049,structural_copying,gen_delim,late_boost_bal_0.60,(123) ; (123) ; (123) ; (123,),short,9,,28,-3.422891,2.550764,-0.201462,1.939531,0.081635,1.483352
+sc_gen_mirror_0072,structural_copying,gen_mirror,off,xy|xyxy|xyxyxy|xyxyxy|xyxy|," xy",short,1,,27,-4.198676,2.165067,1.666296,1.983919,0.029739,-0.525583
+sc_gen_alpha_seq_0006,structural_copying,gen_alpha_seq,constant_2.6,"Q, R, S, T, U, V, W, "," X",short,9,,21,-3.387446,0.456086,2.554609,2.031969,0.871554,-1.988364
+sc_gen_num_seq_0018,structural_copying,gen_num_seq,off,"43, 45, 47, 49, 51, "," 53",short,6,,20,-3.140134,2.08161,3.640708,2.210614,-0.818446,-2.511018
+sc_gen_mirror_0067,structural_copying,gen_mirror,off,pq:pqpq:pqpqpq:pqpqpq:pqpq:," pq",short,1,,27,-4.44823,0.137195,1.391807,2.260216,2.077072,-0.839142
+sc_gen_word_list_0038,structural_copying,gen_word_list,off,"Animals -> deer, fish, frog, goat, cat, wolf,"," otter",short,10,,45,-3.055807,0.241351,3.377917,2.327595,1.020677,-2.712525
+sc_gen_struct_0023,structural_copying,gen_struct,late_boost_bal_0.60,"Planet=Earth; Moon=Moon
+Planet=Mars; Moon=Deimos
+Planet=Jupiter; Moon:"," Io",short,7,,70,-2.990571,2.184615,1.891748,2.349508,-0.559641,-0.853465
+sc_gen_delim_0046,structural_copying,gen_delim,constant_2.6,<k9>  <k9>  <k9>  <k9,>,short,5,,21,-3.431361,1.939639,1.243017,2.417477,0.307874,-0.064932
+sc_gen_struct_0024,structural_copying,gen_struct,edges_narrow_bal_0.55,"Key=beta Value=7
+Key=beta Value=5
+Key=gamma Value:"," 7",short,7,,50,-2.997966,2.53909,1.042854,2.43644,-0.438759,0.180154
+sc_gen_num_seq_0013,structural_copying,gen_num_seq,constant_2.6,"25; 26; 27; 28; 29; "," 30",short,6,,20,-2.990089,1.860958,3.914245,2.52327,-0.404237,-2.660155
+sc_gen_struct_0029,structural_copying,gen_struct,late_boost_bal_0.60,"Planet=Earth; Moon=Moon
+Planet=Mars; Moon=Phobos
+Planet=Jupiter; Moon:"," Io",short,7,,70,-2.620413,2.462736,1.719714,2.664147,-0.844085,-0.58947
+sc_gen_struct_0028,structural_copying,gen_struct,edges_narrow_bal_0.55,"Key=delta Value=3
+Key=beta Value=3
+Key=delta Value:"," 4",short,7,,51,-2.768253,2.668116,0.15471,2.669303,-0.467039,1.030273
+sc_gen_table_0097,structural_copying,gen_table,off,"id,name,score
+1,Ada,89
+2,Bo,97
+3,Di,"," 94",short,5,,36,-2.672599,2.542122,0.194934,2.91331,-0.626907,0.794443
+sc_gen_mirror_0068,structural_copying,gen_mirror,late_boost_bal_0.60,ab:abab:ababab:ababab:abab:," ab",short,1,,27,-3.331424,1.373455,1.009908,3.068075,0.705862,-0.176283
+sc_gen_delim_0098,structural_copying,gen_delim,constant_2.6,<k9> ; <k9> ; <k9> ; <k9,>,short,9,,24,-2.132813,2.349614,0.455811,3.196708,-0.176594,0.805034
+sc_gen_struct_0027,structural_copying,gen_struct,edges_narrow_bal_0.55,"Key=gamma Value=8
+Key=epsilon Value=7
+Key=delta Value:"," 4",short,7,,54,-2.015007,2.583539,1.185727,3.340893,-0.813921,0.016209
+sc_gen_table_0061,structural_copying,gen_table,off,"id,name,score
+1,Fay,91
+2,Eli,73
+3,Cy,"," 98",short,5,,37,-2.250124,2.523057,-0.001434,3.396537,-0.54353,1.033248
+sc_gen_table_0059,structural_copying,gen_table,off,"id,name,score
+1,Ada,86
+2,Eli,78
+3,Bo,"," 74",short,5,,37,-2.22,2.116542,0.671779,3.448039,-0.379771,0.256337
+sc_gen_word_list_0037,structural_copying,gen_word_list,edges_narrow_bal_0.55,"Fruits = lemon, kiwi, banana, date, plum,"," apple",short,9,,41,-2.025585,0.152998,2.936135,3.478418,0.911217,-2.372578
+sc_gen_table_0055,structural_copying,gen_table,off,"id,name,score
+1,Bo,91
+2,Ada,97
+3,Eli,"," 77",short,5,,37,-2.152723,2.581496,-0.479217,3.546883,-0.436111,1.537633
+sc_gen_word_list_0031,structural_copying,gen_word_list,off,"List of animals: bear, bird, wolf, cat, horse,"," frog",short,10,,46,-1.756452,0.216492,2.973553,3.639815,0.852858,-2.344653
+sc_gen_table_0053,structural_copying,gen_table,off,"key=beta value=2
+key=gamma value=10
+key=alpha value="," 11",short,7,,52,-1.762594,1.206669,0.120261,3.762508,0.129524,0.332457
+sc_gen_alpha_seq_0002,structural_copying,gen_alpha_seq,late_boost_bal_0.60,"E, F, G, H, I, J, K, L, "," M",short,10,,24,-1.364815,0.508988,3.438688,3.811048,0.139482,-2.841575
+sc_gen_word_list_0093,structural_copying,gen_word_list,off,"Countries -> France, India, Peru, Egypt, Italy, Spain,"," Kenya",short,10,,54,-1.452733,0.428743,3.437505,3.8353,0.443892,-2.741067
+sc_gen_table_0062,structural_copying,gen_table,off,"key=gamma value=10
+key=alpha value=4
+key=delta value="," 6",short,7,,53,-1.386325,2.069292,-0.790711,4.036428,-0.463898,1.462247
+sc_gen_struct_0022,structural_copying,gen_struct,constant_2.6,"Name: Eve
+Age: 60
+City: Tokyo
+
+Name: Jack
+Age: 35
+City:"," Tokyo",short,14,,55,-0.120013,2.554767,-0.884134,4.176559,-1.602211,1.504027
+sc_gen_num_seq_0095,structural_copying,gen_num_seq,off,"31, 41, 51, 61, "," 71",short,5,,16,-1.072736,1.023745,2.88163,4.560296,-0.350751,-2.248599
+sc_gen_word_list_0036,structural_copying,gen_word_list,off,"Tools -> wrench, shovel, ladder, chisel, drill,"," mallet",short,9,,47,-0.764713,0.950117,1.984831,4.645429,0.216113,-1.192608
+sc_gen_table_0052,structural_copying,gen_table,off,"code	count
+CZ	23
+DU	27
+BY	"," 25",short,9,,26,-0.460159,1.431799,0.077487,4.970774,0.116165,0.689059
+sc_gen_word_list_0032,structural_copying,gen_word_list,off,"List of tools: pliers, shovel, wrench, saw,"," chisel",short,9,,43,-0.286424,0.317945,1.918331,5.226084,0.617422,-1.366415
+sc_gen_num_seq_0020,structural_copying,gen_num_seq,off,"30 40 50 60 70 "," 80",short,6,,15,-0.524951,1.352005,3.093599,5.228784,-0.05817,-1.944332
+sc_gen_alt_0076,structural_copying,gen_alt,late_boost_bal_0.60,"X | dog | X | dog | X | dog | "," dog",short,15,,30,0.605466,0.463168,2.175958,5.233053,-0.047903,-1.668781
+sc_gen_table_0056,structural_copying,gen_table,off,"code	count
+AX	29
+BY	11
+CZ	"," 12",short,9,,26,-0.030249,1.291827,0.020522,5.366935,0.019069,0.616595
+sc_gen_alpha_seq_0010,structural_copying,gen_alpha_seq,edges_narrow_bal_0.55,"F; G; H; I; J; K; L; M; "," N",short,10,,24,0.308904,1.639337,1.89083,5.38326,-0.763552,-1.026884
+sc_gen_word_list_0039,structural_copying,gen_word_list,constant_2.6,"Animals = dog, cat, lion, otter,"," bear",short,7,,32,-0.393269,-0.294478,1.980918,5.405041,0.987618,-1.755172
+sc_gen_delim_0051,structural_copying,gen_delim,constant_2.6,(k9) (k9) (k9) (k9,),short,5,,18,-0.403889,0.419863,1.313615,5.703385,0.938243,-0.672555
+sc_gen_table_0057,structural_copying,gen_table,off,"code	count
+EV	16
+CZ	20
+BY	"," 17",short,9,,26,0.712183,1.725759,0.484643,5.938893,-0.702329,0.26601
+sc_gen_indent_0091,structural_copying,gen_indent,off,"record:
+  color: map
+  color: blue
+  color:"," Paris",short,7,,43,0.348178,0.620066,-0.779375,6.089267,0.508599,1.007244
+sc_gen_num_seq_0021,structural_copying,gen_num_seq,constant_2.6,"24; 27; 30; 33; "," 36",short,5,,16,0.984205,0.75025,3.872561,6.472026,-0.99657,-3.391201
+sc_gen_table_0060,structural_copying,gen_table,constant_2.6,"A | 5 | white
+B | 2 | green
+D | 4 |"," yellow",short,18,,35,2.595699,1.952015,-1.305737,6.739819,-1.138738,1.933519
+sc_gen_alt_0083,structural_copying,gen_alt,off,"X, 1, X, 1, X | "," X",short,7,,16,1.103695,-0.367646,1.727926,6.869861,0.684008,-1.612893
+sc_gen_word_list_0034,structural_copying,gen_word_list,constant_2.6,"Animals -> frog, dog, goat, wolf,"," bird",short,7,,33,1.096679,-0.886675,2.314289,7.026633,1.23002,-2.201572
+sc_gen_indent_0090,structural_copying,gen_indent,late_boost_bal_0.60,"Parts:
+  - epsilon
+  - gamma
+  -"," delta",short,7,,32,1.230513,0.026696,0.308353,7.105431,0.837359,-0.038231
+sc_gen_indent_0087,structural_copying,gen_indent,off,"I.	Ship
+II.	Plan
+III.	"," Build",short,6,,22,1.359828,0.883456,-0.228388,7.204416,0.172155,0.704977
+sc_gen_alpha_seq_0009,structural_copying,gen_alpha_seq,constant_2.6,"S, T, U, V, W, "," X",short,6,,15,1.446908,-0.041181,2.491973,7.321169,0.438725,-2.078192
+sc_gen_indent_0085,structural_copying,gen_indent,constant_2.6,"Parts:
+  - beta
+  - gamma
+  -"," alpha",short,7,,29,1.650662,0.172755,-0.169046,7.503973,0.683645,0.426616
+sc_gen_indent_0089,structural_copying,gen_indent,off,"I.	Review
+II.	Plan
+III.	"," Test",short,6,,24,1.856169,1.34081,0.189383,7.545913,-0.475996,0.428501
+sc_gen_indent_0092,structural_copying,gen_indent,late_boost_bal_0.60,"Items:
+  - delta
+  - beta
+  -"," gamma",short,7,,29,1.973052,0.475618,-0.069742,7.718977,0.254132,0.382197
+sc_gen_alt_0078,structural_copying,gen_alt,off,"A, 2, A, 2, A | "," A",short,7,,16,1.890662,-0.187779,0.4378,7.784927,0.843614,-0.237137
+sc_gen_word_list_0040,structural_copying,gen_word_list,constant_2.6,"Countries = China, Brazil, Kenya, Spain,"," India",short,7,,40,1.97451,-0.486489,2.53894,7.803172,0.664712,-2.292247
+sc_gen_indent_0086,structural_copying,gen_indent,late_boost_bal_0.60,"Items:
+  - gamma
+  - epsilon
+  -"," beta",short,7,,32,2.121015,0.10409,0.693736,7.831226,0.240606,-0.537615
+sc_gen_delim_0041,structural_copying,gen_delim,constant_2.6,<abc> <abc> <abc> <abc,>,short,5,,22,1.831489,0.275203,1.839474,7.881708,0.429091,-1.241806
+sc_gen_indent_0084,structural_copying,gen_indent,off,"I.	Review
+II.	Test
+III.	"," Plan",short,6,,24,2.005152,0.665097,-0.151555,7.916937,0.289975,0.609433
+sc_gen_alt_0082,structural_copying,gen_alt,off,"B, 1, B, 1, "," 1",short,5,,12,2.328487,0.772149,2.002228,7.982564,-0.777883,-1.605383
+sc_gen_table_0058,structural_copying,gen_table,constant_2.6,"D | 5 | red
+B | 4 | white
+C | 3 |"," blue",short,18,,33,4.038804,1.421156,-0.649938,8.136598,-1.323697,1.05245
+sc_gen_table_0054,structural_copying,gen_table,constant_2.6,"A | 8 | blue
+E | 5 | red
+C | 7 |"," green",short,18,,32,4.60359,1.404924,-0.778966,8.649854,-1.537185,1.073896
+sc_gen_alt_0094,structural_copying,gen_alt,constant_2.6,"Y | Q | Y | Q | Y | Q "," Q",short,14,,22,3.779274,-0.56159,1.923583,8.670574,0.129545,-1.849977
+sc_gen_word_list_0035,structural_copying,gen_word_list,off,"Colors -> silver, black, white, green,"," orange",short,7,,38,3.167614,-0.176761,2.316585,8.876661,0.08512,-2.020759
+sc_gen_num_seq_0011,structural_copying,gen_num_seq,off,"22 25 28 31 "," 34",short,5,,12,3.44079,0.447758,3.431211,9.028215,-1.07185,-3.040998
+sc_gen_num_seq_0017,structural_copying,gen_num_seq,off,"37, 39, 41, "," 43",short,3,,12,3.179191,0.235576,2.509265,9.039499,-0.801626,-2.378625
+sc_gen_num_seq_0014,structural_copying,gen_num_seq,constant_2.6,"39 | 42 | 45 | "," 48",short,7,,15,3.675746,0.2458,2.435284,9.04539,-0.95425,-2.303645
+sc_gen_num_seq_0012,structural_copying,gen_num_seq,off,"49, 52, 55, "," 58",short,3,,12,3.364311,0.421408,2.554905,9.179823,-1.013067,-2.365614
+sc_gen_indent_0088,structural_copying,gen_indent,off,"I.	Build
+II.	Test
+III.	"," Plan",short,6,,23,3.567512,0.691113,0.653547,9.272586,-0.523671,-0.303932
+sc_gen_alpha_seq_0008,structural_copying,gen_alpha_seq,constant_2.6,"N; O; P; Q; "," R",short,5,,12,4.202901,0.455437,1.34826,10.102219,-0.389215,-0.902107
+sc_gen_delim_0043,structural_copying,gen_delim,constant_2.6,<pq> <pq> <pq,>,short,3,,13,4.343608,-1.158538,0.84274,10.708254,0.788929,-1.1121
+sc_gen_delim_0048,structural_copying,gen_delim,constant_2.6,<abc> <abc> <abc,>,short,3,,16,4.895418,-0.751271,0.622621,11.370547,0.788011,-0.557959
+sc_gen_alpha_seq_0007,structural_copying,gen_alpha_seq,constant_2.6,"R | S | T | U | "," V",short,10,,16,6.733649,0.217329,1.874614,11.875099,-1.193117,-1.631178
+sc_gen_alt_0077,structural_copying,gen_alt,off,"B 2 B 2, "," 2",short,5,,9,6.64608,-1.615925,1.190029,12.821239,0.619174,-1.596353
+sc_gen_alt_0079,structural_copying,gen_alt,late_boost_bal_0.60,"red 2 red 2 red | "," red",short,7,,18,7.02322,-1.796834,1.481008,12.894962,0.430681,-2.035421
+sc_gen_alt_0081,structural_copying,gen_alt,off,"B, Q, B, Q, B "," B",short,6,,14,6.967258,-1.088104,0.099801,13.030019,0.433748,-0.322728
+sc_gen_alpha_seq_0000,structural_copying,gen_alpha_seq,constant_2.6,"U, V, W, "," X",short,3,,9,6.751612,-1.407193,1.728056,13.136676,0.441278,-1.974009
+sc_gen_alpha_seq_0004,structural_copying,gen_alpha_seq,off,"N, O, P, "," Q",short,3,,9,7.091529,-0.207085,1.646483,13.18142,-0.770222,-1.588244
+sc_gen_alt_0075,structural_copying,gen_alt,off,"B | blue | B | blue "," blue",short,9,,20,7.781353,-2.348067,1.201097,13.571365,0.874635,-1.88152
+sc_gen_alpha_seq_0003,structural_copying,gen_alpha_seq,off,"R | S | T | "," U",short,7,,12,8.010759,-1.18535,1.886494,13.729993,-0.341182,-2.162313
+sc_gen_alt_0074,structural_copying,gen_alt,late_boost_bal_0.60,"A Z A Z A, "," A",short,6,,11,8.642226,-1.926575,0.1579,14.791948,0.651266,-0.743936
+sc_gen_alt_0073,structural_copying,gen_alt,late_boost_bal_0.60,"X, dog, X, dog "," dog",short,5,,15,8.843544,-2.418118,1.631968,14.845464,0.118041,-2.624757
+sc_gen_alpha_seq_0001,structural_copying,gen_alpha_seq,off,"I J K L "," M",short,5,,8,11.402853,-2.494089,1.325142,17.595604,0.14187,-2.134911
+sc_gen_alpha_seq_0099,structural_copying,gen_alpha_seq,late_boost_bal_0.60,"M N O P "," Q",short,5,,8,11.495183,-2.334127,1.035529,17.694141,0.091706,-1.794552
+sc_gen_alt_0080,structural_copying,gen_alt,off,"A, Q, A "," A",short,3,,8,11.253005,-1.942174,0.546135,17.694546,0.040351,-1.152855
+sc_gen_alpha_seq_0005,structural_copying,gen_alpha_seq,off,"C D E F "," G",short,5,,8,12.035055,-1.578739,0.629879,18.125991,-0.525807,-1.150893
