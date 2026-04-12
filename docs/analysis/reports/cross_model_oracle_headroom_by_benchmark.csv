@@ -1,0 +1,9 @@
+benchmark,model,best_fixed_delta,oracle_delta,n
+ARC-Challenge,Qwen 9B,0.4,8.1,1172
+ARC-Challenge,Olmo Hybrid,-0.2,10.2,1172
+abstract_algebra,Qwen 9B,2.0,19.0,100
+abstract_algebra,Olmo Hybrid,-3.0,11.0,100
+college_math,Qwen 9B,1.0,15.0,100
+college_math,Olmo Hybrid,-1.0,19.0,100
+college_cs,Qwen 9B,-1.0,10.0,100
+college_cs,Olmo Hybrid,2.0,21.0,100
