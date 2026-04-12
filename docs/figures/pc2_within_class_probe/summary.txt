@@ -1,0 +1,8 @@
+PC2 within-class conditioning probe
+
+Matched baseline prompts: 1070
+- PC2 residuals are computed by regressing PC2 on PC1 and token count.
+- Within each task class, each proxy is residualized on token count only, then Spearman rho is computed against the class-matched PC2 residuals.
+
+mean_entropy_bits: weighted within-class rho = 0.0343; pooled partial rho = -0.3069; flagged classes = code_comprehension, cultural_memorized, domain_knowledge, factual_recall, factual_retrieval, structural_copying, syntactic_pattern.
+target_prob: weighted within-class rho = -0.0658; pooled partial rho = -0.2013; flagged classes = code_comprehension, domain_knowledge, factual_retrieval, reasoning_numerical, syntactic_pattern.

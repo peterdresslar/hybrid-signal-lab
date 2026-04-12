@@ -1,0 +1,15 @@
+PC2 difficulty probe summary
+
+Schema and baseline rows
+- Figure 6 main PCA uses raw baseline head-entropy features; it was not length-residualized at input time.
+- Baseline rows in verbose.jsonl are those with g_attention_scales == [1.0]*8.
+- Matched baseline prompt rows: 1070.
+
+Correlations
+- target_prob: raw Spearman rho=-0.1388 (p=5.21e-06), PC1-only residual rho=-0.1388 (p=5.21e-06), partial rho controlling PC1 and token count=-0.2013 (p=3.06e-11), n=1070.
+- target_rank: raw Spearman rho=0.1530 (p=4.96e-07), PC1-only residual rho=0.1530 (p=4.96e-07), partial rho controlling PC1 and token count=-0.0536 (p=0.0794), n=1070.
+- final_entropy_bits: raw Spearman rho=-0.1316 (p=1.58e-05), PC1-only residual rho=-0.1316 (p=1.58e-05), partial rho controlling PC1 and token count=-0.0149 (p=0.626), n=1070.
+- mean_entropy_bits: raw Spearman rho=-0.4506 (p=1.24e-54), PC1-only residual rho=-0.4506 (p=1.24e-54), partial rho controlling PC1 and token count=-0.3069 (p=8.89e-25), n=1070.
+
+Plot note
+- `pc2_difficulty_probe_residualized.png` plots residualized PC2 against residualized difficulty proxies.
