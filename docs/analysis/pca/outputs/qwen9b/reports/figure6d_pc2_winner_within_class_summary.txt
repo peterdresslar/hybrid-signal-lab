@@ -1,0 +1,8 @@
+Figure 6d summary
+Pooled η² of PC2 residual by winner: 0.1617
+Top classes by constant_2.6 winner fraction:
+- reasoning_numerical: frac=0.911, within-class η²=0.208
+- code_comprehension: frac=0.850, within-class η²=0.585
+- reasoning_tracking: frac=0.678, within-class η²=0.127
+- algorithmic: frac=0.625, within-class η²=0.500
+- structural_copying: frac=0.300, within-class η²=0.038

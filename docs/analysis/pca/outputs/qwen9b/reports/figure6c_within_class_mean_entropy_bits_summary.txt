@@ -1,0 +1,4 @@
+Figure 6c summary
+Weighted mean within-class rho: -0.0225
+Pooled partial rho: -0.3069
+Flagged classes: factual_recall, domain_knowledge, code_comprehension, structural_copying, syntactic_pattern, algorithmic, factual_retrieval, cultural_memorized

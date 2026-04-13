@@ -1,0 +1,10 @@
+source,display,n_prompts,centroid_pc1,centroid_pc2
+gen_alpha_seq,alpha seq,12,5.393924,-0.497549
+gen_alt,alternation,12,5.572022,-1.084791
+gen_delim,delimited,12,-2.645702,1.68317
+gen_indent,indent,9,1.790231,0.5533
+gen_mirror,mirror,10,-8.844931,2.921724
+gen_num_seq,number seq,12,-0.701999,1.502345
+gen_struct,structured,8,-2.959508,2.267766
+gen_table,table,12,-0.082041,1.855555
+gen_word_list,word list,13,-1.274753,0.332792

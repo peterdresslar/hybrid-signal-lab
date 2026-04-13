@@ -1,16 +1,28 @@
 # Hybrid Signal Lab
 
-A testbed for hybrid-model probing and collective-signal research, developed as a CAS capstone at Arizona State University (advisor: Prof. Bryan Daniels).
+Hybrid Signal Lab is a research codebase for probing hybrid-architecture language models with controlled gain interventions, building prompt batteries, and studying whether prompt-level model state can help predict when intervention will help. The project began as a CAS capstone at Arizona State University under the supervision of Prof. Bryan Daniels.
 
-This is a work in progress.
+At a high level, this repository is for:
 
-The current implemented stack is centered on `signal_lab`, which probes hybrid-architecture LLMs by applying gain intervention to the attention sublayer at inference time. The broader `colony` concept remains the future collective-signal layer that will eventually generate or adapt those interventions.
+- running baseline and intervened sweeps on hybrid models,
+- analyzing how prompt families separate under those sweeps,
+- benchmarking fixed intervention profiles and selected profile panels,
+- and experimenting toward eventual routing or collective-signal methods.
 
-The subject models are Qwen/Qwen3.5 and allenai/olmo-hybrid, both built on hybrid architectures that interleave Gated DeltaNet (GDN) layers with softmax attention layers in a 3:1 ratio. A gain vector *g* is applied as a multiplicative scalar to the attention sublayer contribution at each softmax attention layer. At *g* = 1.0 the model runs unmodified (baseline); deviations from 1.0 amplify or suppress the attention pathway relative to the feed-forward and residual stream, letting the system explore the response surface without retraining.
+The current experimental focus is on Qwen/Qwen3.5 and `allenai/olmo-hybrid`, both of which interleave Gated DeltaNet layers with softmax attention layers. The core intervention multiplies the attention pathway by a gain vector `g` at the attention-bearing layers. At `g = 1.0` the model runs unchanged; moving away from `1.0` amplifies or suppresses the attention contribution and exposes a measurable response surface without retraining.
 
-The gain can be applied in two modes. **Block-output mode** scales the entire decoder block output (attention + feed-forward + residual), which was the original implementation. **Attention-contribution mode** scales only the attention sublayer output at the residual add point, isolating the causal pathway the intervention targets. The two modes produce qualitatively different experimental results: attention-contribution mode yields 5–6× stronger effects on 9B, extends the productive gain range, and reveals task-dependent intervention patterns (particularly on code comprehension and numerical reasoning) that are invisible under block-output mode. The mode × architecture interaction is also significant — the pre-norm Qwen models respond strongly to attention-contribution intervention while the post-norm OLMo architecture constrains the intervention's leverage. See `signal_lab/README.md` for the full technical description of intervention modes and hook targets.
+This front-door README is intentionally brief. The detailed technical story lives in the module READMEs:
 
-See `docs/project_notes.md` for the latest information on the project's direction.
+- [signal_lab/README.md](signal_lab/README.md): core intervention runtime, sweep execution, hook behavior, and output schema.
+- [battery/README.md](battery/README.md): prompt battery construction and data organization.
+- [bench/README.md](bench/README.md): benchmark passes and evaluation workflow.
+- [router/README.md](router/README.md): profile selection, routing experiments, and current router artifacts.
+- [docs/analysis/README.md](docs/analysis/README.md): analysis outputs, diagnostics, and figure-generation organization.
+- [docs/figurelib/README.md](docs/figurelib/README.md): reusable plotting utilities.
+
+Additional project notes live in [docs/project_notes.md](docs/project_notes.md).
+
+This repository remains an active research workbench rather than a polished package. We expect to keep developing the ideas here, in some form, after the degree concludes in May 2026.
 
 ## Usage
 
