@@ -1,0 +1,26 @@
+{
+  "export_version": "v1",
+  "notes": {
+    "purpose": "Versioned source-of-truth exports for oracle winner analyses used in manuscript tables and figures.",
+    "olmo_block_collapse_policy": [
+      "constant_0.4",
+      "constant_0.55",
+      "constant_1.8",
+      "constant_2",
+      "constant_2.3",
+      "constant_2.6",
+      "constant_3",
+      "early_boost_bal_0.60",
+      "late_boost_bal_0.60"
+    ]
+  },
+  "sweep_winner_definitions": {
+    "full_library": "Compare baseline against all retained non-baseline profiles.",
+    "constant_only": "Compare baseline against retained constant profiles only.",
+    "target_rank_min": "Winner is the profile with minimum target_rank.",
+    "delta_target_prob_max": "Winner is the profile with maximum positive delta_target_prob, else baseline fallback."
+  },
+  "bench_winner_definitions": {
+    "selected_panel": "Oracle profiles recorded in benchmark oracle records; restricted to the deployed benchmark panel plus baseline."
+  }
+}
