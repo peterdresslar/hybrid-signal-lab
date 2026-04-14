@@ -174,6 +174,81 @@ class Agent:
 
         return result
 
+    def capture_sequence_states(
+        self,
+        prompt: str,
+        *,
+        prompt_id: str | None = None,
+        hidden_state_dtype: torch.dtype = torch.float16,
+        capture_attention_entropy: bool = True,
+    ) -> dict[str, Any]:
+        """Capture all-token layer-output hidden states for one prompt.
+
+        Returns CPU-resident tensors suitable for serialization:
+        - ``input_ids``: shape ``(N,)``
+        - ``attention_mask``: shape ``(N,)`` when available
+        - ``hidden_states``: shape ``(L+1, N, d)``
+        """
+        start_time = time.perf_counter()
+        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
+
+        with torch.no_grad():
+            outputs = self.model(
+                **inputs,
+                output_hidden_states=True,
+                output_attentions=capture_attention_entropy,
+            )
+
+        final_logits = outputs.logits[0, -1, :].float()
+        probs = torch.softmax(final_logits, dim=-1)
+        final_entropy_bits = -(probs * torch.log2(probs + 1e-10)).sum().item()
+
+        all_logits = outputs.logits[0, :, :].float()
+        all_probs = torch.softmax(all_logits, dim=-1)
+        mean_entropy_bits = (
+            -(all_probs * torch.log2(all_probs + 1e-10)).sum(dim=-1).mean().item()
+        )
+
+        raw_hidden_states = getattr(outputs, "hidden_states", None)
+        if raw_hidden_states is None:
+            raise RuntimeError("Model output did not include hidden_states.")
+
+        hidden_states = torch.stack(
+            [
+                hidden[0].detach().to(device="cpu", dtype=hidden_state_dtype)
+                for hidden in raw_hidden_states
+            ],
+            dim=0,
+        ).contiguous()
+
+        input_ids = inputs["input_ids"][0].detach().to(device="cpu")
+        attention_mask = None
+        if "attention_mask" in inputs:
+            attention_mask = inputs["attention_mask"][0].detach().to(device="cpu")
+
+        elapsed_time = time.perf_counter() - start_time
+
+        result: dict[str, Any] = {
+            "prompt_id": prompt_id if prompt_id else (prompt[:20] + "..."),
+            "model_type": getattr(self.model.config, "model_type", None),
+            "input_ids": input_ids,
+            "attention_mask": attention_mask,
+            "hidden_states": hidden_states,
+            "hidden_state_shape": list(hidden_states.shape),
+            "hidden_state_dtype": str(hidden_states.dtype),
+            "num_tokens": int(input_ids.shape[0]),
+            "num_layers_plus_embedding": int(hidden_states.shape[0]),
+            "hidden_size": int(hidden_states.shape[-1]),
+            "final_entropy_bits": final_entropy_bits,
+            "mean_entropy_bits": mean_entropy_bits,
+            "elapsed_time": elapsed_time,
+        }
+
+        if capture_attention_entropy:
+            result.update(self.backend.process_attention_entropy(outputs))
+
+        return result
+
     def score_target(
         self,
         prompt: str,
