@@ -6,6 +6,7 @@ import argparse
 import json
 import subprocess
 import traceback
+from datetime import datetime, UTC
 from pathlib import Path
 from typing import Any
 
@@ -101,7 +102,8 @@ def resolve_prompts(
 
 def log(message: str, *, verbosity: int, level: int = 1) -> None:
     if verbosity >= level:
-        print(message)
+        timestamp = datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S UTC")
+        print(f"[{timestamp}] {message}", flush=True)
 
 
 def build_state_filename(index: int, prompt_id: str) -> str:
@@ -111,6 +113,14 @@ def build_state_filename(index: int, prompt_id: str) -> str:
 def write_json(path: Path, payload: dict[str, Any]) -> None:
     with open(path, "w", encoding="utf-8") as file_handle:
         json.dump(payload, file_handle, indent=2)
+
+
+def iso_now() -> str:
+    return datetime.now(UTC).isoformat()
+
+
+def update_status(path: Path, payload: dict[str, Any]) -> None:
+    write_json(path, payload)
 
 
 def main() -> None:
@@ -238,6 +248,7 @@ def main() -> None:
     agent = Agent.from_model_key(args.model_key, runtime_device)
 
     manifest_path = output_dir / "manifest.json"
+    status_path = output_dir / "status.json"
     records_path = output_dir / "records.jsonl"
     errors_path = output_dir / "errors.jsonl"
     save_dtype = VALID_DTYPES[args.dtype]
@@ -267,22 +278,61 @@ def main() -> None:
         "hidden_state_dtype": args.dtype,
         "completed_prompts": 0,
         "failed_prompts": 0,
+        "created_at": iso_now(),
     }
     manifest.update(resolve_repo_version_metadata())
     write_json(manifest_path, manifest)
 
+    status: dict[str, Any] = {
+        "run_kind": "sequence_collection_status",
+        "stage": "initializing",
+        "created_at": iso_now(),
+        "updated_at": iso_now(),
+        "model_selector": args.model_key,
+        "model": agent.backend.model_name,
+        "output_dir": str(output_dir),
+        "status_file": str(status_path),
+        "manifest_file": str(manifest_path),
+        "records_file": str(records_path),
+        "errors_file": str(errors_path),
+        "num_prompts_planned": len(prompts),
+        "completed_prompts": 0,
+        "failed_prompts": 0,
+        "current_prompt_index": None,
+        "current_prompt_id": None,
+        "last_completed_prompt_id": None,
+        "last_completed_state_file": None,
+        "last_error_prompt_id": None,
+        "last_error": None,
+    }
+    update_status(status_path, status)
+
     completed = 0
     failed = 0
+
+    log(
+        f"Telemetry files: status={status_path.name}, manifest={manifest_path.name}, "
+        f"records={records_path.name}, errors={errors_path.name}",
+        verbosity=args.verbosity,
+    )
 
     with open(records_path, "w", encoding="utf-8") as records_file, open(
         errors_path, "w", encoding="utf-8"
     ) as errors_file:
+        status["stage"] = "collecting"
+        status["updated_at"] = iso_now()
+        update_status(status_path, status)
         for index, prompt in enumerate(prompts, start=1):
             log(
                 f"[{index}/{len(prompts)}] Collecting {prompt.id}",
                 verbosity=args.verbosity,
                 level=1,
             )
+            status["stage"] = "capturing_prompt"
+            status["updated_at"] = iso_now()
+            status["current_prompt_index"] = index
+            status["current_prompt_id"] = prompt.id
+            update_status(status_path, status)
             try:
                 captured = agent.capture_sequence_states(
                     prompt.prompt_text,
@@ -293,6 +343,10 @@ def main() -> None:
 
                 state_filename = build_state_filename(index, prompt.id)
                 state_path = states_dir / state_filename
+                status["stage"] = "saving_state"
+                status["updated_at"] = iso_now()
+                status["pending_state_file"] = f"states/{state_filename}"
+                update_status(status_path, status)
                 state_payload = {
                     "prompt_id": prompt.id,
                     "prompt_text": prompt.prompt_text,
@@ -315,6 +369,9 @@ def main() -> None:
                 torch.save(state_payload, state_path)
                 state_num_bytes = state_path.stat().st_size
 
+                status["stage"] = "writing_record"
+                status["updated_at"] = iso_now()
+                update_status(status_path, status)
                 record = {
                     "prompt_id": prompt.id,
                     "prompt_type": prompt.type,
@@ -338,6 +395,20 @@ def main() -> None:
                 records_file.write(json.dumps(record) + "\n")
                 records_file.flush()
                 completed += 1
+                manifest["completed_prompts"] = completed
+                manifest["failed_prompts"] = failed
+                write_json(manifest_path, manifest)
+
+                status["stage"] = "prompt_complete"
+                status["updated_at"] = iso_now()
+                status["completed_prompts"] = completed
+                status["failed_prompts"] = failed
+                status["last_completed_prompt_id"] = prompt.id
+                status["last_completed_state_file"] = f"states/{state_filename}"
+                status["last_error_prompt_id"] = None
+                status["last_error"] = None
+                status.pop("pending_state_file", None)
+                update_status(status_path, status)
 
                 log(
                     f"  saved {state_filename} | tokens={captured['num_tokens']} | "
@@ -355,6 +426,16 @@ def main() -> None:
                 }
                 errors_file.write(json.dumps(error_record) + "\n")
                 errors_file.flush()
+                manifest["completed_prompts"] = completed
+                manifest["failed_prompts"] = failed
+                write_json(manifest_path, manifest)
+                status["stage"] = "prompt_error"
+                status["updated_at"] = iso_now()
+                status["completed_prompts"] = completed
+                status["failed_prompts"] = failed
+                status["last_error_prompt_id"] = prompt.id
+                status["last_error"] = repr(exc)
+                update_status(status_path, status)
                 log(
                     f"  [ERROR] {prompt.id}: {exc}",
                     verbosity=args.verbosity,
@@ -363,7 +444,16 @@ def main() -> None:
 
     manifest["completed_prompts"] = completed
     manifest["failed_prompts"] = failed
+    manifest["completed_at"] = iso_now()
     write_json(manifest_path, manifest)
+    status["stage"] = "complete"
+    status["updated_at"] = iso_now()
+    status["completed_prompts"] = completed
+    status["failed_prompts"] = failed
+    status["current_prompt_index"] = None
+    status["current_prompt_id"] = None
+    status.pop("pending_state_file", None)
+    update_status(status_path, status)
 
     log(
         f"Sequence collection complete: {completed} succeeded, {failed} failed. "
