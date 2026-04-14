@@ -73,6 +73,7 @@ The main subtrees are:
 
 - `signal_lab.signal_lab`: one-off probing CLI for a single prompt
 - `signal_lab.sweep`: batch runner over cartridges or battery selections
+- `signal_lab.collect_sequences`: baseline-only hidden-state collector for router / representation follow-on work
 - `signal_lab.sweep_cartridges`: named gain-profile sweep specs
 - `signal_lab.sweep_analyze`: summarize one sweep run directory
 - `signal_lab.run_analyze`: analyze every model subfolder under a run collection (see below)
@@ -189,6 +190,83 @@ uv run -m signal_lab.signal_lab \
 - `--mimic-hybrid`: convenience alias for `--target-attention-layers every_4th_layer`
 - `--device`: `auto`, `cuda`, `mps`, or `cpu`
 - `--output-path`: optional override for the summary JSON location
+- `--data-dir`: optional override for `[DATA_DIR]`
+
+## Collecting Sequence States
+
+Use `signal_lab.collect_sequences` when you want **baseline-only** per-prompt
+sequence-state artifacts rather than a gain-profile sweep.
+
+This command does **not** run interventions across many profiles. It runs one
+forward pass per prompt at baseline (`g = 1.0`) and saves:
+
+- tokenized prompt inputs
+- all-token layer-output hidden states from `outputs.hidden_states`
+- optional derived final-token attention-entropy summaries
+- run metadata and per-prompt record files
+
+This path is intended for follow-on router and representation work where the
+current sweep outputs are too lossy because they summarize only the final prompt
+position.
+
+### Basic Example
+
+```bash
+uv run -m signal_lab.collect_sequences \
+  --prompt-battery battery/data/battery_4 \
+  --model-key 9B \
+  --output-dir [DATA_DIR]/outputs/signal_lab/sequence_runs/qwen9b_b4 \
+  --device cuda
+```
+
+### Smoke / Pilot Example
+
+```bash
+uv run -m signal_lab.collect_sequences \
+  --SMOKE \
+  --verbosity 2 \
+  --prompt-battery battery/data/battery_4 \
+  --model-key OLMO \
+  --output-dir [DATA_DIR]/outputs/signal_lab/sequence_runs/olmo_b4_smoke \
+  --device cuda
+```
+
+`--SMOKE` is a pilot shortcut that keeps only the first few prompts so you can
+measure runtime, file sizes, and cluster behavior before launching a full
+collection run.
+
+### Output Layout
+
+`collect_sequences` writes into the explicit `--output-dir` you provide. That
+directory contains:
+
+- `manifest.json` — run-level metadata and collection summary
+- `status.json` — live stage/progress telemetry for long-running jobs
+- `records.jsonl` — one JSON record per successfully collected prompt
+- `errors.jsonl` — prompt-level failures if any occur
+- `states/` — one `.pt` file per prompt containing the saved tensors
+
+Each state file contains the prompt metadata plus:
+
+- `input_ids`
+- `attention_mask` when available
+- `hidden_states` with shape `(num_layers_plus_embedding, num_tokens, hidden_size)`
+- optional derived attention-entropy summaries
+
+### Useful Flags
+
+- `--prompt-battery`: required battery directory or JSON collection
+- `--model-key`: required registered model key such as `9B` or `OLMO`, or a raw HF model id
+- `--output-dir`: required destination directory; must not already exist and be non-empty
+- `--device`: `auto`, `cuda`, `mps`, or `cpu`
+- `--dtype`: serialization dtype for saved hidden states (`float16` or `bfloat16`)
+- `--verbosity`: progress logging level (`0`, `1`, or `2`)
+- `--SMOKE`: pilot mode; limits collection to the first few prompts
+- `--max-prompts`: explicit cap after filtering
+- `--prompt-id`, `--prompt-ids`: collect only specific prompt ids from the battery
+- `--prompt-tiers`: comma-separated tier filter
+- `--prompt-types`: comma-separated type filter
+- `--no-attn-entropy`: skip derived attention-entropy summaries and collect hidden states only
 - `--data-dir`: optional override for `[DATA_DIR]`
 
 ## Running Sweeps

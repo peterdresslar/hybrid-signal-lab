@@ -24,7 +24,7 @@ from signal_lab.paths import (
 )
 from signal_lab.signal_lab import resolve_device, resolve_prompt_collection
 
-SMOKE_PROMPT_COUNT = 8
+SMOKE_PROMPTS_PER_TIER = 4
 VALID_VERBOSITY = (0, 1, 2)
 VALID_DTYPES = {
     "float16": torch.float16,
@@ -76,6 +76,22 @@ def resolve_repo_version_metadata() -> dict[str, Any]:
     }
 
 
+def infer_prompt_tier(prompt: Prompt) -> str:
+    """Infer the prompt-length tier from ``tokens_approx``."""
+    tokens = prompt.tokens_approx
+    if tokens is None:
+        return "__unknown__"
+    if tokens <= 30:
+        return "short"
+    if tokens <= 80:
+        return "brief"
+    if tokens <= 200:
+        return "med"
+    if tokens <= 500:
+        return "long"
+    return "extended"
+
+
 def resolve_prompts(
     *,
     prompt_battery: str,
@@ -92,7 +108,16 @@ def resolve_prompts(
         prompt_types=prompt_types,
     )
     if smoke:
-        prompts = prompts[:SMOKE_PROMPT_COUNT]
+        kept_counts: dict[str, int] = {}
+        smoke_selected: list[Prompt] = []
+        for prompt in prompts:
+            tier_key = infer_prompt_tier(prompt)
+            current = kept_counts.get(tier_key, 0)
+            if current >= SMOKE_PROMPTS_PER_TIER:
+                continue
+            smoke_selected.append(prompt)
+            kept_counts[tier_key] = current + 1
+        prompts = smoke_selected
     if max_prompts is not None:
         if max_prompts <= 0:
             raise ValueError("--max-prompts must be a positive integer.")
@@ -177,7 +202,10 @@ def main() -> None:
     parser.add_argument(
         "--SMOKE",
         action="store_true",
-        help=f"Shortcut pilot mode: keep only the first {SMOKE_PROMPT_COUNT} prompts.",
+        help=(
+            "Shortcut pilot mode: keep up to "
+            f"{SMOKE_PROMPTS_PER_TIER} prompts per prompt-length tier."
+        ),
     )
     parser.add_argument(
         "--max-prompts",
