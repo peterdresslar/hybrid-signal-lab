@@ -35,7 +35,6 @@ pwd
 hostname
 
 uv run -m signal_lab.collect_sequences \
-  --SMOKE \
   --verbosity 2 \
   --prompt-battery battery/data/battery_4 \
   --model-key "${MODEL_KEY}" \
