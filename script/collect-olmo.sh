@@ -19,7 +19,7 @@ export HUGGINGFACE_HUB_CACHE=/scratch/pdressla/.cache/huggingface/hub
 export TRANSFORMERS_CACHE=/scratch/pdressla/.cache/huggingface/transformers
 export UV_CACHE_DIR=/scratch/pdressla/.cache/uv
 export XDG_CACHE_HOME=/scratch/pdressla/.cache
-export OUTDIR=/home/pdressla/workspace/data/sl-runs/040-collect
+export OUTDIR=/home/pdressla/workspace/data/040-collect
 
 export MODEL_KEY=OLMO
 
