@@ -74,6 +74,7 @@ The main subtrees are:
 - `signal_lab.signal_lab`: one-off probing CLI for a single prompt
 - `signal_lab.sweep`: batch runner over cartridges or battery selections
 - `signal_lab.collect_sequences`: baseline-only hidden-state collector for router / representation follow-on work
+- `signal_lab.sequence_analyze`: compact analysis bundle for sequence-collection runs
 - `signal_lab.sweep_cartridges`: named gain-profile sweep specs
 - `signal_lab.sweep_analyze`: summarize one sweep run directory
 - `signal_lab.run_analyze`: analyze every model subfolder under a run collection (see below)
@@ -217,6 +218,35 @@ uv run -m signal_lab.collect_sequences \
   --model-key 9B \
   --output-dir [DATA_DIR]/outputs/signal_lab/sequence_runs/qwen9b_b4 \
   --device cuda
+```
+
+### Analyzing A Sequence Collection
+
+Use `signal_lab.sequence_analyze` when you want a reduced, portable analysis
+bundle from a collected baseline-state run without moving the raw `.pt` state
+files around.
+
+The analyzer currently exports:
+
+- prompt-level scalar metadata (`tokens_approx`, entropy summaries, shape info)
+- PCA coordinates for several hidden-state feature families
+- raw and length-residualized PCA summaries per feature family
+
+Current feature families include:
+
+- embedding-layer last-token hidden state
+- final-layer last-token hidden state
+- embedding-layer mean pool over prompt tokens
+- final-layer mean pool over prompt tokens
+- concatenated all-layer last-token hidden states
+- concatenated all-layer mean-pooled hidden states
+
+Example:
+
+```bash
+uv run -m signal_lab.sequence_analyze \
+  --run-dir [DATA_DIR]/outputs/signal_lab/sequence_runs/qwen9b_b4 \
+  --output-dir [DATA_DIR]/outputs/signal_lab/sequence_runs/qwen9b_b4/analysis
 ```
 
 ### Smoke / Pilot Example

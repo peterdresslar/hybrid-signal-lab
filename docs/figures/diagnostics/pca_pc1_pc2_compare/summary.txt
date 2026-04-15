@@ -1,0 +1,18 @@
+PC1/PC2 raw vs length-residualized comparison
+
+Token-count correlations:
+- raw PC1 vs tokens_approx: -0.768
+- raw PC2 vs tokens_approx: -0.452
+- length-resid PC1 vs tokens_approx: -0.000
+- length-resid PC2 vs tokens_approx: -0.000
+
+Task structure (eta^2 by task class):
+- raw PC1: 0.812
+- raw PC2: 0.820
+- length-resid PC1: 0.706
+- length-resid PC2: 0.607
+
+Read:
+- Raw PC1 is strongly length-loaded.
+- After residualizing on token count, PC1 is no longer length-dominated but still carries substantial task structure.
+- Residualized PC2 remains task-structured rather than dissolving into noise.

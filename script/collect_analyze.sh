@@ -21,7 +21,8 @@ export UV_CACHE_DIR=/scratch/pdressla/.cache/uv
 export XDG_CACHE_HOME=/scratch/pdressla/.cache
 export OUTDIR=/scratch/pdressla/new-runs/040-collect
 
-export MODEL_KEY=9B
+export MODEL_KEY_QWEN=9B
+export MODEL_KEY_OLMO=OLMO
 
 cd /home/pdressla/workspace/hybrid-signal-lab
 
@@ -34,9 +35,11 @@ source .venv/bin/activate
 pwd
 hostname
 
-uv run -m signal_lab.collect_sequences \
-  --verbosity 2 \
-  --prompt-battery battery/data/battery_4 \
-  --model-key "${MODEL_KEY}" \
-  --output-dir "${OUTDIR}/${MODEL_KEY}" \
-  --device cuda
+
+uv run -m signal_lab.sequence_analyze \
+    --run-dir [${OUTDIR}/${MODEL_KEY_QWEN} \
+    --output-dir [${OUTDIR}/${MODEL_KEY_QWEN}/analysis
+
+uv run -m signal_lab.sequence_analyze \
+    --run-dir [${OUTDIR}/${MODEL_KEY_OLMO} \
+    --output-dir [${OUTDIR}/${MODEL_KEY_OLMO}/analysis
