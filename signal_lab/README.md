@@ -75,6 +75,7 @@ The main subtrees are:
 - `signal_lab.sweep`: batch runner over cartridges or battery selections
 - `signal_lab.collect_sequences`: baseline-only hidden-state collector for router / representation follow-on work
 - `signal_lab.sequence_analyze`: compact analysis bundle for sequence-collection runs
+- `signal_lab.tda_analyze`: ripser/TDA probes over baseline entropy or sequence-state feature clouds
 - `signal_lab.sweep_cartridges`: named gain-profile sweep specs
 - `signal_lab.sweep_analyze`: summarize one sweep run directory
 - `signal_lab.run_analyze`: analyze every model subfolder under a run collection (see below)
@@ -247,6 +248,33 @@ Example:
 uv run -m signal_lab.sequence_analyze \
   --run-dir [DATA_DIR]/outputs/signal_lab/sequence_runs/qwen9b_b4 \
   --output-dir [DATA_DIR]/outputs/signal_lab/sequence_runs/qwen9b_b4/analysis
+```
+
+### Topological Analysis
+
+Use `signal_lab.tda_analyze` when you want a topological probe of a baseline
+representation cloud rather than another linear projection.
+
+It supports:
+
+- `--mode entropy`: last-token attention-head entropy clouds from a sweep run's `verbose.jsonl`
+- `--mode sequence`: hidden-state feature families from a sequence-collection analysis bundle
+
+Examples:
+
+```bash
+uv run -m signal_lab.tda_analyze \
+  --mode entropy \
+  --run-dir data/022-balanced-attention-hybrid/9B \
+  --output-dir [DATA_DIR]/outputs/signal_lab/tda/qwen9b_entropy
+```
+
+```bash
+uv run -m signal_lab.tda_analyze \
+  --mode sequence \
+  --run-dir [DATA_DIR]/outputs/signal_lab/sequence_runs/qwen9b_b4 \
+  --family final_layer_last_token \
+  --output-dir [DATA_DIR]/outputs/signal_lab/tda/qwen9b_final_layer_last
 ```
 
 ### Smoke / Pilot Example

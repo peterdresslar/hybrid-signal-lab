@@ -13,7 +13,6 @@
 #SBATCH --mem=80GB
 
 set -eu
-
 export HF_HOME=/scratch/pdressla/.cache/huggingface
 export HUGGINGFACE_HUB_CACHE=/scratch/pdressla/.cache/huggingface/hub
 export TRANSFORMERS_CACHE=/scratch/pdressla/.cache/huggingface/transformers

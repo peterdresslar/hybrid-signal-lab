@@ -13,6 +13,8 @@ dependencies = [
     "datasets==4.8.2",
     "matplotlib==3.10.8",
     "flash-linear-attention==0.4.2",
+    "ripser==0.6.12",
+    "persim==0.3.8",
 ]
 
 [build-system]
