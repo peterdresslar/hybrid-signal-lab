@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FixedLocator, FuncFormatter, NullFormatter
 
 from .common import add_mode_inset, configure_matplotlib, prettify_type, qualitative_11_color_map
 
@@ -50,6 +51,15 @@ def get_type_order_by_peak(data: dict[str, list[tuple[float, float]]]) -> list[s
     return [prompt_type for prompt_type, _ in peaks]
 
 
+DEFAULT_GAIN_TICKS = [0.4, 0.55, 0.7, 0.85, 1.0, 1.15, 1.3, 1.45, 1.6, 1.8, 2.0, 2.3, 2.6, 3.0]
+
+
+def _format_gain_tick(value: float, _: float) -> str:
+    if abs(value - 1.0) < 1e-9:
+        return "1.0"
+    return f"{value:g}"
+
+
 def plot_constant_gain_dose_response(
     *,
     panels: list[ConstantGainPanel],
@@ -60,10 +70,12 @@ def plot_constant_gain_dose_response(
     legend_columns: int = 4,
     figsize: tuple[float, float] = (14, 5),
     facecolor: str = "white",
+    xticks: list[float] | None = None,
 ) -> None:
     model_data = [load_constant_gain_data(panel.path) for panel in panels]
     type_order = get_type_order_by_peak(model_data[0])
     colors = qualitative_11_color_map(type_order)
+    gain_ticks = xticks if xticks is not None else DEFAULT_GAIN_TICKS
 
     configure_matplotlib(font_family="sans-serif", font_size=11)
 
@@ -89,9 +101,14 @@ def plot_constant_gain_dose_response(
             )
 
         ax.set_title(panel.title)
+        ax.set_xscale("log")
         ax.set_xlim(*xlim)
         ax.set_ylim(*ylim)
         ax.set_xlabel("Constant gain factor (g)")
+        ax.xaxis.set_major_locator(FixedLocator(gain_ticks))
+        ax.xaxis.set_major_formatter(FuncFormatter(_format_gain_tick))
+        ax.xaxis.set_minor_formatter(NullFormatter())
+        ax.tick_params(axis="x", rotation=45)
         ax.axhline(0.0, color="black", linestyle="--", linewidth=0.5)
         ax.axvline(1.0, color="#888888", linestyle="--", linewidth=0.5)
         ax.grid(axis="y", color="#D9D9D9", linewidth=0.3)

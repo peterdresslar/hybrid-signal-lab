@@ -37,9 +37,9 @@ hostname
 
 
 uv run -m signal_lab.sequence_analyze \
-    --run-dir [${OUTDIR}/${MODEL_KEY_QWEN} \
-    --output-dir [${OUTDIR}/${MODEL_KEY_QWEN}/analysis
+    --run-dir ${OUTDIR}/${MODEL_KEY_QWEN} \
+    --output-dir ${OUTDIR}/${MODEL_KEY_QWEN}/analysis
 
 uv run -m signal_lab.sequence_analyze \
-    --run-dir [${OUTDIR}/${MODEL_KEY_OLMO} \
-    --output-dir [${OUTDIR}/${MODEL_KEY_OLMO}/analysis
+    --run-dir ${OUTDIR}/${MODEL_KEY_OLMO} \
+    --output-dir ${OUTDIR}/${MODEL_KEY_OLMO}/analysis
