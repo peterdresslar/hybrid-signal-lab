@@ -27,6 +27,7 @@ export TDA_ROOT=/scratch/pdressla/new-runs/040-tda
 export MODEL_KEY_QWEN=9B
 export MODEL_KEY_OLMO=OLMO
 export PROMPT_BATTERY=/home/pdressla/workspace/hybrid-signal-lab/battery/data/battery_4
+export RUNS_DIR=/scratch/pdressla/sl-runs/022-balanced-attention-hybrid
 
 cd "${REPO_ROOT}"
 
@@ -80,10 +81,10 @@ run_entropy_tda() {
     local out_dir
 
     if [[ "${model_key}" == "${MODEL_KEY_QWEN}" ]]; then
-        sweep_dir="data/022-balanced-attention-hybrid/9B"
+        sweep_dir="${RUNS_DIR}/9B"
         out_dir="${TDA_ROOT}/qwen9b_entropy"
     else
-        sweep_dir="data/022-balanced-attention-hybrid/OLMO"
+        sweep_dir="${RUNS_DIR}/OLMO"
         out_dir="${TDA_ROOT}/olmo_entropy"
     fi
 
