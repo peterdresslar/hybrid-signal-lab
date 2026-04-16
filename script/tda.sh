@@ -27,7 +27,7 @@ export TDA_ROOT=/scratch/pdressla/new-runs/040-tda
 export MODEL_KEY_QWEN=9B
 export MODEL_KEY_OLMO=OLMO
 export PROMPT_BATTERY=/home/pdressla/workspace/hybrid-signal-lab/battery/data/battery_4
-export RUNS_DIR=/scratch/pdressla/sl-runs/022-balanced-attention-hybrid
+export RUNS_DIR=/scratch/pdressla/sl-runs/022-balanced-attn
 
 cd "${REPO_ROOT}"
 
