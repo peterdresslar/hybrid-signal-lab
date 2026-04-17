@@ -117,8 +117,11 @@ def load_scalar_features(analysis_dir: Path) -> dict[str, dict[str, float]]:
     return features
 
 
-def load_sequence_family_vectors(states_dir: Path, family_name: str) -> dict[str, np.ndarray]:
-    """Load raw hidden-state family vectors from a sequence collection states dir."""
+def load_sequence_family_vectors(
+    states_dir: Path,
+    family_name: str,
+) -> tuple[dict[str, np.ndarray], dict[str, float]]:
+    """Load raw hidden-state family vectors and token counts from a states dir."""
     if not states_dir.exists() or not states_dir.is_dir():
         raise FileNotFoundError(f"Missing sequence states directory: {states_dir}")
 
@@ -127,6 +130,7 @@ def load_sequence_family_vectors(states_dir: Path, family_name: str) -> dict[str
         raise FileNotFoundError(f"No .pt state files found in {states_dir}")
 
     vectors: dict[str, np.ndarray] = {}
+    token_counts: dict[str, float] = {}
     for state_file in state_files:
         payload = torch.load(state_file, map_location="cpu")
         prompt_id = payload["prompt_id"]
@@ -134,7 +138,11 @@ def load_sequence_family_vectors(states_dir: Path, family_name: str) -> dict[str
         if family_name not in family_vectors:
             raise KeyError(f"Unknown sequence family '{family_name}'")
         vectors[prompt_id] = np.asarray(family_vectors[family_name], dtype=np.float64)
-    return vectors
+        attention_mask = payload.get("attention_mask")
+        if attention_mask is None:
+            raise KeyError(f"State payload {state_file} is missing attention_mask.")
+        token_counts[prompt_id] = float(np.asarray(attention_mask).sum())
+    return vectors, token_counts
 
 
 def load_delta_matrix(analysis_dir: Path, profile_names: list[str]) -> tuple[list[str], np.ndarray]:
@@ -190,12 +198,15 @@ def build_feature_matrix(
     entropy_vectors: dict[str, np.ndarray],
     scalar_features: dict[str, dict[str, float]],
     sequence_vectors: dict[str, np.ndarray] | None = None,
+    sequence_token_counts: dict[str, float] | None = None,
     n_pca: int = 10,
     sequence_n_pca: int = 10,
     feature_set: str = "pca+scalar",
+    sequence_residualization: str = "raw",
 ) -> tuple[
     np.ndarray,
     list[str],
+    np.ndarray | None,
     np.ndarray | None,
     np.ndarray | None,
     np.ndarray | None,
@@ -210,6 +221,7 @@ def build_feature_matrix(
         pca_mean:       the PCA centering vector, or None
         sequence_pca_components: PCA matrix for sequence family, or None
         sequence_pca_mean:       centering vector for sequence family, or None
+        sequence_residual_beta:  feature-wise residualization coefficients, or None
     """
     n = len(prompt_ids)
 
@@ -224,6 +236,8 @@ def build_feature_matrix(
                 raw_matrix[i] = entropy_vectors[pid]
 
     sequence_raw_matrix = None
+    sequence_design = None
+    sequence_residual_beta = None
     if sequence_vectors:
         sequence_dim = len(next(iter(sequence_vectors.values())))
         sequence_raw_matrix = np.zeros((n, sequence_dim), dtype=np.float64)
@@ -240,6 +254,35 @@ def build_feature_matrix(
                 f"Missing sequence vectors for {len(missing_sequence)} prompts. "
                 f"First few: {preview}"
             )
+
+        if sequence_residualization not in ("raw", "length_resid", "attn_resid"):
+            raise ValueError(
+                "sequence_residualization must be one of: raw, length_resid, attn_resid"
+            )
+        if sequence_residualization != "raw":
+            if sequence_token_counts is None:
+                raise ValueError(
+                    f"Sequence residualization '{sequence_residualization}' requires token counts."
+                )
+            token_values = np.array(
+                [float(sequence_token_counts[pid]) for pid in prompt_ids],
+                dtype=np.float64,
+            )
+            design_parts = [np.ones(n, dtype=np.float64), token_values]
+            if sequence_residualization == "attn_resid":
+                if not scalar_features:
+                    raise ValueError("attn_resid requires scalar features with baseline_attn_entropy_mean.")
+                attn_values = np.array(
+                    [
+                        float(scalar_features.get(pid, {}).get("baseline_attn_entropy_mean", 0.0))
+                        for pid in prompt_ids
+                    ],
+                    dtype=np.float64,
+                )
+                design_parts.append(attn_values)
+            sequence_design = np.column_stack(design_parts)
+            sequence_residual_beta = np.linalg.lstsq(sequence_design, sequence_raw_matrix, rcond=None)[0]
+            sequence_raw_matrix = sequence_raw_matrix - sequence_design @ sequence_residual_beta
 
     # PCA of entropy vectors
     pca_matrix = None
@@ -340,7 +383,15 @@ def build_feature_matrix(
         names.extend([f"seq_pc{i+1}" for i in range(sequence_pca_matrix.shape[1])])
 
     X = np.hstack([p for p in parts if p is not None])
-    return X, names, pca_components, pca_mean, sequence_pca_components, sequence_pca_mean
+    return (
+        X,
+        names,
+        pca_components,
+        pca_mean,
+        sequence_pca_components,
+        sequence_pca_mean,
+        sequence_residual_beta,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -562,6 +613,12 @@ def main():
             "all_layers_mean_pool_concat",
         ],
     )
+    parser.add_argument(
+        "--sequence-residualization",
+        default="raw",
+        choices=["raw", "length_resid", "attn_resid"],
+        help="Optional feature-space residualization to apply before sequence PCA.",
+    )
     parser.add_argument("--lr", type=float, default=0.1)
     parser.add_argument("--n-iter", type=int, default=2000)
     parser.add_argument("--reg", type=float, default=1e-3)
@@ -592,6 +649,8 @@ def main():
     print(f"Profiles: {profile_names}")
     print(f"Feature set: {args.feature_set}")
     print(f"Intervention mode: {intervention_mode.value}")
+    if "sequence_pca" in args.feature_set:
+        print(f"Sequence residualization: {args.sequence_residualization}")
     print()
 
     # Load data
@@ -605,6 +664,7 @@ def main():
     print(f"  {len(scalar_features)} prompts")
 
     sequence_vectors = None
+    sequence_token_counts = None
     if "sequence_pca" in args.feature_set:
         if not args.sequence_states_dir or not args.sequence_family:
             raise ValueError(
@@ -613,7 +673,9 @@ def main():
         sequence_states_dir = Path(args.sequence_states_dir)
         print(f"Loading sequence vectors ({args.sequence_family}) from states dir...")
         t0 = time.time()
-        sequence_vectors = load_sequence_family_vectors(sequence_states_dir, args.sequence_family)
+        sequence_vectors, sequence_token_counts = load_sequence_family_vectors(
+            sequence_states_dir, args.sequence_family
+        )
         print(f"  {len(sequence_vectors)} vectors in {time.time()-t0:.1f}s")
 
     print("Loading delta matrix for selected profiles...")
@@ -629,12 +691,22 @@ def main():
 
     # Build features
     print(f"\nBuilding feature matrix ({args.feature_set}, n_pca={args.n_pca})...")
-    X, feature_names, pca_components, pca_mean, sequence_pca_components, sequence_pca_mean = build_feature_matrix(
+    (
+        X,
+        feature_names,
+        pca_components,
+        pca_mean,
+        sequence_pca_components,
+        sequence_pca_mean,
+        sequence_residual_beta,
+    ) = build_feature_matrix(
         prompt_ids, entropy_vectors, scalar_features,
         sequence_vectors=sequence_vectors,
+        sequence_token_counts=sequence_token_counts,
         n_pca=args.n_pca,
         sequence_n_pca=args.sequence_n_pca,
         feature_set=args.feature_set,
+        sequence_residualization=args.sequence_residualization,
     )
     print(f"  Feature matrix: {X.shape}")
 
@@ -686,6 +758,7 @@ def main():
         "n_pca": args.n_pca,
         "sequence_n_pca": args.sequence_n_pca if "sequence_pca" in args.feature_set else 0,
         "sequence_family": args.sequence_family,
+        "sequence_residualization": args.sequence_residualization if "sequence_pca" in args.feature_set else "raw",
         "n_features": X.shape[1],
         "feature_names": feature_names,
         "n_folds": args.n_folds,
@@ -724,6 +797,7 @@ def main():
         "n_pca": args.n_pca,
         "sequence_n_pca": args.sequence_n_pca if "sequence_pca" in args.feature_set else 0,
         "sequence_family": args.sequence_family,
+        "sequence_residualization": args.sequence_residualization if "sequence_pca" in args.feature_set else "raw",
         "intervention_mode": intervention_mode.value,
         "standardization_mean": mu.tolist(),
         "standardization_std": std.tolist(),
@@ -737,6 +811,8 @@ def main():
     if sequence_pca_components is not None:
         model_artifacts["sequence_pca_components"] = sequence_pca_components.tolist()
         model_artifacts["sequence_pca_mean"] = sequence_pca_mean.tolist()
+    if sequence_residual_beta is not None:
+        model_artifacts["sequence_residual_beta"] = sequence_residual_beta.tolist()
 
     model_path = output_dir / "router_model.json"
     with open(model_path, "w") as f:

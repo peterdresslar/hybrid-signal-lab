@@ -81,6 +81,19 @@ def extract_scalar_features(pass_result: dict) -> dict[str, float]:
     }
 
 
+def extract_num_tokens(pass_result: dict) -> float:
+    """Extract actual prompt token count from a baseline pass result."""
+    if "num_tokens" in pass_result and pass_result["num_tokens"] is not None:
+        return float(pass_result["num_tokens"])
+    attention_mask = pass_result.get("attention_mask")
+    if attention_mask is not None:
+        return float(np.asarray(attention_mask).sum())
+    input_ids = pass_result.get("input_ids")
+    if input_ids is not None:
+        return float(np.asarray(input_ids).size)
+    return 0.0
+
+
 def extract_sequence_family_vector(pass_result: dict, family_name: str) -> np.ndarray:
     """Extract one hidden-state feature family from a baseline pass result."""
     hidden_states = pass_result.get("hidden_states")
@@ -121,6 +134,8 @@ def build_feature_vector(
     sequence_family: str | None = None,
     sequence_pca_components: np.ndarray | None = None,
     sequence_pca_mean: np.ndarray | None = None,
+    sequence_residualization: str = "raw",
+    sequence_residual_beta: np.ndarray | None = None,
     feature_set: str = "pca+scalar",
 ) -> np.ndarray:
     """Build the full standardized feature vector for the classifier.
@@ -162,6 +177,19 @@ def build_feature_vector(
         if sequence_family is None or sequence_pca_components is None or sequence_pca_mean is None:
             raise ValueError(f"Feature set '{feature_set}' requires sequence PCA artifacts.")
         sequence_vec = extract_sequence_family_vector(pass_result, sequence_family)
+        if sequence_residualization not in ("raw", "length_resid", "attn_resid"):
+            raise ValueError(f"Unknown sequence residualization '{sequence_residualization}'.")
+        if sequence_residualization != "raw":
+            if sequence_residual_beta is None:
+                raise ValueError(
+                    f"Feature set '{feature_set}' with residualization '{sequence_residualization}' "
+                    "requires sequence_residual_beta."
+                )
+            design_parts = [1.0, extract_num_tokens(pass_result)]
+            if sequence_residualization == "attn_resid":
+                design_parts.append(scalar_feats["baseline_attn_entropy_mean"])
+            design = np.asarray(design_parts, dtype=np.float64)
+            sequence_vec = sequence_vec - design @ sequence_residual_beta
         centered = sequence_vec - sequence_pca_mean
         sequence_proj = centered @ sequence_pca_components.T
         parts.append(sequence_proj)
