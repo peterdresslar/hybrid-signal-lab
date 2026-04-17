@@ -47,9 +47,11 @@ import time
 from pathlib import Path
 
 import numpy as np
+import torch
 
 from model.backend import InterventionMode, normalize_intervention_mode
 from signal_lab.sweep_cartridges import BALANCED_SWEEP_G_SPECS
+from signal_lab.sequence_analyze import extract_feature_families
 
 
 # ---------------------------------------------------------------------------
@@ -115,6 +117,26 @@ def load_scalar_features(analysis_dir: Path) -> dict[str, dict[str, float]]:
     return features
 
 
+def load_sequence_family_vectors(states_dir: Path, family_name: str) -> dict[str, np.ndarray]:
+    """Load raw hidden-state family vectors from a sequence collection states dir."""
+    if not states_dir.exists() or not states_dir.is_dir():
+        raise FileNotFoundError(f"Missing sequence states directory: {states_dir}")
+
+    state_files = sorted(states_dir.glob("*.pt"))
+    if not state_files:
+        raise FileNotFoundError(f"No .pt state files found in {states_dir}")
+
+    vectors: dict[str, np.ndarray] = {}
+    for state_file in state_files:
+        payload = torch.load(state_file, map_location="cpu")
+        prompt_id = payload["prompt_id"]
+        family_vectors = extract_feature_families(payload)
+        if family_name not in family_vectors:
+            raise KeyError(f"Unknown sequence family '{family_name}'")
+        vectors[prompt_id] = np.asarray(family_vectors[family_name], dtype=np.float64)
+    return vectors
+
+
 def load_delta_matrix(analysis_dir: Path, profile_names: list[str]) -> tuple[list[str], np.ndarray]:
     """Load delta_target_prob for the selected profiles.
 
@@ -167,9 +189,18 @@ def build_feature_matrix(
     prompt_ids: list[str],
     entropy_vectors: dict[str, np.ndarray],
     scalar_features: dict[str, dict[str, float]],
+    sequence_vectors: dict[str, np.ndarray] | None = None,
     n_pca: int = 10,
+    sequence_n_pca: int = 10,
     feature_set: str = "pca+scalar",
-) -> tuple[np.ndarray, list[str], np.ndarray | None, np.ndarray | None]:
+) -> tuple[
+    np.ndarray,
+    list[str],
+    np.ndarray | None,
+    np.ndarray | None,
+    np.ndarray | None,
+    np.ndarray | None,
+]:
     """Build the feature matrix for the classifier.
 
     Returns:
@@ -177,6 +208,8 @@ def build_feature_matrix(
         feature_names:  list of feature name strings
         pca_components: the PCA projection matrix (for deployment), or None
         pca_mean:       the PCA centering vector, or None
+        sequence_pca_components: PCA matrix for sequence family, or None
+        sequence_pca_mean:       centering vector for sequence family, or None
     """
     n = len(prompt_ids)
 
@@ -189,6 +222,24 @@ def build_feature_matrix(
         for i, pid in enumerate(prompt_ids):
             if pid in entropy_vectors:
                 raw_matrix[i] = entropy_vectors[pid]
+
+    sequence_raw_matrix = None
+    if sequence_vectors:
+        sequence_dim = len(next(iter(sequence_vectors.values())))
+        sequence_raw_matrix = np.zeros((n, sequence_dim), dtype=np.float64)
+        missing_sequence = []
+        for i, pid in enumerate(prompt_ids):
+            vec = sequence_vectors.get(pid)
+            if vec is None:
+                missing_sequence.append(pid)
+                continue
+            sequence_raw_matrix[i] = vec
+        if missing_sequence:
+            preview = ", ".join(missing_sequence[:5])
+            raise ValueError(
+                f"Missing sequence vectors for {len(missing_sequence)} prompts. "
+                f"First few: {preview}"
+            )
 
     # PCA of entropy vectors
     pca_matrix = None
@@ -205,6 +256,22 @@ def build_feature_matrix(
         explained = (S[:k] ** 2) / (S ** 2).sum()
         print(f"  PCA: {k} components, explained variance: "
               f"{explained.sum():.3f} ({', '.join(f'{v:.3f}' for v in explained[:5])}...)")
+
+    sequence_pca_matrix = None
+    sequence_pca_components = None
+    sequence_pca_mean = None
+    if sequence_raw_matrix is not None and "sequence_pca" in feature_set:
+        sequence_pca_mean = sequence_raw_matrix.mean(axis=0)
+        centered = sequence_raw_matrix - sequence_pca_mean
+        _u, s, vt = np.linalg.svd(centered, full_matrices=False)
+        k = min(sequence_n_pca, vt.shape[0])
+        sequence_pca_components = vt[:k]
+        sequence_pca_matrix = centered @ sequence_pca_components.T
+        explained = (s[:k] ** 2) / (s ** 2).sum()
+        print(
+            f"  Sequence PCA: {k} components, explained variance: "
+            f"{explained.sum():.3f} ({', '.join(f'{v:.3f}' for v in explained[:5])}...)"
+        )
 
     # Scalar features
     scalar_names = sorted(next(iter(scalar_features.values())).keys()) if scalar_features else []
@@ -233,9 +300,29 @@ def build_feature_matrix(
         names.extend([f"pc{i+1}" for i in range(pca_matrix.shape[1])])
         parts.append(scalar_matrix)
         names.extend(scalar_names)
+    elif feature_set == "sequence_pca":
+        parts.append(sequence_pca_matrix)
+        names.extend([f"seq_pc{i+1}" for i in range(sequence_pca_matrix.shape[1])])
+    elif feature_set == "pca+sequence_pca":
+        parts.append(pca_matrix)
+        names.extend([f"pc{i+1}" for i in range(pca_matrix.shape[1])])
+        parts.append(sequence_pca_matrix)
+        names.extend([f"seq_pc{i+1}" for i in range(sequence_pca_matrix.shape[1])])
+    elif feature_set == "scalar+sequence_pca":
+        parts.append(scalar_matrix)
+        names.extend(scalar_names)
+        parts.append(sequence_pca_matrix)
+        names.extend([f"seq_pc{i+1}" for i in range(sequence_pca_matrix.shape[1])])
+    elif feature_set == "pca+scalar+sequence_pca":
+        parts.append(pca_matrix)
+        names.extend([f"pc{i+1}" for i in range(pca_matrix.shape[1])])
+        parts.append(scalar_matrix)
+        names.extend(scalar_names)
+        parts.append(sequence_pca_matrix)
+        names.extend([f"seq_pc{i+1}" for i in range(sequence_pca_matrix.shape[1])])
 
     X = np.hstack([p for p in parts if p is not None])
-    return X, names, pca_components, pca_mean
+    return X, names, pca_components, pca_mean, sequence_pca_components, sequence_pca_mean
 
 
 # ---------------------------------------------------------------------------
@@ -432,8 +519,31 @@ def main():
                         help="Exactly 4 profile names")
     parser.add_argument("--n-folds", type=int, default=5)
     parser.add_argument("--n-pca", type=int, default=10)
+    parser.add_argument("--sequence-n-pca", type=int, default=10)
     parser.add_argument("--feature-set", default="pca+scalar",
-                        choices=["pca", "raw", "scalar", "pca+scalar"])
+                        choices=[
+                            "pca",
+                            "raw",
+                            "scalar",
+                            "pca+scalar",
+                            "sequence_pca",
+                            "pca+sequence_pca",
+                            "scalar+sequence_pca",
+                            "pca+scalar+sequence_pca",
+                        ])
+    parser.add_argument("--sequence-states-dir", default=None)
+    parser.add_argument(
+        "--sequence-family",
+        default=None,
+        choices=[
+            "embedding_last_token",
+            "final_layer_last_token",
+            "embedding_mean_pool",
+            "final_layer_mean_pool",
+            "all_layers_last_token_concat",
+            "all_layers_mean_pool_concat",
+        ],
+    )
     parser.add_argument("--lr", type=float, default=0.1)
     parser.add_argument("--n-iter", type=int, default=2000)
     parser.add_argument("--reg", type=float, default=1e-3)
@@ -476,6 +586,18 @@ def main():
     scalar_features = load_scalar_features(analysis_dir)
     print(f"  {len(scalar_features)} prompts")
 
+    sequence_vectors = None
+    if "sequence_pca" in args.feature_set:
+        if not args.sequence_states_dir or not args.sequence_family:
+            raise ValueError(
+                "Sequence feature sets require both --sequence-states-dir and --sequence-family."
+            )
+        sequence_states_dir = Path(args.sequence_states_dir)
+        print(f"Loading sequence vectors ({args.sequence_family}) from states dir...")
+        t0 = time.time()
+        sequence_vectors = load_sequence_family_vectors(sequence_states_dir, args.sequence_family)
+        print(f"  {len(sequence_vectors)} vectors in {time.time()-t0:.1f}s")
+
     print("Loading delta matrix for selected profiles...")
     prompt_ids, delta_matrix = load_delta_matrix(analysis_dir, profile_names)
     print(f"  {delta_matrix.shape[0]} prompts × {delta_matrix.shape[1]} profiles")
@@ -489,9 +611,12 @@ def main():
 
     # Build features
     print(f"\nBuilding feature matrix ({args.feature_set}, n_pca={args.n_pca})...")
-    X, feature_names, pca_components, pca_mean = build_feature_matrix(
+    X, feature_names, pca_components, pca_mean, sequence_pca_components, sequence_pca_mean = build_feature_matrix(
         prompt_ids, entropy_vectors, scalar_features,
-        n_pca=args.n_pca, feature_set=args.feature_set,
+        sequence_vectors=sequence_vectors,
+        n_pca=args.n_pca,
+        sequence_n_pca=args.sequence_n_pca,
+        feature_set=args.feature_set,
     )
     print(f"  Feature matrix: {X.shape}")
 
@@ -541,6 +666,8 @@ def main():
         "intervention_mode": intervention_mode.value,
         "feature_set": args.feature_set,
         "n_pca": args.n_pca,
+        "sequence_n_pca": args.sequence_n_pca if "sequence_pca" in args.feature_set else 0,
+        "sequence_family": args.sequence_family,
         "n_features": X.shape[1],
         "feature_names": feature_names,
         "n_folds": args.n_folds,
@@ -577,6 +704,8 @@ def main():
         "feature_set": args.feature_set,
         "feature_names": feature_names,
         "n_pca": args.n_pca,
+        "sequence_n_pca": args.sequence_n_pca if "sequence_pca" in args.feature_set else 0,
+        "sequence_family": args.sequence_family,
         "intervention_mode": intervention_mode.value,
         "standardization_mean": mu.tolist(),
         "standardization_std": std.tolist(),
@@ -587,6 +716,9 @@ def main():
     if pca_components is not None:
         model_artifacts["pca_components"] = pca_components.tolist()
         model_artifacts["pca_mean"] = pca_mean.tolist()
+    if sequence_pca_components is not None:
+        model_artifacts["sequence_pca_components"] = sequence_pca_components.tolist()
+        model_artifacts["sequence_pca_mean"] = sequence_pca_mean.tolist()
 
     model_path = output_dir / "router_model.json"
     with open(model_path, "w") as f:

@@ -80,6 +80,8 @@ class Agent:
         baseline_logits: torch.Tensor | None = None,
         return_raw_logits: bool = False,
         return_verbose: bool = False,
+        return_hidden_states: bool = False,
+        hidden_state_dtype: torch.dtype = torch.float16,
         target_attention_layer_indices: list[int] | None = None,
         intervention_mode: str | InterventionMode = InterventionMode.BACKEND_DEFAULT,
     ) -> dict[str, Any]:
@@ -168,6 +170,31 @@ class Agent:
             result["mean_entropy_bits"] = mean_entropy_bits
             entropy_info = self.backend.process_attention_entropy(outputs)
             result.update(entropy_info)
+
+        if return_hidden_states:
+            raw_hidden_states = getattr(outputs, "hidden_states", None)
+            if raw_hidden_states is None:
+                raise RuntimeError("Model output did not include hidden_states.")
+            hidden_states = torch.stack(
+                [
+                    hidden[0].detach().to(device="cpu", dtype=hidden_state_dtype)
+                    for hidden in raw_hidden_states
+                ],
+                dim=0,
+            ).contiguous()
+            input_ids = inputs["input_ids"][0].detach().to(device="cpu")
+            attention_mask = None
+            if "attention_mask" in inputs:
+                attention_mask = inputs["attention_mask"][0].detach().to(device="cpu")
+
+            result["input_ids"] = input_ids
+            result["attention_mask"] = attention_mask
+            result["hidden_states"] = hidden_states
+            result["hidden_state_shape"] = list(hidden_states.shape)
+            result["hidden_state_dtype"] = str(hidden_states.dtype)
+            result["num_tokens"] = int(input_ids.shape[0])
+            result["num_layers_plus_embedding"] = int(hidden_states.shape[0])
+            result["hidden_size"] = int(hidden_states.shape[-1])
 
         if return_raw_logits:
             result["_raw_logits"] = final_logits

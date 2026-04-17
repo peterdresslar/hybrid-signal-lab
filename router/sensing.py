@@ -17,6 +17,7 @@ are loaded from the router_model.json produced by train_router.py.
 from __future__ import annotations
 
 import numpy as np
+import torch
 
 
 def extract_entropy_vector(pass_result: dict) -> np.ndarray:
@@ -80,13 +81,46 @@ def extract_scalar_features(pass_result: dict) -> dict[str, float]:
     }
 
 
+def extract_sequence_family_vector(pass_result: dict, family_name: str) -> np.ndarray:
+    """Extract one hidden-state feature family from a baseline pass result."""
+    hidden_states = pass_result.get("hidden_states")
+    if hidden_states is None:
+        raise ValueError(
+            f"Pass result is missing hidden_states required for sequence family '{family_name}'."
+        )
+    if isinstance(hidden_states, torch.Tensor):
+        hs = hidden_states.detach().cpu().numpy()
+    else:
+        hs = np.asarray(hidden_states)
+
+    if family_name == "embedding_last_token":
+        vec = hs[0, -1, :]
+    elif family_name == "final_layer_last_token":
+        vec = hs[-1, -1, :]
+    elif family_name == "embedding_mean_pool":
+        vec = hs[0].mean(axis=0)
+    elif family_name == "final_layer_mean_pool":
+        vec = hs[-1].mean(axis=0)
+    elif family_name == "all_layers_last_token_concat":
+        vec = hs[:, -1, :].reshape(-1)
+    elif family_name == "all_layers_mean_pool_concat":
+        vec = hs.mean(axis=1).reshape(-1)
+    else:
+        raise ValueError(f"Unknown sequence family '{family_name}'")
+
+    return np.asarray(vec, dtype=np.float64)
+
+
 def build_feature_vector(
     pass_result: dict,
     *,
-    pca_components: np.ndarray,
-    pca_mean: np.ndarray,
+    pca_components: np.ndarray | None,
+    pca_mean: np.ndarray | None,
     standardization_mean: np.ndarray,
     standardization_std: np.ndarray,
+    sequence_family: str | None = None,
+    sequence_pca_components: np.ndarray | None = None,
+    sequence_pca_mean: np.ndarray | None = None,
     feature_set: str = "pca+scalar",
 ) -> np.ndarray:
     """Build the full standardized feature vector for the classifier.
@@ -107,8 +141,10 @@ def build_feature_vector(
 
     parts = []
 
-    if feature_set in ("pca", "pca+scalar"):
+    if feature_set in ("pca", "pca+scalar", "pca+sequence_pca", "pca+scalar+sequence_pca"):
         # Project entropy vector into PCA space
+        if pca_components is None or pca_mean is None:
+            raise ValueError(f"Feature set '{feature_set}' requires entropy PCA artifacts.")
         centered = entropy_vec - pca_mean
         pca_proj = centered @ pca_components.T  # (n_pca,)
         parts.append(pca_proj)
@@ -116,11 +152,19 @@ def build_feature_vector(
     if feature_set == "raw":
         parts.append(entropy_vec)
 
-    if feature_set in ("scalar", "pca+scalar"):
+    if feature_set in ("scalar", "pca+scalar", "scalar+sequence_pca", "pca+scalar+sequence_pca"):
         # Scalar features in sorted key order (matches training)
         scalar_names = sorted(scalar_feats.keys())
         scalar_arr = np.array([scalar_feats[k] for k in scalar_names], dtype=np.float64)
         parts.append(scalar_arr)
+
+    if "sequence_pca" in feature_set:
+        if sequence_family is None or sequence_pca_components is None or sequence_pca_mean is None:
+            raise ValueError(f"Feature set '{feature_set}' requires sequence PCA artifacts.")
+        sequence_vec = extract_sequence_family_vector(pass_result, sequence_family)
+        centered = sequence_vec - sequence_pca_mean
+        sequence_proj = centered @ sequence_pca_components.T
+        parts.append(sequence_proj)
 
     x = np.concatenate(parts)
 

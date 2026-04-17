@@ -71,3 +71,30 @@ That directory contains the following files:
 | `pc2_pc3_length_resid_task.png` | Length-residualized PC2 vs PC3 scatter colored by prompt type. This is often the follow-up view when the residualized first two axes still do not fully expose class structure. |
 | `raw_scree.png` | Scree plot for the raw PCA, showing explained variance for the first components. Use it to judge whether the family is dominated by one or two axes or has more distributed structure. |
 | `length_resid_scree.png` | Scree plot for the PCA after residualizing on `tokens_approx`. Use it to see how much variance remains concentrated once prompt length is regressed out. |
+
+## Downstream Intervention and Isolation Tools
+
+The standard `sequence_analyze` pipeline provides baseline coordinates, but targeted hypothesis testing and router panel validation relies on these supplemental pipelines chained *after* the initial run.
+
+### `signal_lab.sequence_heads`
+Standalone module designed to perform deep entropy-based double-residualization.
+- Automatically consumes `verbose.jsonl` internal run logs to calculate `global_mean_attn_entropy` for each prompt.
+- Regresses both token sequence length and mean attention heat out of the unadjusted raw arrays, bounding coordinates as `attn_resid_pc1`-`attn_resid_pc3`.
+- Validates the null-hypothesis that task clustering (like Code Comprehension) isn't simply an artifact of prompt-length or model ambiguity.
+
+### `signal_lab.sequence_plot_3d`
+Renders 3D Plotly visual equivalents of the initial unadjusted matrices to `<analysis-dir>/3d_plots`. Generates snapshot plots corresponding directly to the underlying manifold adjustments:
+- `..._3d_raw.png`
+- `..._3d_length_resid.png`
+- `..._3d_attn_resid.png`
+
+### `signal_lab.sequence_plot_winners` & `sequence_plot_panel`
+Tools mapping specific ML routing interventions *onto* the dimensional representations to prove structural alignment:
+- **`sequence_plot_winners`:** Extracts the top-4 raw oracle interventions from `sweep_oracle_winners_v1.csv` and maps them spatially onto the manifolds as `..._top4other_v2.png`.
+- **`sequence_plot_panel`:** Used to hard-test explicit custom panels (like `router-9B-040`). Matches the prompt-level delta target probabilities and plots the optimal profile win geometries natively as `..._top4plusoff.png`.
+
+### `signal_lab.optimize_router_panel`
+Hardware-accelerated search engine treating the sequence representation manifold as a multi-objective search space.
+- Exhaustively evaluates all `K=3` and `K=4` combinations of reliable intervention arrays against the PCA metric embeddings.
+- Simultaneously scores **Battery Performance** (how many prompts receive delta coverage) vs **Geometry Isolation** (Silhouette separation scoring).
+- Returns the theoretical Pareto optimum geometric topology (e.g., `['constant_2.6', 'constant_1.45', 'plateau_bal_0.55', 'bowl_bal_0.40']`) maximizing downstream routing effectiveness.

@@ -65,6 +65,7 @@ def routed_pass(
         target_token_id=target_token_id,
         return_verbose=True,  # always need verbose for sensing
         return_raw_logits=True,
+        return_hidden_states=router.requires_hidden_states,
         intervention_mode=intervention_mode,
     )
 
@@ -93,7 +94,11 @@ def routed_pass(
     routed_result = intervention_result if intervention_result is not None else baseline_result
 
     # Strip internal fields from baseline before returning
-    baseline_clean = {k: v for k, v in baseline_result.items() if not k.startswith("_")}
+    baseline_clean = {
+        k: v
+        for k, v in baseline_result.items()
+        if not k.startswith("_") and k not in {"input_ids", "attention_mask", "hidden_states"}
+    }
 
     return {
         "routing_decision": decision,
@@ -128,6 +133,7 @@ def routed_score_target(
         prompt,
         baseline_scales,
         return_verbose=True,
+        return_hidden_states=router.requires_hidden_states,
         intervention_mode=intervention_mode,
     )
 

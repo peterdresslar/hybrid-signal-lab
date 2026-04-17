@@ -59,6 +59,9 @@ class InterventionRouter:
         feature_set: str,
         intervention_mode: InterventionMode = InterventionMode.ATTENTION_CONTRIBUTION,
         decision_threshold: float | None = None,
+        sequence_family: str | None = None,
+        sequence_pca_components: np.ndarray | None = None,
+        sequence_pca_mean: np.ndarray | None = None,
     ):
         self.model_key = model_key
         self.class_names = class_names
@@ -72,6 +75,9 @@ class InterventionRouter:
         self.feature_set = feature_set
         self.intervention_mode = normalize_intervention_mode(intervention_mode)
         self.decision_threshold = decision_threshold
+        self.sequence_family = sequence_family
+        self.sequence_pca_components = sequence_pca_components
+        self.sequence_pca_mean = sequence_pca_mean
 
     @classmethod
     def from_artifacts(cls, model_path: str | Path) -> "InterventionRouter":
@@ -108,7 +114,22 @@ class InterventionRouter:
             feature_set=artifacts["feature_set"],
             intervention_mode=artifacts.get("intervention_mode", InterventionMode.ATTENTION_CONTRIBUTION.value),
             decision_threshold=artifacts.get("decision_threshold"),
+            sequence_family=artifacts.get("sequence_family"),
+            sequence_pca_components=(
+                np.array(artifacts["sequence_pca_components"], dtype=np.float64)
+                if "sequence_pca_components" in artifacts
+                else None
+            ),
+            sequence_pca_mean=(
+                np.array(artifacts["sequence_pca_mean"], dtype=np.float64)
+                if "sequence_pca_mean" in artifacts
+                else None
+            ),
         )
+
+    @property
+    def requires_hidden_states(self) -> bool:
+        return "sequence_pca" in self.feature_set
 
     def classify(self, baseline_pass_result: dict) -> dict[str, Any]:
         """Classify a prompt and return the routing decision.
@@ -133,6 +154,9 @@ class InterventionRouter:
             pca_mean=self.pca_mean,
             standardization_mean=self.standardization_mean,
             standardization_std=self.standardization_std,
+            sequence_family=self.sequence_family,
+            sequence_pca_components=self.sequence_pca_components,
+            sequence_pca_mean=self.sequence_pca_mean,
             feature_set=self.feature_set,
         )
 
