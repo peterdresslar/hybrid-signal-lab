@@ -163,6 +163,7 @@ def run_scoring_example_routed(
         example.context,
         baseline_scales,
         return_verbose=True,
+        return_hidden_states=router.requires_hidden_states,
         intervention_mode=router.intervention_mode,
     )
 
@@ -536,6 +537,12 @@ def main():
                         help="Which benchmarks to run")
     parser.add_argument("--router-model", default=None,
                         help="Path to router_model.json (omit for baseline-only)")
+    parser.add_argument(
+        "--router-decision-threshold",
+        type=float,
+        default=None,
+        help="Optional abstention threshold override. Higher values make the router choose baseline/off more often.",
+    )
     parser.add_argument("--baseline-only", action="store_true",
                         help="Run only baseline condition (no routing)")
     parser.add_argument("--output-dir", required=True,
@@ -571,6 +578,8 @@ def main():
     if args.router_model and not args.baseline_only:
         print(f"Loading router from {args.router_model}...")
         router = InterventionRouter.from_artifacts(args.router_model)
+        if args.router_decision_threshold is not None:
+            router.decision_threshold = args.router_decision_threshold
         print(f"  {router}")
 
     all_results = []
@@ -635,6 +644,7 @@ def main():
             json.dump({
                 "model_key": args.model_key,
                 "device": device,
+                "router_decision_threshold": args.router_decision_threshold,
                 "tasks": all_results,
             }, f, indent=2)
         print(f"Summary saved to {summary_path}")

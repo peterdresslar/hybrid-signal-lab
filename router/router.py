@@ -167,18 +167,18 @@ class InterventionRouter:
         predicted_idx = int(np.argmax(probs))
         predicted_name = self.class_names[predicted_idx]
 
-        # Optional explicit abstention threshold for simple bistate routers.
-        # When present and the router has exactly one intervention class plus "off",
-        # require the intervention-class probability to clear the threshold.
-        if (
-            self.decision_threshold is not None
-            and len(self.class_names) == 2
-            and "off" in self.class_names
-        ):
+        # Optional explicit abstention threshold.
+        # For routers with an "off" class, require the strongest intervention
+        # class to clear the threshold; otherwise abstain to baseline.
+        if self.decision_threshold is not None and "off" in self.class_names:
             off_idx = self.class_names.index("off")
-            intervention_idx = 1 - off_idx
+            intervention_candidates = [
+                (idx, float(prob))
+                for idx, prob in enumerate(probs)
+                if idx != off_idx
+            ]
+            intervention_idx, intervention_prob = max(intervention_candidates, key=lambda item: item[1])
             intervention_name = self.class_names[intervention_idx]
-            intervention_prob = float(probs[intervention_idx])
             if intervention_prob >= self.decision_threshold:
                 predicted_idx = intervention_idx
                 predicted_name = intervention_name
