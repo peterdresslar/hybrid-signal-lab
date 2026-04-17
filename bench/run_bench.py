@@ -202,6 +202,10 @@ def run_scoring_example_routed(
     }
 
 
+def _threshold_slug(value: float) -> str:
+    return f"{value:.2f}".rstrip("0").rstrip(".").replace(".", "p")
+
+
 def run_scoring_example_fixed(
     agent: Agent,
     example: ScoringExample,
@@ -317,6 +321,7 @@ def run_scoring_task(
     agent: Agent,
     *,
     router: InterventionRouter | None = None,
+    router_thresholds: list[float] | None = None,
     baseline_only: bool = False,
     output_dir: Path,
 ) -> dict[str, Any]:
@@ -367,27 +372,41 @@ def run_scoring_task(
 
     # --- Routed ---
     if router:
-        print(f"\n  [{task_name}] Running routed...")
-        t0 = time.time()
-        routed_records = []
-        routed_heartbeat = ProgressHeartbeat(task_name, "routed", len(examples))
-        for i, ex in enumerate(examples):
-            rec = run_scoring_example_routed(agent, router, ex, baseline_scales, profile_scales)
-            routed_records.append(rec)
-            acc_so_far = sum(r["correct"] for r in routed_records) / len(routed_records)
-            if (i + 1) % 50 == 0:
-                print(f"    {i+1}/{len(examples)}  acc={acc_so_far:.3f}")
-            routed_heartbeat.maybe_ping(i + 1, metric_value=acc_so_far)
+        routed_thresholds = router_thresholds or [router.decision_threshold]
+        original_threshold = router.decision_threshold
 
-        rt_acc = sum(r["correct"] for r in routed_records) / len(routed_records)
-        results["conditions"]["routed"] = {
-            "accuracy": rt_acc,
-            "n_correct": sum(r["correct"] for r in routed_records),
-            "elapsed": time.time() - t0,
-            "profile_distribution": _count_profiles(routed_records),
-        }
-        all_records.extend(routed_records)
-        print(f"  [{task_name}] Routed:   {rt_acc:.3f} ({time.time()-t0:.1f}s)")
+        for threshold in routed_thresholds:
+            router.decision_threshold = threshold
+            threshold_slug = _threshold_slug(threshold)
+            condition_name = "routed" if len(routed_thresholds) == 1 else f"routed_t{threshold_slug}"
+
+            print(f"\n  [{task_name}] Running routed (threshold={threshold:.2f})...")
+            t0 = time.time()
+            routed_records = []
+            routed_heartbeat = ProgressHeartbeat(task_name, condition_name, len(examples))
+            for i, ex in enumerate(examples):
+                rec = run_scoring_example_routed(agent, router, ex, baseline_scales, profile_scales)
+                if len(routed_thresholds) > 1:
+                    rec["condition"] = condition_name
+                    rec["router_decision_threshold"] = threshold
+                routed_records.append(rec)
+                acc_so_far = sum(r["correct"] for r in routed_records) / len(routed_records)
+                if (i + 1) % 50 == 0:
+                    print(f"    {i+1}/{len(examples)}  acc={acc_so_far:.3f}")
+                routed_heartbeat.maybe_ping(i + 1, metric_value=acc_so_far)
+
+            rt_acc = sum(r["correct"] for r in routed_records) / len(routed_records)
+            results["conditions"][condition_name] = {
+                "accuracy": rt_acc,
+                "n_correct": sum(r["correct"] for r in routed_records),
+                "elapsed": time.time() - t0,
+                "profile_distribution": _count_profiles(routed_records),
+                "router_decision_threshold": threshold,
+            }
+            all_records.extend(routed_records)
+            print(f"  [{task_name}] {condition_name}: {rt_acc:.3f} ({time.time()-t0:.1f}s)")
+
+        router.decision_threshold = original_threshold
 
     # --- Best fixed ---
     if profile_scales:
@@ -494,26 +513,40 @@ def maybe_limit_examples(
 
 def print_summary(all_results: list[dict], model_key: str):
     """Print a summary table across all tasks."""
+    routed_conditions: list[str] = []
+    for r in all_results:
+        for condition_name in r["conditions"]:
+            if condition_name.startswith("routed") and condition_name not in routed_conditions:
+                routed_conditions.append(condition_name)
+
     print(f"\n{'=' * 70}")
     print(f"  BENCHMARK SUMMARY: {model_key}")
     print(f"{'=' * 70}")
-    print(f"  {'Task':<15} {'N':>5} {'Baseline':>10} {'Best Fix':>10} {'Routed':>10} {'Oracle':>10}")
-    print(f"  {'-' * 62}")
+    header = f"  {'Task':<15} {'N':>5} {'Baseline':>10} {'Best Fix':>10}"
+    for condition_name in routed_conditions:
+        header += f" {condition_name:>12}"
+    header += f" {'Oracle':>10}"
+    print(header)
+    print(f"  {'-' * max(62, len(header) - 2)}")
 
     for r in all_results:
         task = r["task"]
         n = r["n_examples"]
         bl = r["conditions"].get("baseline", {}).get("accuracy", "—")
-        rt = r["conditions"].get("routed", {}).get("accuracy", "—")
         ora = r["conditions"].get("oracle", {}).get("accuracy", "—")
         bf = r.get("best_fixed", {}).get("accuracy", "—")
 
         bl_s = f"{bl:.3f}" if isinstance(bl, float) else bl
         bf_s = f"{bf:.3f}" if isinstance(bf, float) else bf
-        rt_s = f"{rt:.3f}" if isinstance(rt, float) else rt
         ora_s = f"{ora:.3f}" if isinstance(ora, float) else ora
 
-        print(f"  {task:<15} {n:>5} {bl_s:>10} {bf_s:>10} {rt_s:>10} {ora_s:>10}")
+        row = f"  {task:<15} {n:>5} {bl_s:>10} {bf_s:>10}"
+        for condition_name in routed_conditions:
+            rt = r["conditions"].get(condition_name, {}).get("accuracy", "—")
+            rt_s = f"{rt:.3f}" if isinstance(rt, float) else rt
+            row += f" {rt_s:>12}"
+        row += f" {ora_s:>10}"
+        print(row)
 
     print()
 
@@ -542,6 +575,13 @@ def main():
         type=float,
         default=None,
         help="Optional abstention threshold override. Higher values make the router choose baseline/off more often.",
+    )
+    parser.add_argument(
+        "--router-decision-thresholds",
+        nargs="+",
+        type=float,
+        default=None,
+        help="Evaluate multiple routed thresholds in one benchmark pass. Baseline, fixed, and oracle are shared.",
     )
     parser.add_argument("--baseline-only", action="store_true",
                         help="Run only baseline condition (no routing)")
@@ -582,6 +622,12 @@ def main():
             router.decision_threshold = args.router_decision_threshold
         print(f"  {router}")
 
+    router_thresholds = None
+    if args.router_decision_thresholds:
+        router_thresholds = args.router_decision_thresholds
+    elif args.router_decision_threshold is not None:
+        router_thresholds = [args.router_decision_threshold]
+
     all_results = []
 
     # Run tasks
@@ -595,7 +641,8 @@ def main():
             print(f"  Loaded {len(examples)} COPA examples")
             result = run_scoring_task(
                 "copa", examples, agent,
-                router=router, baseline_only=args.baseline_only,
+                router=router, router_thresholds=router_thresholds,
+                baseline_only=args.baseline_only,
                 output_dir=output_dir,
             )
 
@@ -604,7 +651,8 @@ def main():
             print(f"  Loaded {len(examples)} StoryCloze examples")
             result = run_scoring_task(
                 "storycloze", examples, agent,
-                router=router, baseline_only=args.baseline_only,
+                router=router, router_thresholds=router_thresholds,
+                baseline_only=args.baseline_only,
                 output_dir=output_dir,
             )
 
@@ -613,7 +661,8 @@ def main():
             print(f"  Loaded {len(examples)} ARC-Challenge examples")
             result = run_scoring_task(
                 "arc_challenge", examples, agent,
-                router=router, baseline_only=args.baseline_only,
+                router=router, router_thresholds=router_thresholds,
+                baseline_only=args.baseline_only,
                 output_dir=output_dir,
             )
 
@@ -628,7 +677,8 @@ def main():
             print(f"  Loaded {len(examples)} {task_name} examples")
             result = run_scoring_task(
                 task_name, examples, agent,
-                router=router, baseline_only=args.baseline_only,
+                router=router, router_thresholds=router_thresholds,
+                baseline_only=args.baseline_only,
                 output_dir=output_dir,
             )
 
@@ -645,6 +695,7 @@ def main():
                 "model_key": args.model_key,
                 "device": device,
                 "router_decision_threshold": args.router_decision_threshold,
+                "router_decision_thresholds": router_thresholds,
                 "tasks": all_results,
             }, f, indent=2)
         print(f"Summary saved to {summary_path}")
