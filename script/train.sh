@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH -G a100:1
+#SBATCH -G a 1
 #SBATCH -C a100_80
 #SBATCH -t 0-03:59:59
 #SBATCH -p public

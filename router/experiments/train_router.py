@@ -281,7 +281,12 @@ def build_feature_matrix(
     # Scalar features
     scalar_names = sorted(next(iter(scalar_features.values())).keys()) if scalar_features else []
     scalar_matrix = None
-    if scalar_features and feature_set in ("scalar", "pca+scalar"):
+    if scalar_features and feature_set in (
+        "scalar",
+        "pca+scalar",
+        "scalar+sequence_pca",
+        "pca+scalar+sequence_pca",
+    ):
         scalar_matrix = np.zeros((n, len(scalar_names)), dtype=np.float64)
         for i, pid in enumerate(prompt_ids):
             if pid in scalar_features:
