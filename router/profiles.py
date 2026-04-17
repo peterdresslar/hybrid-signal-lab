@@ -46,6 +46,29 @@ PROFILES_9B = {
 }
 
 # -----------------------------------------------------------------------
+# 9B 040 spatially isolated (optimal PCA separation) geometry panel
+# -----------------------------------------------------------------------
+
+PROFILES_9B_040 = {
+    "constant_2.6": {
+        "g_function": "constant",
+        "g_params": {"value": 2.6},
+    },
+    "constant_1.45": {
+        "g_function": "constant",
+        "g_params": {"value": 1.45},
+    },
+    "bowl_bal_0.40": {
+        "g_function": "control_points",
+        "g_vector": [1.4, 1.0, 0.6, 0.6, 1.0, 1.4],
+    },
+    "plateau_bal_0.55": {
+        "g_function": "control_points",
+        "g_vector": [0.45, 1.275, 1.275, 1.275, 1.275, 0.45],
+    },
+}
+
+# -----------------------------------------------------------------------
 # Legacy OLMO attention-contribution profiles.
 #
 # These remain as the fallback/default table for historical artifacts that do
@@ -81,6 +104,7 @@ BASELINE_SPEC = {
 # Lookup by model key
 PROFILE_SETS = {
     "9B": PROFILES_9B,
+    "9B-040": PROFILES_9B_040,
     "OLMO": PROFILES_OLMO,
 }
 

@@ -1,0 +1,93 @@
+{
+  "model_key": "9B",
+  "profiles": [
+    "constant_2.6",
+    "constant_1.45",
+    "plateau_bal_0.55",
+    "bowl_bal_0.40"
+  ],
+  "intervention_mode": "attention_contribution",
+  "feature_set": "pca+scalar",
+  "n_pca": 10,
+  "n_features": 15,
+  "feature_names": [
+    "pc1",
+    "pc2",
+    "pc3",
+    "pc4",
+    "pc5",
+    "pc6",
+    "pc7",
+    "pc8",
+    "pc9",
+    "pc10",
+    "baseline_attn_entropy_mean",
+    "baseline_final_entropy_bits",
+    "baseline_mean_entropy_bits",
+    "baseline_target_prob",
+    "baseline_top1_top2_logit_margin"
+  ],
+  "n_folds": 5,
+  "hyperparameters": {
+    "lr": 0.1,
+    "n_iter": 2000,
+    "reg": 0.001
+  },
+  "baseline_delta_p": 0.0,
+  "best_fixed_delta_p": 0.09972897196261692,
+  "routed_delta_p": 0.10116822429906544,
+  "oracle_delta_p": 0.11549532710280372,
+  "routing_efficiency": 0.875950801100502,
+  "overall_accuracy": 0.6663551401869159,
+  "fold_results": [
+    {
+      "fold": 0,
+      "n_test": 214,
+      "accuracy": 0.705607476635514,
+      "routed_mean_delta_p": 0.09116822429906543,
+      "oracle_mean_delta_p": 0.10429906542056075
+    },
+    {
+      "fold": 1,
+      "n_test": 214,
+      "accuracy": 0.6728971962616822,
+      "routed_mean_delta_p": 0.09967289719626167,
+      "oracle_mean_delta_p": 0.11780373831775702
+    },
+    {
+      "fold": 2,
+      "n_test": 214,
+      "accuracy": 0.6822429906542056,
+      "routed_mean_delta_p": 0.1080841121495327,
+      "oracle_mean_delta_p": 0.11883177570093457
+    },
+    {
+      "fold": 3,
+      "n_test": 214,
+      "accuracy": 0.6261682242990654,
+      "routed_mean_delta_p": 0.10644859813084112,
+      "oracle_mean_delta_p": 0.12303738317757008
+    },
+    {
+      "fold": 4,
+      "n_test": 214,
+      "accuracy": 0.6448598130841121,
+      "routed_mean_delta_p": 0.10046728971962617,
+      "oracle_mean_delta_p": 0.11350467289719626
+    }
+  ],
+  "true_class_distribution": {
+    "constant_2.6": 372,
+    "constant_1.45": 168,
+    "plateau_bal_0.55": 87,
+    "bowl_bal_0.40": 56,
+    "off": 387
+  },
+  "predicted_class_distribution": {
+    "constant_2.6": 393,
+    "constant_1.45": 152,
+    "plateau_bal_0.55": 12,
+    "bowl_bal_0.40": 26,
+    "off": 487
+  }
+}

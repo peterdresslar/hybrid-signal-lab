@@ -30,7 +30,7 @@ from pathlib import Path
 import numpy as np
 
 from .select_profiles import load_delta_matrix as load_full_delta_matrix
-from .select_profiles import search
+from .select_profiles import score_profile_set, search
 from .train_router import (
     assign_labels,
     build_feature_matrix,
@@ -129,6 +129,7 @@ def main() -> None:
     parser.add_argument("--min-profile-wins", type=int, default=0)
     parser.add_argument("--max-mean-abs-corr", type=float, default=None)
     parser.add_argument("--max-constants", type=int, default=None)
+    parser.add_argument("--explicit-profiles", nargs="+", default=None, help="Bypass search and evaluate this specific list of profiles")
     parser.add_argument("--feature-set", default="pca+scalar", choices=["pca", "raw", "scalar", "pca+scalar"])
     parser.add_argument("--n-pca", type=int, default=10)
     parser.add_argument("--n-folds", type=int, default=5)
@@ -139,30 +140,42 @@ def main() -> None:
     args = parser.parse_args()
 
     data_dir = Path(args.data_dir)
-    analysis_dir = data_dir / args.model_key / "analysis"
+    # The analysis directory lives under the base model structure (e.g. 9B instead of 9B-040)
+    base_model_key = args.model_key.split("-")[0]
+    analysis_dir = data_dir / base_model_key / "analysis"
     output_dir = Path(args.output_dir) if args.output_dir else data_dir / args.model_key / "router"
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"Loading full delta matrix for {args.model_key}...")
+    print(f"Loading full delta matrix for {base_model_key}...")
     prompt_ids, full_profiles, full_matrix = load_full_delta_matrix(analysis_dir)
     print(f"  {len(prompt_ids)} prompts × {len(full_profiles)} profiles")
 
-    print("\nStage 1: oracle shortlist search...")
-    t0 = time.time()
-    shortlist = search(
-        full_matrix,
-        full_profiles,
-        top_n=args.shortlist_size,
-        min_coverage=args.min_coverage,
-        objective="oracle",
-        min_profile_wins=args.min_profile_wins,
-        max_mean_abs_corr=args.max_mean_abs_corr,
-        max_constants=args.max_constants,
-    )
-    print(f"Stage 1 done in {time.time() - t0:.1f}s")
+    if args.explicit_profiles is not None:
+        print("\nStage 1: Validating explicit profiles subset...")
+        for p in args.explicit_profiles:
+            if p not in full_profiles:
+                raise ValueError(f"Explicit profile '{p}' not found in the matrix.")
+        indices = tuple(full_profiles.index(p) for p in args.explicit_profiles)
+        candidate = score_profile_set(full_matrix, indices)
+        candidate["profiles"] = args.explicit_profiles
+        shortlist = [candidate]
+    else:
+        print("\nStage 1: oracle shortlist search...")
+        t0 = time.time()
+        shortlist = search(
+            full_matrix,
+            full_profiles,
+            top_n=args.shortlist_size,
+            min_coverage=args.min_coverage,
+            objective="oracle",
+            min_profile_wins=args.min_profile_wins,
+            max_mean_abs_corr=args.max_mean_abs_corr,
+            max_constants=args.max_constants,
+        )
+        print(f"Stage 1 done in {time.time() - t0:.1f}s")
 
     print("\nLoading baseline features once for Stage 2...")
-    entropy_vectors = load_baseline_entropy_vectors(data_dir, args.model_key)
+    entropy_vectors = load_baseline_entropy_vectors(data_dir, base_model_key)
     scalar_features = load_scalar_features(analysis_dir)
 
     print(
