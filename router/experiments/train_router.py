@@ -245,7 +245,12 @@ def build_feature_matrix(
     pca_matrix = None
     pca_components = None
     pca_mean = None
-    if raw_matrix is not None and feature_set in ("pca", "pca+scalar"):
+    if raw_matrix is not None and feature_set in (
+        "pca",
+        "pca+scalar",
+        "pca+sequence_pca",
+        "pca+scalar+sequence_pca",
+    ):
         pca_mean = raw_matrix.mean(axis=0)
         centered = raw_matrix - pca_mean
         # SVD for PCA
@@ -304,16 +309,24 @@ def build_feature_matrix(
         parts.append(sequence_pca_matrix)
         names.extend([f"seq_pc{i+1}" for i in range(sequence_pca_matrix.shape[1])])
     elif feature_set == "pca+sequence_pca":
+        if pca_matrix is None or sequence_pca_matrix is None:
+            raise ValueError(f"Feature set '{feature_set}' requires both entropy PCA and sequence PCA matrices.")
         parts.append(pca_matrix)
         names.extend([f"pc{i+1}" for i in range(pca_matrix.shape[1])])
         parts.append(sequence_pca_matrix)
         names.extend([f"seq_pc{i+1}" for i in range(sequence_pca_matrix.shape[1])])
     elif feature_set == "scalar+sequence_pca":
+        if scalar_matrix is None or sequence_pca_matrix is None:
+            raise ValueError(f"Feature set '{feature_set}' requires both scalar and sequence PCA matrices.")
         parts.append(scalar_matrix)
         names.extend(scalar_names)
         parts.append(sequence_pca_matrix)
         names.extend([f"seq_pc{i+1}" for i in range(sequence_pca_matrix.shape[1])])
     elif feature_set == "pca+scalar+sequence_pca":
+        if pca_matrix is None or scalar_matrix is None or sequence_pca_matrix is None:
+            raise ValueError(
+                f"Feature set '{feature_set}' requires entropy PCA, scalar, and sequence PCA matrices."
+            )
         parts.append(pca_matrix)
         names.extend([f"pc{i+1}" for i in range(pca_matrix.shape[1])])
         parts.append(scalar_matrix)
