@@ -19,10 +19,21 @@ export HUGGINGFACE_HUB_CACHE=/scratch/pdressla/.cache/huggingface/hub
 export TRANSFORMERS_CACHE=/scratch/pdressla/.cache/huggingface/transformers
 export UV_CACHE_DIR=/scratch/pdressla/.cache/uv
 export XDG_CACHE_HOME=/scratch/pdressla/.cache
-export OUTDIR=/home/pdressla/workspace/data/sl-runs/040-bench
+export OUTDIR=/home/pdressla/workspace/data/sl-runs/050-bench
 
-export ROUTER_MODEL=/home/pdressla/workspace/hybrid-signal-lab/router/router-050-a/router_model.json
-export SAT_VALUES=(0.05 0.25 0.55 0.75)
+export SAT_VALUES=(0.0 0.01 0.02 0.03 0.05)
+
+ROUTER_MODELS=(
+  /home/pdressla/workspace/hybrid-signal-lab/router/router-9B-050-probes-all_layers_mean_pool_concat-attn_resid-pc50/probe_router_model.json
+  /home/pdressla/workspace/hybrid-signal-lab/router/router-9B-050-probes-all_layers_mean_pool_concat-length_resid-pc50/probe_router_model.json
+  /home/pdressla/workspace/hybrid-signal-lab/router/router-9B-050-probes-final_layer_mean_pool-attn_resid-pc50/probe_router_model.json
+)
+
+ROUTER_LABELS=(
+  allmean_attn50
+  allmean_len50
+  finmean_attn50
+)
 
 cd /home/pdressla/workspace/hybrid-signal-lab
 
@@ -36,9 +47,11 @@ pwd
 hostname
 
 echo "[bench] saturations=${SAT_VALUES[*]}"
+echo "[bench] routers=${ROUTER_LABELS[*]}"
 uv run -m bench.run_bench \
   --model-key 9B \
   --tasks arc_challenge mmlu_abstract_algebra mmlu_college_math mmlu_college_cs \
-  --router-model "${ROUTER_MODEL}" \
+  --router-models "${ROUTER_MODELS[@]}" \
+  --router-labels "${ROUTER_LABELS[@]}" \
   --router-decision-thresholds "${SAT_VALUES[@]}" \
-  --output-dir "${OUTDIR}/routed_9B_sat_sweep"
+  --output-dir "${OUTDIR}/routed_9B_probe_sweep_a"

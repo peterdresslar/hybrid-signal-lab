@@ -206,6 +206,25 @@ def _threshold_slug(value: float) -> str:
     return f"{value:.2f}".rstrip("0").rstrip(".").replace(".", "p")
 
 
+def _router_slug(path: str | Path, explicit_label: str | None = None) -> str:
+    if explicit_label:
+        return explicit_label
+    return Path(path).resolve().parent.name
+
+
+def _panel_signature(router: InterventionRouter | None) -> tuple[Any, ...] | None:
+    if router is None:
+        return None
+    return (
+        router.intervention_mode.value,
+        tuple(sorted(router.profile_specs.keys())),
+        tuple(
+            (name, json.dumps(router.profile_specs[name], sort_keys=True))
+            for name in sorted(router.profile_specs.keys())
+        ),
+    )
+
+
 def run_scoring_example_fixed(
     agent: Agent,
     example: ScoringExample,
@@ -320,7 +339,7 @@ def run_scoring_task(
     examples: list[ScoringExample],
     agent: Agent,
     *,
-    router: InterventionRouter | None = None,
+    routers: list[tuple[str, InterventionRouter]] | None = None,
     router_thresholds: list[float] | None = None,
     baseline_only: bool = False,
     output_dir: Path,
@@ -328,13 +347,7 @@ def run_scoring_task(
     """Run a full log-likelihood scoring task."""
     n_attn = len(agent.get_attention_layer_indices())
     baseline_scales = build_attention_scales_from_spec(BASELINE_SPEC, attention_slots=n_attn)
-
-    # Build profile scales
-    profile_scales = {}
-    if router and not baseline_only:
-        specs = router.profile_specs
-        for pname, pspec in specs.items():
-            profile_scales[pname] = build_attention_scales_from_spec(pspec, attention_slots=n_attn)
+    routers = routers or []
 
     results = {"task": task_name, "n_examples": len(examples), "conditions": {}}
     all_records = []
@@ -349,7 +362,7 @@ def run_scoring_task(
             agent,
             ex,
             baseline_scales,
-            intervention_mode=router.intervention_mode if router else InterventionMode.ATTENTION_CONTRIBUTION,
+            intervention_mode=routers[0][1].intervention_mode if routers else InterventionMode.ATTENTION_CONTRIBUTION,
         )
         baseline_records.append(rec)
         acc_so_far = sum(r["correct"] for r in baseline_records) / len(baseline_records)
@@ -370,25 +383,39 @@ def run_scoring_task(
         _save_task_results(results, all_records, task_name, output_dir)
         return results
 
-    # --- Routed ---
-    if router:
+    panel_cache: dict[tuple[Any, ...], dict[str, Any]] = {}
+
+    for router_label, router in routers:
+        profile_scales = {}
+        if not baseline_only:
+            for pname, pspec in router.profile_specs.items():
+                profile_scales[pname] = build_attention_scales_from_spec(pspec, attention_slots=n_attn)
+
+        # --- Routed ---
         routed_thresholds = router_thresholds or [router.decision_threshold]
         original_threshold = router.decision_threshold
 
         for threshold in routed_thresholds:
             router.decision_threshold = threshold
             threshold_slug = _threshold_slug(threshold)
-            condition_name = "routed" if len(routed_thresholds) == 1 else f"routed_t{threshold_slug}"
+            if len(routers) == 1 and len(routed_thresholds) == 1:
+                condition_name = "routed"
+            elif len(routers) == 1:
+                condition_name = f"routed_t{threshold_slug}"
+            elif len(routed_thresholds) == 1:
+                condition_name = f"routed_{router_label}"
+            else:
+                condition_name = f"routed_{router_label}_t{threshold_slug}"
 
-            print(f"\n  [{task_name}] Running routed (threshold={threshold:.2f})...")
+            print(f"\n  [{task_name}] Running {condition_name}...")
             t0 = time.time()
             routed_records = []
             routed_heartbeat = ProgressHeartbeat(task_name, condition_name, len(examples))
             for i, ex in enumerate(examples):
                 rec = run_scoring_example_routed(agent, router, ex, baseline_scales, profile_scales)
-                if len(routed_thresholds) > 1:
-                    rec["condition"] = condition_name
-                    rec["router_decision_threshold"] = threshold
+                rec["condition"] = condition_name
+                rec["router_label"] = router_label
+                rec["router_decision_threshold"] = threshold
                 routed_records.append(rec)
                 acc_so_far = sum(r["correct"] for r in routed_records) / len(routed_records)
                 if (i + 1) % 50 == 0:
@@ -402,79 +429,109 @@ def run_scoring_task(
                 "elapsed": time.time() - t0,
                 "profile_distribution": _count_profiles(routed_records),
                 "router_decision_threshold": threshold,
+                "router_label": router_label,
             }
             all_records.extend(routed_records)
             print(f"  [{task_name}] {condition_name}: {rt_acc:.3f} ({time.time()-t0:.1f}s)")
 
         router.decision_threshold = original_threshold
 
-    # --- Best fixed ---
-    if profile_scales:
-        best_fixed_acc = 0.0
-        best_fixed_name = None
-        for pname, pscales in profile_scales.items():
-            print(f"\n  [{task_name}] Running fixed {pname}...")
+        # --- Fixed + Oracle, cached by panel signature ---
+        panel_sig = _panel_signature(router)
+        if panel_sig not in panel_cache:
+            best_fixed_acc = 0.0
+            best_fixed_name = None
+            panel_conditions: dict[str, Any] = {}
+            panel_records: list[dict[str, Any]] = []
+
+            for pname, pscales in profile_scales.items():
+                fixed_condition_name = f"fixed_{router_label}_{pname}" if len(routers) > 1 else f"fixed_{pname}"
+                print(f"\n  [{task_name}] Running {fixed_condition_name}...")
+                t0 = time.time()
+                fixed_records = []
+                fixed_heartbeat = ProgressHeartbeat(task_name, fixed_condition_name, len(examples))
+                for i, ex in enumerate(examples):
+                    rec = run_scoring_example_fixed(
+                        agent,
+                        ex,
+                        pname,
+                        pscales,
+                        intervention_mode=router.intervention_mode,
+                    )
+                    rec["condition"] = fixed_condition_name
+                    rec["router_label"] = router_label
+                    fixed_records.append(rec)
+                    acc_so_far = sum(r["correct"] for r in fixed_records) / len(fixed_records)
+                    if (i + 1) % 50 == 0:
+                        print(f"    {i+1}/{len(examples)}  acc={acc_so_far:.3f}")
+                    fixed_heartbeat.maybe_ping(i + 1, metric_value=acc_so_far)
+
+                f_acc = sum(r["correct"] for r in fixed_records) / len(fixed_records)
+                panel_conditions[fixed_condition_name] = {
+                    "accuracy": f_acc,
+                    "n_correct": sum(r["correct"] for r in fixed_records),
+                    "elapsed": time.time() - t0,
+                    "router_label": router_label,
+                }
+                panel_records.extend(fixed_records)
+                print(f"  [{task_name}] {fixed_condition_name}: {f_acc:.3f} ({time.time()-t0:.1f}s)")
+
+                if f_acc > best_fixed_acc:
+                    best_fixed_acc = f_acc
+                    best_fixed_name = pname
+
+            oracle_condition_name = f"oracle_{router_label}" if len(routers) > 1 else "oracle"
+            print(f"\n  [{task_name}] Running {oracle_condition_name}...")
             t0 = time.time()
-            fixed_records = []
-            fixed_heartbeat = ProgressHeartbeat(task_name, f"fixed_{pname}", len(examples))
+            oracle_records = []
+            oracle_heartbeat = ProgressHeartbeat(task_name, oracle_condition_name, len(examples))
             for i, ex in enumerate(examples):
-                rec = run_scoring_example_fixed(
+                rec = run_scoring_example_oracle(
                     agent,
                     ex,
-                    pname,
-                    pscales,
+                    baseline_scales,
+                    profile_scales,
                     intervention_mode=router.intervention_mode,
                 )
-                fixed_records.append(rec)
-                acc_so_far = sum(r["correct"] for r in fixed_records) / len(fixed_records)
+                rec["condition"] = oracle_condition_name
+                rec["router_label"] = router_label
+                oracle_records.append(rec)
+                acc_so_far = sum(r["correct"] for r in oracle_records) / len(oracle_records)
                 if (i + 1) % 50 == 0:
                     print(f"    {i+1}/{len(examples)}  acc={acc_so_far:.3f}")
-                fixed_heartbeat.maybe_ping(i + 1, metric_value=acc_so_far)
+                oracle_heartbeat.maybe_ping(i + 1, metric_value=acc_so_far)
 
-            f_acc = sum(r["correct"] for r in fixed_records) / len(fixed_records)
-            results["conditions"][f"fixed_{pname}"] = {
-                "accuracy": f_acc,
-                "n_correct": sum(r["correct"] for r in fixed_records),
+            or_acc = sum(r["correct"] for r in oracle_records) / len(oracle_records)
+            panel_conditions[oracle_condition_name] = {
+                "accuracy": or_acc,
+                "n_correct": sum(r["correct"] for r in oracle_records),
                 "elapsed": time.time() - t0,
+                "oracle_profile_distribution": _count_profiles(oracle_records, key="oracle_profile"),
+                "router_label": router_label,
             }
-            all_records.extend(fixed_records)
-            print(f"  [{task_name}] Fixed {pname}: {f_acc:.3f} ({time.time()-t0:.1f}s)")
+            panel_records.extend(oracle_records)
+            panel_best_fixed = {
+                "profile": best_fixed_name,
+                "accuracy": best_fixed_acc,
+                "router_label": router_label,
+            }
+            panel_cache[panel_sig] = {
+                "conditions": panel_conditions,
+                "records": panel_records,
+                "best_fixed": panel_best_fixed,
+            }
+            print(f"  [{task_name}] {oracle_condition_name}: {or_acc:.3f} ({time.time()-t0:.1f}s)")
+        else:
+            print(f"\n  [{task_name}] Reusing fixed/oracle panel results for router '{router_label}'.")
 
-            if f_acc > best_fixed_acc:
-                best_fixed_acc = f_acc
-                best_fixed_name = pname
-
-        results["best_fixed"] = {"profile": best_fixed_name, "accuracy": best_fixed_acc}
-
-    # --- Oracle ---
-    if profile_scales:
-        print(f"\n  [{task_name}] Running oracle...")
-        t0 = time.time()
-        oracle_records = []
-        oracle_heartbeat = ProgressHeartbeat(task_name, "oracle", len(examples))
-        for i, ex in enumerate(examples):
-            rec = run_scoring_example_oracle(
-                agent,
-                ex,
-                baseline_scales,
-                profile_scales,
-                intervention_mode=router.intervention_mode,
-            )
-            oracle_records.append(rec)
-            acc_so_far = sum(r["correct"] for r in oracle_records) / len(oracle_records)
-            if (i + 1) % 50 == 0:
-                print(f"    {i+1}/{len(examples)}  acc={acc_so_far:.3f}")
-            oracle_heartbeat.maybe_ping(i + 1, metric_value=acc_so_far)
-
-        or_acc = sum(r["correct"] for r in oracle_records) / len(oracle_records)
-        results["conditions"]["oracle"] = {
-            "accuracy": or_acc,
-            "n_correct": sum(r["correct"] for r in oracle_records),
-            "elapsed": time.time() - t0,
-            "oracle_profile_distribution": _count_profiles(oracle_records, key="oracle_profile"),
-        }
-        all_records.extend(oracle_records)
-        print(f"  [{task_name}] Oracle:   {or_acc:.3f} ({time.time()-t0:.1f}s)")
+        cache_entry = panel_cache[panel_sig]
+        results["conditions"].update(cache_entry["conditions"])
+        all_records.extend(cache_entry["records"])
+        if len(routers) == 1:
+            results["best_fixed"] = cache_entry["best_fixed"]
+        else:
+            best_fixeds = results.setdefault("best_fixed_by_router", {})
+            best_fixeds[router_label] = cache_entry["best_fixed"]
 
     _save_task_results(results, all_records, task_name, output_dir)
     return results
@@ -571,6 +628,18 @@ def main():
     parser.add_argument("--router-model", default=None,
                         help="Path to router_model.json (omit for baseline-only)")
     parser.add_argument(
+        "--router-models",
+        nargs="+",
+        default=None,
+        help="Evaluate multiple router_model.json artifacts in one benchmark pass.",
+    )
+    parser.add_argument(
+        "--router-labels",
+        nargs="+",
+        default=None,
+        help="Optional labels matching --router-models. Defaults to parent directory names.",
+    )
+    parser.add_argument(
         "--router-decision-threshold",
         type=float,
         default=None,
@@ -613,14 +682,26 @@ def main():
     agent = Agent.from_model_key(args.model_key, device)
     print(f"  Model loaded.")
 
-    # Load router
-    router = None
-    if args.router_model and not args.baseline_only:
-        print(f"Loading router from {args.router_model}...")
-        router = InterventionRouter.from_artifacts(args.router_model)
-        if args.router_decision_threshold is not None:
-            router.decision_threshold = args.router_decision_threshold
-        print(f"  {router}")
+    # Load routers
+    routers: list[tuple[str, InterventionRouter]] = []
+    router_model_paths: list[str] = []
+    if args.router_models:
+        router_model_paths.extend(args.router_models)
+    elif args.router_model:
+        router_model_paths.append(args.router_model)
+
+    if args.router_labels and len(args.router_labels) != len(router_model_paths):
+        raise ValueError("--router-labels must match the number of router models.")
+
+    if router_model_paths and not args.baseline_only:
+        for i, model_path in enumerate(router_model_paths):
+            label = _router_slug(model_path, args.router_labels[i] if args.router_labels else None)
+            print(f"Loading router '{label}' from {model_path}...")
+            router = InterventionRouter.from_artifacts(model_path)
+            if args.router_decision_threshold is not None:
+                router.decision_threshold = args.router_decision_threshold
+            print(f"  {router}")
+            routers.append((label, router))
 
     router_thresholds = None
     if args.router_decision_thresholds:
@@ -641,7 +722,7 @@ def main():
             print(f"  Loaded {len(examples)} COPA examples")
             result = run_scoring_task(
                 "copa", examples, agent,
-                router=router, router_thresholds=router_thresholds,
+                routers=routers, router_thresholds=router_thresholds,
                 baseline_only=args.baseline_only,
                 output_dir=output_dir,
             )
@@ -651,7 +732,7 @@ def main():
             print(f"  Loaded {len(examples)} StoryCloze examples")
             result = run_scoring_task(
                 "storycloze", examples, agent,
-                router=router, router_thresholds=router_thresholds,
+                routers=routers, router_thresholds=router_thresholds,
                 baseline_only=args.baseline_only,
                 output_dir=output_dir,
             )
@@ -661,7 +742,7 @@ def main():
             print(f"  Loaded {len(examples)} ARC-Challenge examples")
             result = run_scoring_task(
                 "arc_challenge", examples, agent,
-                router=router, router_thresholds=router_thresholds,
+                routers=routers, router_thresholds=router_thresholds,
                 baseline_only=args.baseline_only,
                 output_dir=output_dir,
             )
@@ -677,7 +758,7 @@ def main():
             print(f"  Loaded {len(examples)} {task_name} examples")
             result = run_scoring_task(
                 task_name, examples, agent,
-                router=router, router_thresholds=router_thresholds,
+                routers=routers, router_thresholds=router_thresholds,
                 baseline_only=args.baseline_only,
                 output_dir=output_dir,
             )
@@ -694,6 +775,8 @@ def main():
             json.dump({
                 "model_key": args.model_key,
                 "device": device,
+                "router_models": router_model_paths,
+                "router_labels": [label for label, _ in routers],
                 "router_decision_threshold": args.router_decision_threshold,
                 "router_decision_thresholds": router_thresholds,
                 "tasks": all_results,
