@@ -59,11 +59,15 @@ source .venv/bin/activate
 pwd
 hostname
 
+TOTAL=$(( ${#FAMILIES[@]} * ${#RESIDUALIZATIONS[@]} * ${#PCS[@]} ))
+RUN=0
+
 for family in "${FAMILIES[@]}"; do
   for resid in "${RESIDUALIZATIONS[@]}"; do
     for seq_pca in "${PCS[@]}"; do
+      RUN=$(( RUN + 1 ))
       output_dir="${ROUTER_ROOT}/${ROUTER_PREFIX}-${family}-${resid}-pc${seq_pca}"
-      echo "[train_probes] family=${family} resid=${resid} seq_pca=${seq_pca} output=${output_dir}"
+      echo "[train_probes ${RUN}/${TOTAL}] family=${family} resid=${resid} seq_pca=${seq_pca} output=${output_dir}"
       uv run -m router.experiments.train_probes \
         --model-key "${MODEL_KEY_QWEN}" \
         --data-dir "${DATADIR}" \

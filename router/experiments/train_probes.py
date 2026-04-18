@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 import time
 from pathlib import Path
 
@@ -120,6 +121,7 @@ def cross_validate_probes(
     fold_results: list[dict] = []
 
     for fold_idx in range(n_folds):
+        print(f"  fold {fold_idx + 1}/{n_folds}")
         test_idx = folds[fold_idx]
         train_idx = np.concatenate([folds[i] for i in range(n_folds) if i != fold_idx])
 
@@ -216,6 +218,7 @@ def parse_thresholds(values: list[float] | None) -> list[float]:
 
 
 def main() -> None:
+    sys.stdout.reconfigure(line_buffering=True)
     parser = argparse.ArgumentParser(description="Train per-profile value probes.")
     parser.add_argument("--model-key", required=True)
     parser.add_argument("--data-dir", required=True)
