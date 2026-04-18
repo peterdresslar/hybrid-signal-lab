@@ -1,8 +1,9 @@
 #!/bin/bash
 
-#SBATCH -c 8
-#SBATCH --mem=64GB
-#SBATCH -t 0-07:59:59
+#SBATCH -G 1
+#SBATCH -C a100_80
+#SBATCH --mem=80GB
+#SBATCH -t 0-03:59:59
 #SBATCH -p public
 #SBATCH -q public
 #SBATCH -o slurm.%j.out
