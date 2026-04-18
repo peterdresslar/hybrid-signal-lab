@@ -37,6 +37,7 @@ from bench.tasks import (
     load_mmlu,
     ScoringExample,
 )
+from router.probe_router import ProbeRouter
 from router.router import InterventionRouter
 from router.profiles import BASELINE_SPEC
 
@@ -147,7 +148,7 @@ def run_scoring_example_baseline(
 
 def run_scoring_example_routed(
     agent: Agent,
-    router: InterventionRouter,
+    router: InterventionRouter | ProbeRouter,
     example: ScoringExample,
     baseline_scales: np.ndarray,
     profile_scales: dict[str, np.ndarray],
@@ -212,7 +213,7 @@ def _router_slug(path: str | Path, explicit_label: str | None = None) -> str:
     return Path(path).resolve().parent.name
 
 
-def _panel_signature(router: InterventionRouter | None) -> tuple[Any, ...] | None:
+def _panel_signature(router: InterventionRouter | ProbeRouter | None) -> tuple[Any, ...] | None:
     if router is None:
         return None
     return (
@@ -223,6 +224,15 @@ def _panel_signature(router: InterventionRouter | None) -> tuple[Any, ...] | Non
             for name in sorted(router.profile_specs.keys())
         ),
     )
+
+
+def load_router_artifact(model_path: str | Path) -> InterventionRouter | ProbeRouter:
+    model_path = Path(model_path)
+    with open(model_path) as f:
+        artifacts = json.load(f)
+    if artifacts.get("probe_type"):
+        return ProbeRouter.from_artifacts(model_path)
+    return InterventionRouter.from_artifacts(model_path)
 
 
 def run_scoring_example_fixed(
@@ -683,7 +693,7 @@ def main():
     print(f"  Model loaded.")
 
     # Load routers
-    routers: list[tuple[str, InterventionRouter]] = []
+    routers: list[tuple[str, InterventionRouter | ProbeRouter]] = []
     router_model_paths: list[str] = []
     if args.router_models:
         router_model_paths.extend(args.router_models)
@@ -697,7 +707,7 @@ def main():
         for i, model_path in enumerate(router_model_paths):
             label = _router_slug(model_path, args.router_labels[i] if args.router_labels else None)
             print(f"Loading router '{label}' from {model_path}...")
-            router = InterventionRouter.from_artifacts(model_path)
+            router = load_router_artifact(model_path)
             if args.router_decision_threshold is not None:
                 router.decision_threshold = args.router_decision_threshold
             print(f"  {router}")

@@ -25,14 +25,10 @@ export SAT_VALUES=(0.0 0.01 0.02 0.03 0.05)
 
 ROUTER_MODELS=(
   /home/pdressla/workspace/hybrid-signal-lab/router/router-9B-050-probes-all_layers_mean_pool_concat-attn_resid-pc50/probe_router_model.json
-  /home/pdressla/workspace/hybrid-signal-lab/router/router-9B-050-probes-all_layers_mean_pool_concat-length_resid-pc50/probe_router_model.json
-  /home/pdressla/workspace/hybrid-signal-lab/router/router-9B-050-probes-final_layer_mean_pool-attn_resid-pc50/probe_router_model.json
 )
 
 ROUTER_LABELS=(
   allmean_attn50
-  allmean_len50
-  finmean_attn50
 )
 
 cd /home/pdressla/workspace/hybrid-signal-lab
@@ -54,4 +50,4 @@ uv run -m bench.run_bench \
   --router-models "${ROUTER_MODELS[@]}" \
   --router-labels "${ROUTER_LABELS[@]}" \
   --router-decision-thresholds "${SAT_VALUES[@]}" \
-  --output-dir "${OUTDIR}/routed_9B_probe_sweep_a"
+  --output-dir "${OUTDIR}/routed_9B_probe_allmean_attn50_a"
